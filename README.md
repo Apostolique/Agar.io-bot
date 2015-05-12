@@ -8,7 +8,7 @@ How to install videos:
 
 By: http://www.twitch.tv/ismite3
 
-https://www.youtube.com/watch?v=NND6nqJih3U - Full fledge instructions
+https://www.youtube.com/watch?v=NND6nqJih3U - Full fledged instructions
 
 By http://www.twitch.tv/shekappa/
 
