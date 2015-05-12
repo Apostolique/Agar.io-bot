@@ -1,9 +1,10 @@
 // ==UserScript==
 
-// @name       Vawlt Agar.io Bot
+// @name        Vawlt Agar.io Bot
 // @namespace   Vawlt
 // @include     http://agar.io/*
 // @version     1
+// @@updateURL  https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/bot.js
 // @grant       none
 // @author      twitch.tv/apostolique
 // @run-at document-start
