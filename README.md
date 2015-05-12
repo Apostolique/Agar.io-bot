@@ -5,4 +5,5 @@ To run the script, you need to install Greasemonkey in Firefox. Then activate th
 
 How to install videos:
 https://www.youtube.com/watch?v=a3aCnOpDxKg
+
 https://www.youtube.com/watch?v=0_HoZfuQN7M
