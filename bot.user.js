@@ -390,7 +390,6 @@ function main_out() {
             }
             
             for (var i = 0; i < m.length; i++) {
-                console.log("Target Size: " + v[element].size + " selfSize: " + m[0].x);
                 if (!isMe && (!v[element].isVirus && (v[element].size >= m[i].oSize * 1.15))) {
                     return true;
                 } else if (v[element].isVirus && (v[element].size * 1.15 <= m[i].oSize)) {
@@ -400,7 +399,6 @@ function main_out() {
             }
         }, v);
         
-        console.log("Amount of threats: " + dotList.length);
         return dotList;
     }
 
@@ -427,7 +425,6 @@ function main_out() {
             dotList.push([elementList[i].x, elementList[i].y, elementList[i].size]);
         }
         
-        console.log("Amount of food: " + dotList.length);
         return dotList;
     }
 
@@ -525,8 +522,6 @@ function main_out() {
             var clusterAllFood = clusterFood(allPossibleFood, m[0].oSize);
             
             for (var i = 0; i < allPossibleThreats.length; i++) {
-                console.log("Hello");
-                
                 var tempD = computerDistanceFromCircleEdge(m[0].x, m[0].y, allPossibleThreats[i].x, allPossibleThreats[i].y, allPossibleThreats[i].size);
                 
                 if (closestThreatIndex != null) {
@@ -1034,7 +1029,8 @@ function main_out() {
     d.restore();
     y && 0 != w.length && d.drawImage(y, l - y.width - 10, 10);
     M = Math.max(M, Ea());
-    0 != M && (null == W && (W = new X(24, '#FFFFFF')), W.setValue('Score: ' + ~~(M / 100)), c = W.render(), b = c.width, d.globalAlpha = 0.2, d.fillStyle = '#000000', d.fillRect(10, r - 10 - 24 - 10, b + 10, 34), d.globalAlpha = 1, d.drawImage(c, 15, r - 10 - 24 - 5));
+    sessionScore = Math.max(sessionScore, M);
+    0 != M && (null == W && (W = new X(24, '#FFFFFF')), W.setValue('Score: ' + ~~(M / 100) + ' || Best Score: ' + ~~(sessionScore / 100)), c = W.render(), b = c.width, d.globalAlpha = 0.2, d.fillStyle = '#000000', d.fillRect(10, r - 10 - 24 - 10, b + 10, 34), d.globalAlpha = 1, d.drawImage(c, 15, r - 10 - 24 - 5));
     Fa();
     a = + new Date - a;
     a > 1000 / 60 ? u -= 0.01 : a < 1000 / 65 && (u += 0.01);
@@ -1180,6 +1176,7 @@ function main_out() {
     dPoints = [],
     lines = [],
     originalName,
+    sessionScore = 0,
     d,
     z,
     l,
