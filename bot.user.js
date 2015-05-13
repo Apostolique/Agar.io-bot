@@ -322,7 +322,7 @@ function main_out() {
     c += 4,
     v[e] && (v[e].updateCode = b);
     for (d = 0; d < p.length; d++) p[d].updateCode != b && p[d--].destroy();
-    da && 0 == m.length && q('#overlays').fadeIn(3000)
+    da && 0 == m.length && q('#overlays').fadeIn(3000) && setNick(originalName)
   }
   
     function computeDistance(x1, y1, x2, y2) {
@@ -791,32 +791,35 @@ function main_out() {
                 
                 //console.log("X: " + P + " Y: " + Q);
                 
-                if (m.length > 1 && splitted) {
-                    splitted = false;
-                    tempMoveX = biggestCluster[0];
-                    tempMoveY = biggestCluster[1];
-                }
-                if (splitting) {
-                    tempMoveX = biggestCluster[0];
-                    tempMoveY = biggestCluster[1];
-                    A(17);
-                    splitting = false;
-                    splitted = true;
+                if (!toggle) {
+                  if (m.length > 1 && splitted) {
+                      splitted = false;
+                      tempMoveX = biggestCluster[0];
+                      tempMoveY = biggestCluster[1];
+                  }
+                  if (splitting) {
+                      tempMoveX = biggestCluster[0];
+                      tempMoveY = biggestCluster[1];
+                      A(17);
+                      splitting = false;
+                      splitted = true;
+                  }
+                  
+                  if (biggestCluster[2] * 2.5 < m[0].size && biggestCluster[2] > m[0].size / 5 &&  biggestCluster[2] > 11 && !splitted && !splitting) {
+                      drawLine(m[0].x, m[0].y, biggestCluster[0], biggestCluster[1], 4);
+                      
+                      var worthyTargetDistance = computeDistance(m[0].x, m[0].y, biggestCluster[0], biggestCluster[1]);
+                      
+                      console.log("I want to split.");
+                      
+                      if ((worthyTargetDistance < m[0].size * 3) && m.length == 1) {
+                          tempMoveX = biggestCluster[0];
+                          tempMoveY = biggestCluster[1];
+                          splitting = true;
+                      }
+                  }
                 }
                 
-                if (biggestCluster[2] * 2.5 < m[0].size && biggestCluster[2] > m[0].size / 5 &&  biggestCluster[2] > 11 && !splitted && !splitting) {
-                    drawLine(m[0].x, m[0].y, biggestCluster[0], biggestCluster[1], 4);
-                    
-                    var worthyTargetDistance = computeDistance(m[0].x, m[0].y, biggestCluster[0], biggestCluster[1]);
-                    
-                    console.log("I want to split.");
-                    
-                    if ((worthyTargetDistance < m[0].size * 3) && m.length == 1) {
-                        tempMoveX = biggestCluster[0];
-                        tempMoveY = biggestCluster[1];
-                        splitting = true;
-                    }
-                }
             } else if (!virusmait) {
                 //console.log("I'm lost, where do I go?");
                 
@@ -924,9 +927,6 @@ function main_out() {
         if (!toggleDraw) {
             var x1 = ((x_1 - I) * k) + l/2;
             var y1 = ((y_1 - J) * k) + r/2;
-            
-            //console.log("\tdX: " + x_1 + " dY: " + y_1);
-            
             dPoints.push([x1, y1, drawColor]);
         }
     }
@@ -937,7 +937,6 @@ function main_out() {
             var y1 = ((y_1 - J) * k) + r/2;
             var x2 = ((x_2 - I) * k) + l/2;
             var y2 = ((y_2 - J) * k) + r/2;
-            console.log("x1: " + x_1 + " y1: " + y_1);
             lines.push([x1, y1, x2, y2, drawColor]);
         }
     }
@@ -1172,7 +1171,7 @@ function main_out() {
    else if (g.top != g) g.top.location = 'http://agar.io/';
    else {
     var $,
-    toggle = true,
+    toggle = false,
     toggleDraw = false,
     splitted = false,
     splitting = false,
@@ -1180,6 +1179,7 @@ function main_out() {
     tempPoint = [0, 0, 1],
     dPoints = [],
     lines = [],
+    originalName,
     d,
     z,
     l,
@@ -1236,6 +1236,7 @@ function main_out() {
     fa.src = 'img/split.png';
     var R = null;
     g.setNick = function (a) {
+      originalName = a;
       ma();
       L = a;
       pa();
@@ -1517,5 +1518,4 @@ function main_out() {
     g.onload = wa
   }
 }) (window, jQuery);
-
 }
