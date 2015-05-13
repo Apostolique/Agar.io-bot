@@ -21,3 +21,8 @@ https://www.youtube.com/watch?v=a3aCnOpDxKg
 Credits need claimed.
 
 https://www.youtube.com/watch?v=0_HoZfuQN7M - No sound.
+
+#Hotkeys
+
+* Press 'R' if you want to toggle the line and dot drawing.
+* Press 'T' if you want to use the manual controls.
