@@ -1453,7 +1453,7 @@ function main_out() {
             d.drawImage(e, ~~this.x - ~~(g / 2), a - ~~(f / 2), g, f);
             a += e.height / 2 / b + 4
           }
-          va && (~~(this.size * this.size / 100) > 10) && (null == this.sizeCache && (this.sizeCache = new X(this.getNameSize() / 2, '#FFFFFF', !0, '#000000')), c = this.sizeCache, c.setSize(this.getNameSize() / 2), c.setValue(~~(this.size * this.size / 100)), b = Math.ceil(10 *
+          (~~(this.size * this.size / 100) > 10) && (null == this.sizeCache && (this.sizeCache = new X(this.getNameSize() / 2, '#FFFFFF', !0, '#000000')), c = this.sizeCache, c.setSize(this.getNameSize() / 2), c.setValue(~~(this.size * this.size / 100)), b = Math.ceil(10 *
           k) / 10, c.setScale(b), e = c.render(), g = ~~(e.width / b), f = ~~(e.height / b), d.drawImage(e, ~~this.x - ~~(g / 2), a - ~~(f / 2), g, f));
           d.restore()
         }
