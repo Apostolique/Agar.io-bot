@@ -1045,6 +1045,17 @@ function main_out() {
     sessionScore = Math.max(sessionScore, M);
     0 != M && (null == W && (W = new X(24, '#FFFFFF')), W.setValue('Score: ' + ~~(M / 100) + ' || Best Score: ' + ~~(sessionScore / 100)), c = W.render(), b = c.width, d.globalAlpha = 0.2, d.fillStyle = '#000000', d.fillRect(10, r - 10 - 24 - 10, b + 10, 34), d.globalAlpha = 1, d.drawImage(c, 15, r - 10 - 24 - 5));
     Fa();
+	
+	d.font = '18px Arial';
+    d.fillStyle = '#333333';
+	var cameraX = s, cameraY = t, canvasWidth = l, canvasHeight = r; //ignore this omg
+    if (cameraX <= 1000 || cameraX >= 10180 || cameraY <= 1000 || cameraY >= 10180) {
+      d.fillStyle = '#ff3333';
+    }
+    var txt = "[" + Math.round(cameraX) + ", " + Math.round(cameraY) + "]";
+    d.fillText(txt, canvasWidth / 2 - d.measureText(txt).width / 2, canvasHeight / 2 - 50);
+	
+	
     a = + new Date - a;
     a > 1000 / 60 ? u -= 0.01 : a < 1000 / 65 && (u += 0.01);
     0.4 > u && (u = 0.4);
