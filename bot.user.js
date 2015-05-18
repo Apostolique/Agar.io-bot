@@ -1024,6 +1024,9 @@ function main_out() {
     2, r / 2);
     d.scale(k, k);
     d.translate( - s, - t);
+	d.strokeStyle = '#333333';
+	d.lineWidth = 3;
+	d.beginPath(), d.moveTo(0, 0), d.lineTo(11180, 0), d.lineTo(11180, 11180), d.lineTo(0, 11180), d.lineTo(0, 0), d.stroke();
     for (e = 0; e < C.length; e++) C[e].draw();
     for (e = 0; e < p.length; e++) p[e].draw();
     d.restore();
