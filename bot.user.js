@@ -31,6 +31,12 @@ window.addEventListener('beforescriptexecute', function (e) {
 
 }, true);
 
+/*var Emouse = function (e) {
+    toggleMouseWheel && (k *= 1 + e.wheelDelta / 1e3)
+};
+"onwheel" in document ? document.addEventListener("wheel", Emouse) : "onmousewheel" in document ? document.addEventListener("mousewheel", Emouse) : document.addEventListener("MozMousePixelScroll", Emouse)
+*/
+
 ////// append with new block function:
 function append(s) {
 	console.log('append fired');
@@ -85,6 +91,10 @@ function main_out() {
         console.log("ToggleDraw");
         toggleDraw = !toggleDraw;
       }
+	  if (e.keyCode == 89) {
+		console.log("ToggleMouseWheel");
+		toggleMouseWheel = !toggleMouseWheel;
+	  }
     };
     g.onkeyup = function (e) {
       32 == e.keyCode && (a = !1);
@@ -973,7 +983,7 @@ function main_out() {
     ba()
   }
   function Ca() {
-    if (0 != m.length) {
+    if (!toggleMouseWheel && 0 != m.length) {
       for (var a = 0, b = 0; b < m.length; b++) a += m[b].size;
       a = Math.pow(Math.min(64 / a, 1), 0.4) * Math.max(r / 1080, l / 1920);
       k = (9 * k + a) / 10
@@ -1172,6 +1182,7 @@ function main_out() {
     var $,
     toggle = false,
     toggleDraw = false,
+	toggleMouseWheel = false,
     splitted = false,
     splitting = false,
     virusBait = false,
