@@ -95,6 +95,10 @@ function main_out() {
 		console.log("ToggleMouseWheel");
 		toggleMouseWheel = !toggleMouseWheel;
 	  }
+	  if (e.keyCode == 85) {
+		console.log("ToggleSizeColors");
+		toggleSizeColors = !toggleSizeColors;
+	  }
     };
     g.onkeyup = function (e) {
       32 == e.keyCode && (a = !1);
@@ -1194,6 +1198,7 @@ function main_out() {
     toggle = false,
     toggleDraw = false,
 	toggleMouseWheel = false,
+	toggleSizeColors = false,
     splitted = false,
     splitting = false,
     virusBait = false,
@@ -1424,10 +1429,36 @@ function main_out() {
         this.size = a * (this.nSize - this.oSize) + this.oSize;
         return a
       },
+	  getMass: function () {
+		return ~~(this.size * this.size / 100)
+	  },
       shouldRender: function () {
         return this.x + this.size + 40 < s - l / 2 / k || this.y + this.size + 40 < t - r / 2 / k || this.x - this.size - 40 > s + l / 2 / k || this.y - this.size - 40 > t + r / 2 / k ? !1 : !0
       },
       draw: function () {
+	  
+	  var e = this.color;
+	  //я тоже в ахуе с этого кэша
+      if ("undefined" == typeof exd && (exd = []), -1 == exd.indexOf(this.color + " " + this.name) && exd.push(this.color + " " + this.name), toggleSizeColors) {
+        var t = Math.min.apply(null, m.map(function (e) {
+          return e.getMass()
+        }));
+        if (this.isVirus || 0 === m.length) {
+          e = "#666666";
+        } else if (~m.indexOf(this)) {
+          e = "#3371FF";
+        } else if (this.getMass() > 1.3 * t * 2) {
+          e = "#FF3C3C";
+        } else if (this.getMass() > 1.3 * t) {
+          e = "#FFBF3D";
+        } else if (1.3 * this.getMass() * 2 < t) {
+          e = "#44F720";
+        } else if (1.3 * this.getMass() < t) {
+          e = "#00AA00";
+        } else {
+          e = "#FFFF00";
+        }
+      }
         if (this.shouldRender()) {
           var a = !this.isVirus &&
           0.5 > k;
@@ -1438,7 +1469,7 @@ function main_out() {
           d.lineWidth = 10;
           d.lineCap = 'round';
           d.lineJoin = this.isVirus ? 'mitter' : 'round';
-          ga ? (d.fillStyle = '#FFFFFF', d.strokeStyle = '#AAAAAA')  : (d.fillStyle = this.color, d.strokeStyle = this.color);
+          ga ? (d.fillStyle = '#FFFFFF', d.strokeStyle = '#AAAAAA')  : (d.fillStyle = e, d.strokeStyle = e);
           if (a) d.beginPath(),
           d.arc(this.x, this.y, this.size, 0, 2 * Math.PI, !1);
            else {

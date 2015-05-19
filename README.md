@@ -27,3 +27,4 @@ https://www.youtube.com/watch?v=0_HoZfuQN7M - No sound.
 * Press 'R' if you want to toggle the line and dot drawing.
 * Press 'T' if you want to use the manual controls.
 * Press 'Y' for memes
+* Press 'U' for another memes
