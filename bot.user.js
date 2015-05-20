@@ -61,14 +61,6 @@
 		console.log("ToggleSizeColors");
 		toggleSizeColors = !toggleSizeColors;
 	  }
-	  if (e.keyCode == 71) {
-		console.log("scale--");
-		k = k * 0.9;
-	  }
-	  if (e.keyCode == 72) {
-		console.log("scale++");
-		k = k * 1.1;
-	  }
     };
     g.onkeyup = function (e) {
       32 == e.keyCode && (a = !1);
