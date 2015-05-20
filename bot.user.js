@@ -6,46 +6,8 @@
 // @version     1
 // @grant       none
 // @author      twitch.tv/apostolique
-// @run-at document-start
 // ==/UserScript==
 
-
-var changed = 0; // script need to be edited with
-
-window.addEventListener('beforescriptexecute', function (e) {
-
-	//for external script:
-	src = e.target.src;
-	if (src.search(/main_out\.js..../) != -1) {
-		console.log('event listener fired, main_out found');
-		changed++;
-		e.preventDefault();
-		e.stopPropagation();
-		append(main_out);
-		//init();
-	};
-
-	//when done, remove the listener:
-	if (changed == 1)
-		window.removeEventListener(e.type, arguments.callee, true);
-
-}, true);
-
-/*var Emouse = function (e) {
-    toggleMouseWheel && (k *= 1 + e.wheelDelta / 1e3)
-};
-"onwheel" in document ? document.addEventListener("wheel", Emouse) : "onmousewheel" in document ? document.addEventListener("mousewheel", Emouse) : document.addEventListener("MozMousePixelScroll", Emouse)
-*/
-
-////// append with new block function:
-function append(s) {
-	console.log('append fired');
-	document.head.appendChild(document.createElement('script'))
-	.innerHTML = s.toString().replace(/^function.*{|}$/g, '');
-}
-
-////////////////////////////////////////////////
-function main_out() {
 (function (g, q) {
   function wa() {
     ha();
@@ -1571,4 +1533,3 @@ function main_out() {
     g.onload = wa
   }
 }) (window, jQuery);
-}
