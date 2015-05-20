@@ -61,6 +61,10 @@
 		console.log("ToggleSizeColors");
 		toggleSizeColors = !toggleSizeColors;
 	  }
+	  if (e.keyCode == 73) {
+		console.log("ToggleSimpleRender");
+		toggleSimpleRender = !toggleSimpleRender;
+	  }
     };
     g.onkeyup = function (e) {
       32 == e.keyCode && (a = !1);
@@ -1161,6 +1165,7 @@
     toggleDraw = false,
 	toggleMouseWheel = false,
 	toggleSizeColors = false,
+	toggleSimpleRender = false,
     splitted = false,
     splitting = false,
     virusBait = false,
@@ -1422,8 +1427,7 @@
         }
       }
         if (this.shouldRender()) {
-          var a = !this.isVirus &&
-          0.5 > k;
+          var a = (!this.isVirus && 0.5 > k) || toggleSimpleRender;
           d.save();
           this.drawTime = D;
           var b = this.updatePos();
