@@ -22,3 +22,4 @@ https://www.youtube.com/watch?v=NND6nqJih3U - Full fledged instructions.
 * Press 'T' if you want to use the manual controls.
 * Press 'Y' for scaling - it allows you to use Ctrl with mouse wheel to scale the map. Press 'Y' again, and it'll return you to normal scale.
 * Press 'U' for color mass interpretation. Blue - it's you. Light green means that you can eat this cell and you still will be able to do it after splitting. Green means that you can eat this cell, but you willn't be able to eat it if you split. Yellow - this cell is merely equal in mass to you, and both of you can't "eat" each other. Orange cells can eat you, but they willn't be able to do it after splitting. Red cells can eat you, and they are able to eat you if they split.
+* Press 'G' for increase scale, 'H' for decrease.
