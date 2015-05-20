@@ -1,7 +1,7 @@
 # Agar.io-bot
 The aim of the project is to create a bot that can play Agar.io
 
-To run the script, you need to install Greasemonkey in Firefox. Then activate the script on the page http://agar.io/
+To run the script, you need to install Greasemonkey / Tampermonkey in your browser. Then activate the script on the page http://agar.io/
 
 #How to Install
 **Videos**
