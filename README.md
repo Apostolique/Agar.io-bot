@@ -3,6 +3,10 @@ The aim of the project is to create a bot that can play Agar.io
 
 To run the script, you need to install Greasemonkey / Tampermonkey in your browser. Then activate the script on the page http://agar.io/
 
+To use the Server Selector, Select a server region, the server ip and port is then Displayed give that to your friends.
+
+To join a Server your Friends gave u info to, You use the Empty field below the play button
+
 #How to Install
 **Videos**
 
