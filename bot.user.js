@@ -16,8 +16,8 @@ nodeDiv.id = "includedContent";
 nodeDiv.style.backgroundColor = "#000000";
 nodeDiv.style.zIndex = 9999999999;
 nodeDiv.style.color = "#dddddd";
-nodeDiv.innerHTML+= "<p>Hacked interface for team play</p>";
-nodeDiv.innerHTML = "<small>Code from - https://github.com/Asexual/</small>";
+nodeDiv.innerHTML = "<p>Hacked interface for team play</p>";
+nodeDiv.innerHTML += "<small>Code from - https://github.com/Asexual/</small>";
 jQuery('#region').parent().get(0).appendChild( document.createElement("br"));
 jQuery('#region').parent().get(0).appendChild(nodeDiv);
 
