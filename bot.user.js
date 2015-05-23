@@ -593,35 +593,29 @@
                     offsetEscapeRightX = offsetEscapeX + (allPossibleThreats[i].size / ratioLeftX * escapeMid);
                     offsetEscapeRightY = offsetEscapeY + (allPossibleThreats[i].size / ratioLeftY * escapeMid);
                 }
-
-                if (offsetEscapeLeftX < 0) { offsetEscapeLeftX = 0 + m[0].size /2; }
-                if (offsetEscapeLeftY < 0) { offsetEscapeLeftY = 0 + m[0].size /2; }
-                if (offsetEscapeLeftX > mapSize) { offsetEscapeLeftX = mapSize - m[0].size /2; }
-                if (offsetEscapeLeftY > mapSize) { offsetEscapeLeftY = mapSize - m[0].size /2; }
-                if (offsetEscapeRightX < 0) { offsetEscapeRightX = 0 + m[0].size /2; }
-                if (offsetEscapeRightY < 0) { offsetEscapeRightY = 0 + m[0].size /2; }
-                if (offsetEscapeRightX > mapSize) { offsetEscapeRightX = mapSize - m[0].size /2; }
-                if (offsetEscapeRightY > mapSize) { offsetEscapeRightY = mapSize - m[0].size /2; }
-
-                if (m[0].x < allPossibleThreats[i].x && m[0].y > allPossibleThreats[i].y) {
-                    var c = offsetRightX;
-                    offsetRightX = offsetLeftX;
-                    offsetLeftX = c;
-
-                    var d = offsetRightY;
-                    offsetRightY = offsetLeftY;
-                    offsetLeftY = d;
-
-                    var e = offsetEscapeRightX;
-                    offsetEscapeRightX = offsetEscapeLeftX;
-                    offsetEscapeLeftX = e;
-
-                    var f = offsetEscapeRightY;
-                    offsetEscapeRightY = offsetEscapeLeftY;
-                    offsetEscapeLeftY = f;
-                    //console.log("Swap");
-                } else if (m[0].x > allPossibleThreats[i].x && m[0].y > allPossibleThreats[i].y)
-                {
+                var PushEscapePoint = true;
+                //do not add to escape list if the escape point is the corner
+                if ((offsetEscapeLeftX == 0 && offsetEscapeLeftY == 0) ||  (offsetEscapeLeftX == mapSize && offsetEscapeLeftY == mapSize) || 
+                   (offsetEscapeLeftX == 0 && offsetEscapeLeftY == mapSize) || (offsetEscapeLeftX == mapSize && offsetEscapeLeftY == 0) || )
+                    {PushEscapePoint = false; }
+                    
+                //reset escape point to map if it is outside the map    
+                //also adds half of the size of YOU when the escape point is on the eage to have full speed                
+                else if (offsetEscapeLeftX < 0) { offsetEscapeLeftX = 0 + m[0].size /2; }
+                else if (offsetEscapeLeftY < 0) { offsetEscapeLeftY = 0 + m[0].size /2; }
+                else if (offsetEscapeLeftX > mapSize) { offsetEscapeLeftX = mapSize - m[0].size /2; }
+                else if (offsetEscapeLeftY > mapSize) { offsetEscapeLeftY = mapSize - m[0].size /2; }
+                else if (offsetEscapeRightX < 0) { offsetEscapeRightX = 0 + m[0].size /2; }
+                else if (offsetEscapeRightY < 0) { offsetEscapeRightY = 0 + m[0].size /2; }
+                else if (offsetEscapeRightX > mapSize) { offsetEscapeRightX = mapSize - m[0].size /2; }
+                else if (offsetEscapeRightY > mapSize) { offsetEscapeRightY = mapSize - size /2; }
+              
+                //do not add to escape list if the escape point is at your location
+                if (offsetEscapeLeftX == m[0].x && offsetEscapeLeftY == m[0].y){
+                  PushEscapePoint = false; 
+                }
+              
+                if ((m[0].x < allPossibleThreats[i].x || m[0].x > allPossibleThreats[i].x) && m[0].y > allPossibleThreats[i].y) {
                     var c = offsetRightX;
                     offsetRightX = offsetLeftX;
                     offsetLeftX = c;
@@ -663,22 +657,19 @@
                 drawLine(threatLineRight[0][0], threatLineRight[0][1], threatLineRight[1][0], threatLineRight[1][1], 0);
 
                 allThreatLines.push([threatLineLeft, threatLineRight]);
+                if(PushEscapePoint){
+                  drawPoint(offsetEscapeLeftX, offsetEscapeLeftY, 4);
+                  drawPoint(offsetEscapeRightX, offsetEscapeRightY, 4);
+                  allFallbackPointsLeft.push([offsetEscapeLeftX, offsetEscapeLeftY]);
+                  allFallbackPointsRight.push([offsetEscapeRightX, offsetEscapeRightY]);
+                  //allFallbackPoints.push([offsetEscapeRightX, offsetEscapeRightY]);
 
-                drawPoint(offsetEscapeLeftX, offsetEscapeLeftY, 4);
-                drawPoint(offsetEscapeRightX, offsetEscapeRightY, 4);
-                //drawPoint(offsetEscapeX, offsetEscapeY, 4);
+                  allFallbackmool.push(true);
+                  //allFallbackmool.push(true);
 
-                //allFallbackPoints.push([offsetEscapeX, offsetEscapeY]);
-                allFallbackPointsLeft.push([offsetEscapeLeftX, offsetEscapeLeftY]);
-                allFallbackPointsRight.push([offsetEscapeRightX, offsetEscapeRightY]);
-                //allFallbackPoints.push([offsetEscapeRightX, offsetEscapeRightY]);
-
-                allFallbackmool.push(true);
-                //allFallbackmool.push(true);
-
-                allFallbackCount.push(0);
-                //allFallbackCount.push(0);
-
+                  allFallbackCount.push(0);
+                  //allFallbackCount.push(0);
+                }
                 var badSide = isSideLine(threatLine[0], threatLine[1], [allPossibleThreats[i].x, allPossibleThreats[i].y]);
 
                 var badSideLeft = isSideLine(threatLineLeft[0], threatLineLeft[1], [allPossibleThreats[i].x, allPossibleThreats[i].y]);
@@ -1075,15 +1066,18 @@
 
             d.moveTo(lines[i][0], lines[i][1]);
             d.lineTo(lines[i][2], lines[i][3]);
-        
-        d.stroke();
+
+            d.stroke();
+        }
+       
+        d.lineWidth = 1;
+
+
     }
-    d.lineWidth = 1;
-  }
-  function Fa() {
-    if (ia && fa.width) {
-      var a = l / 5;
-      d.drawImage(fa, 5, 5, a, a)
+    function Fa() {
+        if (ia && fa.width) {
+            var a = l / 5;
+            d.drawImage(fa, 5, 5, a, a)
         }
     }
     function Ea() {
