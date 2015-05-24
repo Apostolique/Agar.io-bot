@@ -595,20 +595,20 @@
                 }
                 var PushEscapePoint = true;
                 //do not add to escape list if the escape point is the corner
-                if ((offsetEscapeLeftX == 0 && offsetEscapeLeftY == 0) ||  (offsetEscapeLeftX == mapSize && offsetEscapeLeftY == mapSize) || 
-                   (offsetEscapeLeftX == 0 && offsetEscapeLeftY == mapSize) || (offsetEscapeLeftX == mapSize && offsetEscapeLeftY == 0) || )
+                if ((offsetEscapeLeftX <= 0 && offsetEscapeLeftY <= 0) ||  (offsetEscapeLeftX >= mapWidth && offsetEscapeLeftY >= mapHeight) || 
+                   (offsetEscapeLeftX == 0 && offsetEscapeLeftY >= mapHeight ) || (offsetEscapeLeftX >= mapWidth && offsetEscapeLeftY <= 0) || )
                     {PushEscapePoint = false; }
                     
                 //reset escape point to map if it is outside the map    
                 //also adds half of the size of YOU when the escape point is on the eage to have full speed                
                 else if (offsetEscapeLeftX < 0) { offsetEscapeLeftX = 0 + m[0].size /2; }
                 else if (offsetEscapeLeftY < 0) { offsetEscapeLeftY = 0 + m[0].size /2; }
-                else if (offsetEscapeLeftX > mapSize) { offsetEscapeLeftX = mapSize - m[0].size /2; }
-                else if (offsetEscapeLeftY > mapSize) { offsetEscapeLeftY = mapSize - m[0].size /2; }
+                else if (offsetEscapeLeftX > mapWidth -1) { offsetEscapeLeftX = mapWidth - m[0].size /2; }
+                else if (offsetEscapeLeftY > mapHeight -1) { offsetEscapeLeftY = mapHeight - m[0].size /2; }
                 else if (offsetEscapeRightX < 0) { offsetEscapeRightX = 0 + m[0].size /2; }
                 else if (offsetEscapeRightY < 0) { offsetEscapeRightY = 0 + m[0].size /2; }
-                else if (offsetEscapeRightX > mapSize) { offsetEscapeRightX = mapSize - m[0].size /2; }
-                else if (offsetEscapeRightY > mapSize) { offsetEscapeRightY = mapSize - size /2; }
+                else if (offsetEscapeRightX > mapWidth-1) { offsetEscapeRightX = mapSimapWidthze - m[0].size /2; }
+                else if (offsetEscapeRightY > mapHeight) { offsetEscapeRightY = mapHeight - size /2; }
               
                 //do not add to escape list if the escape point is at your location
                 if (offsetEscapeLeftX == m[0].x && offsetEscapeLeftY == m[0].y){
@@ -997,9 +997,9 @@
         d.lineWidth = 5;
         d.beginPath();
         d.moveTo(0, 0); 
-        d.lineTo(mapSize, 0); 
-        d.lineTo(mapSize, mapSize); 
-        d.lineTo(0, mapSize);
+        d.lineTo(mapWidth, 0); 
+        d.lineTo(mapWidth, mapHight); 
+        d.lineTo(0, mapHight);
         d.lineTo(0, 0); 
         d.stroke();
         d.restore();        
@@ -1014,9 +1014,7 @@
         1 < u && (u = 1)
 
         for (var i = 0; i < dPoints.length; i++) {
-            var radius = 10;
-
-
+            var radius = 10;            
             d.beginPath();
             d.arc(dPoints[i][0], dPoints[i][1], radius, 0, 2 * Math.PI, false);
 
@@ -1037,9 +1035,16 @@
             d.fill();
             d.lineWidth = 2;
             d.strokeStyle = '#003300';
-            d.stroke();
+            d.stroke();           
+            d.font = '18px Arial';
+            d.fillStyle = '#333333';	         
+            var txt = "[" + String(Math.round(dPoints[i][0])) + ", " + String(Math.round(dPoints[i][1])) + "]";
+            d.strokeText(txt, dPoints[i][0] , dPoints[i][1]); 
+            d.fillText(txt, dPoints[i][0] , dPoints[i][1]); 
+            //d.strokeText(txt, dPoints[i][0] - d.measureText(txt).width / 2, dPoints[i][1] - 50); 
+            //d.fillText(txt, dPoints[i][0] - d.measureText(txt).width / 2, dPoints[i][1] - 50);  
         }
-        d.lineWidth = 1;
+        d.lineWidth = 1;t
 
         for (var i = 0; i < lines.length; i++) {
             d.beginPath();
@@ -1155,8 +1160,9 @@
         dPoints = [],
         lines = [],
         originalName,
-        sessionScore = 0,
-        mapSize = 11180,
+        sessionScore = 0,       
+        mapWidth = g.innerWidth;
+        mapHeight = g.innerHeight;
         d,
         z,
         l,
