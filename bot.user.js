@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name        AgarBot
+// @name        AgarBotGusFork
 // @namespace   Apos
 // @description Plays Agar
 // @include     http://agar.io/
-// @version     1
+// @version     69
 // @grant       none
 // @author      twitch.tv/apostolique
 // ==/UserScript==
