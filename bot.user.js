@@ -1,12 +1,79 @@
 // ==UserScript==
-// @name        AgarBot
+// @name        AgarBotGusFork
 // @namespace   Apos
 // @description Plays Agar
 // @include     http://agar.io/
-// @version     1
+// @version     69
 // @grant       none
 // @author      twitch.tv/apostolique
 // ==/UserScript==
+
+
+//Server Selection
+var modBlocking = true;
+var nodeDiv = document.createElement("div");
+nodeDiv.id = "includedContent";
+nodeDiv.style.backgroundColor = "#000000";
+nodeDiv.style.zIndex = 9999999999;
+nodeDiv.style.color = "#dddddd";
+nodeDiv.innerHTML = "<p>Hacked interface for team play</p>";
+nodeDiv.innerHTML += "<small>Code from - https://github.com/Asexual/</small>";
+jQuery('#region').parent().get(0).appendChild( document.createElement("br"));
+jQuery('#region').parent().get(0).appendChild(nodeDiv);
+
+var selector = jQuery('#region');
+var playBtn = jQuery('#playBtn');
+var nodeInput = document.createElement("input");
+var nodeBr = document.createElement("br");
+nodeInput.className = "form-control";
+nodeInput.id = "iphack";
+jQuery( playBtn ).parent().get( 0 ).appendChild(nodeBr);
+jQuery( playBtn ).parent().get( 0 ).appendChild(nodeInput);
+
+jQuery('#iphack').change(function () {
+modBlocking = false;
+});
+
+jQuery('#playBtn').off();
+$('.btn-needs-server').prop('disabled', false);
+jQuery('#playBtn').click(function() {
+	if (modBlocking == false ) {
+		jQuery('#region').val("SG-Singapore");
+		jQuery('#region').change();
+	}
+    setNick(document.getElementById('nick').value);
+    return false;
+});
+jQuery('#region').off();
+jQuery('#region').change(function () {
+	jQuery.ajax("http://m.agar.io/", {
+            error: function() {
+            },
+            success: function(a) {
+                a = a.split("\n");
+                jQuery('#includedContent').html(a[0]);
+            },
+            dataType: "text",
+            method: "POST",
+            cache: !1,
+            crossDomain: !0,
+            data: jQuery('#region').val()
+        });
+});
+(function(window){
+    var WebSocket_original = window.WebSocket;
+    window.WebSocket_original = WebSocket_original;
+    window.WebSocket = function(data) {
+	if (modBlocking == true ) {
+		newWebSocket = new window.WebSocket_original(data);
+        	return newWebSocket;
+	}else {
+		console.log("HAXXED: connecting to "+jQuery('#iphack').val()   + "(ignoring: "+data+")");
+	}
+    };
+})(window);
+
+
 
 (function (g, q) {
   function wa() {
@@ -53,6 +120,26 @@
         console.log("ToggleDraw");
         toggleDraw = !toggleDraw;
       }
+	  if (e.keyCode == 89) {
+		console.log("ToggleMouseWheel");
+		toggleMouseWheel = !toggleMouseWheel;
+	  }
+	  if (e.keyCode == 85) {
+		console.log("ToggleSizeColors");
+		toggleSizeColors = !toggleSizeColors;
+	  }
+	  if (e.keyCode == 73) {
+		console.log("ToggleSimpleRender");
+		toggleSimpleRender = !toggleSimpleRender;
+      }
+	  if (e.keyCode == 71) {
+		console.log("scale--");
+		k = k * 0.9;
+	  }
+	  if (e.keyCode == 72) {
+		console.log("scale++");
+		k = k * 1.1;
+	  }
     };
     g.onkeyup = function (e) {
       32 == e.keyCode && (a = !1);
@@ -941,7 +1028,7 @@
     ba()
   }
   function Ca() {
-    if (0 != m.length) {
+    if (!toggleMouseWheel && 0 != m.length) {
       for (var a = 0, b = 0; b < m.length; b++) a += m[b].size;
       a = Math.pow(Math.min(64 / a, 1), 0.4) * Math.max(r / 1080, l / 1920);
       k = (9 * k + a) / 10
@@ -992,6 +1079,9 @@
     2, r / 2);
     d.scale(k, k);
     d.translate( - s, - t);
+	d.strokeStyle = '#333333';
+	d.lineWidth = 3;
+	d.beginPath(), d.moveTo(0, 0), d.lineTo(11180, 0), d.lineTo(11180, 11180), d.lineTo(0, 11180), d.lineTo(0, 0), d.stroke();
     for (e = 0; e < C.length; e++) C[e].draw();
     for (e = 0; e < p.length; e++) p[e].draw();
     d.restore();
@@ -1000,6 +1090,17 @@
     sessionScore = Math.max(sessionScore, M);
     0 != M && (null == W && (W = new X(24, '#FFFFFF')), W.setValue('Score: ' + ~~(M / 100) + ' || Best Score: ' + ~~(sessionScore / 100)), c = W.render(), b = c.width, d.globalAlpha = 0.2, d.fillStyle = '#000000', d.fillRect(10, r - 10 - 24 - 10, b + 10, 34), d.globalAlpha = 1, d.drawImage(c, 15, r - 10 - 24 - 5));
     Fa();
+	
+	d.font = '18px Arial';
+    d.fillStyle = '#333333';
+	var cameraX = s, cameraY = t, canvasWidth = l, canvasHeight = r; //ignore this omg
+    if (cameraX <= 1000 || cameraX >= 10180 || cameraY <= 1000 || cameraY >= 10180) {
+      d.fillStyle = '#ff3333';
+    }
+    var txt = "[" + Math.round(cameraX) + ", " + Math.round(cameraY) + "]";
+    d.fillText(txt, canvasWidth / 2 - d.measureText(txt).width / 2, canvasHeight / 2 - 50);
+	
+	
     a = + new Date - a;
     a > 1000 / 60 ? u -= 0.01 : a < 1000 / 65 && (u += 0.01);
     0.4 > u && (u = 0.4);
@@ -1137,6 +1238,9 @@
     var $,
     toggle = false,
     toggleDraw = false,
+	toggleMouseWheel = false,
+	toggleSizeColors = false,
+	toggleSimpleRender = false,
     splitted = false,
     splitting = false,
     virusBait = false,
@@ -1367,13 +1471,38 @@
         this.size = a * (this.nSize - this.oSize) + this.oSize;
         return a
       },
+	  getMass: function () {
+		return ~~(this.size * this.size / 100)
+	  },
       shouldRender: function () {
         return this.x + this.size + 40 < s - l / 2 / k || this.y + this.size + 40 < t - r / 2 / k || this.x - this.size - 40 > s + l / 2 / k || this.y - this.size - 40 > t + r / 2 / k ? !1 : !0
       },
       draw: function () {
+	  
+	  var e = this.color;
+	  //я тоже в ахуе с этого кэша
+      if ("undefined" == typeof exd && (exd = []), -1 == exd.indexOf(this.color + " " + this.name) && exd.push(this.color + " " + this.name), toggleSizeColors) {
+        var t = Math.min.apply(null, m.map(function (e) {
+          return e.getMass()
+        }));
+        if (this.isVirus || 0 === m.length) {
+          e = "#666666";
+        } else if (~m.indexOf(this)) {
+          e = "#3371FF";
+        } else if (this.getMass() > 1.3 * t * 2) {
+          e = "#FF3C3C";
+        } else if (this.getMass() > 1.3 * t) {
+          e = "#FFBF3D";
+        } else if (1.3 * this.getMass() * 2 < t) {
+          e = "#44F720";
+        } else if (1.3 * this.getMass() < t) {
+          e = "#00AA00";
+        } else {
+          e = "#FFFF00";
+        }
+      }
         if (this.shouldRender()) {
-          var a = !this.isVirus &&
-          0.5 > k;
+          var a = (!this.isVirus && 0.5 > k) || toggleSimpleRender;
           d.save();
           this.drawTime = D;
           var b = this.updatePos();
@@ -1381,7 +1510,7 @@
           d.lineWidth = 10;
           d.lineCap = 'round';
           d.lineJoin = this.isVirus ? 'mitter' : 'round';
-          ga ? (d.fillStyle = '#FFFFFF', d.strokeStyle = '#AAAAAA')  : (d.fillStyle = this.color, d.strokeStyle = this.color);
+          ga ? (d.fillStyle = '#FFFFFF', d.strokeStyle = '#AAAAAA')  : (d.fillStyle = e, d.strokeStyle = e);
           if (a) d.beginPath(),
           d.arc(this.x, this.y, this.size, 0, 2 * Math.PI, !1);
            else {
@@ -1418,7 +1547,7 @@
             d.drawImage(e, ~~this.x - ~~(g / 2), a - ~~(f / 2), g, f);
             a += e.height / 2 / b + 4
           }
-          va && c && (null == this.sizeCache && (this.sizeCache = new X(this.getNameSize() / 2, '#FFFFFF', !0, '#000000')), c = this.sizeCache, c.setSize(this.getNameSize() / 2), c.setValue(~~(this.size * this.size / 100)), b = Math.ceil(10 *
+          (~~(this.size * this.size / 100) > 10) && (null == this.sizeCache && (this.sizeCache = new X(this.getNameSize() / 2, '#FFFFFF', !0, '#000000')), c = this.sizeCache, c.setSize(this.getNameSize() / 2), c.setValue(~~(this.size * this.size / 100)), b = Math.ceil(10 *
           k) / 10, c.setScale(b), e = c.render(), g = ~~(e.width / b), f = ~~(e.height / b), d.drawImage(e, ~~this.x - ~~(g / 2), a - ~~(f / 2), g, f));
           d.restore()
         }
