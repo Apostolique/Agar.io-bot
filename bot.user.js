@@ -1,6 +1,6 @@
 // ==UserScript==
-// @name        AgarBot
-// @namespace   Apos
+// @name        BestAgarBot
+// @namespace   AposBest
 // @description Plays Agar
 // @include     http://agar.io/
 // @version     1
@@ -8,6 +8,11 @@
 // @author      twitch.tv/apostolique
 // ==/UserScript==
 
+Number.prototype.mod = function(n) {
+    return ((this%n)+n)%n;
+};
+
+console.log("Running Bot!");
 (function (g, q) {
   function wa() {
     ha();
@@ -44,7 +49,7 @@
       81 != e.keyCode || b || (A(18), b = !0);
       87 != e.keyCode || c || (E(), A(21), c = !0);
       27 == e.keyCode && q('#overlays').fadeIn(200)
-      
+
       if (84 == e.keyCode) {
         console.log("Toggle");
         toggle = !toggle;
@@ -52,6 +57,12 @@
       if (82 == e.keyCode) {
         console.log("ToggleDraw");
         toggleDraw = !toggleDraw;
+      }
+      if (68 == e.keyCode) {
+        g.setDarkTheme(!ea);
+      }
+      if (70 == e.keyCode) {
+        g.setShowMass(!va);
       }
     };
     g.onkeyup = function (e) {
@@ -150,6 +161,7 @@
     ];
     x = null;
     console.log('Connecting to ' + a);
+    serverIP = a;
     h = new WebSocket(a);
     h.binaryType = 'arraybuffer';
     h.onopen = ya;
@@ -290,49 +302,49 @@
     c += 4,
     v[e] && (v[e].updateCode = b);
     for (d = 0; d < p.length; d++) p[d].updateCode != b && p[d--].destroy();
-    da && 0 == m.length && q('#overlays').fadeIn(3000) && setNick(originalName)
+    da && 0 == m.length /*&& q('#overlays').fadeIn(3000)*/ && setNick(originalName)
   }
-  
+
     function computeDistance(x1, y1, x2, y2) {
         var xdis = x1 - x2; // <--- FAKE AmS OF COURSE!
         var ydis = y1 - y2;
-        var distance = Math.sqrt(Math.pow(xdis, 2)  + Math.pow(ydis, 2));
-        
+        var distance = Math.sqrt(xdis * xdis + ydis * ydis);
+
         return distance;
     }
 
     function computerDistanceFromCircleEdge(x1, y1, x2, y2, s2) {
         var tempD = computeDistance(x2, y2, x1, y1);
-        
+
         var offsetX = 0;
         var offsetY = 0;
-        
+
         var ratioX =  tempD / (x2 - x1);
         var ratioY =  tempD / (y2 - y1);
 
         offsetX = x2 - (s2 / ratioX);
         offsetY = y2 - (s2 / ratioY);
-        
+
         return computeDistance(x1, y1, offsetX, offsetY);
     }
 
-    function getListmasedOnFunction(booleanFunction, listToUse) {
+    function getListBasedOnFunction(booleanFunction, listToUse) {
         var dotList = [];
         Object.keys(listToUse).forEach(function (element, index) {
             if (booleanFunction(element)){
                 dotList.push(v[element]);
             }
         });
-        
+
         return dotList;
     }
 
     //TODO: Make it only go to a virus if it's big enough. If it shrinks, it shouldn't only grab a single dot and go back in.
     function getAllNiceViruses() {
         var dotList = [];
-        
+
         if (m.length == 1) {
-            dotList = getListmasedOnFunction(function (element){
+            dotList = getListBasedOnFunction(function (element){
                 if (v[element].isVirus && (v[element].size *1.10 <= m[0].size) && v[element].size * 1.15 >= m[0].size) {
                         return true;
                 }
@@ -340,23 +352,23 @@
             }, v);
         }
 
-        
+
         return dotList;
     }
 
     function getAllThreats() {
         var dotList = [];
-        
-        dotList = getListmasedOnFunction(function (element){
+
+        dotList = getListBasedOnFunction(function (element){
             var isMe = false;
-            
+
             for (var i = 0; i < m.length; i++) {
                 if (v[element].id == m[i].id) {
                     isMe = true;
                     break;
                 }
             }
-            
+
             for (var i = 0; i < m.length; i++) {
                 if (!isMe && (!v[element].isVirus && (v[element].size >= m[i].oSize * 1.15))) {
                     return true;
@@ -366,39 +378,45 @@
                 return false;
             }
         }, v);
-        
+
         return dotList;
     }
 
     function getAllFood() {
         var elementList = [];
         var dotList = [];
-        
-        elementList = getListmasedOnFunction(function (element){
+
+        elementList = getListBasedOnFunction(function (element){
             var isMe = false;
-            
+
             for (var i = 0; i < m.length; i++) {
                 if (v[element].id == m[i].id) {
                     isMe = true;
                     break;
                 }
             }
-            
+
             for (var i = 0; i < m.length; i++) {
                 if (!isMe && !v[element].isVirus && (v[element].size * 1.25 <= m[i].size)  || (v[element].size <= 11)){return true;} else{return false;}
             }
         }, v);
-        
+
         for (var i = 0; i < elementList.length; i++) {
             dotList.push([elementList[i].x, elementList[i].y, elementList[i].size]);
         }
-        
+
         return dotList;
     }
 
     function clusterFood(foodList, blobSize) {
         var clusters = [];
         var addedCluster = false;
+
+        //1: x
+        //2: y
+        //3: size or value
+        //4: Angle, not set here.
+
         for (var i = 0; i < foodList.length; i++) {
             for (var j = 0; j < clusters.length; j++) {
                 if (computeDistance(foodList[i][0], foodList[i][1], clusters[j][0], clusters[j][1]) < blobSize * 1.5) {
@@ -410,25 +428,71 @@
                 }
             }
             if (!addedCluster) {
-                clusters.push([foodList[i][0], foodList[i][1], foodList[i][2]]);
+                clusters.push([foodList[i][0], foodList[i][1], foodList[i][2], 0]);
             }
             addedCluster = false;
         }
         return clusters;
     }
 
+    function getAngle(x1, y1, x2, y2) {
+        //Handle vertical and horizontal lines.
+
+        if (x1 == x2) {
+            if (y1 < y2) {
+                return 271;
+            } else {
+                return 89;
+            }
+        }
+
+        return (Math.round(Math.atan2(-(y1 - y2), -(x1 - x2))/Math.PI*180 + 180));
+    }
+
+    function slope(x1, y1, x2, y2) {
+        var m = (y1 - y2) / (x1 - x2);
+
+        return m;
+    }
+
+    function slopeFromAngle(degree) {
+        if (degree == 270) {
+            degree = 271;
+        } else if (degree == 90) {
+            degree = 91;
+        }
+        return Math.tan((degree - 180) / 180 * Math.PI);
+    }
+
     //Given two points on a line, finds the slope of a perpendicular line crossing it.
     function inverseSlope(x1, y1, x2, y2) {
-        var m = (y1 - y2) / (x1 - x2);
+        var m = slope(x1, y1, x2, y2);
         return (-1) / m;
     }
 
     //Given a slope and an offset, returns two points on that line.
-    function pointsOnLine(slope, useX, useY) {
-        
+    function pointsOnLine(slope, useX, useY, distance) {
         var b = useY - slope * useX;
-        
-        return [[useX - 100, slope * (useX - 100) + b], [useX + 100, slope * (useX + 100) + b]];
+        var r = Math.sqrt(1 + slope * slope);
+
+        var newX1 = (useX + (distance / r));
+        var newY1 = (useY + ((distance * slope) / r));
+        var newX2 = (useX + ((-distance) / r));
+        var newY2 = (useY + (((-distance) * slope) / r));
+
+        return [[newX1, newY1], [newX2, newY2]];
+    }
+
+    function followAngle(angle, useX, useY, distance) {
+        var slope = slopeFromAngle(angle);
+        var coords = pointsOnLine(slope, useX, useY, distance);
+
+        var side = (angle - 90).mod(360);
+        if (side < 180) {
+            return coords[1];
+        } else {
+            return coords[0];
+        }
     }
 
     //Using a line formed from point a to b, tells if point c is on S side of that line.
@@ -439,458 +503,375 @@
         return false;
     }
 
+    //angle range2 is within angle range2
+    //an Angle is a point and a distance between an other point [5, 40]
+    function angleRangeIsWithin(range1, range2) {
+        if (range2[0] == (range2[0] + range2[1]).mod(360)) {
+            return true;
+        }
+        //console.log("r1: " + range1[0] + ", " + range1[1] + " ... r2: " + range2[0] + ", " + range2[1]);
+        if (angleIsWithin(range1[0], range2) && angleIsWithin((range1[0] + range1[1]).mod(360), range2)) {
+            return true;
+        }
+        return false;
+    }
+
+    function angleIsWithin(angle, range) {
+        var diff = (angle - range[0]).mod(360);
+        if (diff < range[1]) {
+            return true;
+        }
+        return false;
+    }
+
     function findDestination() {
         dPoints = [];
+        dArc = [];
+        dText = [];
         lines = [];
-        
-        var tempMoveX = P;
-        var tempMoveY = Q;
-        
-        if (m[0] != null) {
-            var allPossibleFood = null;
-            allPossibleFood = getAllFood(); // #1
-            
-            /*for (var i = -1000; i < 1000; i += m[0].size) {
-                for (var j = -1000; j < 1000; j += m[0].size) {
-                    allPossibleFood.push([m[0].x + i, m[0].y + j, -200]);
-                }
-            }*/
-            
-            var allPossibleThreats = getAllThreats();
-            
-            var allPossibleNiceViruses = getAllNiceViruses();
-            var closestNiceViruse = null;
-            if (allPossibleNiceViruses.length != 0) {
-                closestNiceViruse = [allPossibleNiceViruses[0], computeDistance(allPossibleNiceViruses[0].x, allPossibleNiceViruses[0].y, m[0].x, m[0].y)];
-            
-                for (var i = 1; i < allPossibleNiceViruses.length; i++) {
-                    var testD = computeDistance(allPossibleNiceViruses[i].x, allPossibleNiceViruses[i].y, m[0].x, m[0].y)
-                    if (testD < closestNiceViruse[1]) {
-                        closestNiceViruse = [allPossibleNiceViruses[i], testD];
-                    }
-                }
-                
-                console.log("NO WAY!!! LET THE TROLLING mEGIN!");
-            }
-            
-            var allThreatLines = [];
-            var allThreatLinesmool = [];
-            var allFallbackPointsLeft = [];
-            var allFallbackPointsRight = [];
-            var allFallbackmool = [];
-            var allFallbackCount = [];
-            
-            var closestThreatIndex = null;
-            var closestThreatD = null;
-            var closestThreatIndex2 = null;
-            var closestThreatD2 = null;
-            
-            var isSafeSpot = true;
-            
-            var clusterAllFood = clusterFood(allPossibleFood, m[0].oSize);
-            
-            for (var i = 0; i < allPossibleThreats.length; i++) {
-                var tempD = computerDistanceFromCircleEdge(m[0].x, m[0].y, allPossibleThreats[i].x, allPossibleThreats[i].y, allPossibleThreats[i].size);
-                
-                if (closestThreatIndex != null) {
-                    if (closestThreatD > tempD) {
-                        closestThreatIndex2 = closestThreatIndex;
-                        closestThreatD2 = closestThreatD;
-                        closestThreatIndex = i;
-                        closestThreatD = tempD;
-                    }
-                } else {
-                    closestThreatIndex = i;
-                    closestThreatD = tempD;
-                }
-                
-                var ratioX =  tempD / (allPossibleThreats[i].x - m[0].x);
-                var ratioY =  tempD / (allPossibleThreats[i].y - m[0].y);
-                
-                var offsetX = 0;
-                var offsetY = 0;
-                
-                var offsetEscapeX = 0;
-                var offsetEscapeY = 0;
-                
-                var offsetLeftX = 0;
-                var offsetLeftY = 0;
 
-                var offsetRightX = 0;
-                var offsetRightY = 0;
-                
-                var offsetEscapeLeftX = 0;
-                var offsetEscapeLeftY = 0;
+        if (!toggle) {
+          var useMouseX = (N - l/2 + s*k) / k;
+          var useMouseY = (O - r/2 + t*k) / k;
+          tempPoint = [useMouseX, useMouseY, 1];
 
-                var offsetEscapeRightX = 0;
-                var offsetEscapeRightY = 0;
-                
-                var escape = 5;
-                var escapeMid = 3;
-                
-                iSlope = inverseSlope(allPossibleThreats[i].x, allPossibleThreats[i].y, m[0].x, m[0].y);
-                
-                var sidePoints = pointsOnLine(iSlope, allPossibleThreats[i].x, allPossibleThreats[i].y);
-                
-                var SD = computeDistance(allPossibleThreats[i].x, allPossibleThreats[i].y, sidePoints[0][0], sidePoints[0][1]);
+          var tempMoveX = P;
+          var tempMoveY = Q;
 
-                var ratioLeftX = SD / (allPossibleThreats[i].x - sidePoints[0][0]);
-                var ratioLeftY = SD / (allPossibleThreats[i].y - sidePoints[0][1]);
-                
-                if (allPossibleThreats[i].size >= m[0].size * 4) {
-                    offsetX = allPossibleThreats[i].x - (allPossibleThreats[i].size / ratioX * 1.5);
-                    offsetY = allPossibleThreats[i].y - (allPossibleThreats[i].size / ratioY * 1.5);
-                    
-                    offsetLeftX = allPossibleThreats[i].x - (allPossibleThreats[i].size / ratioLeftX * 3);
-                    offsetLeftY = allPossibleThreats[i].y - (allPossibleThreats[i].size / ratioLeftY * 3);
-                    
-                    offsetRightX = allPossibleThreats[i].x + (allPossibleThreats[i].size / ratioLeftX * 3);
-                    offsetRightY = allPossibleThreats[i].y + (allPossibleThreats[i].size / ratioLeftY * 3);
-                    
-                    offsetEscapeX = allPossibleThreats[i].x - (allPossibleThreats[i].size / ratioX * escape);
-                    offsetEscapeY = allPossibleThreats[i].y - (allPossibleThreats[i].size / ratioY * escape);
-                    
-                    offsetEscapeLeftX = offsetEscapeX - (allPossibleThreats[i].size / ratioLeftX * escapeMid);
-                    offsetEscapeLeftY = offsetEscapeY - (allPossibleThreats[i].size / ratioLeftY * escapeMid);
+          if (m[0] != null) {
+              var allPossibleFood = null;
+              allPossibleFood = getAllFood(); // #1
 
-                    offsetEscapeRightX = offsetEscapeX + (allPossibleThreats[i].size / ratioLeftX * escapeMid);
-                    offsetEscapeRightY = offsetEscapeY + (allPossibleThreats[i].size / ratioLeftY * escapeMid);
-                    
-                } else if (allPossibleThreats[i].size >= m[0].size * 2.1) {
-                    offsetX = allPossibleThreats[i].x - (allPossibleThreats[i].size / ratioX * 4);
-                    offsetY = allPossibleThreats[i].y - (allPossibleThreats[i].size / ratioY * 4);
-                    
-                    offsetLeftX = allPossibleThreats[i].x - (allPossibleThreats[i].size / ratioLeftX * 4);
-                    offsetLeftY = allPossibleThreats[i].y - (allPossibleThreats[i].size / ratioLeftY * 4);
-                    
-                    offsetRightX = allPossibleThreats[i].x + (allPossibleThreats[i].size / ratioLeftX * 4);
-                    offsetRightY = allPossibleThreats[i].y + (allPossibleThreats[i].size / ratioLeftY * 4);
-                    
-                    offsetEscapeX = allPossibleThreats[i].x - (allPossibleThreats[i].size / ratioX * escape);
-                    offsetEscapeY = allPossibleThreats[i].y - (allPossibleThreats[i].size / ratioY * escape);
-                    
-                    offsetEscapeLeftX = offsetEscapeX - (allPossibleThreats[i].size / ratioLeftX * escapeMid);
-                    offsetEscapeLeftY = offsetEscapeY - (allPossibleThreats[i].size / ratioLeftY * escapeMid);
+              var allPossibleThreats = getAllThreats();
 
-                    offsetEscapeRightX = offsetEscapeX + (allPossibleThreats[i].size / ratioLeftX * escapeMid);
-                    offsetEscapeRightY = offsetEscapeY + (allPossibleThreats[i].size / ratioLeftY * escapeMid);
-                } else {
-                    offsetX = allPossibleThreats[i].x - (allPossibleThreats[i].size / ratioX * 1);
-                    offsetY = allPossibleThreats[i].y - (allPossibleThreats[i].size / ratioY * 1);
-                    
-                    offsetLeftX = allPossibleThreats[i].x - (allPossibleThreats[i].size / ratioLeftX * 3);
-                    offsetLeftY = allPossibleThreats[i].y - (allPossibleThreats[i].size / ratioLeftY * 3);
-                    
-                    offsetRightX = allPossibleThreats[i].x + (allPossibleThreats[i].size / ratioLeftX * 3);
-                    offsetRightY = allPossibleThreats[i].y + (allPossibleThreats[i].size / ratioLeftY * 3);
-                    
-                    offsetEscapeX = allPossibleThreats[i].x - (allPossibleThreats[i].size / ratioX * escape);
-                    offsetEscapeY = allPossibleThreats[i].y - (allPossibleThreats[i].size / ratioY * escape);
-                    
-                    offsetEscapeLeftX = offsetEscapeX - (allPossibleThreats[i].size / ratioLeftX * escapeMid);
-                    offsetEscapeLeftY = offsetEscapeY - (allPossibleThreats[i].size / ratioLeftY * escapeMid);
+              var badAngles = [];
 
-                    offsetEscapeRightX = offsetEscapeX + (allPossibleThreats[i].size / ratioLeftX * escapeMid);
-                    offsetEscapeRightY = offsetEscapeY + (allPossibleThreats[i].size / ratioLeftY * escapeMid);
-                }
-                
-                if (m[0].x < allPossibleThreats[i].x && m[0].y > allPossibleThreats[i].y) {
-                    var c = offsetRightX;
-                    offsetRightX = offsetLeftX;
-                    offsetLeftX = c;
+              var isSafeSpot = true;
+              var isMouseSafe = true;
 
-                    var d = offsetRightY;
-                    offsetRightY = offsetLeftY;
-                    offsetLeftY = d;
-                    
-                    var e = offsetEscapeRightX;
-                    offsetEscapeRightX = offsetEscapeLeftX;
-                    offsetEscapeLeftX = e;
+              var clusterAllFood = clusterFood(allPossibleFood, m[0].oSize);
 
-                    var f = offsetEscapeRightY;
-                    offsetEscapeRightY = offsetEscapeLeftY;
-                    offsetEscapeLeftY = f;
-                    //console.log("Swap");
-                } else if (m[0].x > allPossibleThreats[i].x && m[0].y > allPossibleThreats[i].y)
-                {
-                    var c = offsetRightX;
-                    offsetRightX = offsetLeftX;
-                    offsetLeftX = c;
+              for (var i = 0; i < allPossibleThreats.length; i++) {
+                  var offsetX = m[0].x;
+                  var offsetY = m[0].y;
 
-                    var d = offsetRightY;
-                    offsetRightY = offsetLeftY;
-                    offsetLeftY = d;
-                    
-                    var e = offsetEscapeRightX;
-                    offsetEscapeRightX = offsetEscapeLeftX;
-                    offsetEscapeLeftX = e;
+                  var threatAngle = getAngle(allPossibleThreats[i].x, allPossibleThreats[i].y, m[0].x, m[0].y);
 
-                    var f = offsetEscapeRightY;
-                    offsetEscapeRightY = offsetEscapeLeftY;
-                    offsetEscapeLeftY = f;
-                    //console.log("Swap");
-                }
-                
-                //offsetX = ((allPossibleThreats[i].x + m[0].x) / 2);
-                //offsetY = ((allPossibleThreats[i].y + m[0].y) / 2);
+                  var iThreatAngleL = (threatAngle - 90).mod(360);
+                  var iThreatAngleR = (threatAngle + 90).mod(360);
 
-                drawPoint(offsetX, offsetY, 2);
-                
-                drawPoint(offsetLeftX, offsetLeftY, 3);
-                drawPoint(offsetRightX, offsetRightY, 3);
-                
-                var SSlope = inverseSlope(allPossibleThreats[i].x, allPossibleThreats[i].y, sidePoints[0][0], sidePoints[0][1]);
-                
-                threatLineLeft = [[offsetLeftX, offsetLeftY], [offsetX, offsetY]];
-                threatLineRight = [[offsetRightX, offsetRightY], [offsetX, offsetY]];
-                
-                threatLine = pointsOnLine(iSlope, offsetX, offsetY);
-                
-                drawLine(allPossibleThreats[i].x, allPossibleThreats[i].y, m[0].x, m[0].y, 3);
-                
-                //drawLine(threatLine[0][0], threatLine[0][1], threatLine[1][0], threatLine[1][1], 0);
-                
-                drawLine(threatLineLeft[0][0], threatLineLeft[0][1], threatLineLeft[1][0], threatLineLeft[1][1], 0);
-                drawLine(threatLineRight[0][0], threatLineRight[0][1], threatLineRight[1][0], threatLineRight[1][1], 0);
-                
-                allThreatLines.push([threatLineLeft, threatLineRight]);
-                
-                drawPoint(offsetEscapeLeftX, offsetEscapeLeftY, 4);
-                drawPoint(offsetEscapeRightX, offsetEscapeRightY, 4);
-                //drawPoint(offsetEscapeX, offsetEscapeY, 4);
-                
-                //allFallbackPoints.push([offsetEscapeX, offsetEscapeY]);
-                allFallbackPointsLeft.push([offsetEscapeLeftX, offsetEscapeLeftY]);
-                allFallbackPointsRight.push([offsetEscapeRightX, offsetEscapeRightY]);
-                //allFallbackPoints.push([offsetEscapeRightX, offsetEscapeRightY]);
-                
-                allFallbackmool.push(true);
-                //allFallbackmool.push(true);
-                
-                allFallbackCount.push(0);
-                //allFallbackCount.push(0);
-                
-                var badSide = isSideLine(threatLine[0], threatLine[1], [allPossibleThreats[i].x, allPossibleThreats[i].y]);
-                
-                var badSideLeft = isSideLine(threatLineLeft[0], threatLineLeft[1], [allPossibleThreats[i].x, allPossibleThreats[i].y]);
-                var badSideRight = isSideLine(threatLineRight[0], threatLineRight[1], [allPossibleThreats[i].x, allPossibleThreats[i].y]);
-                
-                allThreatLinesmool.push([badSideLeft, badSideRight]);
-                
-                isSafeSpot = (
-                        badSideLeft != isSideLine(threatLineLeft[0], threatLineLeft[1], [m[0].x, m[0].y]) &&
-                        badSideRight != isSideLine(threatLineRight[0], threatLineRight[1], [m[0].x, m[0].y]) && isSafeSpot
-                );
-                
-                var removeClusterList = [];
-                
-                for (var j = 0; j < clusterAllFood.length; j++) {
-                    if (
-                        badSideLeft == isSideLine(threatLineLeft[0], threatLineLeft[1], [clusterAllFood[j][0], clusterAllFood[j][1]]) &&
-                        badSideRight == isSideLine(threatLineRight[0], threatLineRight[1], [clusterAllFood[j][0], clusterAllFood[j][1]])
-                    ) {
-                        removeClusterList.push(j);
-                    }
-                }
-                for (var j = removeClusterList.length - 1; j >= 0; j--) {
-                    if (!toggle) {
-                        drawPoint(clusterAllFood[j][0], clusterAllFood[j][1], 0);
-                    }
-                    clusterAllFood.splice(removeClusterList[j], 1);
-                }
-                
-                if (
-                    badSideLeft == isSideLine(threatLineLeft[0], threatLineLeft[1], [tempPoint[0], tempPoint[1]]) &&
-                    badSideRight == isSideLine(threatLineRight[0], threatLineRight[1], [tempPoint[0], tempPoint[1]])
-                ) {
-                    tempPoint[2] = 0;
-                } 
-            }
-            
-            for (var i = 0; i < clusterAllFood.length; i++) {
-                //console.log("mefore: " + clusterAllFood[i][2]);
-                clusterAllFood[i][2] = clusterAllFood[i][2] * 6 - computeDistance(clusterAllFood[i][0], clusterAllFood[i][1], m[0].ox, m[0].oy);
-                if (!toggle) {
-                    drawPoint(clusterAllFood[i][0], clusterAllFood[i][1], 1);
-                }
-                //console.log("After: " + clusterAllFood[i][2]);
-            }
-            
-            if (clusterAllFood.length != 0 && isSafeSpot) {
-                biggestCluster = clusterAllFood[0];
-                for (var i = 1; i < clusterAllFood.length; i++) {
-                    if (clusterAllFood[i][2] > biggestCluster[2]) {
-                        biggestCluster = clusterAllFood[i];
-                    }
-                }
-                
-                /**
-                 * #1 Get a list of all the food.
-                 * #2 Get a list of all the threats.
-                 * #3 Remove all the food near threats.
-                 * #4 Find closest food after the filter.
-                 */
-                
-                if (closestNiceViruse != null && closestNiceViruse[0].size * 1.15 <= m[0].size) {
-                    for (var i = 0; i < m.length; i++) {
-                        drawLine(m[i].ox, m[i].oy, closestNiceViruse[0].x, closestNiceViruse[0].y, 5);
-                    }
-                    
-                    virusmait = true;
-     
-                    tempMoveX = closestNiceViruse[0].x;
-                    tempMoveY = closestNiceViruse[0].y;
-                } else {
-                    for (var i = 0; i < m.length; i++) {
-                        drawLine(m[i].ox, m[i].oy, biggestCluster[0], biggestCluster[1], 1);
-                    }
-                    
-                    virusmait = false;
-     
-                    tempMoveX = biggestCluster[0];
-                    tempMoveY = biggestCluster[1];
-                    //console.log("Moving");
-                }
-                
-                //console.log("X: " + P + " Y: " + Q);
-                
-                if (!toggle) {
-                  if (m.length > 1 && splitted) {
-                      splitted = false;
-                      tempMoveX = biggestCluster[0];
-                      tempMoveY = biggestCluster[1];
+                  var leftPoint = followAngle(iThreatAngleL, allPossibleThreats[i].x, allPossibleThreats[i].y, allPossibleThreats[i].size);
+                  var rightPoint = followAngle(iThreatAngleR, allPossibleThreats[i].x, allPossibleThreats[i].y, allPossibleThreats[i].size);
+
+                  drawPoint(leftPoint[0], leftPoint[1], 3, "");
+                  drawPoint(rightPoint[0], rightPoint[1], 3, "");
+
+                  var leftAngle = getAngle(leftPoint[0], leftPoint[1], offsetX, offsetY);
+                  var rightAngle = getAngle(rightPoint[0], rightPoint[1], offsetX, offsetY);
+
+                  var difference = (rightAngle - leftAngle).mod(360);
+
+                  badAngles.push([leftAngle, difference]);
+
+                  //console.log("Adding badAngles: " + leftAngle + ", " + rightAngle + " diff: " + difference);
+
+                  var lineLeft = followAngle(leftAngle, m[0].x, m[0].y, 400);
+                  var lineRight = followAngle(rightAngle, m[0].x, m[0].y, 400);
+                  drawLine(m[0].x, m[0].y, lineLeft[0], lineLeft[1], 0);
+                  drawLine(m[0].x, m[0].y, lineRight[0], lineRight[1], 0);
+                  drawPoint(lineLeft[0], lineLeft[1], 0, "Left 0");
+                  drawPoint(lineRight[0], lineRight[1], 0, "Right 1");
+              }
+
+
+
+              var goodAngles = [];
+              //TODO: Add wall angles here. Hardcoding temporary values.
+              if (m[0].x < 1000 && m[0].y < 1000) {
+                  //TOP LEFT
+                  var wallAngle1 = getAngle(1500, 0, m[0].x, m[0].y);
+                  var wallAngle2 = getAngle(0, 1500, m[0].x, m[0].y);
+                  var diff = (wallAngle2 - wallAngle1).mod(360);
+
+                  //console.log("Angle1: " + wallAngle2 + ", " + wallAngle1);
+
+                  drawLine(m[0].x, m[0].y, 1500, 0, 6);
+                  drawLine(m[0].x, m[0].y, 0, 1500, 6);
+
+                  goodAngles.push([wallAngle1, diff]);
+
+
+              } else if (m[0].x > 11180 - 1000 && m[0].y > 11180 - 1000) {
+                  //BOTTOM RIGHT
+                  var wallAngle1 = getAngle(11180 - 1500, 0, m[0].x, m[0].y);
+                  var wallAngle2 = getAngle(0, 11180 - 1500, m[0].x, m[0].y);
+                  var diff = (wallAngle1 - wallAngle2).mod(360);
+
+                  //console.log("Angle2: " + wallAngle2 + ", " + wallAngle1);
+
+                  drawLine(m[0].x, m[0].y, 1500, 0, 6);
+                  drawLine(m[0].x, m[0].y, 0, 1500, 6);
+
+                  goodAngles.push([wallAngle2, diff]);
+              } else if (m[0].x < 1000 && m[0].y > 11180 - 1000) {
+                  //BOTTOM LEFT
+                  var wallAngle1 = getAngle(1500, 11180 - 1500, m[0].x, m[0].y);
+                  var wallAngle2 = getAngle(11180 - 1500, 11180 - 1500, m[0].x, m[0].y);
+                  var diff = (wallAngle2 - wallAngle1).mod(360);
+
+                  drawLine(m[0].x, m[0].y, 1500, 11180 - 1500, 6);
+                  drawLine(m[0].x, m[0].y, 11180 - 1500, 11180 - 1500, 6);
+
+                  //console.log("Angle3: " + wallAngle2 + ", " + wallAngle1);
+
+                  drawLine(m[0].x, m[0].y, 1500, 0, 6);
+                  drawLine(m[0].x, m[0].y, 0, 1500, 6);
+
+                  goodAngles.push([wallAngle1, diff]);
+              } else if (m[0].x > 11180 - 1000 && m[0].y < 1000) {
+                  //TOP RIGHT
+                  var wallAngle1 = getAngle(11180 - 1500, 0, m[0].x, m[0].y);
+                  var wallAngle2 = getAngle(11180, 11180 - 1500, m[0].x, m[0].y);
+                  var diff = (wallAngle1 - wallAngle2).mod(360);
+
+                  drawLine(m[0].x, m[0].y, 11180 - 1500, 0, 6);
+                  drawLine(m[0].x, m[0].y, 11180, 11180 - 1500, 6);
+
+                  //console.log("Angle3: " + wallAngle2 + ", " + wallAngle1);
+
+                  drawLine(m[0].x, m[0].y, 1500, 0, 6);
+                  drawLine(m[0].x, m[0].y, 0, 1500, 6);
+
+                  goodAngles.push([wallAngle2, diff]);
+              } else if (m[0].x < 1000) {
+                  //LEFT WALL
+                  var wallAngle1 = getAngle(0, 0, m[0].x, m[0].y);
+                  var wallAngle2 = getAngle(0, 11180, m[0].x, m[0].y);
+                  var diff = (wallAngle2 - wallAngle1).mod(360);
+
+                  drawLine(m[0].x, m[0].y, 0, 0, 6);
+                  drawLine(m[0].x, m[0].y, 0, 11180, 6);
+
+                  //console.log("You called? " + m[0].x + ", " + m[0].y);
+
+                  goodAngles.push([wallAngle1, diff]);
+              } else if (m[0].x > 11180 - 1000) {
+                  //RIGHT WALL
+                  var wallAngle1 = getAngle(11180, 0, m[0].x, m[0].y);
+                  var wallAngle2 = getAngle(11180, 11180, m[0].x, m[0].y);
+                  var diff = (wallAngle1 - wallAngle2).mod(360);
+
+                  //console.log("You didn't call? " + m[0].x + ", " + m[0].y);
+
+                  goodAngles.push([wallAngle2, diff]);
+              } else if (m[0].y < 1000) {
+                  //TOP WALL
+                  var wallAngle1 = getAngle(0, 0, m[0].x, m[0].y);
+                  var wallAngle2 = getAngle(11180, 0, m[0].x, m[0].y);
+                  var diff = (wallAngle1 - wallAngle2).mod(360);
+
+                  drawLine(m[0].x, m[0].y, 0, 0, 6);
+                  drawLine(m[0].x, m[0].y, 11180, 0, 6);
+
+                  //console.log("You called? " + m[0].x + ", " + m[0].y);
+
+                  goodAngles.push([wallAngle2, diff]);
+              } else if (m[0].y > 11180 - 1000) {
+                  //BOTTOM WALL
+                  var wallAngle1 = getAngle(0, 11180, m[0].x, m[0].y);
+                  var wallAngle2 = getAngle(11180, 11180, m[0].x, m[0].y);
+                  var diff = (wallAngle2 - wallAngle1).mod(360);
+
+                  drawLine(m[0].x, m[0].y, 0, 11180, 6);
+                  drawLine(m[0].x, m[0].y, 11180, 11180, 6);
+
+                  //console.log("You called? " + m[0].x + ", " + m[0].y);
+
+                  goodAngles.push([wallAngle1, diff]);
+              }
+
+
+
+
+              //console.log("1) Good Angles: " + goodAngles.length + " Bad Angles: " + badAngles.length);
+              //TODO: Step 1: Write code to substract angle ranges.
+              console.log("___");
+              for (var i = 0; i < badAngles.length; i++) {
+                  var tempGoodAnglesLength = goodAngles.length;
+
+                  if (tempGoodAnglesLength == 0) {
+                      //console.log("First of " + badAngles.length);
+                      angle1 = (badAngles[i][0] + badAngles[i][1]).mod(360);
+                      angle2 = (badAngles[i][0] - angle1).mod(360);
+                      goodAngles.push([angle1, angle2]);
+                      //console.log("Setup " + (badAngles[i][0] - goodAngles[j][0]).mod(360) + " or " + (360 - badAngles[i][1]));
+                      continue;
                   }
-                  if (splitting) {
-                      tempMoveX = biggestCluster[0];
-                      tempMoveY = biggestCluster[1];
-                      A(17);
-                      splitting = false;
-                      splitted = true;
-                  }
-                  
-                  if (biggestCluster[2] * 2.5 < m[0].size && biggestCluster[2] > m[0].size / 5 &&  biggestCluster[2] > 11 && !splitted && !splitting) {
-                      drawLine(m[0].x, m[0].y, biggestCluster[0], biggestCluster[1], 4);
-                      
-                      var worthyTargetDistance = computeDistance(m[0].x, m[0].y, biggestCluster[0], biggestCluster[1]);
-                      
-                      console.log("I want to split.");
-                      
-                      if ((worthyTargetDistance < m[0].size * 3) && m.length == 1) {
-                          tempMoveX = biggestCluster[0];
-                          tempMoveY = biggestCluster[1];
-                          splitting = true;
+                  var removeIndex = [];
+                  for (var j = 0; j < tempGoodAnglesLength; j++) {
+                      if (angleRangeIsWithin(goodAngles[j], badAngles[i])) {
+                          removeIndex.push(j);
+                      } else if (angleRangeIsWithin(badAngles[i], goodAngles[j])) {
+                          var diff1 = (badAngles[i][0] - goodAngles[j][0]).mod(360);
+                          var newZero = (badAngles[i][0] + badAngles[i][1]).mod(360);
+                          var diff2 = (newZero - goodAngles[j][0]).mod(360);
+                          goodAngles.push([newZero, goodAngles[j][1] - diff2]);
+                          goodAngles[j][1] = diff1;
+                          //console.log("\t\t\t\t\tSplit good Angle");
+
+                          break;
+                      } else if (angleIsWithin(badAngles[i][0], goodAngles[j])) {
+                          var diff = (badAngles[i][0] - goodAngles[j][0]).mod(360);
+                          goodAngles[j][1] = diff;
+                          //console.log("Modify good Angle 0");
+                      } else if (angleIsWithin((badAngles[i][0] + badAngles[i][1]).mod(360), goodAngles[j])) {
+                          var oldY = (goodAngles[j][0] + goodAngles[j][1]).mod(360);
+                          goodAngles[j][0] = (badAngles[i][0] + badAngles[i][1]).mod(360);
+                          var diff = (oldY - goodAngles[j][0]).mod(360);
+                          goodAngles[j][1] = diff;
+                          //console.log("Modify good Angle 1");
                       }
                   }
-                }
-                
-            } else if (!virusmait) {
-                //console.log("I'm lost, where do I go?");
-                
-                /*if (closestThreatIndex2 != null) {
-                    if (allPossibleThreats[closestThreatIndex].x < allPossibleThreats[closestThreatIndex2].x && allPossibleThreats[closestThreatIndex].y < allPossibleThreats[closestThreatIndex2].y) {
-                        tempMoveX = allFallbackPointsLeft[closestThreatIndex][0];
-                        tempMoveY = allFallbackPointsLeft[closestThreatIndex][1];
-                    } else if (allPossibleThreats[closestThreatIndex].x > allPossibleThreats[closestThreatIndex2].x && allPossibleThreats[closestThreatIndex].y < allPossibleThreats[closestThreatIndex2].y) {
-                        tempMoveX = allFallbackPointsRight[closestThreatIndex][0];
-                        tempMoveY = allFallbackPointsRight[closestThreatIndex][1];
-                    } else if (allPossibleThreats[closestThreatIndex].x < allPossibleThreats[closestThreatIndex2].x && allPossibleThreats[closestThreatIndex].y > allPossibleThreats[closestThreatIndex2].y) {
-                        tempMoveX = allFallbackPointsRight[closestThreatIndex][0];
-                        tempMoveY = allFallbackPointsRight[closestThreatIndex][1];
-                    } else if (allPossibleThreats[closestThreatIndex].x > allPossibleThreats[closestThreatIndex2].x && allPossibleThreats[closestThreatIndex].y > allPossibleThreats[closestThreatIndex2].y) {
-                        tempMoveX = allFallbackPointsLeft[closestThreatIndex][0];
-                        tempMoveY = allFallbackPointsLeft[closestThreatIndex][1];
-                    } else {
-                        console.log("Hmm, WTF!!!");
-                    }
-                } else {
-                    tempMoveX = allFallbackPointsLeft[closestThreatIndex][0];
-                    tempMoveY = allFallbackPointsLeft[closestThreatIndex][1];
-                }*/
-                tempMoveX = allFallbackPointsLeft[closestThreatIndex][0];
-                tempMoveY = allFallbackPointsLeft[closestThreatIndex][1];
-                
-                if (tempMoveX < S || tempMoveX > U) {
-                    tempMoveX = allFallbackPointsRight[closestThreatIndex][0];
-                    tempMoveY = allFallbackPointsRight[closestThreatIndex][1];
-                } else if (tempMoveX < T || tempMoveX > V) {
-                    tempMoveX = allFallbackPointsRight[closestThreatIndex][0];
-                    tempMoveY = allFallbackPointsRight[closestThreatIndex][1];
-                }
-                
-                
-                drawLine(m[0].x, m[0].y, tempMoveX, tempMoveY, 6);
-                //#1 Find closest enemy.
-                //#2 go to its teal line.
-                
-                /*for (var i = 0; i < allFallbackPoints.length; i++) {
-                    for (var j = 0; j < allThreatLines.length; j++) {
-                        var badSideLeft = allThreatLinesmool[0];
-                        var badSideRight = allThreatLinesmool[1];
-                        
-                        if (allFallbackmool[i] &&
-                            badSideLeft != isSideLine(allThreatLines[j][0][0], allThreatLines[j][0][1], allFallbackPoints[i]) &&
-                            badSideRight != isSideLine(allThreatLines[j][1][0], allThreatLines[j][1][1], allFallbackPoints[i])
-                        ) {
-                            allFallbackmool[i] = true;
-                            //console.log("Step 1");
-                        } else {
-                            //console.log("Failed Step 1");
-                            allFallbackmool[i] = false;
-                            allFallbackCount[i] += 1;
-                        }
-                    }
-                    
+                  if (removeIndex.length > 0) {
+                      console.log("I KNEW IT!!! THIS NEEDED TO BE HANDLED");
+                      for (var j = 0; j < removeIndex.length; j++) {
+                          goodAngles.splice(removeIndex[j], 1);
+                      }
+                  }
+              }
+              //console.log("2) Good Angles: " + goodAngles.length);
 
-                }
-                
-                var closestFallback = null;
-                var fallbackDistance = null;
-                for (var i = 1; i < allFallbackPoints.length; i++) {
-                    if (allFallbackmool[i]) {
-                        var tempDistance = computeDistance(m[0].x, m[0].y, allFallbackPoints[i][0], allFallbackPoints[i][1]);
-                        if (closestFallback != null) {
-                            if (tempDistance < fallbackDistance) {
-                                closestFallback = allFallbackPoints[i];
-                                fallbackDistance = tempDistance;
-                            }
-                        } else {
-                            //console.log("FOUND CHILL SPOT!");
-                            closestFallback = allFallbackPoints[i];
-                            fallbackDistance = tempDistance;
-                        }
-                    }
-                }
-                
-                if (closestFallback != null) {
-                    console.log("ESCAPING");
-                    tempMoveX = closestFallback[0];
-                    tempMoveY = closestFallback[1];
-                    drawLine(m[0].x, m[0].y, tempMoveX, tempMoveY, 6);
-                } else {
-                    console.log("NOPE! NEVER RUNNING AWAY!");
-                }*/
-                
-                //#1 Loop through fallbackpoints
-                //#2 Loop through threatlines
-                //#3 Verify if a point is fine. If not, add counter to point's overlaps
-                //#4 Go to closest safe point, otherwise find point with lowest counter.
-            }
-            
-            drawPoint(tempPoint[0], tempPoint[1], tempPoint[2]);
-            tempPoint[2] = 1;
-        }
-        
-        if (!toggle) {
-            P = tempMoveX;
-            Q = tempMoveY;
+              for (var i = 0; i < goodAngles.length; i++) {
+                  if (goodAngles[i][0] != goodAngles[i][1].mod(360)) {
+                      var line1 = followAngle(goodAngles[i][0], m[0].x, m[0].y, 200);
+                      var line2 = followAngle((goodAngles[i][0] + goodAngles[i][1]).mod(360), m[0].x, m[0].y, 200);
+                      drawLine(m[0].x, m[0].y, line1[0], line1[1], 2);
+                      drawLine(m[0].x, m[0].y, line2[0], line2[1], 2);
+                      
+                      drawArc(line1[0], line1[1], line2[0], line2[1], m[0].x, m[0].y, 200, 1);
+
+                      drawPoint(line1[0], line1[1], 0, "" + i + ": 0");
+                      drawPoint(line2[0], line2[1], 0, "" + i + ": 1");
+                  }
+
+              }
+
+              if (goodAngles.length > 0) {
+                  var bIndex = goodAngles[0];
+                  var biggest = goodAngles[0][1];
+                  for (var i = 1; i < goodAngles.length; i++) {
+                      var size = goodAngles[i][1];
+                      if (size > biggest) {
+                          biggest = size;
+                          bIndex = goodAngles[i];
+                      }
+                  }
+                  var perfectAngle = (bIndex[0] + bIndex[1] / 2);
+                  var line1 = followAngle(perfectAngle, m[0].x, m[0].y, 300);
+                  drawLine(m[0].x, m[0].y, line1[0], line1[1], 7);
+
+                  for (var i = 0; i < clusterAllFood.length; i++) {
+                      //console.log("mefore: " + clusterAllFood[i][2]);
+                      //This is the cost function. Higher is better.
+                      
+                      var clusterAngle = getAngle(clusterAllFood[i][0], clusterAllFood[i][1], m[0].x, m[0].y);
+
+                      var angleD1 = (bIndex[0] - clusterAngle).mod(360);
+                      var angleD2 = (clusterAngle - bIndex[0] + bIndex[1]).mod(360);
+
+                      var bestAngleScore = Math.min(angleD1, angleD2);
+
+                      clusterAllFood[i][2] = clusterAllFood[i][2] -/* computeDistance(clusterAllFood[i][0], clusterAllFood[i][1], m[0].x, m[0].y) +*/ (bestAngleScore * 10);
+                      console.log("Current Value: " + clusterAllFood[i][2]);
+
+                      clusterAllFood[i][3] = clusterAngle;
+
+                      if (!toggle) {
+
+                          drawPoint(clusterAllFood[i][0], clusterAllFood[i][1], 1, "");
+                      }
+                      //console.log("After: " + clusterAllFood[i][2]);
+                  }
+
+                  var bestFoodI = 0;
+                  var bestFood = clusterAllFood[0][2];
+                  for (var i = 1; i < clusterAllFood.length; i++) {
+                      if (bestFood < clusterAllFood[i][2]) {
+                          bestFood = clusterAllFood[i][2];
+                          bestFoodI = i;
+                      }
+                  }
+
+                  console.log("Best Value: " + clusterAllFood[bestFoodI][2]);
+
+                  tempMoveX = clusterAllFood[bestFoodI][0];
+                  tempMoveY = clusterAllFood[bestFoodI][1];
+                  drawLine(m[0].x, m[0].y, tempMoveX, tempMoveY, 1);
+              } else {
+                 for (var i = 0; i < clusterAllFood.length; i++) {
+                      //console.log("mefore: " + clusterAllFood[i][2]);
+                      //This is the cost function. Higher is better.
+                      
+                      var clusterAngle = getAngle(clusterAllFood[i][0], clusterAllFood[i][1], m[0].x, m[0].y);
+
+                      clusterAllFood[i][2] = clusterAllFood[i][2] * 6 - computeDistance(clusterAllFood[i][0], clusterAllFood[i][1], m[0].x, m[0].y);
+                      console.log("Current Value: " + clusterAllFood[i][2]);
+
+                      //(goodAngles[bIndex][1] / 2 - (Math.abs(perfectAngle - clusterAngle)));
+
+                      clusterAllFood[i][3] = clusterAngle;
+
+                      if (!toggle) {
+
+                          drawPoint(clusterAllFood[i][0], clusterAllFood[i][1], 1, "");
+                      }
+                      //console.log("After: " + clusterAllFood[i][2]);
+                  }
+
+                  var bestFoodI = 0;
+                  var bestFood = clusterAllFood[0][2];
+                  for (var i = 1; i < clusterAllFood.length; i++) {
+                      if (bestFood < clusterAllFood[i][2]) {
+                          bestFood = clusterAllFood[i][2];
+                          bestFoodI = i;
+                      }
+                  }
+
+                  console.log("Best Value: " + clusterAllFood[bestFoodI][2]);
+
+                  tempMoveX = clusterAllFood[bestFoodI][0];
+                  tempMoveY = clusterAllFood[bestFoodI][1];
+                  drawLine(m[0].x, m[0].y, tempMoveX, tempMoveY, 1);
+              }
+
+              drawPoint(tempPoint[0], tempPoint[1], tempPoint[2], "");
+              //drawLine(tempPoint[0], tempPoint[1], m[0].x, m[0].y, 6);
+              //console.log("Slope: " + slope(tempPoint[0], tempPoint[1], m[0].x, m[0].y) + " Angle: " + getAngle(tempPoint[0], tempPoint[1], m[0].x, m[0].y) + " Side: " + (getAngle(tempPoint[0], tempPoint[1], m[0].x, m[0].y) - 90).mod(360));
+              tempPoint[2] = 1;
+          }
+          P = tempMoveX;
+          Q = tempMoveY;
         }
     }
 
-    function drawPoint(x_1, y_1, drawColor) {
+    function drawPoint(x_1, y_1, drawColor, text) {
         if (!toggleDraw) {
             var x1 = ((x_1 - I) * k) + l/2;
             var y1 = ((y_1 - J) * k) + r/2;
             dPoints.push([x1, y1, drawColor]);
+            dText.push(text);
+        }
+    }
+
+    function drawArc(x_1, y_1, x_2, y_2, x_3, y_3, radius, drawColor) {
+        if (!toggleDraw) {
+            var x1 = ((x_1 - I) * k) + l/2;
+            var y1 = ((y_1 - J) * k) + r/2;
+            var x2 = ((x_2 - I) * k) + l/2;
+            var y2 = ((y_2 - J) * k) + r/2;
+            var x3 = ((x_3 - I) * k) + l/2;
+            var y3 = ((y_3 - J) * k) + r/2;
+            dArc.push([x1, y1, x2, y2, x3, y3, radius, drawColor]);
         }
     }
 
@@ -903,10 +884,10 @@
             lines.push([x1, y1, x2, y2, drawColor]);
         }
     }
-  
+
   function E() {
     findDestination();
-      
+
     if (null != h && h.readyState == h.OPEN) {
       var a = N - l / 2,
       b = O - r / 2;
@@ -1004,40 +985,13 @@
     a > 1000 / 60 ? u -= 0.01 : a < 1000 / 65 && (u += 0.01);
     0.4 > u && (u = 0.4);
     1 < u && (u = 1)
-    
-    for (var i = 0; i < dPoints.length; i++) {
-        var radius = 10;
-        
 
-        d.beginPath();
-        d.arc(dPoints[i][0], dPoints[i][1], radius, 0, 2 * Math.PI, false);
 
-        if (dPoints[i][2] == 0) {
-            d.fillStyle = "black";
-        } else if (dPoints[i][2] == 1) {
-            d.fillStyle = "yellow";
-        } else if (dPoints[i][2] == 2) {
-            d.fillStyle = "blue";
-        } else if (dPoints[i][2] == 3) {
-            d.fillStyle = "red";
-        } else if (dPoints[i][2] == 4) {
-            d.fillStyle = "#008080";
-        } else {
-            d.fillStyle = "#000000";
-        }
-          
-        d.fill();
-        d.lineWidth = 2;
-        d.strokeStyle = '#003300';
-        d.stroke();
-    }
-    d.lineWidth = 1;
-    
     for(var i = 0; i < lines.length; i++) {
         d.beginPath();
-        
+
         d.lineWidth = 5;
-        
+
         if (lines[i][4] == 0) {
             d.strokeStyle = "#FF0000";
         } else if (lines[i][4] == 1) {
@@ -1052,16 +1006,110 @@
             d.strokeStyle = "#FF69B4";
         } else if (lines[i][4] == 6) {
             d.strokeStyle = "#008080";
+        } else if (lines[i][4] == 7) {
+            d.strokeStyle = "#FFFFFF";
         } else {
             d.strokeStyle = "#000000";
         }
-        
+
         d.moveTo(lines[i][0], lines[i][1]);
         d.lineTo(lines[i][2], lines[i][3]);
-        
+
         d.stroke();
     }
     d.lineWidth = 1;
+
+    for(var i = 0; i < dArc.length; i++) {
+        if (dArc[i][7] == 0) {
+            d.strokeStyle = "#FF0000";
+        } else if (dArc[i][7] == 1) {
+            d.strokeStyle = "#00FF00";
+        } else if (dArc[i][7] == 2) {
+            d.strokeStyle = "#0000FF";
+        } else if (dArc[i][7] == 3) {
+            d.strokeStyle = "#FF8000";
+        } else if (dArc[i][7] == 4) {
+            d.strokeStyle = "#8A2BE2";
+        } else if (dArc[i][7] == 5) {
+            d.strokeStyle = "#FF69B4";
+        } else if (dArc[i][7] == 6) {
+            d.strokeStyle = "#008080";
+        } else if (dArc[i][7] == 7) {
+            d.strokeStyle = "#FFFFFF";
+        } else {
+            d.strokeStyle = "#000000";
+        }
+
+        d.beginPath();
+
+        d.lineWidth = 5;
+
+        var ang1 = Math.atan2(dArc[i][1] - dArc[i][5], dArc[i][0] - dArc[i][4]);
+        var ang2 = Math.atan2(dArc[i][3] - dArc[i][5], dArc[i][2] - dArc[i][4]);
+
+        d.arc(dArc[i][4], dArc[i][5], dArc[i][6], ang1, ang2, false);
+
+        d.stroke();
+    }
+    d.lineWidth = 1;
+
+    for (var i = 0; i < dPoints.length; i++) {
+        if (dText[i] == "") {
+          var radius = 10;
+
+
+          d.beginPath();
+          d.arc(dPoints[i][0], dPoints[i][1], radius, 0, 2 * Math.PI, false);
+
+          if (dPoints[i][2] == 0) {
+              d.fillStyle = "black";
+          } else if (dPoints[i][2] == 1) {
+              d.fillStyle = "yellow";
+          } else if (dPoints[i][2] == 2) {
+              d.fillStyle = "blue";
+          } else if (dPoints[i][2] == 3) {
+              d.fillStyle = "red";
+          } else if (dPoints[i][2] == 4) {
+              d.fillStyle = "#008080";
+          } else {
+              d.fillStyle = "#000000";
+          }
+
+          d.fill();
+          d.lineWidth = 2;
+          d.strokeStyle = '#003300';
+          d.stroke();
+        } else {
+            var text = new X(18, (ea ? '#F2FBFF' : '#111111'));
+
+            text.setValue(dText[i]);
+            var textRender = text.render();
+            d.drawImage(textRender, dPoints[i][0], dPoints[i][1]);
+        }
+
+    }
+    d.lineWidth = 1;
+
+
+    var debugStrings = [];
+    debugStrings.push("1 - Bot: " + (!toggle ? "On" : "Off"));
+    debugStrings.push("2 - Lines: " + (!toggleDraw ? "On" : "Off"));
+    debugStrings.push("Server: " + serverIP);
+
+    var offsetValue = 20;
+    var text = new X(18, (ea ? '#F2FBFF' : '#111111'));
+
+    for (var i = 0; i < debugStrings.length; i++) {
+      text.setValue(debugStrings[i]);
+      var textRender = text.render();
+      d.drawImage(textRender, 20, offsetValue);
+      offsetValue += textRender.height;
+    }
+
+    //d.fillStyle = ea ? '#FFFFFF' : '#000000';
+    //d.fillText("1 - Bot Activated: " + (!toggle ? "On" : "Off"), 20, 20);
+    //d.fillText("2 - Lines Activated: " + (!toggleDraw ? "On" : "Off"), 20, 30);
+
   }
   function Fa() {
     if (ia && fa.width) {
@@ -1074,7 +1122,8 @@
     return a
   }
   function qa() {
-    if (0 != w.length) if (Y) {
+    y = null;
+    if (null != x || 0 != w.length) if (null != x || Y) {
       y = document.createElement('canvas');
       var a = y.getContext('2d'),
       b = 60,
@@ -1107,7 +1156,7 @@
       a.arc(100, 140, 80, c, angEnd, !1),
       a.fill(),
       c = angEnd
-    } else y = null
+    }
   }
   function ra(a, b, c, e, d, f, g) {
     p.push(this);
@@ -1142,9 +1191,12 @@
     virusBait = false,
     tempPoint = [0, 0, 1],
     dPoints = [],
+    dArc = [],
+    dText = [],
     lines = [],
     originalName,
     sessionScore = 0,
+    serverIP = "",
     d,
     z,
     l,
@@ -1232,6 +1284,11 @@
       a != H && (H = a, ca())
     };
     g.connect = oa;
+    g.bestScore = function (a) {
+        console.log("Score: " + sessionScore);
+        sessionScore = a;
+        console.log("Score: " + sessionScore);
+    };
     var sa = - 1,
     ta = - 1,
     y = null,
