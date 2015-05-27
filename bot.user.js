@@ -987,6 +987,10 @@ console.log("Running Bot!");
     1 < u && (u = 1)
 
 
+    d.strokeStyle = '#333333';
+    d.lineWidth = 3;
+    d.beginPath(), d.moveTo(0, 0), d.lineTo(11180, 0), d.lineTo(11180, 11180), d.lineTo(0, 11180), d.lineTo(0, 0), d.stroke();
+
     for(var i = 0; i < lines.length; i++) {
         d.beginPath();
 
