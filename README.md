@@ -3,6 +3,9 @@ The aim of the project is to create a bot that can play Agar.io
 
 To run the script, you need to install Greasemonkey / Tampermonkey in your browser. Then activate the script on the page http://agar.io/
 
+#Honorable mention
+There are other people working on bots, you can check the forks, as well as GamerLio's Github which uses genetic algorithms: https://github.com/leomwu/agario-bot
+
 #Beta Branch
 
 There is now a beta branch where you can test the stuff that I'm currently working on. It is therefore not nearly as good, but will eventually become better. https://github.com/Apostolique/Agar.io-bot/tree/beta
