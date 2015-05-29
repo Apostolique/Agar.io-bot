@@ -309,8 +309,8 @@ console.log("Running Bot!");
 
             delete interNodes[element];
         } else if (isRemoved && computeDistance(I, J, interNodes[element].x, interNodes[element].y) < computeDistance
-          (I, J, fullRight, J)) {
-            //console.log("Too close! Remove");
+          (I, J, screenToGameX(l), J)) {
+            //console.log("Too close! Remove " + computeDistance(I, J, interNodes[element].x, interNodes[element].y) + " || " + computeDistance(I, J, screenToGameX(l), J));
 
             delete interNodes[element];
         }
@@ -467,6 +467,7 @@ console.log("Running Bot!");
         if (x1 == x2) {
             if (y1 < y2) {
                 return 271;
+                //return 89;
             } else {
                 return 89;
             }
@@ -605,10 +606,17 @@ console.log("Running Bot!");
 
                   var lineLeft = followAngle(leftAngle, m[0].x, m[0].y, 400);
                   var lineRight = followAngle(rightAngle, m[0].x, m[0].y, 400);
-                  drawLine(m[0].x, m[0].y, lineLeft[0], lineLeft[1], 0);
-                  drawLine(m[0].x, m[0].y, lineRight[0], lineRight[1], 0);
-                  drawPoint(lineLeft[0], lineLeft[1], 0, "Left 0");
-                  drawPoint(lineRight[0], lineRight[1], 0, "Right 1");
+                  if (v.hasOwnProperty(allPossibleThreats[i].id)) {
+                      drawLine(m[0].x, m[0].y, lineLeft[0], lineLeft[1], 0);
+                      drawLine(m[0].x, m[0].y, lineRight[0], lineRight[1], 0);
+                  } else {
+                      drawLine(m[0].x, m[0].y, lineLeft[0], lineLeft[1], 3);
+                      drawLine(m[0].x, m[0].y, lineRight[0], lineRight[1], 3);
+                  }
+                  drawPoint(lineLeft[0], lineLeft[1], 0, "Left " + Math.floor(computeDistance
+          (I, J, screenToGameX(l), J)) + " || " + Math.floor(computeDistance(I, J, allPossibleThreats[i].x, allPossibleThreats[i].y)));
+                  drawPoint(lineRight[0], lineRight[1], 0, "Right " + Math.floor(computeDistance
+          (I, J, screenToGameX(l), J)) + " || " + Math.floor(computeDistance(I, J, allPossibleThreats[i].x, allPossibleThreats[i].y)));
               }
 
               var goodAngles = [];
@@ -618,7 +626,7 @@ console.log("Running Bot!");
                   var wallI = 1;
                   if (!interNodes.hasOwnProperty(wallI)) {
                       var newX = -100 - computeDistance
-          (I, J, fullRight, J)
+          (I, J, screenToGameX(l), J)
 
                       var n = new ra(wallI, newX, m[0].y, m[0].size * 10, "#000", false, "Left Wall");
                       delete v[wallI];
@@ -642,19 +650,19 @@ console.log("Running Bot!");
                   var wallI = 2;
                   if (!interNodes.hasOwnProperty(wallI)) {
                       var newY = -100 - computeDistance
-          (I, J, fullRight, J)
-                      var n = new ra(wallI, m[0].x, newY, m[0].size * 10, "#000", false, "Left Wall");
+          (I, J, screenToGameX(l), J)
+                      var n = new ra(wallI, m[0].x, newY, m[0].size * 10, "#000", false, "Top Wall");
                       delete v[wallI];
-                      p.splice(p.length - 1, 1);
+                      p.pop();
 
                       interNodes[wallI] = n;
                       interNodes[wallI].nx = m[0].nx;
                       interNodes[wallI].ny = newY;
                       interNodes[wallI].nSize = m[0].oSize * 10;
                       interNodes[wallI].updateTime = D;
-                      console.log("Added corner enemy");
+                      //console.log("Added corner enemy");
                   } else {
-                      console.log("Update Wall!");
+                      //console.log("Update Wall!");
                       interNodes[wallI].updateTime = D;
                       interNodes[wallI].x = m[0].x; 
                       interNodes[wallI].nx = m[0].nx;
@@ -665,19 +673,19 @@ console.log("Running Bot!");
                   var wallI = 3;
                   if (!interNodes.hasOwnProperty(wallI)) {
                       var newX = 11180 + 100 + computeDistance
-          (I, J, fullRight, J)
-                      var n = new ra(wallI, newX, m[0].y, m[0].size * 10, "#000", false, "Left Wall");
+          (I, J, screenToGameX(l), J)
+                      var n = new ra(wallI, newX, m[0].y, m[0].size * 10, "#000", false, "Right Wall");
                       delete v[wallI];
-                      p.splice(p.length - 1, 1);
+                      p.pop();
 
                       interNodes[wallI] = n;
                       interNodes[wallI].nx = newX;
                       interNodes[wallI].ny = m[0].ny;
                       interNodes[wallI].nSize = m[0].oSize * 10;
                       interNodes[wallI].updateTime = D;
-                      console.log("Added corner enemy");
+                      //console.log("Added corner enemy");
                   } else {
-                      console.log("Update Wall!");
+                      //console.log("Update Wall!");
                       interNodes[wallI].updateTime = D;
                       interNodes[wallI].y = m[0].y; 
                       interNodes[wallI].ny = m[0].ny;
@@ -688,19 +696,19 @@ console.log("Running Bot!");
                   var wallI = 4;
                   if (!interNodes.hasOwnProperty(wallI)) {
                       var newY = 11180 + 100 + computeDistance
-          (I, J, fullRight, J)
-                      var n = new ra(wallI, m[0].x, newY, m[0].size * 10, "#000", false, "Left Wall");
+          (I, J, screenToGameX(l), J)
+                      var n = new ra(wallI, m[0].x, newY, m[0].size * 10, "#000", false, "Bottom Wall");
                       delete v[wallI];
-                      p.splice(p.length - 1, 1);
+                      p.pop();
 
                       interNodes[wallI] = n;
                       interNodes[wallI].nx = m[0].nx;
                       interNodes[wallI].ny = newY;
                       interNodes[wallI].nSize = m[0].oSize * 10;
-                      interNodes[wallI].updateTime = D;
-                      console.log("Added corner enemy");
+                      //interNodes[wallI].updateTime = D;
+                      //console.log("Added corner enemy");
                   } else {
-                      console.log("Update Wall!");
+                      //console.log("Update Wall!");
                       interNodes[wallI].updateTime = D;
                       interNodes[wallI].x = m[0].x; 
                       interNodes[wallI].nx = m[0].nx;
@@ -780,7 +788,8 @@ console.log("Running Bot!");
                           bIndex = goodAngles[i];
                       }
                   }
-                  var perfectAngle = (bIndex[0] + bIndex[1] / 2);
+                  var perfectAngle = (bIndex[0] + bIndex[1] / 2).mod(360);
+                  console.log("perfectAngle " + perfectAngle);
                   var line1 = followAngle(perfectAngle, m[0].x, m[0].y, 300);
                   drawLine(m[0].x, m[0].y, line1[0], line1[1], 7);
 
@@ -863,6 +872,7 @@ console.log("Running Bot!");
               }
 
               drawPoint(tempPoint[0], tempPoint[1], tempPoint[2], "");
+              drawPoint(tempPoint[0], tempPoint[1], tempPoint[2], "" + Math.floor(computeDistance(tempPoint[0], tempPoint[1], I, J)));
               //drawLine(tempPoint[0], tempPoint[1], m[0].x, m[0].y, 6);
               //console.log("Slope: " + slope(tempPoint[0], tempPoint[1], m[0].x, m[0].y) + " Angle: " + getAngle(tempPoint[0], tempPoint[1], m[0].x, m[0].y) + " Side: " + (getAngle(tempPoint[0], tempPoint[1], m[0].x, m[0].y) - 90).mod(360));
               tempPoint[2] = 1;
@@ -991,9 +1001,6 @@ console.log("Running Bot!");
     d.scale(k, k);
     b = l / k;
     c = r / k;
-
-    fullRight = screenToGameX(l / k);
-    fullBottom = screenToGameY(r / k);
 
     for (e = - 0.5 + ( - s + b / 2) % 50; e < b; e += 50) d.beginPath(),
     d.moveTo(e, 0),
@@ -1246,8 +1253,6 @@ console.log("Running Bot!");
     interNodes = [],
     lifeTimer = new Date(),
     bestTime = 0,
-    fullRight = 0,
-    fullBottom = 0,
     d,
     z,
     l,
