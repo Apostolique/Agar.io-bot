@@ -293,7 +293,29 @@ console.log("Running Bot!");
       n.updateCode = b;
       n.updateTime = D;
       - 1 != B.indexOf(e) && - 1 == m.indexOf(n) && (document.getElementById('overlays').style.display = 'none', m.push(n), 1 == m.length && (s = n.x, t = n.y))
+
+
+      //Goal: Update elements that are already in interNodes if they are also in v. If they aren't in v, delete them after they get timed out.
+
+      interNodes[e] = v[e]; //You can compute direction here if you ever need it.
     }
+
+
+    Object.keys(interNodes).forEach(function (element, index) {
+        //console.log("start: " + interNodes[element].updateTime + " current: " + D + " life: " + (D - interNodes[element].updateTime));
+        var isRemoved = !v.hasOwnProperty(element);
+
+        if (isRemoved  && (D - interNodes[element].updateTime) > 3000) {
+
+            delete interNodes[element];
+        } else if (isRemoved && computeDistance(I, J, interNodes[element].x, interNodes[element].y) < computeDistance
+          (I, J, fullRight, J)) {
+            //console.log("Too close! Remove");
+
+            delete interNodes[element];
+        }
+    });
+
     a.getUint16(c, !0);
     c += 2;
     f = a.getUint32(c, !0);
@@ -302,7 +324,11 @@ console.log("Running Bot!");
     c += 4,
     v[e] && (v[e].updateCode = b);
     for (d = 0; d < p.length; d++) p[d].updateCode != b && p[d--].destroy();
-    da && 0 == m.length /*&& q('#overlays').fadeIn(3000)*/ && setNick(originalName)
+    da && 0 == m.length /*&& q('#overlays').fadeIn(3000)*/ && (setNick(originalName), lifeTimer = new Date())
+
+    //TODO: Create intermediate array.
+
+
   }
 
     function computeDistance(x1, y1, x2, y2) {
@@ -332,7 +358,7 @@ console.log("Running Bot!");
         var dotList = [];
         Object.keys(listToUse).forEach(function (element, index) {
             if (booleanFunction(element)){
-                dotList.push(v[element]);
+                dotList.push(interNodes[element]);
             }
         });
 
@@ -345,11 +371,11 @@ console.log("Running Bot!");
 
         if (m.length == 1) {
             dotList = getListBasedOnFunction(function (element){
-                if (v[element].isVirus && (v[element].size *1.10 <= m[0].size) && v[element].size * 1.15 >= m[0].size) {
+                if (interNodes[element].isVirus && (interNodes[element].size *1.10 <= m[0].size) && interNodes[element].size * 1.15 >= m[0].size) {
                         return true;
                 }
                 return false;
-            }, v);
+            }, interNodes);
         }
 
 
@@ -363,21 +389,21 @@ console.log("Running Bot!");
             var isMe = false;
 
             for (var i = 0; i < m.length; i++) {
-                if (v[element].id == m[i].id) {
+                if (interNodes[element].id == m[i].id) {
                     isMe = true;
                     break;
                 }
             }
 
             for (var i = 0; i < m.length; i++) {
-                if (!isMe && (!v[element].isVirus && (v[element].size >= m[i].oSize * 1.15))) {
+                if (!isMe && (!interNodes[element].isVirus && (interNodes[element].size >= m[i].oSize * 1.15))) {
                     return true;
-                } else if (v[element].isVirus && (v[element].size * 1.15 <= m[i].oSize)) {
+                } else if (interNodes[element].isVirus && (interNodes[element].size * 1.15 <= m[i].oSize)) {
                     return true;
                 }
                 return false;
             }
-        }, v);
+        }, interNodes);
 
         return dotList;
     }
@@ -390,16 +416,16 @@ console.log("Running Bot!");
             var isMe = false;
 
             for (var i = 0; i < m.length; i++) {
-                if (v[element].id == m[i].id) {
+                if (interNodes[element].id == m[i].id) {
                     isMe = true;
                     break;
                 }
             }
 
             for (var i = 0; i < m.length; i++) {
-                if (!isMe && !v[element].isVirus && (v[element].size * 1.25 <= m[i].size)  || (v[element].size <= 11)){return true;} else{return false;}
+                if (!isMe && !interNodes[element].isVirus && (interNodes[element].size * 1.25 <= m[i].size)  || (interNodes[element].size <= 11)){return true;} else{return false;}
             }
-        }, v);
+        }, interNodes);
 
         for (var i = 0; i < elementList.length; i++) {
             dotList.push([elementList[i].x, elementList[i].y, elementList[i].size]);
@@ -530,13 +556,15 @@ console.log("Running Bot!");
         dText = [];
         lines = [];
 
-        if (!toggle) {
+        if (/*!toggle*/ 1) {
           var useMouseX = (N - l/2 + s*k) / k;
           var useMouseY = (O - r/2 + t*k) / k;
           tempPoint = [useMouseX, useMouseY, 1];
 
           var tempMoveX = P;
           var tempMoveY = Q;
+
+          drawPoint(m[0].x, m[0].y - m[0].size, 3, "" + Math.floor(m[0].x) + ", " + Math.floor(m[0].y));
 
           if (m[0] != null) {
               var allPossibleFood = null;
@@ -583,119 +611,105 @@ console.log("Running Bot!");
                   drawPoint(lineRight[0], lineRight[1], 0, "Right 1");
               }
 
-
-
               var goodAngles = [];
               //TODO: Add wall angles here. Hardcoding temporary values.
-              if (m[0].x < 1000 && m[0].y < 1000) {
-                  //TOP LEFT
-                  var wallAngle1 = getAngle(1500, 0, m[0].x, m[0].y);
-                  var wallAngle2 = getAngle(0, 1500, m[0].x, m[0].y);
-                  var diff = (wallAngle2 - wallAngle1).mod(360);
+              if (m[0].x < 1000) {
+                  //LEFT
+                  var wallI = 1;
+                  if (!interNodes.hasOwnProperty(wallI)) {
+                      var newX = -100 - computeDistance
+          (I, J, fullRight, J)
 
-                  //console.log("Angle1: " + wallAngle2 + ", " + wallAngle1);
+                      var n = new ra(wallI, newX, m[0].y, m[0].size * 10, "#000", false, "Left Wall");
+                      delete v[wallI];
+                      p.splice(p.length - 1, 1);
 
-                  drawLine(m[0].x, m[0].y, 1500, 0, 6);
-                  drawLine(m[0].x, m[0].y, 0, 1500, 6);
-
-                  goodAngles.push([wallAngle1, diff]);
-
-
-              } else if (m[0].x > 11180 - 1000 && m[0].y > 11180 - 1000) {
-                  //BOTTOM RIGHT
-                  var wallAngle1 = getAngle(11180 - 1500, 0, m[0].x, m[0].y);
-                  var wallAngle2 = getAngle(0, 11180 - 1500, m[0].x, m[0].y);
-                  var diff = (wallAngle1 - wallAngle2).mod(360);
-
-                  //console.log("Angle2: " + wallAngle2 + ", " + wallAngle1);
-
-                  drawLine(m[0].x, m[0].y, 1500, 0, 6);
-                  drawLine(m[0].x, m[0].y, 0, 1500, 6);
-
-                  goodAngles.push([wallAngle2, diff]);
-              } else if (m[0].x < 1000 && m[0].y > 11180 - 1000) {
-                  //BOTTOM LEFT
-                  var wallAngle1 = getAngle(1500, 11180 - 1500, m[0].x, m[0].y);
-                  var wallAngle2 = getAngle(11180 - 1500, 11180 - 1500, m[0].x, m[0].y);
-                  var diff = (wallAngle2 - wallAngle1).mod(360);
-
-                  drawLine(m[0].x, m[0].y, 1500, 11180 - 1500, 6);
-                  drawLine(m[0].x, m[0].y, 11180 - 1500, 11180 - 1500, 6);
-
-                  //console.log("Angle3: " + wallAngle2 + ", " + wallAngle1);
-
-                  drawLine(m[0].x, m[0].y, 1500, 0, 6);
-                  drawLine(m[0].x, m[0].y, 0, 1500, 6);
-
-                  goodAngles.push([wallAngle1, diff]);
-              } else if (m[0].x > 11180 - 1000 && m[0].y < 1000) {
-                  //TOP RIGHT
-                  var wallAngle1 = getAngle(11180 - 1500, 0, m[0].x, m[0].y);
-                  var wallAngle2 = getAngle(11180, 11180 - 1500, m[0].x, m[0].y);
-                  var diff = (wallAngle1 - wallAngle2).mod(360);
-
-                  drawLine(m[0].x, m[0].y, 11180 - 1500, 0, 6);
-                  drawLine(m[0].x, m[0].y, 11180, 11180 - 1500, 6);
-
-                  //console.log("Angle3: " + wallAngle2 + ", " + wallAngle1);
-
-                  drawLine(m[0].x, m[0].y, 1500, 0, 6);
-                  drawLine(m[0].x, m[0].y, 0, 1500, 6);
-
-                  goodAngles.push([wallAngle2, diff]);
-              } else if (m[0].x < 1000) {
-                  //LEFT WALL
-                  var wallAngle1 = getAngle(0, 0, m[0].x, m[0].y);
-                  var wallAngle2 = getAngle(0, 11180, m[0].x, m[0].y);
-                  var diff = (wallAngle2 - wallAngle1).mod(360);
-
-                  drawLine(m[0].x, m[0].y, 0, 0, 6);
-                  drawLine(m[0].x, m[0].y, 0, 11180, 6);
-
-                  //console.log("You called? " + m[0].x + ", " + m[0].y);
-
-                  goodAngles.push([wallAngle1, diff]);
-              } else if (m[0].x > 11180 - 1000) {
-                  //RIGHT WALL
-                  var wallAngle1 = getAngle(11180, 0, m[0].x, m[0].y);
-                  var wallAngle2 = getAngle(11180, 11180, m[0].x, m[0].y);
-                  var diff = (wallAngle1 - wallAngle2).mod(360);
-
-                  //console.log("You didn't call? " + m[0].x + ", " + m[0].y);
-
-                  goodAngles.push([wallAngle2, diff]);
-              } else if (m[0].y < 1000) {
-                  //TOP WALL
-                  var wallAngle1 = getAngle(0, 0, m[0].x, m[0].y);
-                  var wallAngle2 = getAngle(11180, 0, m[0].x, m[0].y);
-                  var diff = (wallAngle1 - wallAngle2).mod(360);
-
-                  drawLine(m[0].x, m[0].y, 0, 0, 6);
-                  drawLine(m[0].x, m[0].y, 11180, 0, 6);
-
-                  //console.log("You called? " + m[0].x + ", " + m[0].y);
-
-                  goodAngles.push([wallAngle2, diff]);
-              } else if (m[0].y > 11180 - 1000) {
-                  //BOTTOM WALL
-                  var wallAngle1 = getAngle(0, 11180, m[0].x, m[0].y);
-                  var wallAngle2 = getAngle(11180, 11180, m[0].x, m[0].y);
-                  var diff = (wallAngle2 - wallAngle1).mod(360);
-
-                  drawLine(m[0].x, m[0].y, 0, 11180, 6);
-                  drawLine(m[0].x, m[0].y, 11180, 11180, 6);
-
-                  //console.log("You called? " + m[0].x + ", " + m[0].y);
-
-                  goodAngles.push([wallAngle1, diff]);
+                      interNodes[wallI] = n;
+                      interNodes[wallI].nx = newX;
+                      interNodes[wallI].ny = m[0].ny;
+                      interNodes[wallI].nSize = m[0].oSize * 10;
+                      interNodes[wallI].updateTime = D;
+                      //console.log("Added corner enemy");
+                  } else {
+                      //console.log("Update Wall!");
+                      interNodes[wallI].updateTime = D;
+                      interNodes[wallI].y = m[0].y; 
+                      interNodes[wallI].ny = m[0].ny;
+                  }
               }
+              if (m[0].y < 1000) {
+                  //TOP
+                  var wallI = 2;
+                  if (!interNodes.hasOwnProperty(wallI)) {
+                      var newY = -100 - computeDistance
+          (I, J, fullRight, J)
+                      var n = new ra(wallI, m[0].x, newY, m[0].size * 10, "#000", false, "Left Wall");
+                      delete v[wallI];
+                      p.splice(p.length - 1, 1);
 
+                      interNodes[wallI] = n;
+                      interNodes[wallI].nx = m[0].nx;
+                      interNodes[wallI].ny = newY;
+                      interNodes[wallI].nSize = m[0].oSize * 10;
+                      interNodes[wallI].updateTime = D;
+                      console.log("Added corner enemy");
+                  } else {
+                      console.log("Update Wall!");
+                      interNodes[wallI].updateTime = D;
+                      interNodes[wallI].x = m[0].x; 
+                      interNodes[wallI].nx = m[0].nx;
+                  }
+              }
+              if (m[0].x > 11180 - 1000) {
+                  //RIGHT
+                  var wallI = 3;
+                  if (!interNodes.hasOwnProperty(wallI)) {
+                      var newX = 11180 + 100 + computeDistance
+          (I, J, fullRight, J)
+                      var n = new ra(wallI, newX, m[0].y, m[0].size * 10, "#000", false, "Left Wall");
+                      delete v[wallI];
+                      p.splice(p.length - 1, 1);
 
+                      interNodes[wallI] = n;
+                      interNodes[wallI].nx = newX;
+                      interNodes[wallI].ny = m[0].ny;
+                      interNodes[wallI].nSize = m[0].oSize * 10;
+                      interNodes[wallI].updateTime = D;
+                      console.log("Added corner enemy");
+                  } else {
+                      console.log("Update Wall!");
+                      interNodes[wallI].updateTime = D;
+                      interNodes[wallI].y = m[0].y; 
+                      interNodes[wallI].ny = m[0].ny;
+                  }
+              }
+              if (m[0].y > 11180 - 1000) {
+                  //BOTTOM
+                  var wallI = 4;
+                  if (!interNodes.hasOwnProperty(wallI)) {
+                      var newY = 11180 + 100 + computeDistance
+          (I, J, fullRight, J)
+                      var n = new ra(wallI, m[0].x, newY, m[0].size * 10, "#000", false, "Left Wall");
+                      delete v[wallI];
+                      p.splice(p.length - 1, 1);
 
+                      interNodes[wallI] = n;
+                      interNodes[wallI].nx = m[0].nx;
+                      interNodes[wallI].ny = newY;
+                      interNodes[wallI].nSize = m[0].oSize * 10;
+                      interNodes[wallI].updateTime = D;
+                      console.log("Added corner enemy");
+                  } else {
+                      console.log("Update Wall!");
+                      interNodes[wallI].updateTime = D;
+                      interNodes[wallI].x = m[0].x; 
+                      interNodes[wallI].nx = m[0].nx;
+                  }
+              }
 
               //console.log("1) Good Angles: " + goodAngles.length + " Bad Angles: " + badAngles.length);
               //TODO: Step 1: Write code to substract angle ranges.
-              console.log("___");
+              //console.log("___");
               for (var i = 0; i < badAngles.length; i++) {
                   var tempGoodAnglesLength = goodAngles.length;
 
@@ -733,7 +747,7 @@ console.log("Running Bot!");
                       }
                   }
                   if (removeIndex.length > 0) {
-                      console.log("I KNEW IT!!! THIS NEEDED TO BE HANDLED");
+                      //console.log("I KNEW IT!!! THIS NEEDED TO BE HANDLED");
                       for (var j = 0; j < removeIndex.length; j++) {
                           goodAngles.splice(removeIndex[j], 1);
                       }
@@ -781,14 +795,16 @@ console.log("Running Bot!");
 
                       var bestAngleScore = Math.min(angleD1, angleD2);
 
-                      clusterAllFood[i][2] = clusterAllFood[i][2] -/* computeDistance(clusterAllFood[i][0], clusterAllFood[i][1], m[0].x, m[0].y) +*/ (bestAngleScore * 10);
-                      console.log("Current Value: " + clusterAllFood[i][2]);
+                      clusterAllFood[i][2] = /*clusterAllFood[i][2] -*//* computeDistance(clusterAllFood[i][0], clusterAllFood[i][1], m[0].x, m[0].y) +*/ (bestAngleScore * 10);
+                      //console.log("Current Value: " + clusterAllFood[i][2]);
+
 
                       clusterAllFood[i][3] = clusterAngle;
 
                       if (!toggle) {
 
                           drawPoint(clusterAllFood[i][0], clusterAllFood[i][1], 1, "");
+                          //drawPoint(clusterAllFood[i][0], clusterAllFood[i][1], 1, "" + clusterAllFood[i][2]);
                       }
                       //console.log("After: " + clusterAllFood[i][2]);
                   }
@@ -802,11 +818,13 @@ console.log("Running Bot!");
                       }
                   }
 
-                  console.log("Best Value: " + clusterAllFood[bestFoodI][2]);
+                  //console.log("Best Value: " + clusterAllFood[bestFoodI][2]);
 
-                  tempMoveX = clusterAllFood[bestFoodI][0];
-                  tempMoveY = clusterAllFood[bestFoodI][1];
-                  drawLine(m[0].x, m[0].y, tempMoveX, tempMoveY, 1);
+                  //tempMoveX = clusterAllFood[bestFoodI][0];
+                  //tempMoveY = clusterAllFood[bestFoodI][1];
+                  //drawLine(m[0].x, m[0].y, tempMoveX, tempMoveY, 1);
+                  tempMoveX = line1[0];
+                  tempMoveY = line1[1];
               } else {
                  for (var i = 0; i < clusterAllFood.length; i++) {
                       //console.log("mefore: " + clusterAllFood[i][2]);
@@ -815,7 +833,7 @@ console.log("Running Bot!");
                       var clusterAngle = getAngle(clusterAllFood[i][0], clusterAllFood[i][1], m[0].x, m[0].y);
 
                       clusterAllFood[i][2] = clusterAllFood[i][2] * 6 - computeDistance(clusterAllFood[i][0], clusterAllFood[i][1], m[0].x, m[0].y);
-                      console.log("Current Value: " + clusterAllFood[i][2]);
+                      //console.log("Current Value: " + clusterAllFood[i][2]);
 
                       //(goodAngles[bIndex][1] / 2 - (Math.abs(perfectAngle - clusterAngle)));
 
@@ -837,7 +855,7 @@ console.log("Running Bot!");
                       }
                   }
 
-                  console.log("Best Value: " + clusterAllFood[bestFoodI][2]);
+                  //console.log("Best Value: " + clusterAllFood[bestFoodI][2]);
 
                   tempMoveX = clusterAllFood[bestFoodI][0];
                   tempMoveY = clusterAllFood[bestFoodI][1];
@@ -849,15 +867,32 @@ console.log("Running Bot!");
               //console.log("Slope: " + slope(tempPoint[0], tempPoint[1], m[0].x, m[0].y) + " Angle: " + getAngle(tempPoint[0], tempPoint[1], m[0].x, m[0].y) + " Side: " + (getAngle(tempPoint[0], tempPoint[1], m[0].x, m[0].y) - 90).mod(360));
               tempPoint[2] = 1;
           }
-          P = tempMoveX;
-          Q = tempMoveY;
+          if (!toggle) {
+              P = tempMoveX;
+              Q = tempMoveY;
+          }
         }
+    }
+
+    function screenToGameX(x) {
+        return (x - l / 2) / k + s;
+    }
+
+    function screenToGameY(y) {
+        return (y - r / 2) / k + t;
+    }
+
+    function gameToScreenX (x) {
+        return ((x - I) * k) + l/2;
+    }
+    function gameToScreenY (y) {
+        return ((y - J) * k) + r/2;
     }
 
     function drawPoint(x_1, y_1, drawColor, text) {
         if (!toggleDraw) {
-            var x1 = ((x_1 - I) * k) + l/2;
-            var y1 = ((y_1 - J) * k) + r/2;
+            var x1 = gameToScreenX(x_1);
+            var y1 = gameToScreenY(y_1);
             dPoints.push([x1, y1, drawColor]);
             dText.push(text);
         }
@@ -865,22 +900,22 @@ console.log("Running Bot!");
 
     function drawArc(x_1, y_1, x_2, y_2, x_3, y_3, radius, drawColor) {
         if (!toggleDraw) {
-            var x1 = ((x_1 - I) * k) + l/2;
-            var y1 = ((y_1 - J) * k) + r/2;
-            var x2 = ((x_2 - I) * k) + l/2;
-            var y2 = ((y_2 - J) * k) + r/2;
-            var x3 = ((x_3 - I) * k) + l/2;
-            var y3 = ((y_3 - J) * k) + r/2;
+            var x1 = gameToScreenX(x_1);
+            var y1 = gameToScreenY(y_1);
+            var x2 = gameToScreenX(x_2);
+            var y2 = gameToScreenY(y_2);
+            var x3 = gameToScreenX(x_3);
+            var y3 = gameToScreenY(y_3);
             dArc.push([x1, y1, x2, y2, x3, y3, radius, drawColor]);
         }
     }
 
     function drawLine(x_1, y_1, x_2, y_2, drawColor) {
         if (!toggleDraw) {
-            var x1 = ((x_1 - I) * k) + l/2;
-            var y1 = ((y_1 - J) * k) + r/2;
-            var x2 = ((x_2 - I) * k) + l/2;
-            var y2 = ((y_2 - J) * k) + r/2;
+            var x1 = gameToScreenX(x_1);
+            var y1 = gameToScreenY(y_1);
+            var x2 = gameToScreenX(x_2);
+            var y2 = gameToScreenY(y_2);
             lines.push([x1, y1, x2, y2, drawColor]);
         }
     }
@@ -925,7 +960,7 @@ console.log("Running Bot!");
     if (0 != m.length) {
       for (var a = 0, b = 0; b < m.length; b++) a += m[b].size;
       a = Math.pow(Math.min(64 / a, 1), 0.4) * Math.max(r / 1080, l / 1920);
-      k = (9 * k + a) / 10
+      k = (9 * k + a) / 10;
     }
   }
   function ba() {
@@ -956,6 +991,10 @@ console.log("Running Bot!");
     d.scale(k, k);
     b = l / k;
     c = r / k;
+
+    fullRight = screenToGameX(l / k);
+    fullBottom = screenToGameY(r / k);
+
     for (e = - 0.5 + ( - s + b / 2) % 50; e < b; e += 50) d.beginPath(),
     d.moveTo(e, 0),
     d.lineTo(e, c),
@@ -979,17 +1018,13 @@ console.log("Running Bot!");
     y && 0 != w.length && d.drawImage(y, l - y.width - 10, 10);
     M = Math.max(M, Ea());
     sessionScore = Math.max(sessionScore, M);
-    0 != M && (null == W && (W = new X(24, '#FFFFFF')), W.setValue('Score: ' + ~~(M / 100) + ' || Best Score: ' + ~~(sessionScore / 100)), c = W.render(), b = c.width, d.globalAlpha = 0.2, d.fillStyle = '#000000', d.fillRect(10, r - 10 - 24 - 10, b + 10, 34), d.globalAlpha = 1, d.drawImage(c, 15, r - 10 - 24 - 5));
+    0 != M && (null == W && (W = new X(24, '#FFFFFF')), W.setValue('Score: ' + ~~(M / 100) + ' || Best Score: ' + ~~(sessionScore / 100) + " || Best time alive: " + bestTime + " seconds"), c = W.render(), b = c.width, d.globalAlpha = 0.2, d.fillStyle = '#000000', d.fillRect(10, r - 10 - 24 - 10, b + 10, 34), d.globalAlpha = 1, d.drawImage(c, 15, r - 10 - 24 - 5));
     Fa();
     a = + new Date - a;
     a > 1000 / 60 ? u -= 0.01 : a < 1000 / 65 && (u += 0.01);
     0.4 > u && (u = 0.4);
     1 < u && (u = 1)
 
-
-    d.strokeStyle = '#333333';
-    d.lineWidth = 3;
-    d.beginPath(), d.moveTo(0, 0), d.lineTo(11180, 0), d.lineTo(11180, 11180), d.lineTo(0, 11180), d.lineTo(0, 0), d.stroke();
 
     for(var i = 0; i < lines.length; i++) {
         d.beginPath();
@@ -1094,10 +1129,16 @@ console.log("Running Bot!");
     }
     d.lineWidth = 1;
 
+    var currentDate = new Date();
+
+    var nbSeconds = (currentDate.getSeconds() + (currentDate.getMinutes() * 60) + (currentDate.getHours() * 60 * 60)) - (lifeTimer.getSeconds() + (lifeTimer.getMinutes() * 60) + (lifeTimer.getHours() * 60 * 60));
+
+    bestTime = Math.max(nbSeconds, bestTime);
 
     var debugStrings = [];
     debugStrings.push("1 - Bot: " + (!toggle ? "On" : "Off"));
     debugStrings.push("2 - Lines: " + (!toggleDraw ? "On" : "Off"));
+    debugStrings.push("3 - Survived for: " + nbSeconds + " seconds");
     debugStrings.push("Server: " + serverIP);
 
     var offsetValue = 20;
@@ -1162,6 +1203,7 @@ console.log("Running Bot!");
       c = angEnd
     }
   }
+
   function ra(a, b, c, e, d, f, g) {
     p.push(this);
     v[a] = this;
@@ -1201,6 +1243,11 @@ console.log("Running Bot!");
     originalName,
     sessionScore = 0,
     serverIP = "",
+    interNodes = [],
+    lifeTimer = new Date(),
+    bestTime = 0,
+    fullRight = 0,
+    fullBottom = 0,
     d,
     z,
     l,
@@ -1290,9 +1337,16 @@ console.log("Running Bot!");
     g.connect = oa;
     g.bestScore = function (a) {
         console.log("Score: " + sessionScore);
-        sessionScore = a;
+        sessionScore = a * 100;
         console.log("Score: " + sessionScore);
     };
+    g.bestTime = function (a) {
+        bestTime = a;
+    }
+    g.best = function (a, b) {
+        g.bestScore(a);
+        g.bestTime(b);
+    }
     var sa = - 1,
     ta = - 1,
     y = null,
