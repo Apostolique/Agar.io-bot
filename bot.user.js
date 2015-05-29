@@ -80,6 +80,7 @@ console.log("Running Bot!");
     setInterval(E, 40);
     la(q('#region').val());
     q('#overlays').show()
+    q('#playBtn')[0].disabled = false;
   }
   function xa() {
     if (0.5 > k) F = null;
@@ -308,9 +309,8 @@ console.log("Running Bot!");
         if (isRemoved  && (D - interNodes[element].updateTime) > 3000) {
 
             delete interNodes[element];
-        } else if (isRemoved && computeDistance(I, J, interNodes[element].x, interNodes[element].y) < computeDistance
-          (I, J, screenToGameX(l), J)) {
-            //console.log("Too close! Remove " + computeDistance(I, J, interNodes[element].x, interNodes[element].y) + " || " + computeDistance(I, J, screenToGameX(l), J));
+        } else if (isRemoved && computeDistance(I, J, interNodes[element].x, interNodes[element].y) < screenDistance()) {
+            //console.log("Too close! Remove " + computeDistance(I, J, interNodes[element].x, interNodes[element].y) + " || " + screenDistance());
 
             delete interNodes[element];
         }
@@ -324,12 +324,18 @@ console.log("Running Bot!");
     c += 4,
     v[e] && (v[e].updateCode = b);
     for (d = 0; d < p.length; d++) p[d].updateCode != b && p[d--].destroy();
-    da && 0 == m.length /*&& q('#overlays').fadeIn(3000)*/ && (setNick(originalName), lifeTimer = new Date())
+    da && 0 == m.length /*&& q('#overlays').fadeIn(3000)*/ && (setNick(originalName))
 
     //TODO: Create intermediate array.
 
 
   }
+
+    function screenDistance() {
+        return Math.min(computeDistance
+          (I, J, screenToGameX(l), J), computeDistance
+          (I, J, I, screenToGameY(r)));
+    }
 
     function computeDistance(x1, y1, x2, y2) {
         var xdis = x1 - x2; // <--- FAKE AmS OF COURSE!
@@ -613,10 +619,8 @@ console.log("Running Bot!");
                       drawLine(m[0].x, m[0].y, lineLeft[0], lineLeft[1], 3);
                       drawLine(m[0].x, m[0].y, lineRight[0], lineRight[1], 3);
                   }
-                  drawPoint(lineLeft[0], lineLeft[1], 0, "Left " + Math.floor(computeDistance
-          (I, J, screenToGameX(l), J)) + " || " + Math.floor(computeDistance(I, J, allPossibleThreats[i].x, allPossibleThreats[i].y)));
-                  drawPoint(lineRight[0], lineRight[1], 0, "Right " + Math.floor(computeDistance
-          (I, J, screenToGameX(l), J)) + " || " + Math.floor(computeDistance(I, J, allPossibleThreats[i].x, allPossibleThreats[i].y)));
+                  drawPoint(lineLeft[0], lineLeft[1], 0, "Left " + Math.floor(screenDistance()) + " || " + Math.floor(computeDistance(I, J, allPossibleThreats[i].x, allPossibleThreats[i].y)));
+                  drawPoint(lineRight[0], lineRight[1], 0, "Right " + Math.floor(screenDistance()) + " || " + Math.floor(computeDistance(I, J, allPossibleThreats[i].x, allPossibleThreats[i].y)));
               }
 
               var goodAngles = [];
@@ -625,8 +629,7 @@ console.log("Running Bot!");
                   //LEFT
                   var wallI = 1;
                   if (!interNodes.hasOwnProperty(wallI)) {
-                      var newX = -100 - computeDistance
-          (I, J, screenToGameX(l), J)
+                      var newX = -100 - screenDistance();
 
                       var n = new ra(wallI, newX, m[0].y, m[0].size * 10, "#000", false, "Left Wall");
                       delete v[wallI];
@@ -649,8 +652,7 @@ console.log("Running Bot!");
                   //TOP
                   var wallI = 2;
                   if (!interNodes.hasOwnProperty(wallI)) {
-                      var newY = -100 - computeDistance
-          (I, J, screenToGameX(l), J)
+                      var newY = -100 - screenDistance();
                       var n = new ra(wallI, m[0].x, newY, m[0].size * 10, "#000", false, "Top Wall");
                       delete v[wallI];
                       p.pop();
@@ -672,8 +674,7 @@ console.log("Running Bot!");
                   //RIGHT
                   var wallI = 3;
                   if (!interNodes.hasOwnProperty(wallI)) {
-                      var newX = 11180 + 100 + computeDistance
-          (I, J, screenToGameX(l), J)
+                      var newX = 11180 + 100 + screenDistance();
                       var n = new ra(wallI, newX, m[0].y, m[0].size * 10, "#000", false, "Right Wall");
                       delete v[wallI];
                       p.pop();
@@ -695,8 +696,7 @@ console.log("Running Bot!");
                   //BOTTOM
                   var wallI = 4;
                   if (!interNodes.hasOwnProperty(wallI)) {
-                      var newY = 11180 + 100 + computeDistance
-          (I, J, screenToGameX(l), J)
+                      var newY = 11180 + 100 + screenDistance();
                       var n = new ra(wallI, m[0].x, newY, m[0].size * 10, "#000", false, "Bottom Wall");
                       delete v[wallI];
                       p.pop();
@@ -1138,15 +1138,18 @@ console.log("Running Bot!");
 
     var currentDate = new Date();
 
-    var nbSeconds = (currentDate.getSeconds() + (currentDate.getMinutes() * 60) + (currentDate.getHours() * 60 * 60)) - (lifeTimer.getSeconds() + (lifeTimer.getMinutes() * 60) + (lifeTimer.getHours() * 60 * 60));
+    var nbSeconds = 0;
+    if (m.length > 0) {
+        nbSeconds = (currentDate.getSeconds() + (currentDate.getMinutes() * 60) + (currentDate.getHours() * 60 * 60)) - (lifeTimer.getSeconds() + (lifeTimer.getMinutes() * 60) + (lifeTimer.getHours() * 60 * 60));
+    }
 
     bestTime = Math.max(nbSeconds, bestTime);
 
     var debugStrings = [];
-    debugStrings.push("1 - Bot: " + (!toggle ? "On" : "Off"));
-    debugStrings.push("2 - Lines: " + (!toggleDraw ? "On" : "Off"));
-    debugStrings.push("3 - Survived for: " + nbSeconds + " seconds");
+    debugStrings.push("T - Bot: " + (!toggle ? "On" : "Off"));
+    debugStrings.push("R - Lines: " + (!toggleDraw ? "On" : "Off"));
     debugStrings.push("Server: " + serverIP);
+    debugStrings.push("Survived for: " + nbSeconds + " seconds");
 
     var offsetValue = 20;
     var text = new X(18, (ea ? '#F2FBFF' : '#111111'));
@@ -1309,6 +1312,7 @@ console.log("Running Bot!");
     fa.src = 'img/split.png';
     var R = null;
     g.setNick = function (a) {
+      lifeTimer = new Date();
       originalName = a;
       ma();
       L = a;
