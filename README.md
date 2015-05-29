@@ -1,6 +1,8 @@
 # Agar.io-bot
 The aim of the project is to create a bot that can play Agar.io
 
+The full programming process is streamed live on http://www.twitch.tv/apostolique
+
 To run the script, you need to install Greasemonkey / Tampermonkey in your browser. Then activate the script on the page http://agar.io/
 
 #Honorable mention
