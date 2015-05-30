@@ -12,6 +12,10 @@ Number.prototype.mod = function(n) {
     return ((this%n)+n)%n;
 };
 
+Array.prototype.peek = function() {
+    return this[this.length-1];
+}
+
 console.log("Running Bot!");
 (function (g, q) {
   function wa() {
@@ -325,10 +329,6 @@ console.log("Running Bot!");
     v[e] && (v[e].updateCode = b);
     for (d = 0; d < p.length; d++) p[d].updateCode != b && p[d--].destroy();
     da && 0 == m.length /*&& q('#overlays').fadeIn(3000)*/ && (setNick(originalName))
-
-    //TODO: Create intermediate array.
-
-
   }
 
     function screenDistance() {
@@ -551,10 +551,18 @@ console.log("Running Bot!");
 
     function angleIsWithin(angle, range) {
         var diff = (angle - range[0]).mod(360);
-        if (diff < range[1]) {
+        if (diff > 0 && diff < range[1]) {
             return true;
         }
         return false;
+    }
+
+    function rangeToAngle(range) {
+        return (range[0] + range[1]).mod(360);
+    }
+
+    function anglePair(range) {
+        return (range[0] + ", " + rangeToAngle(range));
     }
 
     function findDestination() {
@@ -571,9 +579,9 @@ console.log("Running Bot!");
           var tempMoveX = P;
           var tempMoveY = Q;
 
-          drawPoint(m[0].x, m[0].y - m[0].size, 3, "" + Math.floor(m[0].x) + ", " + Math.floor(m[0].y));
-
           if (m[0] != null) {
+              drawPoint(m[0].x, m[0].y - m[0].size, 3, "" + Math.floor(m[0].x) + ", " + Math.floor(m[0].y));
+
               var allPossibleFood = null;
               allPossibleFood = getAllFood(); // #1
 
@@ -619,13 +627,13 @@ console.log("Running Bot!");
                       drawLine(m[0].x, m[0].y, lineLeft[0], lineLeft[1], 3);
                       drawLine(m[0].x, m[0].y, lineRight[0], lineRight[1], 3);
                   }
-                  drawPoint(lineLeft[0], lineLeft[1], 0, "Left " + Math.floor(screenDistance()) + " || " + Math.floor(computeDistance(I, J, allPossibleThreats[i].x, allPossibleThreats[i].y)));
-                  drawPoint(lineRight[0], lineRight[1], 0, "Right " + Math.floor(screenDistance()) + " || " + Math.floor(computeDistance(I, J, allPossibleThreats[i].x, allPossibleThreats[i].y)));
+                  drawPoint(lineLeft[0], lineLeft[1], 0, "Left 0 - " + i);
+                  drawPoint(lineRight[0], lineRight[1], 0, "Right 1 - " + i);
               }
 
               var goodAngles = [];
               //TODO: Add wall angles here. Hardcoding temporary values.
-              if (m[0].x < 1000) {
+              if (m[0].x < 1000 && badAngles.length > 0) {
                   //LEFT
                   var wallI = 1;
                   if (!interNodes.hasOwnProperty(wallI)) {
@@ -648,7 +656,7 @@ console.log("Running Bot!");
                       interNodes[wallI].ny = m[0].ny;
                   }
               }
-              if (m[0].y < 1000) {
+              if (m[0].y < 1000 && badAngles.length > 0) {
                   //TOP
                   var wallI = 2;
                   if (!interNodes.hasOwnProperty(wallI)) {
@@ -670,7 +678,7 @@ console.log("Running Bot!");
                       interNodes[wallI].nx = m[0].nx;
                   }
               }
-              if (m[0].x > 11180 - 1000) {
+              if (m[0].x > 11180 - 1000 && badAngles.length > 0) {
                   //RIGHT
                   var wallI = 3;
                   if (!interNodes.hasOwnProperty(wallI)) {
@@ -692,7 +700,7 @@ console.log("Running Bot!");
                       interNodes[wallI].ny = m[0].ny;
                   }
               }
-              if (m[0].y > 11180 - 1000) {
+              if (m[0].y > 11180 - 1000 && badAngles.length > 0) {
                   //BOTTOM
                   var wallI = 4;
                   if (!interNodes.hasOwnProperty(wallI)) {
@@ -717,7 +725,7 @@ console.log("Running Bot!");
 
               //console.log("1) Good Angles: " + goodAngles.length + " Bad Angles: " + badAngles.length);
               //TODO: Step 1: Write code to substract angle ranges.
-              //console.log("___");
+              console.log("___");
               for (var i = 0; i < badAngles.length; i++) {
                   var tempGoodAnglesLength = goodAngles.length;
 
@@ -726,6 +734,7 @@ console.log("Running Bot!");
                       angle1 = (badAngles[i][0] + badAngles[i][1]).mod(360);
                       angle2 = (badAngles[i][0] - angle1).mod(360);
                       goodAngles.push([angle1, angle2]);
+                      console.log("First: " + anglePair([angle1, angle2]) + " Enemy: " + anglePair(badAngles[i]));
                       //console.log("Setup " + (badAngles[i][0] - goodAngles[j][0]).mod(360) + " or " + (360 - badAngles[i][1]));
                       continue;
                   }
@@ -733,21 +742,25 @@ console.log("Running Bot!");
                   for (var j = 0; j < tempGoodAnglesLength; j++) {
                       if (angleRangeIsWithin(goodAngles[j], badAngles[i])) {
                           removeIndex.push(j);
+                          console.log("Remove: " + anglePair(goodAngles[j])  + " Enemy: " + anglePair(badAngles[i]));
                       } else if (angleRangeIsWithin(badAngles[i], goodAngles[j])) {
                           var diff1 = (badAngles[i][0] - goodAngles[j][0]).mod(360);
                           var newZero = (badAngles[i][0] + badAngles[i][1]).mod(360);
                           var diff2 = (newZero - goodAngles[j][0]).mod(360);
                           goodAngles.push([newZero, goodAngles[j][1] - diff2]);
+                          console.log("From: " + anglePair(goodAngles[j]) + " Enemy: " + anglePair(badAngles[i]) + " Split: " + anglePair([goodAngles[j][0], (goodAngles[j][0] + diff1).mod(360)]) + " and: " + anglePair([newZero, (newZero + goodAngles[j][1] - diff2).mod(360)]));
                           goodAngles[j][1] = diff1;
                           //console.log("\t\t\t\t\tSplit good Angle");
 
                           break;
                       } else if (angleIsWithin(badAngles[i][0], goodAngles[j])) {
                           var diff = (badAngles[i][0] - goodAngles[j][0]).mod(360);
+                          console.log("Modify: " + anglePair(goodAngles[j]) + " Enemy: " + anglePair(badAngles[i]) + " into: " + anglePair([goodAngles[j][0], (goodAngles[j][0] + diff).mod(360)]));
                           goodAngles[j][1] = diff;
                           //console.log("Modify good Angle 0");
                       } else if (angleIsWithin((badAngles[i][0] + badAngles[i][1]).mod(360), goodAngles[j])) {
                           var oldY = (goodAngles[j][0] + goodAngles[j][1]).mod(360);
+                          console.log("Modify: " + anglePair(goodAngles[j]) + " Enemy: " + anglePair(badAngles[i]) + " into: " + anglePair([(badAngles[i][0] + badAngles[i][1]).mod(360), ((badAngles[i][0] + badAngles[i][1]).mod(360) + (oldY - goodAngles[j][0]).mod(360)).mod(360)]));
                           goodAngles[j][0] = (badAngles[i][0] + badAngles[i][1]).mod(360);
                           var diff = (oldY - goodAngles[j][0]).mod(360);
                           goodAngles[j][1] = diff;
@@ -765,12 +778,12 @@ console.log("Running Bot!");
 
               for (var i = 0; i < goodAngles.length; i++) {
                   if (goodAngles[i][0] != goodAngles[i][1].mod(360)) {
-                      var line1 = followAngle(goodAngles[i][0], m[0].x, m[0].y, 200);
-                      var line2 = followAngle((goodAngles[i][0] + goodAngles[i][1]).mod(360), m[0].x, m[0].y, 200);
+                      var line1 = followAngle(goodAngles[i][0], m[0].x, m[0].y, 200 + (i * 20));
+                      var line2 = followAngle((goodAngles[i][0] + goodAngles[i][1]).mod(360), m[0].x, m[0].y, 200 + (i * 20));
                       drawLine(m[0].x, m[0].y, line1[0], line1[1], 2);
                       drawLine(m[0].x, m[0].y, line2[0], line2[1], 2);
                       
-                      drawArc(line1[0], line1[1], line2[0], line2[1], m[0].x, m[0].y, 200, 1);
+                      drawArc(line1[0], line1[1], line2[0], line2[1], m[0].x, m[0].y, 200 + (i * 20), 1);
 
                       drawPoint(line1[0], line1[1], 0, "" + i + ": 0");
                       drawPoint(line2[0], line2[1], 0, "" + i + ": 1");
@@ -789,7 +802,7 @@ console.log("Running Bot!");
                       }
                   }
                   var perfectAngle = (bIndex[0] + bIndex[1] / 2).mod(360);
-                  console.log("perfectAngle " + perfectAngle);
+                  //console.log("perfectAngle " + perfectAngle);
                   var line1 = followAngle(perfectAngle, m[0].x, m[0].y, 300);
                   drawLine(m[0].x, m[0].y, line1[0], line1[1], 7);
 
@@ -872,7 +885,7 @@ console.log("Running Bot!");
               }
 
               drawPoint(tempPoint[0], tempPoint[1], tempPoint[2], "");
-              drawPoint(tempPoint[0], tempPoint[1], tempPoint[2], "" + Math.floor(computeDistance(tempPoint[0], tempPoint[1], I, J)));
+              //drawPoint(tempPoint[0], tempPoint[1], tempPoint[2], "" + Math.floor(computeDistance(tempPoint[0], tempPoint[1], I, J)));
               //drawLine(tempPoint[0], tempPoint[1], m[0].x, m[0].y, 6);
               //console.log("Slope: " + slope(tempPoint[0], tempPoint[1], m[0].x, m[0].y) + " Angle: " + getAngle(tempPoint[0], tempPoint[1], m[0].x, m[0].y) + " Side: " + (getAngle(tempPoint[0], tempPoint[1], m[0].x, m[0].y) - 90).mod(360));
               tempPoint[2] = 1;
