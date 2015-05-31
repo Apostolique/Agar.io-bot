@@ -337,6 +337,26 @@ console.log("Running Bot!");
           (I, J, I, screenToGameY(r)));
     }
 
+    //Given an angle value that was gotten from valueAndleBased(),
+    //returns a new value that scales it appropriately.
+    function paraAngleValue(angleValue, range) {
+        return (2 / (range[1] / 2)) * (angleValue * angleValue) - (range[1] / 4);
+    }
+
+    function valueAngleBased(angle, range) {
+        var leftValue = (angle - range[0]).mod(360);
+        var rightValue = (rangeToAngle(range) - angle).mod(360);
+
+        var bestValue = Math.min(leftValue, rightValue);
+
+        if (bestValue <= range[1]) {
+            return paraAngleValue(bestValue, range);
+        }
+        var banana = -1;
+        return banana;
+
+    }
+
     function computeDistance(x1, y1, x2, y2) {
         var xdis = x1 - x2; // <--- FAKE AmS OF COURSE!
         var ydis = y1 - y2;
@@ -580,7 +600,7 @@ console.log("Running Bot!");
           var tempMoveY = Q;
 
           if (m[0] != null) {
-              drawPoint(m[0].x, m[0].y - m[0].size, 3, "" + Math.floor(m[0].x) + ", " + Math.floor(m[0].y));
+              //drawPoint(m[0].x, m[0].y - m[0].size, 3, "" + Math.floor(m[0].x) + ", " + Math.floor(m[0].y));
 
               var allPossibleFood = null;
               allPossibleFood = getAllFood(); // #1
@@ -627,8 +647,8 @@ console.log("Running Bot!");
                       drawLine(m[0].x, m[0].y, lineLeft[0], lineLeft[1], 3);
                       drawLine(m[0].x, m[0].y, lineRight[0], lineRight[1], 3);
                   }
-                  drawPoint(lineLeft[0], lineLeft[1], 0, "Left 0 - " + i);
-                  drawPoint(lineRight[0], lineRight[1], 0, "Right 1 - " + i);
+                  //drawPoint(lineLeft[0], lineLeft[1], 0, "Left 0 - " + i);
+                  //drawPoint(lineRight[0], lineRight[1], 0, "Right 1 - " + i);
               }
 
               var goodAngles = [];
@@ -713,7 +733,7 @@ console.log("Running Bot!");
                       interNodes[wallI].nx = m[0].nx;
                       interNodes[wallI].ny = newY;
                       interNodes[wallI].nSize = m[0].oSize * 10;
-                      //interNodes[wallI].updateTime = D;
+                      interNodes[wallI].updateTime = D;
                       //console.log("Added corner enemy");
                   } else {
                       //console.log("Update Wall!");
@@ -725,7 +745,6 @@ console.log("Running Bot!");
 
               //console.log("1) Good Angles: " + goodAngles.length + " Bad Angles: " + badAngles.length);
               //TODO: Step 1: Write code to substract angle ranges.
-              console.log("___");
               for (var i = 0; i < badAngles.length; i++) {
                   var tempGoodAnglesLength = goodAngles.length;
 
@@ -734,7 +753,6 @@ console.log("Running Bot!");
                       angle1 = (badAngles[i][0] + badAngles[i][1]).mod(360);
                       angle2 = (badAngles[i][0] - angle1).mod(360);
                       goodAngles.push([angle1, angle2]);
-                      console.log("First: " + anglePair([angle1, angle2]) + " Enemy: " + anglePair(badAngles[i]));
                       //console.log("Setup " + (badAngles[i][0] - goodAngles[j][0]).mod(360) + " or " + (360 - badAngles[i][1]));
                       continue;
                   }
@@ -742,25 +760,21 @@ console.log("Running Bot!");
                   for (var j = 0; j < tempGoodAnglesLength; j++) {
                       if (angleRangeIsWithin(goodAngles[j], badAngles[i])) {
                           removeIndex.push(j);
-                          console.log("Remove: " + anglePair(goodAngles[j])  + " Enemy: " + anglePair(badAngles[i]));
                       } else if (angleRangeIsWithin(badAngles[i], goodAngles[j])) {
                           var diff1 = (badAngles[i][0] - goodAngles[j][0]).mod(360);
                           var newZero = (badAngles[i][0] + badAngles[i][1]).mod(360);
                           var diff2 = (newZero - goodAngles[j][0]).mod(360);
                           goodAngles.push([newZero, goodAngles[j][1] - diff2]);
-                          console.log("From: " + anglePair(goodAngles[j]) + " Enemy: " + anglePair(badAngles[i]) + " Split: " + anglePair([goodAngles[j][0], (goodAngles[j][0] + diff1).mod(360)]) + " and: " + anglePair([newZero, (newZero + goodAngles[j][1] - diff2).mod(360)]));
                           goodAngles[j][1] = diff1;
                           //console.log("\t\t\t\t\tSplit good Angle");
 
                           break;
                       } else if (angleIsWithin(badAngles[i][0], goodAngles[j])) {
                           var diff = (badAngles[i][0] - goodAngles[j][0]).mod(360);
-                          console.log("Modify: " + anglePair(goodAngles[j]) + " Enemy: " + anglePair(badAngles[i]) + " into: " + anglePair([goodAngles[j][0], (goodAngles[j][0] + diff).mod(360)]));
                           goodAngles[j][1] = diff;
                           //console.log("Modify good Angle 0");
                       } else if (angleIsWithin((badAngles[i][0] + badAngles[i][1]).mod(360), goodAngles[j])) {
                           var oldY = (goodAngles[j][0] + goodAngles[j][1]).mod(360);
-                          console.log("Modify: " + anglePair(goodAngles[j]) + " Enemy: " + anglePair(badAngles[i]) + " into: " + anglePair([(badAngles[i][0] + badAngles[i][1]).mod(360), ((badAngles[i][0] + badAngles[i][1]).mod(360) + (oldY - goodAngles[j][0]).mod(360)).mod(360)]));
                           goodAngles[j][0] = (badAngles[i][0] + badAngles[i][1]).mod(360);
                           var diff = (oldY - goodAngles[j][0]).mod(360);
                           goodAngles[j][1] = diff;
@@ -778,17 +792,16 @@ console.log("Running Bot!");
 
               for (var i = 0; i < goodAngles.length; i++) {
                   if (goodAngles[i][0] != goodAngles[i][1].mod(360)) {
-                      var line1 = followAngle(goodAngles[i][0], m[0].x, m[0].y, 200 + (i * 20));
-                      var line2 = followAngle((goodAngles[i][0] + goodAngles[i][1]).mod(360), m[0].x, m[0].y, 200 + (i * 20));
+                      var line1 = followAngle(goodAngles[i][0], m[0].x, m[0].y, 200);
+                      var line2 = followAngle((goodAngles[i][0] + goodAngles[i][1]).mod(360), m[0].x, m[0].y, 200);
                       drawLine(m[0].x, m[0].y, line1[0], line1[1], 2);
                       drawLine(m[0].x, m[0].y, line2[0], line2[1], 2);
                       
-                      drawArc(line1[0], line1[1], line2[0], line2[1], m[0].x, m[0].y, 200 + (i * 20), 1);
+                      drawArc(line1[0], line1[1], line2[0], line2[1], m[0].x, m[0].y, 200, 1);
 
                       drawPoint(line1[0], line1[1], 0, "" + i + ": 0");
                       drawPoint(line2[0], line2[1], 0, "" + i + ": 1");
                   }
-
               }
 
               if (goodAngles.length > 0) {
@@ -804,7 +817,8 @@ console.log("Running Bot!");
                   var perfectAngle = (bIndex[0] + bIndex[1] / 2).mod(360);
                   //console.log("perfectAngle " + perfectAngle);
                   var line1 = followAngle(perfectAngle, m[0].x, m[0].y, 300);
-                  drawLine(m[0].x, m[0].y, line1[0], line1[1], 7);
+
+                  var stuffToEat = false;
 
                   for (var i = 0; i < clusterAllFood.length; i++) {
                       //console.log("mefore: " + clusterAllFood[i][2]);
@@ -812,14 +826,14 @@ console.log("Running Bot!");
                       
                       var clusterAngle = getAngle(clusterAllFood[i][0], clusterAllFood[i][1], m[0].x, m[0].y);
 
-                      var angleD1 = (bIndex[0] - clusterAngle).mod(360);
-                      var angleD2 = (clusterAngle - bIndex[0] + bIndex[1]).mod(360);
+                      var angleValue = valueAngleBased(clusterAngle, bIndex);
 
-                      var bestAngleScore = Math.min(angleD1, angleD2);
-
-                      clusterAllFood[i][2] = /*clusterAllFood[i][2] -*//* computeDistance(clusterAllFood[i][0], clusterAllFood[i][1], m[0].x, m[0].y) +*/ (bestAngleScore * 10);
-                      //console.log("Current Value: " + clusterAllFood[i][2]);
-
+                      if (angleValue > 0) {
+                          clusterAllFood[i][2] = clusterAllFood[i][2] * 6;
+                          stuffToEat = true;
+                      } else {
+                          clusterAllFood[i][2] = -1;
+                      }
 
                       clusterAllFood[i][3] = clusterAngle;
 
@@ -831,22 +845,31 @@ console.log("Running Bot!");
                       //console.log("After: " + clusterAllFood[i][2]);
                   }
 
-                  var bestFoodI = 0;
-                  var bestFood = clusterAllFood[0][2];
-                  for (var i = 1; i < clusterAllFood.length; i++) {
-                      if (bestFood < clusterAllFood[i][2]) {
-                          bestFood = clusterAllFood[i][2];
-                          bestFoodI = i;
+                  //TODO: You can't assume that there will be food available.
+                  var bestFoodI = null;
+                  if (stuffToEat) {
+                      bestFoodI = clusterAllFood[0];
+                      var bestFood = clusterAllFood[0][2];
+                      for (var i = 1; i < clusterAllFood.length; i++) {
+                          if (bestFood < clusterAllFood[i][2]) {
+                              bestFood = clusterAllFood[i][2];
+                              bestFoodI = clusterAllFood[i];
+                          }
                       }
                   }
 
                   //console.log("Best Value: " + clusterAllFood[bestFoodI][2]);
-
-                  //tempMoveX = clusterAllFood[bestFoodI][0];
-                  //tempMoveY = clusterAllFood[bestFoodI][1];
+                  if (stuffToEat) {
+                      tempMoveX = bestFoodI[0];
+                      tempMoveY = bestFoodI[1];
+                      drawLine(m[0].x, m[0].y, bestFoodI[0], bestFoodI[1], 1);
+                  } else {
+                      drawLine(m[0].x, m[0].y, line1[0], line1[1], 7);
+                      tempMoveX = line1[0];
+                      tempMoveY = line1[1];
+                  }
+                  
                   //drawLine(m[0].x, m[0].y, tempMoveX, tempMoveY, 1);
-                  tempMoveX = line1[0];
-                  tempMoveY = line1[1];
               } else {
                  for (var i = 0; i < clusterAllFood.length; i++) {
                       //console.log("mefore: " + clusterAllFood[i][2]);
@@ -1163,6 +1186,10 @@ console.log("Running Bot!");
     debugStrings.push("R - Lines: " + (!toggleDraw ? "On" : "Off"));
     debugStrings.push("Server: " + serverIP);
     debugStrings.push("Survived for: " + nbSeconds + " seconds");
+
+    if (m.length > 0) {
+        debugStrings.push("Location: " + Math.floor(m[0].x) + ", " + Math.floor(m[0].y));
+    }
 
     var offsetValue = 20;
     var text = new X(18, (ea ? '#F2FBFF' : '#111111'));
