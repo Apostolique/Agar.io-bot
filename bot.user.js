@@ -340,7 +340,7 @@ console.log("Running Bot!");
     //Given an angle value that was gotten from valueAndleBased(),
     //returns a new value that scales it appropriately.
     function paraAngleValue(angleValue, range) {
-        return (2 / (range[1] / 2)) * (angleValue * angleValue) - (range[1] / 4);
+        return (15 / (range[1])) * (angleValue * angleValue) - (range[1] / 6);
     }
 
     function valueAngleBased(angle, range) {
@@ -585,6 +585,46 @@ console.log("Running Bot!");
         return (range[0] + ", " + rangeToAngle(range));
     }
 
+    function getEdgeLinesFromPoint(blob1, blob2) {
+        // find tangents
+        // 
+        // TODO: DON'T FORGET TO HANDLE IF BLOB1'S CENTER POINT IS INSIDE BLOB2!!!
+        var px = blob1.x;
+        var py = blob1.y;
+
+        var cx = blob2.x;
+        var cy = blob2.y;
+
+        var radius = blob2.size;
+
+        if (computeDistance(px, py, cx, cy) <= radius) {
+            var tempAngle = getAngle(cx, cy, px, py);
+            var tempCoord = followAngle(tempAngle, cx, cy, blob1.size);
+            px = tempCoord[0];
+            py = tempCoord[1];
+
+            drawPoint(px, py, 2, "");
+        }
+
+        var dx = cx - px;
+        var dy = cy - py;
+        var dd = Math.sqrt(dx * dx + dy * dy);
+        var a = Math.asin(radius / dd);
+        var b = Math.atan2(dy, dx);
+        
+        var t = b - a
+        var ta = { x:radius * Math.sin(t), y:radius * -Math.cos(t) };
+        
+        t = b + a
+        var tb = { x:radius * -Math.sin(t), y:radius * Math.cos(t) };
+
+        var angleLeft = getAngle(cx + ta.x, cy + ta.y, px, py);
+        var angleRight = getAngle(cx + tb.x, cy + tb.y, px, py);
+        var angleDistance = (angleRight - angleLeft).mod(360);
+
+        return [angleLeft, angleDistance, [cx + tb.x, cy + tb.y], [cx + ta.x, cy + ta.y]];
+    }
+
     function findDestination() {
         dPoints = [];
         dArc = [];
@@ -618,21 +658,14 @@ console.log("Running Bot!");
                   var offsetX = m[0].x;
                   var offsetY = m[0].y;
 
-                  var threatAngle = getAngle(allPossibleThreats[i].x, allPossibleThreats[i].y, m[0].x, m[0].y);
+                  var enemyAngleStuff = getEdgeLinesFromPoint(m[0], allPossibleThreats[i]);
 
-                  var iThreatAngleL = (threatAngle - 90).mod(360);
-                  var iThreatAngleR = (threatAngle + 90).mod(360);
+                  var leftAngle = enemyAngleStuff[0];
+                  var rightAngle = rangeToAngle(enemyAngleStuff);
+                  var difference = enemyAngleStuff[1];
 
-                  var leftPoint = followAngle(iThreatAngleL, allPossibleThreats[i].x, allPossibleThreats[i].y, allPossibleThreats[i].size);
-                  var rightPoint = followAngle(iThreatAngleR, allPossibleThreats[i].x, allPossibleThreats[i].y, allPossibleThreats[i].size);
-
-                  drawPoint(leftPoint[0], leftPoint[1], 3, "");
-                  drawPoint(rightPoint[0], rightPoint[1], 3, "");
-
-                  var leftAngle = getAngle(leftPoint[0], leftPoint[1], offsetX, offsetY);
-                  var rightAngle = getAngle(rightPoint[0], rightPoint[1], offsetX, offsetY);
-
-                  var difference = (rightAngle - leftAngle).mod(360);
+                  drawPoint(enemyAngleStuff[2][0], enemyAngleStuff[2][1], 3, "");
+                  drawPoint(enemyAngleStuff[3][0], enemyAngleStuff[3][1], 3, "");
 
                   badAngles.push([leftAngle, difference]);
 
@@ -829,29 +862,31 @@ console.log("Running Bot!");
                       var angleValue = valueAngleBased(clusterAngle, bIndex);
 
                       if (angleValue > 0) {
-                          clusterAllFood[i][2] = clusterAllFood[i][2] * 6;
+                          clusterAllFood[i][2] = clusterAllFood[i][2] * 6 + angleValue  - computeDistance(clusterAllFood[i][0], clusterAllFood[i][1], m[0].x, m[0].y);
                           stuffToEat = true;
+                          clusterAllFood[i][3] = true;
                       } else {
                           clusterAllFood[i][2] = -1;
+                          clusterAllFood[i][3] = false;
                       }
 
-                      clusterAllFood[i][3] = clusterAngle;
 
-                      if (!toggle) {
+                      if (!toggle && angleValue > 0) {
 
                           drawPoint(clusterAllFood[i][0], clusterAllFood[i][1], 1, "");
                           //drawPoint(clusterAllFood[i][0], clusterAllFood[i][1], 1, "" + clusterAllFood[i][2]);
+                      } else if (!toggle) {
+                          drawPoint(clusterAllFood[i][0], clusterAllFood[i][1], 0, "");
                       }
                       //console.log("After: " + clusterAllFood[i][2]);
                   }
 
-                  //TODO: You can't assume that there will be food available.
                   var bestFoodI = null;
                   if (stuffToEat) {
                       bestFoodI = clusterAllFood[0];
                       var bestFood = clusterAllFood[0][2];
                       for (var i = 1; i < clusterAllFood.length; i++) {
-                          if (bestFood < clusterAllFood[i][2]) {
+                          if (bestFood < clusterAllFood[i][2] && clusterAllFood[i][3]) {
                               bestFood = clusterAllFood[i][2];
                               bestFoodI = clusterAllFood[i];
                           }
@@ -859,7 +894,7 @@ console.log("Running Bot!");
                   }
 
                   //console.log("Best Value: " + clusterAllFood[bestFoodI][2]);
-                  if (stuffToEat) {
+                  if (stuffToEat && bestFoodI[3]) {
                       tempMoveX = bestFoodI[0];
                       tempMoveY = bestFoodI[1];
                       drawLine(m[0].x, m[0].y, bestFoodI[0], bestFoodI[1], 1);
