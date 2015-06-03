@@ -3,7 +3,7 @@
 // @namespace   AposBest
 // @description Plays Agar
 // @include     http://agar.io/
-// @version     1
+// @version     3.01
 // @grant       none
 // @author      twitch.tv/apostolique
 // ==/UserScript==
@@ -425,6 +425,12 @@ console.log("Running Bot!");
         return dotList;
     }
 
+    function processEverything(listToUse) {
+        Object.keys(listToUse).forEach(function (element, index) {
+            computeAngleRanges(listToUse[element], getPlayer()[0]);
+        });
+    }
+
     //TODO: Make it only go to a virus if it's big enough. If it shrinks, it shouldn't only grab a single dot and go back in.
     function getAllNiceViruses() {
         var dotList = [];
@@ -607,7 +613,7 @@ console.log("Running Bot!");
     }
 
     function angleIsWithin(angle, range) {
-        var diff = (angle - range[0]).mod(360);
+        var diff = (rangeToAngle(range) - angle).mod(360);
         if (diff > 0 && diff < range[1]) {
             return true;
         }
@@ -622,6 +628,38 @@ console.log("Running Bot!");
         return (range[0] + ", " + rangeToAngle(range));
     }
 
+    function computeAngleRanges(blob1, blob2) {
+        var mainAngle = getAngle(blob1.x, blob1.y, blob2.x, blob2.y);
+        var leftAngle = (mainAngle - 90).mod(360);
+        var rightAngle = (mainAngle + 90).mod(360);
+
+        var blob1Left = followAngle(leftAngle, blob1.x, blob1.y, blob1.size);
+        var blob1Right = followAngle(rightAngle, blob1.x, blob1.y, blob1.size);
+
+        var blob2Left = followAngle(rightAngle, blob2.x, blob2.y, blob2.size);
+        var blob2Right = followAngle(leftAngle, blob2.x, blob2.y, blob2.size);
+
+        var blob1AngleLeft = getAngle(blob2.x, blob2.y, blob1Left[0], blob1Left[1]);
+        var blob1AngleRight = getAngle(blob2.x, blob2.y, blob1Right[0], blob1Right[1]);
+
+        var blob2AngleLeft = getAngle(blob1.x, blob1.y, blob2Left[0], blob2Left[1]);
+        var blob2AngleRight = getAngle(blob1.x, blob1.y, blob2Right[0], blob2Right[1]);
+
+        var blob1Range = (blob1AngleRight - blob1AngleLeft).mod(360);
+        var blob2Range = (blob2AngleRight - blob2AngleLeft).mod(360);
+
+        var tempLine = followAngle(blob2AngleLeft, blob2Left[0], blob2Left[1], 400);
+        //drawLine(blob2Left[0], blob2Left[1], tempLine[0], tempLine[1], 0);
+
+        if ((blob1Range / blob2Range) > 1) {
+            drawPoint(blob1Left[0], blob1Left[1], 3, "");
+            drawPoint(blob1Right[0], blob1Right[1], 3, "");
+            drawPoint(blob1.x, blob1.y, 3, "" + blob1Range + ", " + blob2Range + " R: " + (Math.round((blob1Range / blob2Range) * 1000) / 1000));
+        }
+
+        //drawPoint(blob2.x, blob2.y, 3, "" + blob1Range);
+    }
+
     function getEdgeLinesFromPoint(blob1, blob2) {
         // find tangents
         // 
@@ -634,13 +672,11 @@ console.log("Running Bot!");
 
         var radius = blob2.size;
 
-        if (computeDistance(px, py, cx, cy) <= radius) {
-            var tempAngle = getAngle(cx, cy, px, py);
-            var tempCoord = followAngle(tempAngle, cx, cy, blob1.size);
-            px = tempCoord[0];
-            py = tempCoord[1];
+        var shouldInvert = false;
 
-            drawPoint(px, py, 2, "");
+        if (computeDistance(px, py, cx, cy) <= radius) {
+            radius = computeDistance(px, py, cx, cy) - 5;
+            shouldInvert = true;
         }
 
         var dx = cx - px;
@@ -676,6 +712,8 @@ console.log("Running Bot!");
 
           if (player.length > 0) {
               //drawPoint(player[0].x, player[0].y - player[0].size, 3, "" + Math.floor(player[0].x) + ", " + Math.floor(player[0].y));
+
+              //var allDots = processEverything(interNodes);
 
               var allPossibleFood = null;
               allPossibleFood = getAllFood(); // #1
@@ -823,7 +861,7 @@ console.log("Running Bot!");
 
                   if (tempGoodAnglesLength == 0) {
                       //console.log("First of " + badAngles.length);
-                      angle1 = (badAngles[i][0] + badAngles[i][1]).mod(360);
+                      angle1 = rangeToAngle(badAngles[i]);
                       angle2 = (badAngles[i][0] - angle1).mod(360);
                       goodAngles.push([angle1, angle2]);
                       //console.log("Setup " + (badAngles[i][0] - goodAngles[j][0]).mod(360) + " or " + (360 - badAngles[i][1]));
@@ -835,10 +873,13 @@ console.log("Running Bot!");
                           removeIndex.push(j);
                       } else if (angleRangeIsWithin(badAngles[i], goodAngles[j])) {
                           var diff1 = (badAngles[i][0] - goodAngles[j][0]).mod(360);
-                          var newZero = (badAngles[i][0] + badAngles[i][1]).mod(360);
+                          var newZero = rangeToAngle(badAngles[i]);
                           var diff2 = (newZero - goodAngles[j][0]).mod(360);
                           goodAngles.push([newZero, goodAngles[j][1] - diff2]);
                           goodAngles[j][1] = diff1;
+
+                          console.log("");
+
                           //console.log("\t\t\t\t\tSplit good Angle");
 
                           break;
@@ -846,9 +887,9 @@ console.log("Running Bot!");
                           var diff = (badAngles[i][0] - goodAngles[j][0]).mod(360);
                           goodAngles[j][1] = diff;
                           //console.log("Modify good Angle 0");
-                      } else if (angleIsWithin((badAngles[i][0] + badAngles[i][1]).mod(360), goodAngles[j])) {
-                          var oldY = (goodAngles[j][0] + goodAngles[j][1]).mod(360);
-                          goodAngles[j][0] = (badAngles[i][0] + badAngles[i][1]).mod(360);
+                      } else if (angleIsWithin(rangeToAngle(badAngles[i]), goodAngles[j])) {
+                          var oldY = rangeToAngle(goodAngles[j]);
+                          goodAngles[j][0] = rangeToAngle(badAngles[i]);
                           var diff = (oldY - goodAngles[j][0]).mod(360);
                           goodAngles[j][1] = diff;
                           //console.log("Modify good Angle 1");
@@ -865,12 +906,12 @@ console.log("Running Bot!");
 
               for (var i = 0; i < goodAngles.length; i++) {
                   if (goodAngles[i][0] != goodAngles[i][1].mod(360)) {
-                      var line1 = followAngle(goodAngles[i][0], player[0].x, player[0].y, 200);
-                      var line2 = followAngle((goodAngles[i][0] + goodAngles[i][1]).mod(360), player[0].x, player[0].y, 200);
+                      var line1 = followAngle(goodAngles[i][0], player[0].x, player[0].y, 200 + i * 20);
+                      var line2 = followAngle((goodAngles[i][0] + goodAngles[i][1]).mod(360), player[0].x, player[0].y, 200 + i * 20);
                       drawLine(player[0].x, player[0].y, line1[0], line1[1], 2);
                       drawLine(player[0].x, player[0].y, line2[0], line2[1], 2);
                       
-                      drawArc(line1[0], line1[1], line2[0], line2[1], player[0].x, player[0].y, 200, 1);
+                      drawArc(line1[0], line1[1], line2[0], line2[1], player[0].x, player[0].y, 200 + i * 20, 1);
 
                       drawPoint(line1[0], line1[1], 0, "" + i + ": 0");
                       drawPoint(line2[0], line2[1], 0, "" + i + ": 1");
@@ -894,7 +935,7 @@ console.log("Running Bot!");
                   var stuffToEat = false;
 
                   for (var i = 0; i < clusterAllFood.length; i++) {
-                      //console.log("mefore: " + clusterAllFood[i][2]);
+                      //console.log("Before: " + clusterAllFood[i][2]);
                       //This is the cost function. Higher is better.
                       
                       var clusterAngle = getAngle(clusterAllFood[i][0], clusterAllFood[i][1], player[0].x, player[0].y);
@@ -1846,6 +1887,19 @@ console.log("Running Bot!");
       f.setPoint = function(x, y) {
         U = x;
         V = y;
+      }
+
+      f.setScore = function(a) {
+        sessionScore = a * 100;
+      }
+
+      f.setBestTime = function(a) {
+        bestTime = a;
+      }
+
+      f.best = function(a, b) {
+        setScore(a);
+        setBestTime(b);
       }
 
       var X = 500,
