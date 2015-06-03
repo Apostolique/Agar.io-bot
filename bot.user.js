@@ -445,7 +445,6 @@ console.log("Running Bot!");
             }, interNodes);
         }
 
-
         return dotList;
     }
 
@@ -614,7 +613,7 @@ console.log("Running Bot!");
 
     function angleIsWithin(angle, range) {
         var diff = (rangeToAngle(range) - angle).mod(360);
-        if (diff > 0 && diff < range[1]) {
+        if (diff >= 0 && diff <= range[1]) {
             return true;
         }
         return false;
@@ -625,7 +624,7 @@ console.log("Running Bot!");
     }
 
     function anglePair(range) {
-        return (range[0] + ", " + rangeToAngle(range));
+        return (range[0] + ", " + rangeToAngle(range) + " range: " + range[1]);
     }
 
     function computeAngleRanges(blob1, blob2) {
@@ -856,43 +855,62 @@ console.log("Running Bot!");
 
               //console.log("1) Good Angles: " + goodAngles.length + " Bad Angles: " + badAngles.length);
               //TODO: Step 1: Write code to substract angle ranges.
+              console.log("---");
               for (var i = 0; i < badAngles.length; i++) {
                   var tempGoodAnglesLength = goodAngles.length;
 
                   if (tempGoodAnglesLength == 0) {
-                      //console.log("First of " + badAngles.length);
                       angle1 = rangeToAngle(badAngles[i]);
                       angle2 = (badAngles[i][0] - angle1).mod(360);
                       goodAngles.push([angle1, angle2]);
-                      //console.log("Setup " + (badAngles[i][0] - goodAngles[j][0]).mod(360) + " or " + (360 - badAngles[i][1]));
+                      console.log("Add: " + anglePair(goodAngles[0]));
                       continue;
                   }
                   var removeIndex = [];
                   for (var j = 0; j < tempGoodAnglesLength; j++) {
+
+                      if (goodAngles[j][1] == 0) {
+                          removeIndex.push(j);
+                          console.log("Removed " + anglePair(goodAngles[j]));
+                          break;
+                      }
+
                       if (angleRangeIsWithin(goodAngles[j], badAngles[i])) {
+                          console.log("Removed " + anglePair(goodAngles[j]));
                           removeIndex.push(j);
                       } else if (angleRangeIsWithin(badAngles[i], goodAngles[j])) {
                           var diff1 = (badAngles[i][0] - goodAngles[j][0]).mod(360);
                           var newZero = rangeToAngle(badAngles[i]);
                           var diff2 = (newZero - goodAngles[j][0]).mod(360);
-                          goodAngles.push([newZero, goodAngles[j][1] - diff2]);
+
+                          var newGoodAngle = [newZero, goodAngles[j][1] - diff2];
+
+                          var oldGoodAngle = goodAngles[j];
+
+                          goodAngles.push(newGoodAngle);
                           goodAngles[j][1] = diff1;
 
-                          console.log("");
+                          console.log("Modify: " + anglePair(oldGoodAngle) + " into: " + anglePair(goodAngles[j]));
+                          if (goodAngles[j][1] == 0) {
+                              removeIndex.push(j);
+                              console.log("Removed " + anglePair(goodAngles[j]));
+                          }
 
-                          //console.log("\t\t\t\t\tSplit good Angle");
+                          console.log("Add: " + anglePair(newGoodAngle));
 
                           break;
                       } else if (angleIsWithin(badAngles[i][0], goodAngles[j])) {
+                          var oldGoodAngle = goodAngles[j];
                           var diff = (badAngles[i][0] - goodAngles[j][0]).mod(360);
                           goodAngles[j][1] = diff;
-                          //console.log("Modify good Angle 0");
+                          console.log("Modify: " + anglePair(oldGoodAngle) + " into: " + anglePair(goodAngles[j]));
                       } else if (angleIsWithin(rangeToAngle(badAngles[i]), goodAngles[j])) {
+                          var oldGoodAngle = goodAngles[j];
                           var oldY = rangeToAngle(goodAngles[j]);
                           goodAngles[j][0] = rangeToAngle(badAngles[i]);
                           var diff = (oldY - goodAngles[j][0]).mod(360);
                           goodAngles[j][1] = diff;
-                          //console.log("Modify good Angle 1");
+                          console.log("Modify: " + anglePair(oldGoodAngle) + " into: " + anglePair(goodAngles[j]));
                       }
                   }
                   if (removeIndex.length > 0) {
