@@ -5,6 +5,8 @@ The full coding process is streamed live on http://www.twitch.tv/apostolique
 
 To run the script, you need to install Greasemonkey / Tampermonkey in your browser. Then activate the script on the page http://agar.io/
 
+Make sure to install both bot.user.js and launcher.user.js
+
 #Honorable mention
 There are other people working on bots, you can check the forks, as well as GamerLio's Github which uses genetic algorithms: https://github.com/leomwu/agario-bot
 
