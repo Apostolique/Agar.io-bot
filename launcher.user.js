@@ -447,9 +447,13 @@ console.log("Running Bot Launcher!");
     dText = [];
     lines = [];
 
-
+    var oldX = getPointX();
+    var oldY = getPointY();
     f.botList[botIndex][1]();
-    //findDestination();
+
+    if (toggle) {
+        f.setPoint(oldX, oldY);
+    }
 
     if (ja()) {
       var a = Q - q / 2,
