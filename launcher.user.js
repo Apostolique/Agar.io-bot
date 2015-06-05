@@ -452,7 +452,7 @@ console.log("Running Bot Launcher!");
     f.botList[botIndex][1]();
 
     if (toggle) {
-        f.setPoint(oldX, oldY);
+        setPoint(oldX, oldY);
     }
 
     if (ja()) {
@@ -655,7 +655,7 @@ console.log("Running Bot Launcher!");
           d.strokeStyle = '#003300';
           d.stroke();
         } else {
-            var text = new ca(18, (ea ? '#F2FBFF' : '#111111'));
+            var text = new ca(18, (getDarkBool() ? '#F2FBFF' : '#111111'));
 
             text.setValue(dText[i]);
             var textRender = text.render();
