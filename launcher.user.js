@@ -123,8 +123,11 @@ console.log("Running Bot Launcher!");
     }
   }
   function ga() {
-    U = (Q - q / 2) / h + s;
-    V = (R - r / 2) / h + t
+    if (toggle) {
+        U = (Q - q / 2) / h + s;
+        V = (R - r / 2) / h + t;
+    }
+
   }
   function na() {
     null == W && (W = {
@@ -423,25 +426,18 @@ console.log("Running Bot Launcher!");
     }
 
   function I() {
-    dPoints = [];
-    dArc = [];
-    dText = [];
-    lines = [];
-
     if (restartPlz) {
         setNick(originalName);
         restartPlz = false;
     }
 
-    var oldX = getPointX();
+    /*var oldX = getPointX();
     var oldY = getPointY();
-    if (getPlayer().length > 0) {
-        f.botList[botIndex][1]();
-    }
+
 
     if (toggle) {
         setPoint(oldX, oldY);
-    }
+    }*/
 
     if (ja()) {
       var a = Q - q / 2,
@@ -487,6 +483,12 @@ console.log("Running Bot Launcher!");
     }
   }
   function ha() {
+
+    dPoints = [];
+    dArc = [];
+    dText = [];
+    lines = [];
+
     var a = + new Date;
     ++La;
     G = + new Date;
@@ -531,8 +533,14 @@ console.log("Running Bot Launcher!");
     2, r / 2);
     e.scale(h, h);
     e.translate( - s, - t);
-    for (d = 0; d < E.length; d++) E[d].draw();
     for (d = 0; d < n.length; d++) n[d].draw();
+    for (d = 0; d < E.length; d++) E[d].draw();
+    if (getPlayer().length > 0) {
+        var moveLoc = f.botList[botIndex][1]();
+        if (!toggle) {
+            setPoint(moveLoc[0], moveLoc[1]);
+        }
+    }
     customRender(e);
     e.restore();
     v && v.width && e.drawImage(v, q - v.width - 10, 10);
@@ -1411,6 +1419,8 @@ console.log("Running Bot Launcher!");
           }
         },
         updatePos: function () {
+          var temp = - 1 != l.indexOf(this);
+
           var a;
           a = (G - this.updateTime) / 120;
           a = 0 > a ? 0 : 1 < a ? 1 : a;
@@ -1478,6 +1488,20 @@ console.log("Running Bot Launcher!");
               e.drawImage(d, ~~this.x - ~~(f / 2), a - ~~(g / 2), f, g);
               a += d.height / 2 / c + 4
             }
+
+            /*if (b) {
+              var radius = 20;
+
+              e.beginPath();
+              e.arc(this.x, this.y, radius, 0, 2 * Math.PI, false);
+              e.fillStyle = "blue";
+
+              e.fill();
+              e.lineWidth = 2;
+              e.strokeStyle = '#003300';
+              e.stroke();
+            }*/
+
             Ca && (b || 0 == l.length && (!this.isVirus || this.isAgitated) && 20 < this.size) && (null == this.sizeCache && (this.sizeCache = new ca(this.getNameSize() / 2, '#FFFFFF', !0, '#000000')), b = this.sizeCache, b.setSize(this.getNameSize() / 2), b.setValue(~~(this.size * this.size / 100)), c = Math.ceil(10 * h) / 10, b.setScale(c), d = b.render(), f = ~~(d.width / c), g = ~~(d.height / c), e.drawImage(d, ~~this.x - ~~(f / 2), a - ~~(g / 2), f, g));
             e.restore()
           }
