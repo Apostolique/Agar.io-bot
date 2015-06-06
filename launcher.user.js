@@ -17,6 +17,8 @@ Array.prototype.peek = function() {
 console.log("Running Bot Launcher!");
 (function (f, g) {
 
+  console.log("bList: " + g('#bList'));
+
   g('#locationUnknown').append(g('<select id="bList" class="form-control" onchange="setBotIndex($(this).val());" />'));
   g('#locationUnknown').addClass('form-group');
 
@@ -377,7 +379,7 @@ console.log("Running Bot Launcher!");
     c += 4,
     k = y[d],
     null != k && k.destroy();
-    ia && 0 == l.length && (setNick(originalName), console.log("Dead"))
+    ia && 0 == l.length && (setNick(originalName), restartPlz = true, console.log("Dead"))
   }
 
     function computeDistance(x1, y1, x2, y2) {
@@ -413,20 +415,25 @@ console.log("Running Bot Launcher!");
         if (!toggleDraw) {
             var x1 = gameToScreenX(x_1);
             var y1 = gameToScreenY(y_1);
-            dPoints.push([x1, y1, drawColor]);
+            //dPoints.push([x1, y1, drawColor]);
+            dPoints.push([x_1, y_1, drawColor]);
             dText.push(text);
         }
     }
 
-    f.drawArc = function(x_1, y_1, x_2, y_2, x_3, y_3, radius, drawColor) {
+    f.drawArc = function(x_1, y_1, x_2, y_2, x_3, y_3, drawColor) {
         if (!toggleDraw) {
+
             var x1 = gameToScreenX(x_1);
             var y1 = gameToScreenY(y_1);
             var x2 = gameToScreenX(x_2);
             var y2 = gameToScreenY(y_2);
             var x3 = gameToScreenX(x_3);
             var y3 = gameToScreenY(y_3);
-            dArc.push([x1, y1, x2, y2, x3, y3, radius, drawColor]);
+
+            var radius = computeDistance(x_1, y_1, x_3, y_3);
+            dArc.push([x_1, y_1, x_2, y_2, x_3, y_3, radius, drawColor]);
+            //dArc.push([x1, y1, x2, y2, x3, y3, radius, drawColor]);
         }
     }
 
@@ -436,20 +443,27 @@ console.log("Running Bot Launcher!");
             var y1 = gameToScreenY(y_1);
             var x2 = gameToScreenX(x_2);
             var y2 = gameToScreenY(y_2);
-            lines.push([x1, y1, x2, y2, drawColor]);
+            lines.push([x_1, y_1, x_2, y_2, drawColor]);
+            //lines.push([x1, y1, x2, y2, drawColor]);
         }
     }
 
   function I() {
-    console.log("Running");
     dPoints = [];
     dArc = [];
     dText = [];
     lines = [];
 
+    if (restartPlz) {
+        setNick(originalName);
+        restartPlz = false;
+    }
+
     var oldX = getPointX();
     var oldY = getPointY();
-    f.botList[botIndex][1]();
+    if (getPlayer().length > 0) {
+        f.botList[botIndex][1]();
+    }
 
     if (toggle) {
         setPoint(oldX, oldY);
@@ -545,6 +559,7 @@ console.log("Running Bot Launcher!");
     e.translate( - s, - t);
     for (d = 0; d < E.length; d++) E[d].draw();
     for (d = 0; d < n.length; d++) n[d].draw();
+    customRender(e);
     e.restore();
     v && v.width && e.drawImage(v, q - v.width - 10, 10);
     F = Math.max(F, Ma());
@@ -556,7 +571,6 @@ console.log("Running Bot Launcher!");
     0.4 > x && (x = 0.4);
     1 < x && (x = 1)
 
-    customRender(e);
   }
 
   function customRender(d) {
@@ -629,7 +643,6 @@ console.log("Running Bot Launcher!");
     for (var i = 0; i < dPoints.length; i++) {
         if (dText[i] == "") {
           var radius = 10;
-
 
           d.beginPath();
           d.arc(dPoints[i][0], dPoints[i][1], radius, 0, 2 * Math.PI, false);
@@ -782,6 +795,7 @@ console.log("Running Bot Launcher!");
     lifeTimer = new Date(),
     bestTime = 0,
     botIndex = 0,
+    restartPlz = false,
     e,
     A,
     q,
@@ -843,6 +857,7 @@ console.log("Running Bot Launcher!");
      else {
       var W = null;
       f.setNick = function (a) {
+        console.log("Nick set");
         lifeTimer = new Date();
         originalName = a;
         ta();
