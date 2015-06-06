@@ -17,10 +17,6 @@ Array.prototype.peek = function() {
 console.log("Running Bot Launcher!");
 (function (f, g) {
 
-  console.log("bList: " + g('#bList'));
-
-  g('#locationUnknown').append(g('<select id="bList" class="form-control" onchange="setBotIndex($(this).val());" />'));
-  g('#locationUnknown').addClass('form-group');
 
   function keyAction(e) {
     if (84 == e.keyCode) {
@@ -47,6 +43,8 @@ console.log("Running Bot Launcher!");
 
     if (f.botList == null) {
         f.botList = [];
+        g('#locationUnknown').append(g('<select id="bList" class="form-control" onchange="setBotIndex($(this).val());" />'));
+        g('#locationUnknown').addClass('form-group');
     }
 
     f.botList.push(["Human", humanPlayer]);
@@ -547,6 +545,7 @@ console.log("Running Bot Launcher!");
     0.4 > x && (x = 0.4);
     1 < x && (x = 1)
 
+    drawStats(e);
   }
 
   function customRender(d) {
@@ -653,7 +652,8 @@ console.log("Running Bot Launcher!");
 
     }
     d.lineWidth = 1;
-
+  }
+  function drawStats(d) {
     var currentDate = new Date();
 
     var nbSeconds = 0;
