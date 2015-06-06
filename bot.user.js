@@ -21,6 +21,8 @@ console.log("Running Apos Bot!");
 
     if (f.botList == null) {
         f.botList = [];
+        g('#locationUnknown').append(g('<select id="bList" class="form-control" onchange="setBotIndex($(this).val());" />'));
+        g('#locationUnknown').addClass('form-group');
     }
 
     f.botList.push(["AposBot", findDestination]);
@@ -555,8 +557,8 @@ console.log("Running Apos Bot!");
 
                     //console.log("Adding badAngles: " + leftAngle + ", " + rightAngle + " diff: " + difference);
 
-                    var lineLeft = followAngle(leftAngle, player[0].x, player[0].y, 400 - i * 10);
-                    var lineRight = followAngle(rightAngle, player[0].x, player[0].y, 400 - i * 10);
+                    var lineLeft = followAngle(leftAngle, player[0].x, player[0].y, 200 + player[0].size - i * 10);
+                    var lineRight = followAngle(rightAngle, player[0].x, player[0].y, 200 + player[0].size - i * 10);
                     if (getCells().hasOwnProperty(allPossibleThreats[i].id)) {
                         drawLine(player[0].x, player[0].y, lineLeft[0], lineLeft[1], 0);
                         drawLine(player[0].x, player[0].y, lineRight[0], lineRight[1], 0);
@@ -709,8 +711,8 @@ console.log("Running Apos Bot!");
 
                 for (var i = 0; i < goodAngles.length; i++) {
                     if (goodAngles[i][0] != goodAngles[i][1].mod(360)) {
-                        var line1 = followAngle(goodAngles[i][0], player[0].x, player[0].y, 200);
-                        var line2 = followAngle((goodAngles[i][0] + goodAngles[i][1]).mod(360), player[0].x, player[0].y, 200);
+                        var line1 = followAngle(goodAngles[i][0], player[0].x, player[0].y, 100 + player[0].size);
+                        var line2 = followAngle((goodAngles[i][0] + goodAngles[i][1]).mod(360), player[0].x, player[0].y, 100 + player[0].size);
                         drawLine(player[0].x, player[0].y, line1[0], line1[1], 2);
                         drawLine(player[0].x, player[0].y, line2[0], line2[1], 2);
 
