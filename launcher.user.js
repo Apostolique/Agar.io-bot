@@ -404,18 +404,8 @@ console.log("Running Bot Launcher!");
         return (y - getHeight() / 2) / getRatio() + getY();;
     }
 
-    function gameToScreenX (x) {
-        return ((x - getOffsetX()) * getRatio()) + getWidth()/2;
-    }
-    function gameToScreenY (y) {
-        return ((y - getOffsetY()) * getRatio()) + getHeight()/2;
-    }
-
     f.drawPoint = function(x_1, y_1, drawColor, text) {
         if (!toggleDraw) {
-            var x1 = gameToScreenX(x_1);
-            var y1 = gameToScreenY(y_1);
-            //dPoints.push([x1, y1, drawColor]);
             dPoints.push([x_1, y_1, drawColor]);
             dText.push(text);
         }
@@ -423,28 +413,14 @@ console.log("Running Bot Launcher!");
 
     f.drawArc = function(x_1, y_1, x_2, y_2, x_3, y_3, drawColor) {
         if (!toggleDraw) {
-
-            var x1 = gameToScreenX(x_1);
-            var y1 = gameToScreenY(y_1);
-            var x2 = gameToScreenX(x_2);
-            var y2 = gameToScreenY(y_2);
-            var x3 = gameToScreenX(x_3);
-            var y3 = gameToScreenY(y_3);
-
             var radius = computeDistance(x_1, y_1, x_3, y_3);
             dArc.push([x_1, y_1, x_2, y_2, x_3, y_3, radius, drawColor]);
-            //dArc.push([x1, y1, x2, y2, x3, y3, radius, drawColor]);
         }
     }
 
     f.drawLine =  function(x_1, y_1, x_2, y_2, drawColor) {
         if (!toggleDraw) {
-            var x1 = gameToScreenX(x_1);
-            var y1 = gameToScreenY(y_1);
-            var x2 = gameToScreenX(x_2);
-            var y2 = gameToScreenY(y_2);
             lines.push([x_1, y_1, x_2, y_2, drawColor]);
-            //lines.push([x1, y1, x2, y2, drawColor]);
         }
     }
 
