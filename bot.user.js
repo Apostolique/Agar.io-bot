@@ -2,7 +2,7 @@
 // @name        AposBot
 // @namespace   AposBot
 // @include     http://agar.io/
-// @version     1
+// @version     3.03
 // @grant       none
 // ==/UserScript==
 
