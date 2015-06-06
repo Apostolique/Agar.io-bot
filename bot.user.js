@@ -2,7 +2,7 @@
 // @name        AposBot
 // @namespace   AposBot
 // @include     http://agar.io/
-// @version     3.02
+// @version     1
 // @grant       none
 // ==/UserScript==
 
@@ -555,14 +555,16 @@ console.log("Running Apos Bot!");
 
                     //console.log("Adding badAngles: " + leftAngle + ", " + rightAngle + " diff: " + difference);
 
-                    var lineLeft = followAngle(leftAngle, player[0].x, player[0].y, 400);
-                    var lineRight = followAngle(rightAngle, player[0].x, player[0].y, 400);
+                    var lineLeft = followAngle(leftAngle, player[0].x, player[0].y, 400 - i * 10);
+                    var lineRight = followAngle(rightAngle, player[0].x, player[0].y, 400 - i * 10);
                     if (getCells().hasOwnProperty(allPossibleThreats[i].id)) {
                         drawLine(player[0].x, player[0].y, lineLeft[0], lineLeft[1], 0);
                         drawLine(player[0].x, player[0].y, lineRight[0], lineRight[1], 0);
+                        drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], player[0].x, player[0].y, 0);
                     } else {
                         drawLine(player[0].x, player[0].y, lineLeft[0], lineLeft[1], 3);
                         drawLine(player[0].x, player[0].y, lineRight[0], lineRight[1], 3);
+                        drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], player[0].x, player[0].y, 3);
                     }
                     //drawPoint(lineLeft[0], lineLeft[1], 0, "Left 0 - " + i);
                     //drawPoint(lineRight[0], lineRight[1], 0, "Right 1 - " + i);
@@ -712,7 +714,7 @@ console.log("Running Apos Bot!");
                         drawLine(player[0].x, player[0].y, line1[0], line1[1], 2);
                         drawLine(player[0].x, player[0].y, line2[0], line2[1], 2);
 
-                        drawArc(line1[0], line1[1], line2[0], line2[1], player[0].x, player[0].y, 200, 1);
+                        drawArc(line1[0], line1[1], line2[0], line2[1], player[0].x, player[0].y, 1);
 
                         drawPoint(line1[0], line1[1], 0, "" + i + ": 0");
                         drawPoint(line2[0], line2[1], 0, "" + i + ": 1");
@@ -841,20 +843,12 @@ console.log("Running Apos Bot!");
         return (y - getHeight() / 2) / getRatio() + getY();;
     }
 
-    function gameToScreenX(x) {
-        return ((x - getOffsetX()) * getRatio()) + getWidth() / 2;
-    }
-
-    function gameToScreenY(y) {
-        return ((y - getOffsetY()) * getRatio()) + getHeight() / 2;
-    }
-
     function drawPoint(x_1, y_1, drawColor, text) {
         f.drawPoint(x_1, y_1, drawColor, text);
     }
 
-    function drawArc(x_1, y_1, x_2, y_2, x_3, y_3, radius, drawColor) {
-        f.drawArc(x_1, y_1, x_2, y_2, x_3, y_3, radius, drawColor);
+    function drawArc(x_1, y_1, x_2, y_2, x_3, y_3, drawColor) {
+        f.drawArc(x_1, y_1, x_2, y_2, x_3, y_3, drawColor);
     }
 
     function drawLine(x_1, y_1, x_2, y_2, drawColor) {
