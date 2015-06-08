@@ -38,6 +38,7 @@ console.log("Running Bot Launcher!");
 
   function humanPlayer() {
     //Don't need to do anything.
+    return [getPointX(), getPointY()];
   }
 
   function Pa() {
@@ -131,7 +132,7 @@ console.log("Running Bot Launcher!");
     }
   }
   function la() {
-    if (toggle) {
+    if (toggle ||f.botList[botIndex][0] == "Human") {
       W = (S - p / 2) / h + s;
       X = (T - r / 2) / h + t
     }
