@@ -415,7 +415,7 @@ console.log("Running Bot Launcher!");
     b += 4,
     k = y[d],
     null != k && k.destroy();
-    ra && 0 == l.length && (setNick(originalName), restartPlz = true, console.log("Dead"))
+    //ra && 0 == l.length && (setNick(originalName), restartPlz = true, console.log("Dead"))
   }
 
     function computeDistance(x1, y1, x2, y2) {
@@ -462,7 +462,7 @@ console.log("Running Bot Launcher!");
 
   function K() {
 
-    if (restartPlz) {
+    if (getPlayer().length == 0) {
         setNick(originalName);
         restartPlz = false;
     }
@@ -831,7 +831,7 @@ console.log("Running Bot Launcher!");
     dArc = [],
     dText = [],
     lines = [],
-    originalName,
+    originalName = "NotReallyABot",
     sessionScore = 0,
     serverIP = "",
     interNodes = [],
