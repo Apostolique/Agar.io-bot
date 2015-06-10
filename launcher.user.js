@@ -460,6 +460,12 @@ console.log("Running Bot Launcher!");
         }
     }
 
+    f.drawCircle = function(x_1, y_1, radius, drawColor) {
+        if (!toggleDraw) {
+            circles.push([x_1, y_1, radius, drawColor]);
+        }
+    }
+
   function K() {
 
     if (getPlayer().length == 0) {
@@ -519,6 +525,7 @@ console.log("Running Bot Launcher!");
   function ma() {
 
     dPoints = [];
+    circles = [];
     dArc = [];
     dText = [];
     lines = [];
@@ -603,6 +610,7 @@ console.log("Running Bot Launcher!");
     e.restore();
     v && v.width && e.drawImage(v, p - v.width - 10, 10);
     H = Math.max(H, Xa());
+    sessionScore = Math.max(H, sessionScore);
     0 != H && (null == ga && (ga = new ha(24, '#FFFFFF')), ga.setValue('Score: ' + ~~(H / 100) + ' || Best Score: ' + ~~(sessionScore / 100) + " || Best time alive: " + bestTime + " seconds"), a = ga.render(), b = a.width, e.globalAlpha = 0.2, e.fillStyle = '#000000', e.fillRect(10, r - 10 - 24 - 10, b + 10, 34), e.globalAlpha = 1, e.drawImage(a, 15, r - 10 - 24 - 5));
     Ya();
     c = + new Date - c;
@@ -614,6 +622,7 @@ console.log("Running Bot Launcher!");
   }
 
   function customRender(d) {
+    d.save();
     for(var i = 0; i < lines.length; i++) {
         d.beginPath();
 
@@ -644,8 +653,40 @@ console.log("Running Bot Launcher!");
 
         d.stroke();
     }
-    d.lineWidth = 1;
+    d.restore();
+    d.save();
+    for(var i = 0; i < circles.length; i++) {
+        if (circles[i][3] == 0) {
+            d.strokeStyle = "#FF0000";
+        } else if (circles[i][3] == 1) {
+            d.strokeStyle = "#00FF00";
+        } else if (circles[i][3] == 2) {
+            d.strokeStyle = "#0000FF";
+        } else if (circles[i][3] == 3) {
+            d.strokeStyle = "#FF8000";
+        } else if (circles[i][3] == 4) {
+            d.strokeStyle = "#8A2BE2";
+        } else if (circles[i][3] == 5) {
+            d.strokeStyle = "#FF69B4";
+        } else if (circles[i][3] == 6) {
+            d.strokeStyle = "#008080";
+        } else if (circles[i][3] == 7) {
+            d.strokeStyle = "#FFFFFF";
+        } else {
+            d.strokeStyle = "#000000";
+        }
+        d.beginPath();
 
+        d.lineWidth = 10;
+        //d.setLineDash([5]);
+        d.globalAlpha = 0.3;
+
+        d.arc(circles[i][0], circles[i][1], circles[i][2], 0, 2 * Math.PI, false);
+
+        d.stroke();
+    }
+    d.restore();
+    d.save();
     for(var i = 0; i < dArc.length; i++) {
         if (dArc[i][7] == 0) {
             d.strokeStyle = "#FF0000";
@@ -678,8 +719,9 @@ console.log("Running Bot Launcher!");
 
         d.stroke();
     }
-    d.lineWidth = 1;
+    d.restore();
 
+    d.save();
     for (var i = 0; i < dPoints.length; i++) {
         if (dText[i] == "") {
           var radius = 10;
@@ -716,7 +758,7 @@ console.log("Running Bot Launcher!");
         }
 
     }
-    d.lineWidth = 1;
+    d.restore();
   }
   function drawStats(d) {
     var currentDate = new Date();
@@ -828,6 +870,7 @@ console.log("Running Bot Launcher!");
     virusBait = false,
     tempPoint = [0, 0, 1],
     dPoints = [],
+    circles = [],
     dArc = [],
     dText = [],
     lines = [],
@@ -1404,6 +1447,8 @@ console.log("Running Bot Launcher!");
         isVirus: !1,
         isAgitated: !1,
         wasSimpleDrawing: !0,
+        danger: false,
+        dangerTimeOut: 0,
         destroy: function () {
           var a;
           for (a = 0; a < n.length; a++) if (n[a] == this) {
