@@ -208,9 +208,10 @@ console.log("Running Apos Bot!");
         for (var i = 0; i < foodList.length; i++) {
             for (var j = 0; j < clusters.length; j++) {
                 if (computeDistance(foodList[i][0], foodList[i][1], clusters[j][0], clusters[j][1]) < blobSize * 1.5) {
-                    clusters[j][0] = (foodList[i][0] + clusters[j][0]) / 2;
-                    clusters[j][1] = (foodList[i][1] + clusters[j][1]) / 2;
-                    clusters[j][2] += foodList[i][2];
+                    totalSize = clusters[j][2] + foodList[i][2];
+                    clusters[j][0] = (foodList[i][2]*foodList[i][0] + clusters[j][2]*clusters[j][0]) / totalSize;
+                    clusters[j][1] = (foodList[i][2]*foodList[i][1] + clusters[j][2]*clusters[j][1]) / totalSize;
+                    clusters[j][2] = totalSize;
                     addedCluster = true;
                     break;
                 }
