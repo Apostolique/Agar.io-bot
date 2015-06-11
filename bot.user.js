@@ -913,7 +913,8 @@ console.log("Running Apos Bot!");
             }
             //console.log("MOVING RIGHT NOW!");
 
-
+            targetX=tempMoveX;
+            targetY=tempMoveY;
             return [tempMoveX, tempMoveY];
         }
     }
