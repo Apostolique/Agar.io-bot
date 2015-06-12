@@ -20,6 +20,11 @@ console.log("Running Apos Bot!");
 (function(f, g) {
     console.log("Apos Bot!");
 
+
+    var SPLIT_THREAT_BUFFER = 500;//710
+
+    var FOOD_ANGLE_TOLERANCE = 10; // in degrees
+    
     if (f.botList == null) {
         f.botList = [];
         g('#locationUnknown').append(g('<select id="bList" class="form-control" onchange="setBotIndex($(this).val());" />'));
@@ -852,6 +857,22 @@ console.log("Running Apos Bot!");
                         drawPoint(line2[0], line2[1], 0, "" + i + ": 1");
                     }
                 }
+                for (var i = 0; i < clusterAllFood.length; i++) {
+                    //console.log("mefore: " + clusterAllFood[i][2]);
+                    //This is the cost function. Higher is better.
+
+                    var clusterAngle = getAngle(clusterAllFood[i][0], clusterAllFood[i][1], player[0].x, player[0].y);
+
+                    clusterAllFood[i][2] = clusterAllFood[i][2] * 1000 / computeDistance(clusterAllFood[i][0], clusterAllFood[i][1], player[0].x, player[0].y);
+                    //console.log("Current Value: " + clusterAllFood[i][2]);
+
+                    //(goodAngles[bIndex][1] / 2 - (Math.abs(perfectAngle - clusterAngle)));
+
+                    clusterAllFood[i][3] = clusterAngle;
+
+                    drawPoint(clusterAllFood[i][0], clusterAllFood[i][1], 1, "");
+                    //console.log("After: " + clusterAllFood[i][2]);
+                }
 
                 if (goodAngles.length > 0) {
                     var bIndex = goodAngles[0];
@@ -867,28 +888,21 @@ console.log("Running Apos Bot!");
                     //console.log("perfectAngle " + perfectAngle);
                     var line1 = followAngle(perfectAngle, player[0].x, player[0].y, 300);
 
+                    // oh, sure, that's the perfect angle but can't we try to eat on the way?
+                    var food = 0;
+                    for (var i = 0; i < clusterAllFood.length; i++) {
+                        if ((clusterAllFood[i][3] >= (bIndex[0] + FOOD_ANGLE_TOLERANCE).mod(360)) && (clusterAllFood[i][3] <= (bIndex[1] - FOOD_ANGLE_TOLERANCE).mod(360))) {
+                            if (clusterAllFood[i][2]>food) {
+                                perfectAngle = clusterAllFood[i][3];
+                                food = clusterAllFood[i][2];
+                            }
+                        }
+                    }
                     drawLine(player[0].x, player[0].y, line1[0], line1[1], 7);
                     tempMoveX = line1[0];
                     tempMoveY = line1[1];
                 } else {
-                    for (var i = 0; i < clusterAllFood.length; i++) {
-                        //console.log("mefore: " + clusterAllFood[i][2]);
-                        //This is the cost function. Higher is better.
-
-                        var clusterAngle = getAngle(clusterAllFood[i][0], clusterAllFood[i][1], player[0].x, player[0].y);
-
-                        clusterAllFood[i][2] = clusterAllFood[i][2] * 6 - computeDistance(clusterAllFood[i][0], clusterAllFood[i][1], player[0].x, player[0].y);
-                        //console.log("Current Value: " + clusterAllFood[i][2]);
-
-                        //(goodAngles[bIndex][1] / 2 - (Math.abs(perfectAngle - clusterAngle)));
-
-                        clusterAllFood[i][3] = clusterAngle;
-
-
-                        drawPoint(clusterAllFood[i][0], clusterAllFood[i][1], 1, "");
-                        //console.log("After: " + clusterAllFood[i][2]);
-                    }
-
+                    
                     var bestFoodI = 0;
                     var bestFood = clusterAllFood[0][2];
                     for (var i = 1; i < clusterAllFood.length; i++) {
