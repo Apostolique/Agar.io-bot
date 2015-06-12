@@ -1451,8 +1451,8 @@ console.log("Running Bot Launcher!");
       D: 0,         //nx
       F: 0,         //ny
       n: 0,         //nSize
-      W: 0,         //updateTime
-      L: 0,         //drawTime
+      W: 0,         //drawTime
+      L: 0,         //updateTime
       ja: 0,
       ba: 0,
       A: !1,
@@ -1462,6 +1462,7 @@ console.log("Running Bot Launcher!");
       //UPDATE
       updateCode: 0,
       danger: false,
+      dangerTimeOut: 0,
       S: function () {
         var a;
         for (a = 0; a < u.length; a++) if (u[a] == this) {
