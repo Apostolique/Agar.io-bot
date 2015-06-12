@@ -20,6 +20,8 @@ console.log("Running Apos Bot!");
 (function(f, g) {
     console.log("Apos Bot!");
 
+    var targetX = 0;
+    var targetY = 0;
 
     var SPLIT_THREAT_BUFFER = 500;//710
 
@@ -903,19 +905,24 @@ console.log("Running Apos Bot!");
                     tempMoveY = line1[1];
                 } else {
                     
-                    var bestFoodI = 0;
-                    var bestFood = clusterAllFood[0][2];
-                    for (var i = 1; i < clusterAllFood.length; i++) {
-                        if (bestFood < clusterAllFood[i][2]) {
-                            bestFood = clusterAllFood[i][2];
-                            bestFoodI = i;
+                    if (clusterAllFood.length > 0) {
+                        var bestFoodI = 0;
+                        var bestFood = clusterAllFood[0][2];
+                        for (var i = 1; i < clusterAllFood.length; i++) {
+                            if (bestFood < clusterAllFood[i][2]) {
+                                bestFood = clusterAllFood[i][2];
+                                bestFoodI = i;
+                            }
                         }
+
+                        //console.log("Best Value: " + clusterAllFood[bestFoodI][2]);
+
+                        tempMoveX = clusterAllFood[bestFoodI][0];
+                        tempMoveY = clusterAllFood[bestFoodI][1];
+                    } else {
+                        tempMoveX = targetX;
+                        tempMoveY = targetY;
                     }
-
-                    //console.log("Best Value: " + clusterAllFood[bestFoodI][2]);
-
-                    tempMoveX = clusterAllFood[bestFoodI][0];
-                    tempMoveY = clusterAllFood[bestFoodI][1];
                     drawLine(player[0].x, player[0].y, tempMoveX, tempMoveY, 1);
                 }
 
