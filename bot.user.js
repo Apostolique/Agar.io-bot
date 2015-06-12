@@ -484,7 +484,7 @@ console.log("Running Apos Bot!");
                         removeFirst = true;
                     }
                     listToUse[(i - 1).mod(sortedLength)][2] += listToUse[i][2];
-                    console.log("Merging: " + listToUse[(i - 1).mod(sortedLength)][2]);
+                    //console.log("Merging: " + listToUse[(i - 1).mod(sortedLength)][2]);
                     listToUse.splice(i, 1);
                     sortedLength--;
                     i--;
@@ -492,7 +492,7 @@ console.log("Running Apos Bot!");
                 } else {
                     if (removeFirst) {
                         listToUse[(seriesStartIndex - 1).mod(sortedLength)][2] += listToUse[seriesStartIndex][2];
-                        console.log("Merging: " + listToUse[(seriesStartIndex - 1).mod(sortedLength)][2]);
+                        //console.log("Merging: " + listToUse[(seriesStartIndex - 1).mod(sortedLength)][2]);
                         listToUse.splice(seriesStartIndex, 1);
                         sortedLength--;
                         i--;
@@ -606,7 +606,7 @@ console.log("Running Apos Bot!");
     }
 
     function canSplit(player1, player2) {
-        if (player1.size * player1.size * 2.00 < player2.size * player2.size) {
+        if (player1.size * player1.size * 2.30 < player2.size * player2.size) {
             return true;
         }
         return false;
@@ -634,7 +634,6 @@ console.log("Running Apos Bot!");
                 allPossibleFood = getAllFood(); // #1
 
                 var allPossibleThreats = getAllThreats();
-                console.log("enemies: " + allPossibleThreats.length);
                 //console.log("Internodes: " + interNodes.length + " Food: " + allPossibleFood.length + " Threats: " + allPossibleThreats.length);
 
                 var badAngles = [];
@@ -642,9 +641,10 @@ console.log("Running Apos Bot!");
                 var isSafeSpot = true;
                 var isMouseSafe = true;
 
-                var clusterAllFood = clusterFood(allPossibleFood, player[0].oSize);
+                var clusterAllFood = clusterFood(allPossibleFood, player[0].size);
 
                 for (var i = 0; i < allPossibleThreats.length; i++) {
+
                     var enemyDistance = computeDistance(allPossibleThreats[i].x, allPossibleThreats[i].y, player[0].x, player[0].y);
 
 
@@ -715,11 +715,11 @@ console.log("Running Apos Bot!");
                         getCellsArray().pop();
 
                         interNodes[wallI] = n;
-                        interNodes[wallI].W = getUpdate();
+                        interNodes[wallI].L = getUpdate();
                         //console.log("Added corner enemy");
                     } else {
                         //console.log("Update Wall!");
-                        interNodes[wallI].W = getUpdate();
+                        interNodes[wallI].L = getUpdate();
                         interNodes[wallI].y = player[0].y;
                     }
                 } else if (player[0].x < 1000 && interNodes.hasOwnProperty(1)) {
@@ -739,11 +739,11 @@ console.log("Running Apos Bot!");
                         getCellsArray().pop();
 
                         interNodes[wallI] = n;
-                        interNodes[wallI].W = getUpdate();
+                        interNodes[wallI].L = getUpdate();
                         //console.log("Added corner enemy");
                     } else {
                         //console.log("Update Wall!");
-                        interNodes[wallI].W = getUpdate();
+                        interNodes[wallI].L = getUpdate();
                         interNodes[wallI].x = player[0].x;
                     }
                 } else if (player[0].y < 1000 && interNodes.hasOwnProperty(2)) {
@@ -763,11 +763,11 @@ console.log("Running Apos Bot!");
                         getCellsArray().pop();
 
                         interNodes[wallI] = n;
-                        interNodes[wallI].W = getUpdate();
+                        interNodes[wallI].L = getUpdate();
                         //console.log("Added corner enemy");
                     } else {
                         //console.log("Update Wall!");
-                        interNodes[wallI].W = getUpdate();
+                        interNodes[wallI].L = getUpdate();
                         interNodes[wallI].y = player[0].y;
                     }
                 } else if (player[0].x > 11180 - 1000 && interNodes.hasOwnProperty(3)) {
@@ -787,11 +787,11 @@ console.log("Running Apos Bot!");
                         getCellsArray().pop();
 
                         interNodes[wallI] = n;
-                        interNodes[wallI].W = getUpdate();
+                        interNodes[wallI].L = getUpdate();
                         //console.log("Added corner enemy");
                     } else {
                         //console.log("Update Wall!");
-                        interNodes[wallI].W = getUpdate();
+                        interNodes[wallI].L = getUpdate();
                         interNodes[wallI].x = player[0].x;
                     }
                 } else if (player[0].y > 11180 - 1000 && interNodes.hasOwnProperty(4)) {
