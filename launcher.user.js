@@ -960,6 +960,10 @@ console.log("Running Bot Launcher!");
    else {
     var Z = null;
     h.setNick = function (a) {
+      originalName = a;
+      if (getPlayer().length == 0) {
+        lifeTimer = new Date();
+      }
       Ga();
       E = a;
       Ia();
