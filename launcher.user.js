@@ -414,7 +414,8 @@ console.log("Running Bot Launcher!");
         //console.log("start: " + interNodes[element].updateTime + " current: " + D + " life: " + (D - interNodes[element].updateTime));
         var isRemoved = !window.getCells().hasOwnProperty(element);
 
-        if (isRemoved  && (getLastUpdate() - interNodes[element].W) > 3000) {
+
+        if (isRemoved  && (getLastUpdate() - interNodes[element].L) > 3000) {
             delete interNodes[element];
         } else if (isRemoved && computeDistance(getOffsetX(), getOffsetY(), interNodes[element].x, interNodes[element].y) < screenDistance()) {
             //console.log("Too close! Remove " + computeDistance(getOffsetX(), getOffsetY(), interNodes[element].x, interNodes[element].y) + " || " + screenDistance());
@@ -960,6 +961,7 @@ console.log("Running Bot Launcher!");
    else {
     var Z = null;
     h.setNick = function (a) {
+      //UPDATE
       originalName = a;
       if (getPlayer().length == 0) {
         lifeTimer = new Date();
