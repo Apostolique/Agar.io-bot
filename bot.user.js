@@ -2,7 +2,7 @@
 // @name        AposBot
 // @namespace   AposBot
 // @include     http://agar.io/
-// @version     3.03
+// @version     3.04
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -100,7 +100,7 @@ console.log("Running Apos Bot!");
 
         if (player.length == 1) {
             dotList = getListBasedOnFunction(function(element) {
-                if (interNodes[element].isVirus && (interNodes[element].size * 1.10 <= player[0].size) && interNodes[element].size * 1.15 >= player[0].size) {
+                if (interNodes[element].d && (interNodes[element].size * 1.10 <= player[0].size) && interNodes[element].size * 1.15 >= player[0].size) {
                     return true;
                 }
                 return false;
@@ -152,9 +152,9 @@ console.log("Running Apos Bot!");
             }
 
             for (var i = 0; i < player.length; i++) {
-                if (!isMe && (!interNodes[element].isVirus && (interNodes[element].size >= player[i].oSize * 1.15))) {
+                if (!isMe && (!interNodes[element].d && (interNodes[element].size >= player[i].size * 1.15))) {
                     return true;
-                } else if (interNodes[element].isVirus && (interNodes[element].size * 1.15 <= player[i].oSize)) {
+                } else if (interNodes[element].d && (interNodes[element].size * 1.15 <= player[i].size)) {
                     return true;
                 }
                 return false;
@@ -181,7 +181,7 @@ console.log("Running Apos Bot!");
             }
 
             for (var i = 0; i < player.length; i++) {
-                if (!isMe && !interNodes[element].isVirus && (interNodes[element].size * 1.25 <= player[i].size) || (interNodes[element].size <= 11)) {
+                if (!isMe && !interNodes[element].d && (interNodes[element].size * 1.25 <= player[i].size) || (interNodes[element].size <= 11)) {
                     return true;
                 } else {
                     return false;
@@ -634,6 +634,7 @@ console.log("Running Apos Bot!");
                 allPossibleFood = getAllFood(); // #1
 
                 var allPossibleThreats = getAllThreats();
+                console.log("enemies: " + allPossibleThreats.length);
                 //console.log("Internodes: " + interNodes.length + " Food: " + allPossibleFood.length + " Threats: " + allPossibleThreats.length);
 
                 var badAngles = [];
@@ -714,16 +715,12 @@ console.log("Running Apos Bot!");
                         getCellsArray().pop();
 
                         interNodes[wallI] = n;
-                        interNodes[wallI].nx = newX;
-                        interNodes[wallI].ny = player[0].ny;
-                        interNodes[wallI].nSize = player[0].oSize * 10;
-                        interNodes[wallI].updateTime = getUpdate();
+                        interNodes[wallI].W = getUpdate();
                         //console.log("Added corner enemy");
                     } else {
                         //console.log("Update Wall!");
-                        interNodes[wallI].updateTime = getUpdate();
+                        interNodes[wallI].W = getUpdate();
                         interNodes[wallI].y = player[0].y;
-                        interNodes[wallI].ny = player[0].ny;
                     }
                 } else if (player[0].x < 1000 && interNodes.hasOwnProperty(1)) {
                     delete interNodes[1];
@@ -742,16 +739,12 @@ console.log("Running Apos Bot!");
                         getCellsArray().pop();
 
                         interNodes[wallI] = n;
-                        interNodes[wallI].nx = player[0].nx;
-                        interNodes[wallI].ny = newY;
-                        interNodes[wallI].nSize = player[0].oSize * 10;
-                        interNodes[wallI].updateTime = getUpdate();
+                        interNodes[wallI].W = getUpdate();
                         //console.log("Added corner enemy");
                     } else {
                         //console.log("Update Wall!");
-                        interNodes[wallI].updateTime = getUpdate();
+                        interNodes[wallI].W = getUpdate();
                         interNodes[wallI].x = player[0].x;
-                        interNodes[wallI].nx = player[0].nx;
                     }
                 } else if (player[0].y < 1000 && interNodes.hasOwnProperty(2)) {
                     delete interNodes[2];
@@ -770,16 +763,12 @@ console.log("Running Apos Bot!");
                         getCellsArray().pop();
 
                         interNodes[wallI] = n;
-                        interNodes[wallI].nx = newX;
-                        interNodes[wallI].ny = player[0].ny;
-                        interNodes[wallI].nSize = player[0].oSize * 10;
-                        interNodes[wallI].updateTime = getUpdate();
+                        interNodes[wallI].W = getUpdate();
                         //console.log("Added corner enemy");
                     } else {
                         //console.log("Update Wall!");
-                        interNodes[wallI].updateTime = getUpdate();
+                        interNodes[wallI].W = getUpdate();
                         interNodes[wallI].y = player[0].y;
-                        interNodes[wallI].ny = player[0].ny;
                     }
                 } else if (player[0].x > 11180 - 1000 && interNodes.hasOwnProperty(3)) {
                     delete interNodes[3];
@@ -798,16 +787,12 @@ console.log("Running Apos Bot!");
                         getCellsArray().pop();
 
                         interNodes[wallI] = n;
-                        interNodes[wallI].nx = player[0].nx;
-                        interNodes[wallI].ny = newY;
-                        interNodes[wallI].nSize = player[0].oSize * 10;
-                        interNodes[wallI].updateTime = getUpdate();
+                        interNodes[wallI].W = getUpdate();
                         //console.log("Added corner enemy");
                     } else {
                         //console.log("Update Wall!");
-                        interNodes[wallI].updateTime = getUpdate();
+                        interNodes[wallI].W = getUpdate();
                         interNodes[wallI].x = player[0].x;
-                        interNodes[wallI].nx = player[0].nx;
                     }
                 } else if (player[0].y > 11180 - 1000 && interNodes.hasOwnProperty(4)) {
                     delete interNodes[4];
