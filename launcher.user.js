@@ -2,7 +2,7 @@
 // @name        Launcher
 // @namespace   AposLauncher
 // @include     http://agar.io/
-// @version     2
+// @version     2.1
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -16,9 +16,9 @@ Array.prototype.peek = function() {
 }
 
 console.log("Running Bot Launcher!");
-(function (f, g) {
+(function (h, f) {
 
-
+  //UPDATE
   function keyAction(e) {
     if (84 == e.keyCode) {
       console.log("Toggle");
@@ -29,10 +29,10 @@ console.log("Running Bot Launcher!");
       toggleDraw = !toggleDraw;
     }
     if (68 == e.keyCode) {
-      f.setDarkTheme(!getDarkBool());
+      window.setDarkTheme(!getDarkBool());
     }
     if (70 == e.keyCode) {
-      f.setShowMass(!getMassBool());
+      window.setShowMass(!getMassBool());
     }
   }
 
@@ -41,110 +41,119 @@ console.log("Running Bot Launcher!");
     return [getPointX(), getPointY()];
   }
 
-  function Pa() {
+  function Sa() {
 
-    if (f.botList == null) {
-        f.botList = [];
-        g('#locationUnknown').append(g('<select id="bList" class="form-control" onchange="setBotIndex($(this).val());" />'));
-        g('#locationUnknown').addClass('form-group');
+    //UPDATE
+    if (window.botList == null) {
+        window.botList = [];
+        window.jQuery('#locationUnknown').append(window.jQuery('<select id="bList" class="form-control" onchange="setBotIndex($(this).val());" />'));
+        window.jQuery('#locationUnknown').addClass('form-group');
     }
 
-    f.botList.push(["Human", humanPlayer]);
+    window.botList.push(["Human", humanPlayer]);
 
-    var bList = g('#bList');
-    g('<option />', {value: (f.botList.length - 1), text: "Human"}).appendTo(bList);
+    var bList = window.jQuery('#bList');
+    window.jQuery('<option />', {value: (window.botList.length - 1), text: "Human"}).appendTo(bList);
 
-
-    ja = !0;
-    xa();
-    setInterval(xa, 180000);
-    A = ka = document.getElementById('canvas');
-    e = A.getContext('2d');
-    A.onmousedown = function (a) {
-      if (ya) {
+    la = !0;
+    za();
+    setInterval(za, 180000);
+    B = ma = document.getElementById('canvas');
+    e = B.getContext('2d');
+    B.onmousedown = function (a) {
+      if (Aa) {
         var b = a.clientX - (5 + p / 5 / 2),
         c = a.clientY - (5 + p / 5 / 2);
         if (Math.sqrt(b * b + c * c) <= p / 5 / 2) {
           K();
-          B(17);
+          C(17);
           return
         }
       }
-      S = a.clientX;
-      T = a.clientY;
-      la();
+      T = a.clientX;
+      U = a.clientY;
+      na();
       K()
     };
-    A.onmousemove = function (a) {
-      S = a.clientX;
-      T = a.clientY;
-      la()
+    B.onmousemove = function (a) {
+      T = a.clientX;
+      U = a.clientY;
+      na()
     };
-    A.onmouseup = function (a) {
+    B.onmouseup = function () {
     };
-    /firefox/i.test(navigator.userAgent) ? document.addEventListener('DOMMouseScroll', za, !1)  : document.body.onmousewheel = za;
+    /firefox/i.test(navigator.userAgent) ? document.addEventListener('DOMMouseScroll', Ba, !1)  : document.body.onmousewheel = Ba;
     var a = !1,
     b = !1,
     c = !1;
-    f.onkeydown = function (d) {
-      32 != d.keyCode || a || (K(), B(17), a = !0);
-      81 != d.keyCode || b || (B(18), b = !0);
-      87 != d.keyCode || c || (K(), B(21), c = !0);
-      27 == d.keyCode && Aa(!0)
+    h.onkeydown = function (d) {
+      32 != d.keyCode || a || (K(), C(17), a = !0);
+      81 != d.keyCode || b || (C(18), b = !0);
+      87 != d.keyCode || c || (K(), C(21), c = !0);
+      27 == d.keyCode && Ca(!0);
 
+      //UPDATE
       keyAction(d);
     };
-    f.onkeyup = function (d) {
+    h.onkeyup = function (d) {
       32 == d.keyCode && (a = !1);
       87 == d.keyCode && (c = !1);
-      81 == d.keyCode && b && (B(19), b = !1)
+      81 == d.keyCode && b && (C(19), b = !1)
     };
-    f.onblur = function () {
-      B(19);
+    h.onblur = function () {
+      C(19);
       c = b = a = !1
     };
-    f.onresize = Ba;
-    Ba();
-    f.requestAnimationFrame ? f.requestAnimationFrame(Ca)  : setInterval(ma, 1000 / 60);
-    setInterval(K, 40);
-    u && g('#region').val(u);
+    h.onresize = Da;
     Da();
-    U(g('#region').val());
-    null == m && u && V();
-    g('#overlays').show()
+    h.requestAnimationFrame ? h.requestAnimationFrame(Ea)  : setInterval(oa, 1000 / 60);
+    setInterval(K, 40);
+    v && f('#region').val(v);
+    Fa();
+    V(f('#region').val());
+    null == r && v && W();
+    f('#overlays').show()
   }
-  function za(a) {
-    C *= Math.pow(0.9, a.wheelDelta / - 120 || a.detail || 0);
-    1 > C && (C = 1);
-    C > 4 / h && (C = 4 / h)
+  function Ba(a) {
+    D *= Math.pow(0.9, a.wheelDelta / - 120 || a.detail || 0);
+    1 > D && (D = 1);
+    D > 4 / g && (D = 4 / g)
   }
-  function Qa() {
-    if (0.35 > h) L = null;
+  function Ta() {
+    if (0.4 > g) L = null;
      else {
-      for (var a = Number.POSITIVE_INFINITY, b = Number.POSITIVE_INFINITY, c = Number.NEGATIVE_INFINITY, d = Number.NEGATIVE_INFINITY, e = 0, q = 0; q < n.length; q++) n[q].shouldRender() && (e = Math.max(n[q].size, e), a = Math.min(n[q].x, a), b = Math.min(n[q].y, b), c = Math.max(n[q].x, c), d = Math.max(n[q].y, d));
-      L = QUAD.init({
-        minX: a - (e + 100),
-        minY: b - (e + 100),
-        maxX: c + (e + 100),
-        maxY: d + (e + 100)
+      for (var a = Number.POSITIVE_INFINITY, b = Number.POSITIVE_INFINITY, c = Number.NEGATIVE_INFINITY, d = Number.NEGATIVE_INFINITY, e = 0, l = 0; l < u.length; l++) {
+        var k = u[l];
+        !k.I() || k.M || 20 >= k.size * g || (e = Math.max(k.size, e), a = Math.min(k.x, a), b = Math.min(k.y, b), c = Math.max(k.x, c), d = Math.max(k.y, d))
+      }
+      L = Ua.ca({
+        X: a - (e + 100),
+        Y: b - (e + 100),
+        fa: c + (e + 100),
+        ga: d + (e + 100),
+        da: 2,
+        ea: 4
       });
-      for (q = 0; q < n.length; q++) if (a = n[q], a.shouldRender()) for (b = 0; b < a.points.length; ++b) L.insert(a.points[b])
+      for (l = 0; l < u.length; l++) if (k = u[l], k.I() && !(20 >= k.size * g)) for (a = 0; a < k.a.length; ++a) b = k.a[a].x,
+      c = k.a[a].y,
+      b < s - p / 2 / g || c < t - q / 2 / g || b > s + p / 2 / g || c > t + q / 2 / g || L.i(k.a[a])
     }
   }
-  function la() {
-    if (toggle ||f.botList[botIndex][0] == "Human") {
-      W = (S - p / 2) / h + s;
-      X = (T - r / 2) / h + t
+  function na() {
+    //UPDATE
+    if (toggle ||window.botList[botIndex][0] == "Human") {
+      X = (T - p / 2) / g + s;
+      Y = (U - q / 2) / g + t
     }
   }
-  function xa() {
-    null == Y && (Y = {
-    }, g('#region').children().each(function () {
-      var a = g(this),
+  function za() {
+    null == Z && (Z = {
+    }, f('#region').children().each(function () {
+      var a = f(this),
       b = a.val();
-      b && (Y[b] = a.text())
+      b && (Z[b] = a.text())
     }));
-    g.get(F + '//m.agar.io/info', function (a) {
+    f.get($ + '//m.agar.io/info', function (a) {
       var b = {
       },
       c;
@@ -153,254 +162,259 @@ console.log("Running Bot Launcher!");
         b[d] = b[d] || 0;
         b[d] += a.regions[c].numPlayers
       }
-      for (c in b) g('#region option[value="' + c + '"]').text(Y[c] + ' (' + b[c] + ' players)')
+      for (c in b) f('#region option[value="' + c + '"]').text(Z[c] + ' (' + b[c] + ' players)')
     }, 'json')
   }
-  function Ea() {
-    g('#adsBottom').hide();
-    g('#overlays').hide();
-    Da()
+  function Ga() {
+    f('#adsBottom').hide();
+    f('#overlays').hide();
+    Fa()
   }
-  function U(a) {
-    a && a != u && (g('#region').val() != a && g('#region').val(a), u = f.localStorage.location = a, g('.region-message').hide(), g('.region-message.' + a).show(), g('.btn-needs-server').prop('disabled', !1), ja && V())
+  function V(a) {
+    a && a != v && (f('#region').val() != a && f('#region').val(a), v = h.localStorage.location = a, f('.region-message').hide(), f('.region-message.' + a).show(), f('.btn-needs-server').prop('disabled', !1), la && W())
   }
-  function Aa(a) {
-    D = null;
-    g('#overlays').fadeIn(a ? 200 : 3000);
-    a || g('#adsBottom').fadeIn(3000)
+  function Ca(a) {
+    E = null;
+    f('#overlays').fadeIn(a ? 200 : 3000);
+    a || f('#adsBottom').fadeIn(3000)
   }
-  function Da() {
-    g('#region').val() ? f.localStorage.location = g('#region').val()  : f.localStorage.location && g('#region').val(f.localStorage.location);
-    g('#region').val() ? g('#locationKnown').append(g('#region'))  : g('#locationUnknown').append(g('#region'))
+  function Fa() {
+    f('#region').val() ? h.localStorage.location = f('#region').val()  : h.localStorage.location && f('#region').val(h.localStorage.location);
+    f('#region').val() ? f('#locationKnown').append(f('#region'))  : f('#locationUnknown').append(f('#region'))
   }
-  function na() {
-    console.log('Find ' +
-    u + M);
-    g.ajax(F + '//m.agar.io/', {
+  function pa() {
+    console.log('Find ' + v + M);
+    f.ajax($ + '//m.agar.io/', {
       error: function () {
-        setTimeout(na, 1000)
+        setTimeout(pa, 1000)
       },
       success: function (a) {
         a = a.split('\n');
-        '45.79.222.79:443' == a[0] ? na()  : Fa('ws://' + a[0])
+        '45.79.222.79:443' == a[0] ? pa()  : Ha('ws://' + a[0])
       },
       dataType: 'text',
       method: 'POST',
       cache: !1,
       crossDomain: !0,
-      data: u + M || '?'
+      data: v + M || '?'
     })
   }
-  function V() {
-    ja && u && (g('#connecting').show(), na())
+  function W() {
+    la && v && (f('#connecting').show(), pa())
   }
-  function Fa(a) {
-    if (m) {
-      m.onopen = null;
-      m.onmessage = null;
-      m.onclose = null;
+  function Ha(a) {
+    if (r) {
+      r.onopen = null;
+      r.onmessage = null;
+      r.onclose = null;
       try {
-        m.close()
+        r.close()
       } catch (b) {
       }
-      m = null
+      r = null
     }
-    var c = f.location.search.slice(1);
+    var c = h.location.search.slice(1);
     /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+:[0-9]+$/.test(c) && (a = 'ws://' + c);
-    Ga && (a = a.split(':'), a = a[0] + 's://ip-' +
-    a[1].replace(/\./g, '-').replace(/\//g, '') + '.tech.agar.io:' + ( + a[2] + 2000));
-    E = [
+    Va && (a = a.split(':'), a = a[0] + 's://ip-' + a[1].replace(/\./g, '-').replace(/\//g, '') + '.tech.agar.io:' + ( + a[2] + 2000));
+    F = [
     ];
-    l = [
+    m = [
     ];
-    y = {
+    z = {
     };
-    n = [
+    u = [
     ];
-    G = [
+    H = [
     ];
-    z = [
+    A = [
     ];
-    v = w = null;
-    H = 0;
+    w = x = null;
+    I = 0;
     console.log('Connecting to ' + a);
+    //UPDATE
     serverIP = a;
-    m = new WebSocket(a, Ga ? [
-      'binary',
-      'base64'
-    ] : [
-    ]);
-    m.binaryType = 'arraybuffer';
-    m.onopen = Ra;
-    m.onmessage = Sa;
-    m.onclose = Ta;
-    m.onerror = function () {
+    r = new WebSocket(a);
+    r.binaryType = 'arraybuffer';
+    r.onopen = Wa;
+    r.onmessage = Xa;
+    r.onclose = Ya;
+    r.onerror = function () {
       console.log('socket error')
     }
   }
-  function Ra(a) {
-    Z = 500;
-    g('#connecting').hide();
+  function N(a) {
+    return new DataView(new ArrayBuffer(a))
+  }
+  function O(a) {
+    r.send(a.buffer)
+  }
+  function Wa() {
+    var a;
+    aa = 500;
+    f('#connecting').hide();
     console.log('socket open');
-    a = new ArrayBuffer(5);
-    var b = new DataView(a);
-    b.setUint8(0, 254);
-    b.setUint32(1, 4, !0);
-    m.send(a);
-    a = new ArrayBuffer(5);
-    b = new DataView(a);
-    b.setUint8(0, 255);
-    b.setUint32(1, 673720360, !0);
-    m.send(a);
-    Ha()
+    a = N(5);
+    a.setUint8(0, 254);
+    a.setUint32(1, 4, !0);
+    O(a);
+    a = N(5);
+    a.setUint8(0, 255);
+    a.setUint32(1, 673720361, !0);
+    O(a);
+    Ia()
   }
-  function Ta(a) {
+  function Ya() {
     console.log('socket close');
-    setTimeout(V, Z);
-    Z *= 1.5
+    setTimeout(W, aa);
+    aa *= 1.5
   }
-  function Sa(a) {
+  function Xa(a) {
+    Za(new DataView(a.data))
+  }
+  function Za(a) {
     function b() {
-      for (var a = ''; ; ) {
-        var b = d.getUint16(c, !0);
+      for (var b = ''; ; ) {
+        var d = a.getUint16(c, !0);
         c += 2;
-        if (0 == b) break;
-        a += String.fromCharCode(b)
+        if (0 == d) break;
+        b += String.fromCharCode(d)
       }
-      return a
+      return b
     }
-    var c = 0,
-    d = new DataView(a.data);
-    240 == d.getUint8(c) && (c += 5);
-    switch (d.getUint8(c++)) {
+    var c = 0;
+    240 == a.getUint8(c) && (c += 5);
+    switch (a.getUint8(c++)) {
       case 16:
-        Ua(d, c);
+        $a(a, c);
         break;
       case 17:
-        N = d.getFloat32(c, !0);
+        P = a.getFloat32(c, !0);
         c += 4;
-        O = d.getFloat32(c, !0);
+        Q = a.getFloat32(c, !0);
         c += 4;
-        P = d.getFloat32(c, !0);
+        R = a.getFloat32(c, !0);
         c += 4;
         break;
       case 20:
-        l = [
+        m = [
         ];
-        E = [
+        F = [
         ];
         break;
       case 21:
-        oa = d.getInt16(c, !0);
+        qa = a.getInt16(c, !0);
         c += 2;
-        pa = d.getInt16(c, !0);
+        ra = a.getInt16(c, !0);
         c += 2;
-        qa || (qa = !0, $ = oa, aa = pa);
+        sa || (sa = !0, ba = qa, ca = ra);
         break;
       case 32:
-        E.push(d.getUint32(c, !0));
+        F.push(a.getUint32(c, !0));
         c += 4;
         break;
       case 49:
-        if (null != w) break;
-        a = d.getUint32(c, !0);
-        c += 4;
-        z = [
+        if (null != x) break;
+        var d = a.getUint32(c, !0),
+        c = c + 4;
+        A = [
         ];
-        for (var e = 0; e < a; ++e) {
-          var q = d.getUint32(c, !0),
+        for (var e = 0; e < d; ++e) {
+          var l = a.getUint32(c, !0),
           c = c + 4;
-          z.push({
-            id: q,
+          A.push({
+            id: l,
             name: b()
           })
         }
-        Ia();
+        Ja();
         break;
       case 50:
-        w = [
+        x = [
         ];
-        a = d.getUint32(c, !0);
+        d = a.getUint32(c, !0);
         c += 4;
-        for (e = 0; e < a; ++e) w.push(d.getFloat32(c, !0)),
+        for (e = 0; e < d; ++e) x.push(a.getFloat32(c, !0)),
         c += 4;
-        Ia();
+        Ja();
         break;
       case 64:
-        ba = d.getFloat64(c, !0),
+        da = a.getFloat64(c, !0),
         c += 8,
-        ca = d.getFloat64(c, !0),
+        ea = a.getFloat64(c, !0),
         c += 8,
-        da = d.getFloat64(c, !0),
+        fa = a.getFloat64(c, !0),
         c += 8,
-        ea = d.getFloat64(c, !0),
+        ga = a.getFloat64(c, !0),
         c += 8,
-        N = (da + ba) / 2,
-        O = (ea + ca) / 2,
-        P = 1,
-        0 == l.length && (s = N, t =
-        O, h = P)
+        P = (fa + da) / 2,
+        Q = (ga + ea) / 2,
+        R = 1,
+        0 == m.length && (s = P, t = Q, g = R)
     }
   }
-  function Ua(a, b) {
-    I = + new Date;
+  function $a(a, b) {
+    G = + new Date;
     var c = Math.random();
-    ra = !1;
+    ta = !1;
     var d = a.getUint16(b, !0);
     b += 2;
     for (var e = 0; e < d; ++e) {
-      var q = y[a.getUint32(b, !0)],
-      f = y[a.getUint32(b + 4, !0)];
+      var l = z[a.getUint32(b, !0)],
+      k = z[a.getUint32(b + 4, !0)];
       b += 8;
-      q && f && (f.destroy(), f.ox = f.x, f.oy = f.y, f.oSize = f.size, f.nx = q.x, f.ny = q.y, f.nSize = f.size, f.updateTime = I)
+      l && k && (k.S(), k.p = k.x, k.q = k.y, k.o = k.size, k.D = l.x, k.F = l.y, k.n = k.size, k.L = G)
     }
     for (e = 0; ; ) {
       d = a.getUint32(b, !0);
       b += 4;
       if (0 == d) break;
       ++e;
-      var g,
-      q = a.getInt16(b, !0);
+      var h,
+      l = a.getInt16(b, !0);
       b += 2;
-      f = a.getInt16(b, !0);
+      k = a.getInt16(b, !0);
       b += 2;
-      g = a.getInt16(b, !0);
+      h = a.getInt16(b, !0);
       b += 2;
-      for (var h = a.getUint8(b++), m = a.getUint8(b++), p = a.getUint8(b++), h = (h << 16 | m << 8 | p).toString(16); 6 > h.length; ) h = '0' + h;
-      var h = '#' + h,
-      k = a.getUint8(b++),
-      m = !!(k & 1),
-      p = !!(k & 16);
-      k & 2 && (b += 4);
-      k & 4 && (b += 8);
-      k & 8 && (b += 16);
-      for (var n, k = ''; ; ) {
-        n = a.getUint16(b, !0);
+      for (var g = a.getUint8(b++), f = a.getUint8(b++), p = a.getUint8(b++), g = (g <<
+      16 | f << 8 | p).toString(16); 6 > g.length; ) g = '0' + g;
+      var g = '#' + g,
+      f = a.getUint8(b++),
+      p = !!(f & 1),
+      r = !!(f & 16);
+      f & 2 && (b += 4);
+      f & 4 && (b += 8);
+      f & 8 && (b += 16);
+      for (var q, n = ''; ; ) {
+        q = a.getUint16(b, !0);
         b += 2;
-        if (0 == n) break;
-        k += String.fromCharCode(n)
+        if (0 == q) break;
+        n += String.fromCharCode(q)
       }
-      n = k;
-      k = null;
-      y.hasOwnProperty(d) ? (k = y[d], k.updatePos(), k.ox = k.x, k.oy = k.y, k.oSize = k.size, k.color = h)  : (k = new Ja(d, q, f, g, h, n), k.pX = q, k.pY = f);
-      k.isVirus = m;
-      k.isAgitated = p;
-      k.nx = q;
-      k.ny = f;
-      k.nSize = g;
-      k.updateCode = c;
-      k.updateTime = I;
-      n && k.setName(n);
-      - 1 != E.indexOf(d) && - 1 == l.indexOf(k) && (document.getElementById('overlays').style.display = 'none', l.push(k), 1 == l.length && (s = k.x, t = k.y))
+      q = n;
+      n = null;
+      z.hasOwnProperty(d) ? (n = z[d], n.K(), n.p = n.x, n.q = n.y, n.o = n.size, n.color = g)  : (n = new Ka(d, l, k, h, g, q), n.ka = l, n.la = k);
+      n.d = p;
+      n.j = r;
+      n.D = l;
+      n.F = k;
+      n.n = h;
+      n.ja = c;
+      n.L = G;
+      n.W = f;
+      q && n.Z(q);
+      - 1 != F.indexOf(d) && - 1 == m.indexOf(n) && (document.getElementById('overlays').style.display = 'none', m.push(n), 1 == m.length && (s = n.x, t = n.y))
 
-      interNodes[d] = y[d];
+      //UPDATE
+      interNodes[d] = window.getCells()[d];
     }
 
+    //UPDATE
     Object.keys(interNodes).forEach(function (element, index) {
         //console.log("start: " + interNodes[element].updateTime + " current: " + D + " life: " + (D - interNodes[element].updateTime));
-        var isRemoved = !y.hasOwnProperty(element);
+        var isRemoved = !window.getCells().hasOwnProperty(element);
 
-        if (isRemoved  && (getLastUpdate() - interNodes[element].updateTime) > 3000) {
+        if (isRemoved  && (getLastUpdate() - interNodes[element].W) > 3000) {
             delete interNodes[element];
         } else if (isRemoved && computeDistance(getOffsetX(), getOffsetY(), interNodes[element].x, interNodes[element].y) < screenDistance()) {
             //console.log("Too close! Remove " + computeDistance(getOffsetX(), getOffsetY(), interNodes[element].x, interNodes[element].y) + " || " + screenDistance());
@@ -413,214 +427,196 @@ console.log("Running Bot Launcher!");
     b += 4;
     for (e = 0; e < c; e++) d = a.getUint32(b, !0),
     b += 4,
-    k = y[d],
-    null != k && k.destroy();
-    //ra && 0 == l.length && (setNick(originalName), restartPlz = true, console.log("Dead"))
+    n = z[d],
+    null != n && n.S();
+    //ta && 0 == m.length && Ca(!1)
   }
 
-    function computeDistance(x1, y1, x2, y2) {
-        var xdis = x1 - x2; // <--- FAKE AmS OF COURSE!
-        var ydis = y1 - y2;
-        var distance = Math.sqrt(xdis * xdis + ydis * ydis);
+  //UPDATE
+  function computeDistance(x1, y1, x2, y2) {
+      var xdis = x1 - x2; // <--- FAKE AmS OF COURSE!
+      var ydis = y1 - y2;
+      var distance = Math.sqrt(xdis * xdis + ydis * ydis);
 
-        return distance;
-    }
+      return distance;
+  }
 
-    function screenDistance() {
-        return Math.min(computeDistance
-          (getOffsetX(), getOffsetY(), screenToGameX(getWidth()), getOffsetY()), computeDistance
-          (getOffsetX(), getOffsetY(), getOffsetX(), screenToGameY(getHeight())));
-    }
+  function screenDistance() {
+      return Math.min(computeDistance
+        (getOffsetX(), getOffsetY(), screenToGameX(getWidth()), getOffsetY()), computeDistance
+        (getOffsetX(), getOffsetY(), getOffsetX(), screenToGameY(getHeight())));
+  }
 
-    function screenToGameX(x) {
-        return (x - getWidth() / 2) / getRatio() + getX();
-    }
+  function screenToGameX(x) {
+      return (x - getWidth() / 2) / getRatio() + getX();
+  }
 
-    function screenToGameY(y) {
-        return (y - getHeight() / 2) / getRatio() + getY();;
-    }
+  function screenToGameY(y) {
+      return (y - getHeight() / 2) / getRatio() + getY();;
+  }
 
-    f.drawPoint = function(x_1, y_1, drawColor, text) {
-        if (!toggleDraw) {
-            dPoints.push([x_1, y_1, drawColor]);
-            dText.push(text);
-        }
-    }
+  window.drawPoint = function(x_1, y_1, drawColor, text) {
+      if (!toggleDraw) {
+          dPoints.push([x_1, y_1, drawColor]);
+          dText.push(text);
+      }
+  }
 
-    f.drawArc = function(x_1, y_1, x_2, y_2, x_3, y_3, drawColor) {
-        if (!toggleDraw) {
-            var radius = computeDistance(x_1, y_1, x_3, y_3);
-            dArc.push([x_1, y_1, x_2, y_2, x_3, y_3, radius, drawColor]);
-        }
-    }
+  window.drawArc = function(x_1, y_1, x_2, y_2, x_3, y_3, drawColor) {
+      if (!toggleDraw) {
+          var radius = computeDistance(x_1, y_1, x_3, y_3);
+          dArc.push([x_1, y_1, x_2, y_2, x_3, y_3, radius, drawColor]);
+      }
+  }
 
-    f.drawLine =  function(x_1, y_1, x_2, y_2, drawColor) {
-        if (!toggleDraw) {
-            lines.push([x_1, y_1, x_2, y_2, drawColor]);
-        }
-    }
+  window.drawLine =  function(x_1, y_1, x_2, y_2, drawColor) {
+      if (!toggleDraw) {
+          lines.push([x_1, y_1, x_2, y_2, drawColor]);
+      }
+  }
 
-    f.drawCircle = function(x_1, y_1, radius, drawColor) {
-        if (!toggleDraw) {
-            circles.push([x_1, y_1, radius, drawColor]);
-        }
-    }
+  window.drawCircle = function(x_1, y_1, radius, drawColor) {
+      if (!toggleDraw) {
+          circles.push([x_1, y_1, radius, drawColor]);
+      }
+  }
 
   function K() {
 
+    //UPDATE
     if (getPlayer().length == 0) {
         setNick(originalName);
-        restartPlz = false;
     }
 
-    if (sa()) {
-      var a = S - p / 2,
-      b = T - r / 2;
-      64 > a * a + b * b || Ka == W && La == X || (Ka = W, La = X, a = new ArrayBuffer(21), b = new DataView(a), b.setUint8(0, 16), b.setFloat64(1, W, !0), b.setFloat64(9, X, !0), b.setUint32(17, 0, !0), m.send(a))
-    }
-  }
-  function Ha() {
-    if (sa() && null != D) {
-      var a = new ArrayBuffer(1 + 2 * D.length),
-      b = new DataView(a);
-      b.setUint8(0, 0);
-      for (var c = 0; c < D.length; ++c) b.setUint16(1 +
-      2 * c, D.charCodeAt(c), !0);
-      m.send(a)
-    }
-  }
-  function sa() {
-    return null != m && m.readyState == m.OPEN
-  }
-  function B(a) {
-    if (sa()) {
-      var b = new ArrayBuffer(1);
-      (new DataView(b)).setUint8(0, a);
-      m.send(b)
-    }
-  }
-  function Ca() {
-    ma();
-    f.requestAnimationFrame(Ca)
-  }
-  function Ba() {
-    p = f.innerWidth;
-    r = f.innerHeight;
-    ka.width = A.width = p;
-    ka.height = A.height = r;
-    ma()
-  }
-  function Ma() {
     var a;
-    a = 1 * Math.max(r / 1080, p / 1920);
-    return a *= C
-  }
-  function Va() {
-    if (0 != l.length) {
-      for (var a = 0, b = 0; b < l.length; b++) a += l[b].size;
-      a = Math.pow(Math.min(64 / a, 1), 0.4) * Ma();
-      h = (9 * h + a) / 10
+    if (ua()) {
+      a = T - p / 2;
+      var b = U - q / 2;
+      64 > a * a + b * b || 0.01 > Math.abs(La - X) && 0.01 > Math.abs(Ma - Y) || (La = X, Ma = Y, a = N(21), a.setUint8(0, 16), a.setFloat64(1, X, !0), a.setFloat64(9, Y, !0), a.setUint32(17, 0, !0), O(a))
     }
   }
-  function ma() {
+  function Ia() {
+    if (ua() && null != E) {
+      var a = N(1 + 2 * E.length);
+      a.setUint8(0, 0);
+      for (var b = 0; b < E.length; ++b) a.setUint16(1 + 2 * b, E.charCodeAt(b), !0);
+      O(a)
+    }
+  }
+  function ua() {
+    return null != r && r.readyState == r.OPEN
+  }
+  function C(a) {
+    if (ua()) {
+      var b = N(1);
+      b.setUint8(0, a);
+      O(b)
+    }
+  }
+  function Ea() {
+    oa();
+    h.requestAnimationFrame(Ea)
+  }
+  function Da() {
+    p = h.innerWidth;
+    q = h.innerHeight;
+    ma.width = B.width = p;
+    ma.height = B.height = q;
+    oa()
+  }
+  function Na() {
+    var a;
+    a = 1 * Math.max(q / 1080, p / 1920);
+    return a *= D
+  }
+  function ab() {
+    if (0 != m.length) {
+      for (var a = 0, b = 0; b < m.length; b++) a += m[b].size;
+      a = Math.pow(Math.min(64 / a, 1), 0.4) * Na();
+      g = (9 * g + a) / 10
+    }
+  }
+  function oa() {
 
+    //UPDATE
     dPoints = [];
     circles = [];
     dArc = [];
     dText = [];
     lines = [];
 
+
     var a,
-    b,
-    c = + new Date;
-    ++Wa;
-    I = + new Date;
-    if (0 < l.length) {
-      Va();
-      for (var d = a = b = 0; d < l.length; d++) l[d].updatePos(),
-      b += l[d].x / l.length,
-      a += l[d].y / l.length;
-      N = b;
-      O = a;
-      P = h;
-      s = (s + b) / 2;
-      t = (t + a) / 2
-    } else s = (29 * s + N) / 30,
-    t = (29 * t + O) / 30,
-    h = (9 * h + P * Ma()) / 10;
-    Qa();
-    la();
-    ta || e.clearRect(0, 0, p, r);
-    if (ta) e.fillStyle = fa ? '#111111' : '#F2FBFF',
-    e.globalAlpha = 0.05,
-    e.fillRect(0, 0, p, r),
-    e.globalAlpha = 1;
-     else {
-      e.fillStyle = fa ? '#111111' : '#F2FBFF';
-      e.fillRect(0, 0, p, r);
-      e.save();
-      e.strokeStyle = fa ? '#AAAAAA' : '#000000';
-      e.globalAlpha = 0.2;
-      e.scale(h, h);
-      b = p / h;
-      a = r / h;
-      for (d =
-      - 0.5 + ( - s + b / 2) % 50; d < b; d += 50) e.beginPath(),
-      e.moveTo(d, 0),
-      e.lineTo(d, a),
-      e.stroke();
-      for (d = - 0.5 + ( - t + a / 2) % 50; d < a; d += 50) e.beginPath(),
-      e.moveTo(0, d),
-      e.lineTo(b, d),
-      e.stroke();
-      e.restore()
-    }
-    n.sort(function (a, b) {
+    b = Date.now();
+    ++bb;
+    G = b;
+    if (0 < m.length) {
+      ab();
+      for (var c = a = 0, d = 0; d < m.length; d++) m[d].K(),
+      a += m[d].x / m.length,
+      c += m[d].y / m.length;
+      P = a;
+      Q = c;
+      R = g;
+      s = (s + a) / 2;
+      t = (t + c) / 2
+    } else s = (29 * s + P) / 30,
+    t = (29 * t + Q) / 30,
+    g = (9 * g + R * Na()) / 10;
+    Ta();
+    na();
+    va || e.clearRect(0, 0, p, q);
+    va ? (e.fillStyle = ha ? '#111111' : '#F2FBFF', e.globalAlpha = 0.05, e.fillRect(0, 0, p, q), e.globalAlpha = 1)  : cb();
+    u.sort(function (a, b) {
       return a.size == b.size ? a.id - b.id : a.size - b.size
     });
     e.save();
-    e.translate(p / 2, r / 2);
-    e.scale(h, h);
+    e.translate(p / 2, q / 2);
+    e.scale(g, g);
     e.translate( - s, - t);
-    for (d = 0; d < G.length; d++) G[d].draw();
-    for (d = 0; d < n.length; d++) n[d].draw();
+    for (d = 0; d < H.length; d++) H[d].T();
+    for (d = 0; d < u.length; d++) u[d].T();
+    //UPDATE
     if (getPlayer().length > 0) {
-        var moveLoc = f.botList[botIndex][1]();
+        var moveLoc = window.botList[botIndex][1]();
         if (!toggle) {
             setPoint(moveLoc[0], moveLoc[1]);
         }
     }
     customRender(e);
-    if (qa) {
-      $ = (3 * $ + oa) / 4;
-      aa = (3 * aa + pa) / 4;
+    if (sa) {
+      ba = (3 * ba + qa) / 4;
+      ca = (3 * ca + ra) / 4;
       e.save();
-      e.strokeStyle = '#FFAAAA';
+      e.strokeStyle =
+      '#FFAAAA';
       e.lineWidth = 10;
       e.lineCap = 'round';
       e.lineJoin = 'round';
-      e.globalAlpha =
-      0.5;
+      e.globalAlpha = 0.5;
       e.beginPath();
-      for (d = 0; d < l.length; d++) e.moveTo(l[d].x, l[d].y),
-      e.lineTo($, aa);
+      for (d = 0; d < m.length; d++) e.moveTo(m[d].x, m[d].y),
+      e.lineTo(ba, ca);
       e.stroke();
       e.restore()
     }
     e.restore();
-    v && v.width && e.drawImage(v, p - v.width - 10, 10);
-    H = Math.max(H, Xa());
-    sessionScore = Math.max(H, sessionScore);
-    0 != H && (null == ga && (ga = new ha(24, '#FFFFFF')), ga.setValue('Score: ' + ~~(H / 100) + ' || Best Score: ' + ~~(sessionScore / 100) + " || Best time alive: " + bestTime + " seconds"), a = ga.render(), b = a.width, e.globalAlpha = 0.2, e.fillStyle = '#000000', e.fillRect(10, r - 10 - 24 - 10, b + 10, 34), e.globalAlpha = 1, e.drawImage(a, 15, r - 10 - 24 - 5));
-    Ya();
-    c = + new Date - c;
-    c > 1000 / 60 ? x -= 0.01 : c < 1000 / 65 && (x += 0.01);
-    0.4 > x && (x = 0.4);
-    1 < x && (x = 1)
+    w && w.width && e.drawImage(w, p - w.width - 10, 10);
+    I = Math.max(I, db());
+    //UPDATE
+    sessionScore = Math.max(I, sessionScore); 
+    0 != I && (null == ia && (ia = new ja(24, '#FFFFFF', true,'#000000')), ia.u('Score: ' + ~~(I / 100) + ' || Best Score: ' + ~~(sessionScore / 100) + " || Best time alive: " + bestTime + " seconds"), c = ia.G(), a = c.width, e.globalAlpha = 0.2, e.fillStyle = '#000000', e.fillRect(10, q - 10 - 24 - 10, a + 10, 34), e.globalAlpha = 1, e.drawImage(c, 15, q - 10 - 24 - 5));
+    eb();
+    b = Date.now() - b;
+    b > 1000 / 60 ? y -= 0.01 : b < 1000 /
+    65 && (y += 0.01);
+    0.4 > y && (y = 0.4);
+    1 < y && (y = 1)
 
     drawStats(e);
   }
 
+  //UPDATE
   function customRender(d) {
     d.save();
     for(var i = 0; i < lines.length; i++) {
@@ -750,10 +746,10 @@ console.log("Running Bot Launcher!");
           d.strokeStyle = '#003300';
           d.stroke();
         } else {
-            var text = new ha(18, (getDarkBool() ? '#F2FBFF' : '#111111'));
+            var text = new ja(18, (getDarkBool() ? '#F2FBFF' : '#111111'), true, '#000000');
 
-            text.setValue(dText[i]);
-            var textRender = text.render();
+            text.u(dText[i]);
+            var textRender = text.G();
             d.drawImage(textRender, dPoints[i][0], dPoints[i][1]);
         }
 
@@ -781,36 +777,53 @@ console.log("Running Bot Launcher!");
     }
 
     var offsetValue = 20;
-    var text = new ha(18, (getDarkBool() ? '#F2FBFF' : '#111111'));
+    var text = new ja(18, (getDarkBool() ? '#F2FBFF' : '#111111'));
 
     for (var i = 0; i < debugStrings.length; i++) {
-      text.setValue(debugStrings[i]);
-      var textRender = text.render();
+      text.u(debugStrings[i]);
+      var textRender = text.G();
       d.drawImage(textRender, 20, offsetValue);
       offsetValue += textRender.height;
     }
   }
 
-  function Ya() {
-    if (ya && ua.width) {
+  function cb() {
+    e.fillStyle = ha ? '#111111' : '#F2FBFF';
+    e.fillRect(0, 0, p, q);
+    e.save();
+    e.strokeStyle = ha ? '#AAAAAA' : '#000000';
+    e.globalAlpha = 0.2;
+    e.scale(g, g);
+    for (var a = p / g, b = q / g, c = - 0.5 + ( - s + a / 2) % 50; c < a; c += 50) e.beginPath(),
+    e.moveTo(c, 0),
+    e.lineTo(c, b),
+    e.stroke();
+    for (c = - 0.5 + ( - t + b / 2) % 50; c < b; c += 50) e.beginPath(),
+    e.moveTo(0, c),
+    e.lineTo(a, c),
+    e.stroke();
+    e.restore()
+  }
+  function eb() {
+    if (Aa && wa.width) {
       var a = p / 5;
-      e.drawImage(ua, 5, 5, a, a)
+      e.drawImage(wa, 5, 5, a, a)
     }
   }
-  function Xa() {
-    for (var a = 0, b = 0; b < l.length; b++) a += l[b].nSize * l[b].nSize;
+  function db() {
+    for (var a = 0, b = 0; b < m.length; b++) a += m[b].n * m[b].n;
     return a
   }
-  function Ia() {
-    v = null;
-    if (null != w || 0 != z.length) if (null != w || ia) {
-      v = document.createElement('canvas');
-      var a = v.getContext('2d'),
+  function Ja() {
+    w = null;
+    if (null != x || 0 != A.length) if (null != x || ka) {
+      w = document.createElement('canvas');
+      var a = w.getContext('2d'),
       b = 60,
-      b = null == w ? b + 24 * z.length : b + 180,
+      b = null == x ? b + 24 * A.length : b + 180,
       c = Math.min(200, 0.3 * p) / 200;
-      v.width = 200 * c;
-      v.height = b * c;
+      w.width = 200 * c;
+      w.height = b * c;
       a.scale(c, c);
       a.globalAlpha = 0.4;
       a.fillStyle = '#000000';
@@ -820,854 +833,947 @@ console.log("Running Bot Launcher!");
       c = null;
       c = 'Leaderboard';
       a.font = '30px Ubuntu';
-      a.fillText(c, 100 - a.measureText(c).width /
-      2, 40);
-      if (null == w) for (a.font = '20px Ubuntu', b = 0; b < z.length; ++b) c = z[b].name || 'An unnamed cell',
-      ia || (c = 'An unnamed cell'),
-      - 1 != E.indexOf(z[b].id) ? (l[0].name && (c = l[0].name), a.fillStyle = '#FFAAAA')  : a.fillStyle = '#FFFFFF',
+      a.fillText(c, 100 - a.measureText(c).width / 2, 40);
+      if (null == x) for (a.font = '20px Ubuntu', b = 0; b < A.length; ++b) c = A[b].name || 'An unnamed cell',
+      ka || (c = 'An unnamed cell'),
+      - 1 != F.indexOf(A[b].id) ? (m[0].name && (c = m[0].name), a.fillStyle = '#FFAAAA')  : a.fillStyle = '#FFFFFF',
       c = b + 1 + '. ' + c,
       a.fillText(c, 100 - a.measureText(c).width / 2, 70 + 24 * b);
-       else for (b = c = 0; b < w.length; ++b) angEnd = c + w[b] * Math.PI * 2,
-      a.fillStyle = Za[b + 1],
-      a.beginPath(),
-      a.moveTo(100, 140),
-      a.arc(100, 140, 80, c, angEnd, !1),
-      a.fill(),
-      c = angEnd
+       else for (b = c = 0; b < x.length; ++b) {
+        var d = c + x[b] * Math.PI * 2;
+        a.fillStyle = fb[b + 1];
+        a.beginPath();
+        a.moveTo(100, 140);
+        a.arc(100, 140, 80, c, d, !1);
+        a.fill();
+        c = d
+      }
     }
   }
-  function Ja(a, b, c, d, e, f) {
-    n.push(this);
-    y[a] = this;
+  function Ka(a, b, c, d, e, l) {
+    u.push(this);
+    z[a] = this;
     this.id = a;
-    this.ox = this.x = b;
-    this.oy = this.y = c;
-    this.oSize = this.size = d;
+    this.p = this.x = b;
+    this.q = this.y = c;
+    this.o = this.size = d;
     this.color = e;
-    this.points = [
+    this.a = [
     ];
-    this.pointsAcc = [
+    this.l = [
     ];
-    this.createPoints();
-    this.setName(f)
+    this.R();
+    this.Z(l)
   }
-  function ha(a, b, c, d) {
-    a && (this._size = a);
-    b && (this._color = b);
-    this._stroke = !!c;
-    d && (this._strokeColor = d)
+  function ja(a, b, c, d) {
+    a && (this.r = a);
+    b && (this.N = b);
+    this.P = !!c;
+    d && (this.s = d)
   }
-  var F = f.location.protocol,
-  Ga = 'https:' == F;
-  if ('agar.io' != f.location.hostname && 'localhost' != f.location.hostname && '10.10.2.13' != f.location.hostname) f.location = F + '//agar.io/';
-   else if (f.top != f) f.top.location = F + '//agar.io/';
+  var $ = h.location.protocol,
+  Va = 'https:' == $,
+
+  //UPDATE
+  toggle = false,
+  toggleDraw = false,
+  tempPoint = [0, 0, 1],
+  dPoints = [],
+  circles = [],
+  dArc = [],
+  dText = [],
+  lines = [],
+  originalName = "NotReallyABot",
+  sessionScore = 0,
+  serverIP = "",
+  interNodes = [],
+  lifeTimer = new Date(),
+  bestTime = 0,
+  botIndex = 0,
+
+  ma,
+  e,
+  B,
+  p,
+  q,
+  L = null,
+  r = null,
+  s = 0,
+  t = 0,
+  F = [
+  ],
+  m = [
+  ],
+  z = {
+  },
+  u = [
+  ],
+  H = [
+  ],
+  A = [
+  ],
+  T = 0,
+  U = 0,
+  X = - 1,
+  Y = - 1,
+  bb = 0,
+  G = 0,
+  E = null,
+  da = 0,
+  ea = 0,
+  fa = 10000,
+  ga = 10000,
+  g = 1,
+  v = null,
+  Oa = !0,
+  ka = !0,
+  xa = !1,
+  ta = !1,
+  I = 0,
+  ha = !1,
+  Pa = !1,
+  P = s = ~~((da + fa) / 2),
+  Q = t = ~~((ea + ga) / 2),
+  R = 1,
+  M = '',
+  x = null,
+  la = !1,
+  sa = !1,
+  qa = 0,
+  ra = 0,
+  ba = 0,
+  ca = 0,
+  Qa = 0,
+  fb = [
+    '#333333',
+    '#FF3333',
+    '#33FF33',
+    '#3333FF'
+  ],
+  va = !1,
+  D = 1,
+  Aa = 'ontouchstart' in h && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
+  wa = new Image;
+  wa.src = 'img/split.png';
+  var Ra = document.createElement('canvas');
+  if ('undefined' == typeof console || 'undefined' == typeof DataView || 'undefined' == typeof WebSocket || null == Ra || null == Ra.getContext || null == h.localStorage) alert('You browser does not support this game, we recommend you to use Firefox to play this');
    else {
-    var ka,
-    toggle = false,
-    toggleDraw = false,
-    splitted = false,
-    splitting = false,
-    virusBait = false,
-    tempPoint = [0, 0, 1],
-    dPoints = [],
-    circles = [],
-    dArc = [],
-    dText = [],
-    lines = [],
-    originalName = "NotReallyABot",
-    sessionScore = 0,
-    serverIP = "",
-    interNodes = [],
-    lifeTimer = new Date(),
-    bestTime = 0,
-    botIndex = 0,
-    restartPlz = false,
-    e,
-    A,
-    p,
-    r,
-    L = null,
-    m = null,
-    s = 0,
-    t = 0,
-    E = [
-    ],
-    l = [
-    ],
-    y = {
-    },
-    n = [
-    ],
-    G = [
-    ],
-    z = [
-    ],
-    S = 0,
-    T = 0,
-    W = - 1,
-    X = - 1,
-    Wa = 0,
-    I = 0,
-    D = null,
-    ba = 0,
-    ca = 0,
-    da = 10000,
-    ea = 10000,
-    h = 1,
-    u = null,
-    Na = !0,
-    ia = !0,
-    va = !1,
-    ra = !1,
-    H = 0,
-    fa = !1,
-    Oa = !1,
-    N = s = ~~((ba + da) / 2),
-    O = t = ~~((ca + ea) / 2),
-    P = 1,
-    M = '',
-    w = null,
-    ja = !1,
-    qa = !1,
-    oa = 0,
-    pa = 0,
-    $ = 0,
-    aa = 0,
-    Q = 0,
-    Za = [
-      '#333333',
-      '#FF3333',
-      '#33FF33',
-      '#3333FF'
-    ],
-    ta = !1,
-    C = 1,
-    ya = 'ontouchstart' in f && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
-    ua = new Image;
-    ua.src = 'img/split.png';
-    Q = document.createElement('canvas');
-    if ('undefined' == typeof console || 'undefined' == typeof DataView ||
-    'undefined' == typeof WebSocket || null == Q || null == Q.getContext || null == f.localStorage) alert('You browser does not support this game, we recommend you to use Firefox to play this');
-     else {
-      var Y = null;
-      f.setNick = function (a) {
-        originalName = a;
-        if (getPlayer().length == 0) {
-          lifeTimer = new Date();
-        }
-        Ea();
-        D = a;
-        Ha();
-        H = 0
-      };
-      f.setRegion = U;
-      f.setSkins = function (a) {
-        Na = a
-      };
-      f.setNames = function (a) {
-        ia = a
-      };
-      f.setDarkTheme = function (a) {
-        fa = a
-      };
-      f.setColors = function (a) {
-        va = a
-      };
-      f.setShowMass = function (a) {
-        Oa = a
-      };
-      f.spectate = function () {
-        D = null;
-        B(1);
-        Ea()
-      };
-      f.setGameMode = function (a) {
-        a != M && (M = a, V())
-      };
-      f.setAcid = function (a) {
-        ta = a
-      };
-      null != f.localStorage && (null == f.localStorage.AB8 && (f.localStorage.AB8 = 0 + ~~(100 * Math.random())), Q = + f.localStorage.AB8, f.ABGroup = Q);
-      g.get(F + '//gc.agar.io', function (a) {
-        var b = a.split(' ');
-        a = b[0];
-        b = b[1] || '';
-        - 1 == 'DE IL PL HU BR AT UA'.split(' ').indexOf(a) && wa.push('nazi');
-        - 1 == ['UA'].indexOf(a) && wa.push('ussr');
-        R.hasOwnProperty(a) && ('string' == typeof R[a] ? u || U(R[a])  : R[a].hasOwnProperty(b) && (u || U(R[a][b])))
-      }, 'text');
-      setTimeout(function () {
-      }, 300000);
-      var R = {
-        AF: 'JP-Tokyo',
-        AX: 'EU-London',
-        AL: 'EU-London',
-        DZ: 'EU-London',
-        AS: 'SG-Singapore',
-        AD: 'EU-London',
-        AO: 'EU-London',
-        AI: 'US-Atlanta',
-        AG: 'US-Atlanta',
-        AR: 'BR-Brazil',
-        AM: 'JP-Tokyo',
-        AW: 'US-Atlanta',
-        AU: 'SG-Singapore',
-        AT: 'EU-London',
-        AZ: 'JP-Tokyo',
-        BS: 'US-Atlanta',
-        BH: 'JP-Tokyo',
-        BD: 'JP-Tokyo',
-        BB: 'US-Atlanta',
-        BY: 'EU-London',
-        BE: 'EU-London',
-        BZ: 'US-Atlanta',
-        BJ: 'EU-London',
-        BM: 'US-Atlanta',
-        BT: 'JP-Tokyo',
-        BO: 'BR-Brazil',
-        BQ: 'US-Atlanta',
-        BA: 'EU-London',
-        BW: 'EU-London',
-        BR: 'BR-Brazil',
-        IO: 'JP-Tokyo',
-        VG: 'US-Atlanta',
-        BN: 'JP-Tokyo',
-        BG: 'EU-London',
-        BF: 'EU-London',
-        BI: 'EU-London',
-        KH: 'JP-Tokyo',
-        CM: 'EU-London',
-        CA: 'US-Atlanta',
-        CV: 'EU-London',
+    var Z = null;
+    h.setNick = function (a) {
+      Ga();
+      E = a;
+      Ia();
+      I = 0
+    };
+    h.setRegion = V;
+    h.setSkins = function (a) {
+      Oa = a
+    };
+    h.setNames = function (a) {
+      ka = a
+    };
+    h.setDarkTheme = function (a) {
+      ha = a
+    };
+    h.setColors = function (a) {
+      xa = a
+    };
+    h.setShowMass = function (a) {
+      Pa = a
+    };
+    h.spectate = function () {
+      E = null;
+      C(1);
+      Ga()
+    };
+    h.setGameMode = function (a) {
+      a != M && (M = a, W())
+    };
+    h.setAcid = function (a) {
+      va = a
+    };
+    null != h.localStorage && (null == h.localStorage.AB8 && (h.localStorage.AB8 = 0 + ~~(100 * Math.random())), Qa = + h.localStorage.AB8, h.ABGroup = Qa);
+    f.get($ + '//gc.agar.io', function (a) {
+      var b = a.split(' ');
+      a = b[0];
+      b = b[1] || '';
+      - 1 == 'DE IL PL HU BR AT UA'.split(' ').indexOf(a) && ya.push('nazi');
+      - 1 == ['UA'].indexOf(a) && ya.push('ussr');
+      S.hasOwnProperty(a) && ('string' == typeof S[a] ? v || V(S[a])  : S[a].hasOwnProperty(b) && (v || V(S[a][b])))
+    }, 'text');
+    setTimeout(function () {
+    }, 300000);
+    var S = {
+      AF: 'JP-Tokyo',
+      AX: 'EU-London',
+      AL: 'EU-London',
+      DZ: 'EU-London',
+      AS: 'SG-Singapore',
+      AD: 'EU-London',
+      AO: 'EU-London',
+      AI: 'US-Atlanta',
+      AG: 'US-Atlanta',
+      AR: 'BR-Brazil',
+      AM: 'JP-Tokyo',
+      AW: 'US-Atlanta',
+      AU: 'SG-Singapore',
+      AT: 'EU-London',
+      AZ: 'JP-Tokyo',
+      BS: 'US-Atlanta',
+      BH: 'JP-Tokyo',
+      BD: 'JP-Tokyo',
+      BB: 'US-Atlanta',
+      BY: 'EU-London',
+      BE: 'EU-London',
+      BZ: 'US-Atlanta',
+      BJ: 'EU-London',
+      BM: 'US-Atlanta',
+      BT: 'JP-Tokyo',
+      BO: 'BR-Brazil',
+      BQ: 'US-Atlanta',
+      BA: 'EU-London',
+      BW: 'EU-London',
+      BR: 'BR-Brazil',
+      IO: 'JP-Tokyo',
+      VG: 'US-Atlanta',
+      BN: 'JP-Tokyo',
+      BG: 'EU-London',
+      BF: 'EU-London',
+      BI: 'EU-London',
+      KH: 'JP-Tokyo',
+      CM: 'EU-London',
+      CA: 'US-Atlanta',
+      CV: 'EU-London',
+      KY: 'US-Atlanta',
+      CF: 'EU-London',
+      TD: 'EU-London',
+      CL: 'BR-Brazil',
+      CN: 'CN-China',
+      CX: 'JP-Tokyo',
+      CC: 'JP-Tokyo',
+      CO: 'BR-Brazil',
+      KM: 'EU-London',
+      CD: 'EU-London',
+      CG: 'EU-London',
+      CK: 'SG-Singapore',
+      CR: 'US-Atlanta',
+      CI: 'EU-London',
+      HR: 'EU-London',
+      CU: 'US-Atlanta',
+      CW: 'US-Atlanta',
+      CY: 'JP-Tokyo',
+      CZ: 'EU-London',
+      DK: 'EU-London',
+      DJ: 'EU-London',
+      DM: 'US-Atlanta',
+      DO: 'US-Atlanta',
+      EC: 'BR-Brazil',
+      EG: 'EU-London',
+      SV: 'US-Atlanta',
+      GQ: 'EU-London',
+      ER: 'EU-London',
+      EE: 'EU-London',
+      ET: 'EU-London',
+      FO: 'EU-London',
+      FK: 'BR-Brazil',
+      FJ: 'SG-Singapore',
+      FI: 'EU-London',
+      FR: 'EU-London',
+      GF: 'BR-Brazil',
+      PF: 'SG-Singapore',
+      GA: 'EU-London',
+      GM: 'EU-London',
+      GE: 'JP-Tokyo',
+      DE: 'EU-London',
+      GH: 'EU-London',
+      GI: 'EU-London',
+      GR: 'EU-London',
+      GL: 'US-Atlanta',
+      GD: 'US-Atlanta',
+      GP: 'US-Atlanta',
+      GU: 'SG-Singapore',
+      GT: 'US-Atlanta',
+      GG: 'EU-London',
+      GN: 'EU-London',
+      GW: 'EU-London',
+      GY: 'BR-Brazil',
+      HT: 'US-Atlanta',
+      VA: 'EU-London',
+      HN: 'US-Atlanta',
+      HK: 'JP-Tokyo',
+      HU: 'EU-London',
+      IS: 'EU-London',
+      IN: 'JP-Tokyo',
+      ID: 'JP-Tokyo',
+      IR: 'JP-Tokyo',
+      IQ: 'JP-Tokyo',
+      IE: 'EU-London',
+      IM: 'EU-London',
+      IL: 'JP-Tokyo',
+      IT: 'EU-London',
+      JM: 'US-Atlanta',
+      JP: 'JP-Tokyo',
+      JE: 'EU-London',
+      JO: 'JP-Tokyo',
+      KZ: 'JP-Tokyo',
+      KE: 'EU-London',
+      KI: 'SG-Singapore',
+      KP: 'JP-Tokyo',
+      KR: 'JP-Tokyo',
+      KW: 'JP-Tokyo',
+      KG: 'JP-Tokyo',
+      LA: 'JP-Tokyo',
+      LV: 'EU-London',
+      LB: 'JP-Tokyo',
+      LS: 'EU-London',
+      LR: 'EU-London',
+      LY: 'EU-London',
+      LI: 'EU-London',
+      LT: 'EU-London',
+      LU: 'EU-London',
+      MO: 'JP-Tokyo',
+      MK: 'EU-London',
+      MG: 'EU-London',
+      MW: 'EU-London',
+      MY: 'JP-Tokyo',
+      MV: 'JP-Tokyo',
+      ML: 'EU-London',
+      MT: 'EU-London',
+      MH: 'SG-Singapore',
+      MQ: 'US-Atlanta',
+      MR: 'EU-London',
+      MU: 'EU-London',
+      YT: 'EU-London',
+      MX: 'US-Atlanta',
+      FM: 'SG-Singapore',
+      MD: 'EU-London',
+      MC: 'EU-London',
+      MN: 'JP-Tokyo',
+      ME: 'EU-London',
+      MS: 'US-Atlanta',
+      MA: 'EU-London',
+      MZ: 'EU-London',
+      MM: 'JP-Tokyo',
+      NA: 'EU-London',
+      NR: 'SG-Singapore',
+      NP: 'JP-Tokyo',
+      NL: 'EU-London',
+      NC: 'SG-Singapore',
+      NZ: 'SG-Singapore',
+      NI: 'US-Atlanta',
+      NE: 'EU-London',
+      NG: 'EU-London',
+      NU: 'SG-Singapore',
+      NF: 'SG-Singapore',
+      MP: 'SG-Singapore',
+      NO: 'EU-London',
+      OM: 'JP-Tokyo',
+      PK: 'JP-Tokyo',
+      PW: 'SG-Singapore',
+      PS: 'JP-Tokyo',
+      PA: 'US-Atlanta',
+      PG: 'SG-Singapore',
+      PY: 'BR-Brazil',
+      PE: 'BR-Brazil',
+      PH: 'JP-Tokyo',
+      PN: 'SG-Singapore',
+      PL: 'EU-London',
+      PT: 'EU-London',
+      PR: 'US-Atlanta',
+      QA: 'JP-Tokyo',
+      RE: 'EU-London',
+      RO: 'EU-London',
+      RU: 'RU-Russia',
+      RW: 'EU-London',
+      BL: 'US-Atlanta',
+      SH: 'EU-London',
+      KN: 'US-Atlanta',
+      LC: 'US-Atlanta',
+      MF: 'US-Atlanta',
+      PM: 'US-Atlanta',
+      VC: 'US-Atlanta',
+      WS: 'SG-Singapore',
+      SM: 'EU-London',
+      ST: 'EU-London',
+      SA: 'EU-London',
+      SN: 'EU-London',
+      RS: 'EU-London',
+      SC: 'EU-London',
+      SL: 'EU-London',
+      SG: 'JP-Tokyo',
+      SX: 'US-Atlanta',
+      SK: 'EU-London',
+      SI: 'EU-London',
+      SB: 'SG-Singapore',
+      SO: 'EU-London',
+      ZA: 'EU-London',
+      SS: 'EU-London',
+      ES: 'EU-London',
+      LK: 'JP-Tokyo',
+      SD: 'EU-London',
+      SR: 'BR-Brazil',
+      SJ: 'EU-London',
+      SZ: 'EU-London',
+      SE: 'EU-London',
+      CH: 'EU-London',
+      SY: 'EU-London',
+      TW: 'JP-Tokyo',
+      TJ: 'JP-Tokyo',
+      TZ: 'EU-London',
+      TH: 'JP-Tokyo',
+      TL: 'JP-Tokyo',
+      TG: 'EU-London',
+      TK: 'SG-Singapore',
+      TO: 'SG-Singapore',
+      TT: 'US-Atlanta',
+      TN: 'EU-London',
+      TR: 'TK-Turkey',
+      TM: 'JP-Tokyo',
+      TC: 'US-Atlanta',
+      TV: 'SG-Singapore',
+      UG: 'EU-London',
+      UA: 'EU-London',
+      AE: 'EU-London',
+      GB: 'EU-London',
+      US: {
+        AL: 'US-Atlanta',
+        AK: 'US-Fremont',
+        AZ: 'US-Fremont',
+        AR: 'US-Atlanta',
+        CA: 'US-Fremont',
+        CO: 'US-Fremont',
+        CT: 'US-Atlanta',
+        DE: 'US-Atlanta',
+        FL: 'US-Atlanta',
+        GA: 'US-Atlanta',
+        HI: 'US-Fremont',
+        ID: 'US-Fremont',
+        IL: 'US-Atlanta',
+        IN: 'US-Atlanta',
+        IA: 'US-Atlanta',
+        KS: 'US-Atlanta',
         KY: 'US-Atlanta',
-        CF: 'EU-London',
-        TD: 'EU-London',
-        CL: 'BR-Brazil',
-        CN: 'CN-China',
-        CX: 'JP-Tokyo',
-        CC: 'JP-Tokyo',
-        CO: 'BR-Brazil',
-        KM: 'EU-London',
-        CD: 'EU-London',
-        CG: 'EU-London',
-        CK: 'SG-Singapore',
-        CR: 'US-Atlanta',
-        CI: 'EU-London',
-        HR: 'EU-London',
-        CU: 'US-Atlanta',
-        CW: 'US-Atlanta',
-        CY: 'JP-Tokyo',
-        CZ: 'EU-London',
-        DK: 'EU-London',
-        DJ: 'EU-London',
-        DM: 'US-Atlanta',
-        DO: 'US-Atlanta',
-        EC: 'BR-Brazil',
-        EG: 'EU-London',
-        SV: 'US-Atlanta',
-        GQ: 'EU-London',
-        ER: 'EU-London',
-        EE: 'EU-London',
-        ET: 'EU-London',
-        FO: 'EU-London',
-        FK: 'BR-Brazil',
-        FJ: 'SG-Singapore',
-        FI: 'EU-London',
-        FR: 'EU-London',
-        GF: 'BR-Brazil',
-        PF: 'SG-Singapore',
-        GA: 'EU-London',
-        GM: 'EU-London',
-        GE: 'JP-Tokyo',
-        DE: 'EU-London',
-        GH: 'EU-London',
-        GI: 'EU-London',
-        GR: 'EU-London',
-        GL: 'US-Atlanta',
-        GD: 'US-Atlanta',
-        GP: 'US-Atlanta',
-        GU: 'SG-Singapore',
-        GT: 'US-Atlanta',
-        GG: 'EU-London',
-        GN: 'EU-London',
-        GW: 'EU-London',
-        GY: 'BR-Brazil',
-        HT: 'US-Atlanta',
-        VA: 'EU-London',
-        HN: 'US-Atlanta',
-        HK: 'JP-Tokyo',
-        HU: 'EU-London',
-        IS: 'EU-London',
-        IN: 'JP-Tokyo',
-        ID: 'JP-Tokyo',
-        IR: 'JP-Tokyo',
-        IQ: 'JP-Tokyo',
-        IE: 'EU-London',
-        IM: 'EU-London',
-        IL: 'JP-Tokyo',
-        IT: 'EU-London',
-        JM: 'US-Atlanta',
-        JP: 'JP-Tokyo',
-        JE: 'EU-London',
-        JO: 'JP-Tokyo',
-        KZ: 'JP-Tokyo',
-        KE: 'EU-London',
-        KI: 'SG-Singapore',
-        KP: 'JP-Tokyo',
-        KR: 'JP-Tokyo',
-        KW: 'JP-Tokyo',
-        KG: 'JP-Tokyo',
-        LA: 'JP-Tokyo',
-        LV: 'EU-London',
-        LB: 'JP-Tokyo',
-        LS: 'EU-London',
-        LR: 'EU-London',
-        LY: 'EU-London',
-        LI: 'EU-London',
-        LT: 'EU-London',
-        LU: 'EU-London',
-        MO: 'JP-Tokyo',
-        MK: 'EU-London',
-        MG: 'EU-London',
-        MW: 'EU-London',
-        MY: 'JP-Tokyo',
-        MV: 'JP-Tokyo',
-        ML: 'EU-London',
-        MT: 'EU-London',
-        MH: 'SG-Singapore',
-        MQ: 'US-Atlanta',
-        MR: 'EU-London',
-        MU: 'EU-London',
-        YT: 'EU-London',
-        MX: 'US-Atlanta',
-        FM: 'SG-Singapore',
-        MD: 'EU-London',
-        MC: 'EU-London',
-        MN: 'JP-Tokyo',
-        ME: 'EU-London',
+        LA: 'US-Atlanta',
+        ME: 'US-Atlanta',
+        MD: 'US-Atlanta',
+        MA: 'US-Atlanta',
+        MI: 'US-Atlanta',
+        MN: 'US-Fremont',
         MS: 'US-Atlanta',
-        MA: 'EU-London',
-        MZ: 'EU-London',
-        MM: 'JP-Tokyo',
-        NA: 'EU-London',
-        NR: 'SG-Singapore',
-        NP: 'JP-Tokyo',
-        NL: 'EU-London',
-        NC: 'SG-Singapore',
-        NZ: 'SG-Singapore',
-        NI: 'US-Atlanta',
-        NE: 'EU-London',
-        NG: 'EU-London',
-        NU: 'SG-Singapore',
-        NF: 'SG-Singapore',
-        MP: 'SG-Singapore',
-        NO: 'EU-London',
-        OM: 'JP-Tokyo',
-        PK: 'JP-Tokyo',
-        PW: 'SG-Singapore',
-        PS: 'JP-Tokyo',
+        MO: 'US-Atlanta',
+        MT: 'US-Fremont',
+        NE: 'US-Fremont',
+        NV: 'US-Fremont',
+        NH: 'US-Atlanta',
+        NJ: 'US-Atlanta',
+        NM: 'US-Fremont',
+        NY: 'US-Atlanta',
+        NC: 'US-Atlanta',
+        ND: 'US-Fremont',
+        OH: 'US-Atlanta',
+        OK: 'US-Atlanta',
+        OR: 'US-Fremont',
         PA: 'US-Atlanta',
-        PG: 'SG-Singapore',
-        PY: 'BR-Brazil',
-        PE: 'BR-Brazil',
-        PH: 'JP-Tokyo',
-        PN: 'SG-Singapore',
-        PL: 'EU-London',
-        PT: 'EU-London',
+        RI: 'US-Atlanta',
+        SC: 'US-Atlanta',
+        SD: 'US-Fremont',
+        TN: 'US-Atlanta',
+        TX: 'US-Atlanta',
+        UT: 'US-Fremont',
+        VT: 'US-Atlanta',
+        VA: 'US-Atlanta',
+        WA: 'US-Fremont',
+        WV: 'US-Atlanta',
+        WI: 'US-Atlanta',
+        WY: 'US-Fremont',
+        DC: 'US-Atlanta',
+        AS: 'US-Atlanta',
+        GU: 'US-Atlanta',
+        MP: 'US-Atlanta',
         PR: 'US-Atlanta',
-        QA: 'JP-Tokyo',
-        RE: 'EU-London',
-        RO: 'EU-London',
-        RU: 'RU-Russia',
-        RW: 'EU-London',
-        BL: 'US-Atlanta',
-        SH: 'EU-London',
-        KN: 'US-Atlanta',
-        LC: 'US-Atlanta',
-        MF: 'US-Atlanta',
-        PM: 'US-Atlanta',
-        VC: 'US-Atlanta',
-        WS: 'SG-Singapore',
-        SM: 'EU-London',
-        ST: 'EU-London',
-        SA: 'EU-London',
-        SN: 'EU-London',
-        RS: 'EU-London',
-        SC: 'EU-London',
-        SL: 'EU-London',
-        SG: 'JP-Tokyo',
-        SX: 'US-Atlanta',
-        SK: 'EU-London',
-        SI: 'EU-London',
-        SB: 'SG-Singapore',
-        SO: 'EU-London',
-        ZA: 'EU-London',
-        SS: 'EU-London',
-        ES: 'EU-London',
-        LK: 'JP-Tokyo',
-        SD: 'EU-London',
-        SR: 'BR-Brazil',
-        SJ: 'EU-London',
-        SZ: 'EU-London',
-        SE: 'EU-London',
-        CH: 'EU-London',
-        SY: 'EU-London',
-        TW: 'JP-Tokyo',
-        TJ: 'JP-Tokyo',
-        TZ: 'EU-London',
-        TH: 'JP-Tokyo',
-        TL: 'JP-Tokyo',
-        TG: 'EU-London',
-        TK: 'SG-Singapore',
-        TO: 'SG-Singapore',
-        TT: 'US-Atlanta',
-        TN: 'EU-London',
-        TR: 'TK-Turkey',
-        TM: 'JP-Tokyo',
-        TC: 'US-Atlanta',
-        TV: 'SG-Singapore',
-        UG: 'EU-London',
-        UA: 'EU-London',
-        AE: 'EU-London',
-        GB: 'EU-London',
-        US: {
-          AL: 'US-Atlanta',
-          AK: 'US-Fremont',
-          AZ: 'US-Fremont',
-          AR: 'US-Atlanta',
-          CA: 'US-Fremont',
-          CO: 'US-Fremont',
-          CT: 'US-Atlanta',
-          DE: 'US-Atlanta',
-          FL: 'US-Atlanta',
-          GA: 'US-Atlanta',
-          HI: 'US-Fremont',
-          ID: 'US-Fremont',
-          IL: 'US-Atlanta',
-          IN: 'US-Atlanta',
-          IA: 'US-Atlanta',
-          KS: 'US-Atlanta',
-          KY: 'US-Atlanta',
-          LA: 'US-Atlanta',
-          ME: 'US-Atlanta',
-          MD: 'US-Atlanta',
-          MA: 'US-Atlanta',
-          MI: 'US-Atlanta',
-          MN: 'US-Fremont',
-          MS: 'US-Atlanta',
-          MO: 'US-Atlanta',
-          MT: 'US-Fremont',
-          NE: 'US-Fremont',
-          NV: 'US-Fremont',
-          NH: 'US-Atlanta',
-          NJ: 'US-Atlanta',
-          NM: 'US-Fremont',
-          NY: 'US-Atlanta',
-          NC: 'US-Atlanta',
-          ND: 'US-Fremont',
-          OH: 'US-Atlanta',
-          OK: 'US-Atlanta',
-          OR: 'US-Fremont',
-          PA: 'US-Atlanta',
-          RI: 'US-Atlanta',
-          SC: 'US-Atlanta',
-          SD: 'US-Fremont',
-          TN: 'US-Atlanta',
-          TX: 'US-Atlanta',
-          UT: 'US-Fremont',
-          VT: 'US-Atlanta',
-          VA: 'US-Atlanta',
-          WA: 'US-Fremont',
-          WV: 'US-Atlanta',
-          WI: 'US-Atlanta',
-          WY: 'US-Fremont',
-          DC: 'US-Atlanta',
-          AS: 'US-Atlanta',
-          GU: 'US-Atlanta',
-          MP: 'US-Atlanta',
-          PR: 'US-Atlanta',
-          UM: 'US-Atlanta',
-          VI: 'US-Atlanta'
-        },
-        UM: 'SG-Singapore',
-        VI: 'US-Atlanta',
-        UY: 'BR-Brazil',
-        UZ: 'JP-Tokyo',
-        VU: 'SG-Singapore',
-        VE: 'BR-Brazil',
-        VN: 'JP-Tokyo',
-        WF: 'SG-Singapore',
-        EH: 'EU-London',
-        YE: 'JP-Tokyo',
-        ZM: 'EU-London',
-        ZW: 'EU-London'
-      };
-      f.connect = Fa;
-
-      f.getDarkBool = function() {
-        return fa;
-      }
-      f.getMassBool = function() {
-        return Oa;
-      }
-
-      f.getMemoryCells = function() {
-        return interNodes;
-      }
-
-      f.getCellsArray = function() {
-        return n;
-      }
-
-      f.getCells = function() {
-        return y;
-      }
-
-      f.getPlayer = function() {
-        return l;
-      }
-
-      f.getWidth = function() {
-        return p;
-      }
-
-      f.getHeight = function() {
-        return r;
-      }
-
-      f.getRatio = function() {
-        return h;
-      }
-
-      f.getOffsetX = function() {
-        return N;
-      }
-
-      f.getOffsetY = function() {
-        return O;
-      }
-
-      f.getX = function() {
-        return s;
-      }
-
-      f.getY = function() {
-        return t;
-      }
-
-      f.getPointX = function() {
-        return W;
-      }
-
-      f.getPointY = function() {
-        return X;
-      }
-
-      f.getMouseX = function() {
-        return S;
-      }
-
-      f.getMouseY = function() {
-        return T;
-      }
-
-      f.getScreenDistance = function() {
-        var temp = screenDistance();
-        return temp;
-      }
-      f.getLastUpdate = function() {
-        return I;
-      }
-
-      f.setPoint = function(x, y) {
-        W = x;
-        X = y;
-      }
-
-      f.createFake = function(a, b, c, d, e, f) {
-        var n = new Ja(a, b, c, d, e, f);
-        return n;
-      }
-
-      f.setScore = function(a) {
-        sessionScore = a * 100;
-      }
-
-      f.setBestTime = function(a) {
-        bestTime = a;
-      }
-
-      f.best = function(a, b) {
-        setScore(a);
-        setBestTime(b);
-      }
-
-      f.setBotIndex = function(a) {
-        console.log("Changing bot");
-        botIndex = a;
-      }
-
-
-      var Z = 500,
-      Ka = - 1,
-      La = - 1,
-      v = null,
-      x = 1,
-      ga = null,
-      J = {
+        UM: 'US-Atlanta',
+        VI: 'US-Atlanta'
       },
-      wa = 'poland;usa;china;russia;canada;australia;spain;brazil;germany;ukraine;france;sweden;hitler;north korea;south korea;japan;united kingdom;earth;greece;latvia;lithuania;estonia;finland;norway;cia;maldivas;austria;nigeria;reddit;yaranaika;confederate;9gag;indiana;4chan;italy;bulgaria;tumblr;2ch.hk;hong kong;portugal;jamaica;german empire;mexico;sanik;switzerland;croatia;chile;indonesia;bangladesh;thailand;iran;iraq;peru;moon;botswana;bosnia;netherlands;european union;taiwan;pakistan;hungary;satanist;qing dynasty;matriarchy;patriarchy;feminism;ireland;texas;facepunch;prodota;cambodia;steam;piccolo;ea;india;kc;denmark;quebec;ayy lmao;sealand;bait;tsarist russia;origin;vinesauce;stalin;belgium;luxembourg;stussy;prussia;8ch;argentina;scotland;sir;romania;belarus;wojak;doge;nasa;byzantium;imperial japan;french kingdom;somalia;turkey;mars;pokerface;8;irs;receita federal'.split(';'),
-      $a = [
-        '8',
-        'nasa'
-      ],
-      ab = [
-        'm\'blob'
-      ];
-      Ja.prototype = {
-        id: 0,
-        points: null,
-        pointsAcc: null,
-        name: null,
-        nameCache: null,
-        sizeCache: null,
-        x: 0,
-        y: 0,
-        size: 0,
-        ox: 0,
-        oy: 0,
-        oSize: 0,
-        nx: 0,
-        ny: 0,
-        nSize: 0,
-        updateTime: 0,
-        updateCode: 0,
-        drawTime: 0,
-        destroyed: !1,
-        isVirus: !1,
-        isAgitated: !1,
-        wasSimpleDrawing: !0,
-        danger: false,
-        dangerTimeOut: 0,
-        destroy: function () {
-          var a;
-          for (a = 0; a < n.length; a++) if (n[a] == this) {
-            n.splice(a, 1);
-            break
-          }
-          delete y[this.id];
-          a = l.indexOf(this);
-          - 1 != a && (ra = !0, l.splice(a, 1));
-          a = E.indexOf(this.id);
-          - 1 != a && E.splice(a, 1);
-          this.destroyed = !0;
-          G.push(this)
-        },
-        getNameSize: function () {
-          return Math.max(~~(0.3 * this.size), 24)
-        },
-        setName: function (a) {
-          if (this.name = a) null == this.nameCache ? this.nameCache = new ha(this.getNameSize(), '#FFFFFF', !0, '#000000')  : this.nameCache.setSize(this.getNameSize()),
-          this.nameCache.setValue(this.name)
-        },
-        createPoints: function () {
-          for (var a = this.getNumPoints(); this.points.length > a; ) {
-            var b = ~~(Math.random() * this.points.length);
-            this.points.splice(b, 1);
-            this.pointsAcc.splice(b, 1)
-          }
-          0 == this.points.length && 0 < a && (this.points.push({
-            c: this,
-            v: this.size,
-            x: this.x,
-            y: this.y
-          }), this.pointsAcc.push(Math.random() - 0.5));
-          for (; this.points.length < a; ) {
-            var b = ~~(Math.random() * this.points.length),
-            c = this.points[b];
-            this.points.splice(b, 0, {
-              c: this,
-              v: c.v,
-              x: c.x,
-              y: c.y
-            });
-            this.pointsAcc.splice(b, 0, this.pointsAcc[b])
-          }
-        },
-        getNumPoints: function () {
-          var a = 10;
-          20 > this.size && (a = 5);
-          this.isVirus && (a = 30);
-          var b = this.size;
-          this.isVirus || (b *= h);
-          b *= x;
-          return ~~Math.max(b, a)
-        },
-        movePoints: function () {
-          this.createPoints();
-          for (var a = this.points, b = this.pointsAcc, c = a.length, d = 0; d < c; ++d) {
-            var e = b[(d - 1 + c) % c],
-            f = b[(d + 1) % c];
-            b[d] += (Math.random() - 0.5) * (this.isAgitated ? 3 : 1);
-            b[d] *= 0.7;
-            10 < b[d] && (b[d] = 10);
-            - 10 > b[d] && (b[d] = - 10);
-            b[d] = (e + f + 8 * b[d]) / 10
-          }
-          for (var h = this, d = 0; d < c; ++d) {
-            var g = a[d].v,
-            e = a[(d - 1 + c) % c].v,
-            f = a[(d + 1) % c].v;
-            if (15 < this.size && null != L) {
-              var l = !1,
-              m = a[d].x,
-              n = a[d].y;
-              L.retrieve2(m - 5, n - 5, 10, 10, function (a) {
-                a.c != h && 25 > (m - a.x) * (m - a.x) + (n - a.y) * (n - a.y) && (l = !0)
-              });
-              !l && (a[d].x < ba || a[d].y < ca || a[d].x > da || a[d].y > ea) && (l = !0);
-              l && (0 < b[d] && (b[d] = 0), b[d] -= 1)
-            }
-            g += b[d];
-            0 > g && (g = 0);
-            g = this.isAgitated ? (19 * g + this.size) / 20 : (12 * g + this.size) / 13;
-            a[d].v = (e + f + 8 * g) / 10;
-            e = 2 * Math.PI / c;
-            f = this.points[d].v;
-            this.isVirus && 0 == d % 2 && (f += 5);
-            a[d].x = this.x + Math.cos(e * d) * f;
-            a[d].y = this.y + Math.sin(e * d) * f
-          }
-        },
-        updatePos: function () {
-          var a;
-          a = (I - this.updateTime) / 120;
-          a = 0 > a ? 0 : 1 < a ? 1 : a;
-          var b = 0 > a ? 0 : 1 < a ? 1 : a;
-          this.getNameSize();
-          if (this.destroyed && 1 <= b) {
-            var c = G.indexOf(this);
-            - 1 != c && G.splice(c, 1)
-          }
-          this.x = a * (this.nx - this.ox) + this.ox;
-          this.y = a * (this.ny - this.oy) + this.oy;
-          this.size = b * (this.nSize - this.oSize) + this.oSize;
-          return b
-        },
-        shouldRender: function () {
-          return this.x + this.size + 40 < s - p / 2 / h || this.y + this.size + 40 < t - r / 2 / h || this.x - this.size - 40 >
-          s + p / 2 / h || this.y - this.size - 40 > t + r / 2 / h ? !1 : !0
-        },
-        draw: function () {
-          if (this.shouldRender()) {
-            var a = !this.isVirus && !this.isAgitated && 0.35 > h;
-            if (this.wasSimpleDrawing && !a) for (var b = 0; b < this.points.length; b++) this.points[b].v = this.size;
-            this.wasSimpleDrawing = a;
-            e.save();
-            this.drawTime = I;
-            b = this.updatePos();
-            this.destroyed && (e.globalAlpha *= 1 - b);
-            e.lineWidth = 10;
-            e.lineCap = 'round';
-            e.lineJoin = this.isVirus ? 'mitter' : 'round';
-            va ? (e.fillStyle = '#FFFFFF', e.strokeStyle = '#AAAAAA')  : (e.fillStyle = this.color, e.strokeStyle = this.color);
-            if (a) e.beginPath(),
-            e.arc(this.x, this.y, this.size, 0, 2 * Math.PI, !1);
-             else {
-              this.movePoints();
-              e.beginPath();
-              var c = this.getNumPoints();
-              e.moveTo(this.points[0].x, this.points[0].y);
-              for (b = 1; b <= c; ++b) {
-                var d = b % c;
-                e.lineTo(this.points[d].x, this.points[d].y)
-              }
-            }
-            e.closePath();
-            c = this.name.toLowerCase();
-            !this.isAgitated && Na && '' == M ? - 1 != wa.indexOf(c) ? (J.hasOwnProperty(c) || (J[c] = new Image, J[c].src = 'skins/' + c + '.png'), b = 0 != J[c].width && J[c].complete ? J[c] : null)  : b = null : b = null;
-            b = (d = b) ? - 1 != ab.indexOf(c)  : !1;
-            a || e.stroke();
-            e.fill();
-            null == d || b || (e.save(), e.clip(), e.drawImage(d, this.x - this.size, this.y - this.size, 2 * this.size, 2 * this.size), e.restore());
-            (va || 15 < this.size) && !a && (e.strokeStyle = '#000000', e.globalAlpha *= 0.1, e.stroke());
-            e.globalAlpha = 1;
-            null != d && b && e.drawImage(d, this.x - 2 * this.size, this.y - 2 * this.size, 4 * this.size, 4 * this.size);
-            b = - 1 != l.indexOf(this);
-            a = ~~this.y;
-            if ((ia || b) && this.name && this.nameCache && (null == d || - 1 == $a.indexOf(c))) {
-              d = this.nameCache;
-              d.setValue(this.name);
-              d.setSize(this.getNameSize());
-              c = Math.ceil(10 * h) / 10;
-              d.setScale(c);
-              var d = d.render(),
-              f = ~~(d.width / c),
-              g = ~~(d.height / c);
-              e.drawImage(d, ~~this.x - ~~(f / 2), a - ~~(g / 2), f, g);
-              a += d.height / 2 / c + 4
-            }
-            Oa && (b || 0 == l.length && (!this.isVirus || this.isAgitated) && 20 < this.size) && (null == this.sizeCache && (this.sizeCache = new ha(this.getNameSize() / 2, '#FFFFFF', !0, '#000000')), b = this.sizeCache, b.setSize(this.getNameSize() / 2), b.setValue(~~(this.size * this.size / 100)), c = Math.ceil(10 * h) / 10, b.setScale(c), d = b.render(), f = ~~(d.width / c), g = ~~(d.height / c), e.drawImage(d, ~~this.x - ~~(f / 2), a - ~~(g / 2), f, g));
-            e.restore()
-          }
-        }
-      };
-      ha.prototype = {
-        _value: '',
-        _color: '#000000',
-        _stroke: !1,
-        _strokeColor: '#000000',
-        _size: 16,
-        _canvas: null,
-        _ctx: null,
-        _dirty: !1,
-        _scale: 1,
-        setSize: function (a) {
-          this._size != a && (this._size = a, this._dirty = !0)
-        },
-        setScale: function (a) {
-          this._scale != a && (this._scale = a, this._dirty = !0)
-        },
-        setColor: function (a) {
-          this._color != a && (this._color = a, this._dirty = !0)
-        },
-        setStroke: function (a) {
-          this._stroke != a && (this._stroke = a, this._dirty = !0)
-        },
-        setStrokeColor: function (a) {
-          this._strokeColor != a && (this._strokeColor = a, this._dirty = !0)
-        },
-        setValue: function (a) {
-          a != this._value && (this._value = a, this._dirty = !0)
-        },
-        render: function () {
-          null == this._canvas && (this._canvas = document.createElement('canvas'), this._ctx = this._canvas.getContext('2d'));
-          if (this._dirty) {
-            this._dirty = !1;
-            var a = this._canvas,
-            b = this._ctx,
-            c = this._value,
-            d = this._scale,
-            e = this._size,
-            f = e + 'px Ubuntu';
-            b.font = f;
-            var g = b.measureText(c).width,
-            h = ~~(0.2 * e);
-            a.width = (g + 6) * d;
-            a.height = (e + h) * d;
-            b.font = f;
-            b.scale(d, d);
-            b.globalAlpha = 1;
-            b.lineWidth = 3;
-            b.strokeStyle = this._strokeColor;
-            b.fillStyle = this._color;
-            this._stroke && b.strokeText(c, 3, e - h / 2);
-            b.fillText(c, 3, e - h / 2)
-          }
-          return this._canvas
-        }
-      };
-      f.onload = Pa
+      UM: 'SG-Singapore',
+      VI: 'US-Atlanta',
+      UY: 'BR-Brazil',
+      UZ: 'JP-Tokyo',
+      VU: 'SG-Singapore',
+      VE: 'BR-Brazil',
+      VN: 'JP-Tokyo',
+      WF: 'SG-Singapore',
+      EH: 'EU-London',
+      YE: 'JP-Tokyo',
+      ZM: 'EU-London',
+      ZW: 'EU-London'
+    };
+    h.connect = Ha;
+
+    //UPDATE
+    window.getDarkBool = function() {
+      return ha;
     }
+    window.getMassBool = function() {
+      return Pa;
+    }
+
+    window.getMemoryCells = function() {
+      return interNodes;
+    }
+
+    window.getCellsArray = function() {
+      return u;
+    }
+
+    window.getCells = function() {
+      return z;
+    }
+
+    window.getPlayer = function() {
+      return m;
+    }
+
+    window.getWidth = function() {
+      return p;
+    }
+
+    window.getHeight = function() {
+      return q;
+    }
+
+    window.getRatio = function() {
+      return g;
+    }
+
+    window.getOffsetX = function() {
+      return P;
+    }
+
+    window.getOffsetY = function() {
+      return Q;
+    }
+
+    window.getX = function() {
+      return s;
+    }
+
+    window.getY = function() {
+      return t;
+    }
+
+    window.getPointX = function() {
+      return X;
+    }
+
+    window.getPointY = function() {
+      return Y;
+    }
+
+    window.getMouseX = function() {
+      return T;
+    }
+
+    window.getMouseY = function() {
+      return U;
+    }
+
+    window.getScreenDistance = function() {
+      var temp = screenDistance();
+      return temp;
+    }
+    window.getLastUpdate = function() {
+      return G;
+    }
+
+    window.setPoint = function(x, y) {
+      X = x;
+      Y = y;
+    }
+
+    window.createFake = function(a, b, c, d, e, f) {
+      var n = new Ka(a, b, c, d, e, f);
+      return n;
+    }
+
+    window.setScore = function(a) {
+      sessionScore = a * 100;
+    }
+
+    window.setBestTime = function(a) {
+      bestTime = a;
+    }
+
+    window.best = function(a, b) {
+      setScore(a);
+      setBestTime(b);
+    }
+
+    window.setBotIndex = function(a) {
+      console.log("Changing bot");
+      botIndex = a;
+    }
+
+    var aa = 500,
+    La = - 1,
+    Ma = - 1,
+    w = null,
+    y = 1,
+    ia = null,
+    J = {
+    },
+    ya = 'poland;usa;china;russia;canada;australia;spain;brazil;germany;ukraine;france;sweden;hitler;north korea;south korea;japan;united kingdom;earth;greece;latvia;lithuania;estonia;finland;norway;cia;maldivas;austria;nigeria;reddit;yaranaika;confederate;9gag;indiana;4chan;italy;bulgaria;tumblr;2ch.hk;hong kong;portugal;jamaica;german empire;mexico;sanik;switzerland;croatia;chile;indonesia;bangladesh;thailand;iran;iraq;peru;moon;botswana;bosnia;netherlands;european union;taiwan;pakistan;hungary;satanist;qing dynasty;matriarchy;patriarchy;feminism;ireland;texas;facepunch;prodota;cambodia;steam;piccolo;ea;india;kc;denmark;quebec;ayy lmao;sealand;bait;tsarist russia;origin;vinesauce;stalin;belgium;luxembourg;stussy;prussia;8ch;argentina;scotland;sir;romania;belarus;wojak;doge;nasa;byzantium;imperial japan;french kingdom;somalia;turkey;mars;pokerface;8;irs;receita federal;facebook'.split(';'),
+    gb = [
+      '8',
+      'nasa'
+    ],
+    hb = [
+      'm\'blob'
+    ];
+    Ka.prototype = {
+      id: 0,
+      a: null,      //points
+      l: null,      //pointsAcc
+      name: null,   //name
+      k: null,      //nameCache
+      J: null,      //sizeCache
+      x: 0,         
+      y: 0,
+      size: 0,
+      p: 0,         //ox
+      q: 0,         //oy
+      o: 0,         //oSize
+      D: 0,         //nx
+      F: 0,         //ny
+      n: 0,         //nSize
+      W: 0,         //updateTime
+      L: 0,         //drawTime
+      ja: 0,
+      ba: 0,
+      A: !1,
+      d: !1,
+      j: !1,
+      M: !0,
+      //UPDATE
+      updateCode: 0,
+      danger: false,
+      S: function () {
+        var a;
+        for (a = 0; a < u.length; a++) if (u[a] == this) {
+          u.splice(a, 1);
+          break
+        }
+        delete z[this.id];
+        a = m.indexOf(this);
+        - 1 != a && (ta = !0, m.splice(a, 1));
+        a = F.indexOf(this.id);
+        - 1 != a && F.splice(a, 1);
+        this.A = !0;
+        H.push(this)
+      },
+      h: function () {
+        return Math.max(~~(0.3 * this.size), 24)
+      },
+      Z: function (a) {
+        if (this.name = a) null == this.k ? this.k = new ja(this.h(), '#FFFFFF', !0, '#000000')  : this.k.H(this.h()),
+        this.k.u(this.name)
+      },
+      R: function () {
+        for (var a = this.C(); this.a.length > a; ) {
+          var b = ~~(Math.random() * this.a.length);
+          this.a.splice(b, 1);
+          this.l.splice(b, 1)
+        }
+        0 == this.a.length && 0 < a && (this.a.push({
+          Q: this,
+          e: this.size,
+          x: this.x,
+          y: this.y
+        }), this.l.push(Math.random() - 0.5));
+        for (; this.a.length < a; ) {
+          var b = ~~(Math.random() * this.a.length),
+          c = this.a[b];
+          this.a.splice(b, 0, {
+            Q: this,
+            e: c.e,
+            x: c.x,
+            y: c.y
+          });
+          this.l.splice(b, 0, this.l[b])
+        }
+      },
+      C: function () {
+        var a = 10;
+        20 > this.size && (a = 0);
+        this.d && (a = 30);
+        var b = this.size;
+        this.d || (b *= g);
+        b *= y;
+        this.W & 32 && (b *= 0.25);
+        return ~~Math.max(b, a)
+      },
+      ha: function () {
+        this.R();
+        for (var a = this.a, b = this.l, c = a.length, d = 0; d < c; ++d) {
+          var e = b[(d - 1 + c) % c],
+          l = b[(d + 1) % c];
+          b[d] += (Math.random() - 0.5) * (this.j ? 3 : 1);
+          b[d] *= 0.7;
+          10 < b[d] && (b[d] = 10);
+          - 10 > b[d] && (b[d] = - 10);
+          b[d] = (e + l + 8 * b[d]) / 10
+        }
+        for (var k = this, h = this.d ? 0 : (this.id / 1000 + G / 10000) % (2 * Math.PI), d = 0; d < c; ++d) {
+          var f = a[d].e,
+          e = a[(d - 1 + c) % c].e,
+          l = a[(d + 1) % c].e;
+          if (15 < this.size && null != L && 20 < this.size * g) {
+            var m = !1,
+            p = a[d].x,
+            q = a[d].y;
+            L.ia(p - 5, q - 5, 10, 10, function (a) {
+              a.Q != k && 25 > (p - a.x) * (p - a.x) + (q - a.y) * (q - a.y) && (m = !0)
+            });
+            !m && (a[d].x < da || a[d].y < ea || a[d].x > fa || a[d].y > ga) && (m = !0);
+            m && (0 < b[d] && (b[d] = 0), b[d] -= 1)
+          }
+          f += b[d];
+          0 > f && (f = 0);
+          f = this.j ? (19 * f + this.size) / 20 : (12 * f + this.size) / 13;
+          a[d].e = (e + l + 8 * f) / 10;
+          e = 2 * Math.PI / c;
+          l = this.a[d].e;
+          this.d && 0 == d % 2 && (l += 5);
+          a[d].x = this.x + Math.cos(e * d + h) * l;
+          a[d].y = this.y + Math.sin(e * d + h) * l
+        }
+      },
+      K: function () {
+        var a;
+        a = (G - this.L) / 120;
+        a = 0 > a ? 0 : 1 < a ? 1 : a;
+        var b = 0 > a ? 0 : 1 < a ? 1 : a;
+        this.h();
+        if (this.A && 1 <= b) {
+          var c = H.indexOf(this);
+          - 1 != c && H.splice(c, 1)
+        }
+        this.x = a * (this.D - this.p) + this.p;
+        this.y = a * (this.F - this.q) + this.q;
+        this.size = b * (this.n - this.o) + this.o;
+        return b
+      },
+      I: function () {
+        return this.x + this.size + 40 < s - p / 2 / g || this.y + this.size + 40 < t - q / 2 / g || this.x - this.size - 40 > s + p / 2 / g || this.y - this.size - 40 > t + q / 2 / g ? !1 : !0
+      },
+      T: function () {
+        if (this.I()) {
+          var a = !this.d && !this.j && 0.4 > g;
+          5 > this.C() && (a = !0);
+          if (this.M && !a) for (var b = 0; b < this.a.length; b++) this.a[b].e = this.size;
+          this.M = a;
+          e.save();
+          this.ba = G;
+          b = this.K();
+          this.A && (e.globalAlpha *= 1 - b);
+          e.lineWidth = 10;
+          e.lineCap = 'round';
+          e.lineJoin = this.d ? 'miter' : 'round';
+          xa ? (e.fillStyle = '#FFFFFF', e.strokeStyle = '#AAAAAA')  : (e.fillStyle = this.color, e.strokeStyle = this.color);
+          if (a) e.beginPath(),
+          e.arc(this.x, this.y, this.size, 0, 2 * Math.PI, !1);
+           else {
+            this.ha();
+            e.beginPath();
+            var c = this.C();
+            e.moveTo(this.a[0].x, this.a[0].y);
+            for (b = 1; b <= c; ++b) {
+              var d = b % c;
+              e.lineTo(this.a[d].x, this.a[d].y)
+            }
+          }
+          e.closePath();
+          c = this.name.toLowerCase();
+          !this.j && Oa && ':teams' != M ? - 1 != ya.indexOf(c) ? (J.hasOwnProperty(c) || (J[c] = new Image, J[c].src = 'skins/' + c + '.png'), b = 0 != J[c].width && J[c].complete ? J[c] : null)  : b = null : b = null;
+          b = (d = b) ? - 1 != hb.indexOf(c)  : !1;
+          a || e.stroke();
+          e.fill();
+          null == d || b || (e.save(), e.clip(), e.drawImage(d, this.x - this.size, this.y - this.size, 2 * this.size, 2 * this.size), e.restore());
+          (xa || 15 < this.size) && !a && (e.strokeStyle = '#000000', e.globalAlpha *= 0.1, e.stroke());
+          e.globalAlpha = 1;
+          null != d && b && e.drawImage(d, this.x - 2 * this.size, this.y - 2 * this.size, 4 * this.size, 4 * this.size);
+          b = - 1 != m.indexOf(this);
+          a = ~~this.y;
+          if ((ka || b) && this.name && this.k && (null == d || - 1 == gb.indexOf(c))) {
+            d = this.k;
+            d.u(this.name);
+            d.H(this.h());
+            c = Math.ceil(10 * g) / 10;
+            d.$(c);
+            var d = d.G(),
+            f = ~~(d.width / c),
+            l = ~~(d.height / c);
+            e.drawImage(d, ~~this.x - ~~(f / 2), a - ~~(l / 2), f, l);
+            a += d.height / 2 / c + 4
+          }
+          Pa && (b || 0 == m.length && (!this.d || this.j) && 20 < this.size) && (null == this.J && (this.J = new ja(this.h() / 2, '#FFFFFF', !0, '#000000')), b = this.J, b.H(this.h() / 2), b.u(~~(this.size * this.size / 100)), c = Math.ceil(10 * g) / 10, b.$(c), d = b.G(), f = ~~(d.width / c), l = ~~(d.height / c), e.drawImage(d, ~~this.x - ~~(f / 2), a - ~~(l / 2), f, l));
+          e.restore()
+        }
+      }
+    };
+    ja.prototype = {
+      w: '',
+      N: '#000000',
+      P: !1,
+      s: '#000000',
+      r: 16,
+      m: null,
+      O: null,
+      g: !1,
+      v: 1,
+      H: function (a) {
+        this.r != a && (this.r = a, this.g = !0)
+      },
+      $: function (a) {
+        this.v != a && (this.v = a, this.g = !0)
+      },
+      setStrokeColor: function (a) {
+        this.s != a && (this.s = a, this.g = !0)
+      },
+      u: function (a) {
+        a != this.w && (this.w = a, this.g = !0)
+      },
+      G: function () {
+        null == this.m && (this.m = document.createElement('canvas'), this.O = this.m.getContext('2d'));
+        if (this.g) {
+          this.g = !1;
+          var a = this.m,
+          b = this.O,
+          c = this.w,
+          d = this.v,
+          e = this.r,
+          l = e + 'px Ubuntu';
+          b.font = l;
+          var k = ~~(0.2 * e);
+          a.width = (b.measureText(c).width + 6) * d;
+          a.height = (e + k) * d;
+          b.font = l;
+          b.scale(d, d);
+          b.globalAlpha = 1;
+          b.lineWidth = 3;
+          b.strokeStyle = this.s;
+          b.fillStyle = this.N;
+          this.P && b.strokeText(c, 3, e - k / 2);
+          b.fillText(c, 3, e - k / 2)
+        }
+        return this.m
+      }
+    };
+    Date.now || (Date.now = function () {
+      return (new Date).getTime()
+    });
+    var Ua = {
+      ca: function (a) {
+        function b(a, b, c, d, e) {
+          this.x = a;
+          this.y = b;
+          this.f = c;
+          this.c = d;
+          this.depth = e;
+          this.items = [
+          ];
+          this.b = [
+          ]
+        }
+        var c = a.da || 2,
+        d = a.ea || 4;
+        b.prototype = {
+          x: 0,
+          y: 0,
+          f: 0,
+          c: 0,
+          depth: 0,
+          items: null,
+          b: null,
+          B: function (a) {
+            for (var b = 0; b < this.items.length; ++b) {
+              var c = this.items[b];
+              if (c.x >= a.x && c.y >= a.y && c.x < a.x + a.f && c.y < a.y + a.c) return !0
+            }
+            if (0 != this.b.length) {
+              var d = this;
+              return this.V(a, function (b) {
+                return d.b[b].B(a)
+              })
+            }
+            return !1
+          },
+          t: function (a, b) {
+            for (var c = 0; c < this.items.length; ++c) b(this.items[c]);
+            if (0 != this.b.length) {
+              var d = this;
+              this.V(a, function (c) {
+                d.b[c].t(a, b)
+              })
+            }
+          },
+          i: function (a) {
+            0 != this.b.length ? this.b[this.U(a)].i(a)  : this.items.length >= c && this.depth < d ? (this.aa(), this.b[this.U(a)].i(a))  : this.items.push(a)
+          },
+          U: function (a) {
+            return a.x < this.x + this.f / 2 ? a.y < this.y + this.c / 2 ? 0 : 2 : a.y < this.y + this.c / 2 ? 1 : 3
+          },
+          V: function (a, b) {
+            return a.x < this.x + this.f / 2 && (a.y < this.y + this.c / 2 && b(0) || a.y >= this.y + this.c / 2 && b(2)) || a.x >= this.x + this.f / 2 && (a.y < this.y + this.c / 2 && b(1) || a.y >= this.y + this.c / 2 && b(3)) ? !0 : !1
+          },
+          aa: function () {
+            var a = this.depth + 1,
+            c = this.f / 2,
+            d = this.c / 2;
+            this.b.push(new b(this.x, this.y, c, d, a));
+            this.b.push(new b(this.x + c, this.y, c, d, a));
+            this.b.push(new b(this.x, this.y + d, c, d, a));
+            this.b.push(new b(this.x + c, this.y + d, c, d, a));
+            a = this.items;
+            this.items = [
+            ];
+            for (c = 0; c < a.length; c++) this.i(a[c])
+          },
+          clear: function () {
+            for (var a = 0; a < this.b.length; a++) this.b[a].clear();
+            this.items.length = 0;
+            this.b.length = 0
+          }
+        };
+        var e = {
+          x: 0,
+          y: 0,
+          f: 0,
+          c: 0
+        };
+        return {
+          root: new b(a.X, a.Y, a.fa - a.X, a.ga - a.Y, 0),
+          i: function (a) {
+            this.root.i(a)
+          },
+          t: function (a, b) {
+            this.root.t(a, b)
+          },
+          ia: function (a, b, c, d, f) {
+            e.x = a;
+            e.y = b;
+            e.f = c;
+            e.c = d;
+            this.root.t(e, f)
+          },
+          B: function (a) {
+            return this.root.B(a)
+          },
+          clear: function () {
+            this.root.clear()
+          }
+        }
+      }
+    };
+    h.onload = Sa
   }
-}) (window, jQuery);
+}) (window, window.jQuery);
