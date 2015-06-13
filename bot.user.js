@@ -624,6 +624,7 @@ console.log("Running Apos Bot!");
     function findDestination() {
         var player = getPlayer();
         var interNodes = getMemoryCells();
+        var drawColor = 0;
 
         if ( /*!toggle*/ 1) {
             var useMouseX = (getMouseX() - getWidth() / 2 + getX() * getRatio()) / getRatio();
@@ -889,10 +890,12 @@ console.log("Running Apos Bot!");
                     lastAngle = perfectAngle;
                     tempMoveX = line1[0];
                     tempMoveY = line1[1];
+                    drawColor = 7;
                 } else if ((goodAngles.length == 0) && (allPossibleThreats.length > 0)) {
                     var line1 = followAngle(lastAngle, player[0].x, player[0].y, 300);
                     tempMoveX = line1[0];
                     tempMoveY = line1[1];
+                    drawColor = 3;
                 } else {
                     
                     if (clusterAllFood.length > 0) {
@@ -909,14 +912,15 @@ console.log("Running Apos Bot!");
                         tempMoveX = clusterAllFood[bestFoodI][0];
                         tempMoveY = clusterAllFood[bestFoodI][1];
                         lastAngle = getAngle(player[0].x, player[0].y,tempMoveX, tempMoveY);
-
+                        drawColor = 1;
                     } else {
                         var line1 = followAngle(lastAngle, player[0].x, player[0].y, 300);
                         tempMoveX = line1[0];
                         tempMoveY = line1[1];
+                        drawColor = 5;
                     }
                 }
-                drawLine(player[0].x, player[0].y, tempMoveX, tempMoveY, 1);
+                drawLine(player[0].x, player[0].y, tempMoveX, tempMoveY, drawColor);
 
                 drawPoint(tempPoint[0], tempPoint[1], tempPoint[2], "");
                 //drawPoint(tempPoint[0], tempPoint[1], tempPoint[2], "" + Math.floor(computeDistance(tempPoint[0], tempPoint[1], I, J)));
