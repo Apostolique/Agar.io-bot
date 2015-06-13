@@ -873,7 +873,6 @@ console.log("Running Apos Bot!");
                     }
                     var perfectAngle = (bIndex[0] + bIndex[1] / 2).mod(360);
                     //console.log("perfectAngle " + perfectAngle);
-                    var line1 = followAngle(perfectAngle, player[0].x, player[0].y, 300);
 
                     // oh, sure, that's the perfect angle but can't we try to eat on the way?
                     var food = 0;
@@ -885,6 +884,8 @@ console.log("Running Apos Bot!");
                             }
                         }
                     }
+                    var line1 = followAngle(perfectAngle, player[0].x, player[0].y, 300);
+
                     drawLine(player[0].x, player[0].y, line1[0], line1[1], 7);
                     tempMoveX = line1[0];
                     tempMoveY = line1[1];
