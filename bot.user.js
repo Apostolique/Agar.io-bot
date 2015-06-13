@@ -863,7 +863,7 @@ console.log("Running Apos Bot!");
                     //console.log("After: " + clusterAllFood[i][2]);
                 }
 
-                if ((goodAngles.length > 0) && (allPossibleThreats.length > 0)) {
+                if ((goodAngles.length > 0)) {
                     var bIndex = goodAngles[0];
                     var biggest = goodAngles[0][1];
                     for (var i = 1; i < goodAngles.length; i++) {
@@ -891,7 +891,7 @@ console.log("Running Apos Bot!");
                     tempMoveX = line1[0];
                     tempMoveY = line1[1];
                     drawColor = 7;
-                } else if ((goodAngles.length == 0) && (allPossibleThreats.length > 0)) {
+                } else if ((goodAngles.length == 0) && (badAngles.length > 0)) {
                     var line1 = followAngle(lastAngle, player[0].x, player[0].y, 300);
                     tempMoveX = line1[0];
                     tempMoveY = line1[1];
