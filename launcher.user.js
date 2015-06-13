@@ -605,7 +605,7 @@ console.log("Running Bot Launcher!");
     w && w.width && e.drawImage(w, p - w.width - 10, 10);
     I = Math.max(I, db());
     //UPDATE
-    sessionScore = Math.max(I, sessionScore); 
+    sessionScore = Math.max(I, sessionScore);
     0 != I && (null == ia && (ia = new ja(24, '#FFFFFF', true,'#000000')), ia.u('Score: ' + ~~(I / 100) + ' || Best Score: ' + ~~(sessionScore / 100) + " || Best time alive: " + bestTime + " seconds"), c = ia.G(), a = c.width, e.globalAlpha = 0.2, e.fillStyle = '#000000', e.fillRect(10, q - 10 - 24 - 10, a + 10, 34), e.globalAlpha = 1, e.drawImage(c, 15, q - 10 - 24 - 5));
     eb();
     b = Date.now() - b;
@@ -775,6 +775,7 @@ console.log("Running Bot Launcher!");
 
     if (getPlayer().length > 0) {
         debugStrings.push("Location: " + Math.floor(getPlayer()[0].x) + ", " + Math.floor(getPlayer()[0].y));
+        debugStrings.push("Target  : " + Math.floor(targetX) + ", " + Math.floor(targetY));
     }
 
     var offsetValue = 20;
@@ -1442,7 +1443,7 @@ console.log("Running Bot Launcher!");
       name: null,   //name
       k: null,      //nameCache
       J: null,      //sizeCache
-      x: 0,         
+      x: 0,
       y: 0,
       size: 0,
       p: 0,         //ox
