@@ -22,6 +22,7 @@ console.log("Running Apos Bot!");
 
     var targetX = 0;
     var targetY = 0;
+    var lastAngle = 0;
 
     var SPLIT_THREAT_BUFFER = 500;//710
 
@@ -885,14 +886,13 @@ console.log("Running Apos Bot!");
                         }
                     }
                     var line1 = followAngle(perfectAngle, player[0].x, player[0].y, 300);
-
-                    drawLine(player[0].x, player[0].y, line1[0], line1[1], 7);
+                    lastAngle = perfectAngle;
                     tempMoveX = line1[0];
                     tempMoveY = line1[1];
                 } else if ((goodAngles.length == 0) && (allPossibleThreats.length > 0)) {
-                    tempMoveX = targetX;
-                    tempMoveY = targetY;
-                    drawLine(player[0].x, player[0].y, tempMoveX, tempMoveY, 1);
+                    var line1 = followAngle(lastAngle, player[0].x, player[0].y, 300);
+                    tempMoveX = line1[0];
+                    tempMoveY = line1[1];
                 } else {
                     
                     if (clusterAllFood.length > 0) {
@@ -906,15 +906,17 @@ console.log("Running Apos Bot!");
                         }
 
                         //console.log("Best Value: " + clusterAllFood[bestFoodI][2]);
-
                         tempMoveX = clusterAllFood[bestFoodI][0];
                         tempMoveY = clusterAllFood[bestFoodI][1];
+                        lastAngle = getAngle(player[0].x, player[0].y,tempMoveX, tempMoveY);
+
                     } else {
-                        tempMoveX = targetX;
-                        tempMoveY = targetY;
+                        var line1 = followAngle(lastAngle, player[0].x, player[0].y, 300);
+                        tempMoveX = line1[0];
+                        tempMoveY = line1[1];
                     }
-                    drawLine(player[0].x, player[0].y, tempMoveX, tempMoveY, 1);
                 }
+                drawLine(player[0].x, player[0].y, tempMoveX, tempMoveY, 1);
 
                 drawPoint(tempPoint[0], tempPoint[1], tempPoint[2], "");
                 //drawPoint(tempPoint[0], tempPoint[1], tempPoint[2], "" + Math.floor(computeDistance(tempPoint[0], tempPoint[1], I, J)));
