@@ -389,8 +389,8 @@ console.log("Running Apos Bot!");
 
         var radius = blob2.size;
 
-        if (blob1.size * 2.30 < blob2.size) {
-            radius += 900;
+        if (canSplit(blob1, blob2)) {
+            radius += 710;
         }
 
         var shouldInvert = false;
