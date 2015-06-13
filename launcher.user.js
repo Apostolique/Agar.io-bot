@@ -775,7 +775,6 @@ console.log("Running Bot Launcher!");
 
     if (getPlayer().length > 0) {
         debugStrings.push("Location: " + Math.floor(getPlayer()[0].x) + ", " + Math.floor(getPlayer()[0].y));
-        debugStrings.push("Target  : " + Math.floor(targetX) + ", " + Math.floor(targetY));
     }
 
     var offsetValue = 20;
