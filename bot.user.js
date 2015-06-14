@@ -23,7 +23,7 @@ console.log("Running Apos Bot!");
     var targetX = 0;
     var targetY = 0;
     var lastAngle = 0;
-
+    var times = 0;
     var SPLIT_THREAT_BUFFER = 500;//710
 
     var FOOD_ANGLE_TOLERANCE = 10; // in degrees
@@ -625,7 +625,8 @@ console.log("Running Apos Bot!");
         var player = getPlayer();
         var interNodes = getMemoryCells();
         var drawColor = 0;
-
+        var keepRunning = false;
+        
         if ( /*!toggle*/ 1) {
             var useMouseX = (getMouseX() - getWidth() / 2 + getX() * getRatio()) / getRatio();
             var useMouseY = (getMouseY() - getHeight() / 2 + getY() * getRatio()) / getRatio();
@@ -663,7 +664,7 @@ console.log("Running Apos Bot!");
                     } else {
                         drawCircle(allPossibleThreats[i].x, allPossibleThreats[i].y, allPossibleThreats[i].size + player[0].size, 3);
                     }
-
+/*
                     if (allPossibleThreats[i].danger && f.getLastUpdate() - allPossibleThreats[i].dangerTimeOut > 1000) {
 
                         allPossibleThreats[i].danger = false;
@@ -673,10 +674,12 @@ console.log("Running Apos Bot!");
 
                         allPossibleThreats[i].danger = true;
                         allPossibleThreats[i].dangerTimeOut = f.getLastUpdate();
+                        keepRunning = true;
                     }
 
                     if ((canSplit(player[0], allPossibleThreats[i]) && enemyDistance < allPossibleThreats[i].size + 710 + player[0].size) || (!canSplit(player[0], allPossibleThreats[i]) && enemyDistance < allPossibleThreats[i].size + player[0].size) || allPossibleThreats[i].danger) {
-
+*/
+                    {
                         var offsetX = player[0].x;
                         var offsetY = player[0].y;
 
@@ -711,16 +714,17 @@ console.log("Running Apos Bot!");
 
                 var goodAngles = [];
                 //TODO: Add wall angles here. Hardcoding temporary values.
+
                 if (player[0].x < 1000 && badAngles.length > 0) {
                     //LEFT
                     //console.log("Left");
                     var wallI = 1;
                     if (!interNodes.hasOwnProperty(wallI)) {
-                        console.log("Creating Wall");
+                        //console.log("Creating Wall");
                         var newX = -100 - screenDistance();
-                        console.log("Got distance");
+                        //console.log("Got distance");
                         var n = f.createFake(wallI, newX, player[0].y, player[0].size * 10, "#000", false, "Left Wall");
-                        console.log("n ID: " + n.id);
+                        //console.log("n ID: " + n.id);
                         delete getCells()[wallI];
                         getCellsArray().pop();
 
@@ -740,11 +744,11 @@ console.log("Running Apos Bot!");
                     //console.log("TOP");
                     var wallI = 2;
                     if (!interNodes.hasOwnProperty(wallI)) {
-                        console.log("Creating Wall");
+                        //console.log("Creating Wall");
                         var newY = -100 - screenDistance();
-                        console.log("Got distance");
+                        //console.log("Got distance");
                         var n = f.createFake(wallI, player[0].x, newY, player[0].size * 10, "#000", false, "Top Wall");
-                        console.log("n ID: " + n.id);
+                        //console.log("n ID: " + n.id);
                         delete getCells()[wallI];
                         getCellsArray().pop();
 
@@ -764,11 +768,11 @@ console.log("Running Apos Bot!");
                     //console.log("RIGHT");
                     var wallI = 3;
                     if (!interNodes.hasOwnProperty(wallI)) {
-                        console.log("Creating Wall");
+                        //console.log("Creating Wall");
                         var newX = 11180 + 100 + screenDistance();
-                        console.log("Got distance");
+                        //console.log("Got distance");
                         var n = f.createFake(wallI, newX, player[0].y, player[0].size * 10, "#000", false, "Right Wall");
-                        console.log("n ID: " + n.id);
+                        //console.log("n ID: " + n.id);
                         delete getCells()[wallI];
                         getCellsArray().pop();
 
@@ -788,11 +792,11 @@ console.log("Running Apos Bot!");
                     //console.log("BOTTOM");
                     var wallI = 4;
                     if (!interNodes.hasOwnProperty(wallI)) {
-                        console.log("Creating Wall");
+                        //console.log("Creating Wall");
                         var newY = 11180 + 100 + screenDistance();
-                        console.log("Got distance");
+                        //console.log("Got distance");
                         var n = f.createFake(wallI, player[0].x, newY, player[0].size * 10, "#000", false, "Bottom Wall");
-                        console.log("n ID: " + n.id);
+                        //console.log("n ID: " + n.id);
                         delete getCells()[wallI];
                         getCellsArray().pop();
 
@@ -807,12 +811,12 @@ console.log("Running Apos Bot!");
                 } else if (player[0].y > 11180 - 1000 && interNodes.hasOwnProperty(4)) {
                     delete interNodes[4];
                 }
-
                 //console.log("1) Good Angles: " + goodAngles.length + " Bad Angles: " + badAngles.length);
                 //TODO: Step 1: Write code to substract angle ranges.
                 //console.log("---");
                 var sortedInterList = [];
-
+if (times.mod(100) == 0) {console.log(Date.now()+" "+"badAngles "+badAngles);}
+                // badAngles are [[base angle, degrees range]*]
                 for (var i = 0; i < badAngles.length; i++) {
 
                     var tempGroup = seperateAngle(badAngles[i]);
@@ -821,24 +825,39 @@ console.log("Running Apos Bot!");
                     addSorted(sortedInterList, tempGroup[1]);
 
                 }
-
+if (times.mod(100) == 0) console.log(Date.now()+" "+"sortedInterList "+sortedInterList);
                 //console.log("Bad angles added!");
 
                 removeDuplicates(sortedInterList);
                 //console.log("Duplicates removed!");
+if (times.mod(100) == 0) console.log(Date.now()+" "+"sortedInterList "+sortedInterList);
 
                 goodAngles = mergeAngles(sortedInterList);
+if (times.mod(100) == 0) console.log(Date.now()+" "+"goodAngles "+goodAngles);
                 //console.log("Angles merged");
-
+                var perfectAngleI = 0;
+                if ((goodAngles.length > 0) && (allPossibleThreats.length > 0)) {
+                    var bIndex = goodAngles[0];
+                    var biggest = goodAngles[0][1];
+                    for (var i = 1; i < goodAngles.length; i++) {
+                        var size = goodAngles[i][1];
+                        if (size > biggest) {
+                            biggest = size;
+                            bIndex = goodAngles[i];
+                            perfectAngleI = i;
+                        }
+                    }
+                }
+                
                 for (var i = 0; i < goodAngles.length; i++) {
                     if (goodAngles[i][0] != goodAngles[i][1].mod(360)) {
 
                         var line1 = followAngle(goodAngles[i][0], player[0].x, player[0].y, 100 + player[0].size);
                         var line2 = followAngle((goodAngles[i][0] + goodAngles[i][1]).mod(360), player[0].x, player[0].y, 100 + player[0].size);
-                        drawLine(player[0].x, player[0].y, line1[0], line1[1], 1);
-                        drawLine(player[0].x, player[0].y, line2[0], line2[1], 1);
+                        drawLine(player[0].x, player[0].y, line1[0], line1[1], (i==perfectAngleI)?1:7);
+                        drawLine(player[0].x, player[0].y, line2[0], line2[1], (i==perfectAngleI)?1:7);
 
-                        drawArc(line1[0], line1[1], line2[0], line2[1], player[0].x, player[0].y, 1);
+                        drawArc(line1[0], line1[1], line2[0], line2[1], player[0].x, player[0].y, (i==perfectAngleI)?1:7);
 
                         //drawPoint(player[0].x, player[0].y, 2, "");
 
@@ -863,8 +882,11 @@ console.log("Running Apos Bot!");
                     //console.log("After: " + clusterAllFood[i][2]);
                 }
 
-                if ((goodAngles.length > 0)) {
-                    var bIndex = goodAngles[0];
+                if ((goodAngles.length > 0) && (allPossibleThreats.length > 0)) {
+                    var bIndex = goodAngles[perfectAngleI];
+                    var RHS = bIndex[0];
+                    var LHS = RHS+bIndex[1];
+/*
                     var biggest = goodAngles[0][1];
                     for (var i = 1; i < goodAngles.length; i++) {
                         var size = goodAngles[i][1];
@@ -873,25 +895,50 @@ console.log("Running Apos Bot!");
                             bIndex = goodAngles[i];
                         }
                     }
-                    var perfectAngle = (bIndex[0] + bIndex[1] / 2).mod(360);
-                    //console.log("perfectAngle " + perfectAngle);
+  */                  
+                    var perfectAngle = ((RHS+LHS)/2).mod(360);
 
+                    drawColor = 7;
+                    var line1 = followAngle(perfectAngle, player[0].x, player[0].y, 300);
                     // oh, sure, that's the perfect angle but can't we try to eat on the way?
+                    // if the direction line is green (1), we're hunting as we run. If it's white (7), we're just running.
                     var food = 0;
                     for (var i = 0; i < clusterAllFood.length; i++) {
-                        if ((clusterAllFood[i][3] >= (bIndex[0] + FOOD_ANGLE_TOLERANCE).mod(360)) && (clusterAllFood[i][3] <= (bIndex[1] - FOOD_ANGLE_TOLERANCE).mod(360))) {
+                        
+                        clusterBearing = clusterAllFood[i][3] + (RHS>clusterAllFood[i][3]&&LHS>359?360:0);
+                        if ((clusterBearing >= (RHS + FOOD_ANGLE_TOLERANCE)) && (clusterBearing <= (LHS - FOOD_ANGLE_TOLERANCE))) {
                             if (clusterAllFood[i][2]>food) {
-                                perfectAngle = clusterAllFood[i][3];
+                                perfectAngle = clusterBearing;
                                 food = clusterAllFood[i][2];
+                                drawColor = 1;
+                                line1[0] = clusterAllFood[i][0];
+                                line1[1] = clusterAllFood[i][1];
                             }
                         }
                     }
-                    var line1 = followAngle(perfectAngle, player[0].x, player[0].y, 300);
+                    if (drawColor == 7 && times.mod(100) == 0){
+                        console.log(Date.now()+" "+drawColor+", "+RHS+", "+perfectAngle+", "+LHS);
+                    }
+                    /*
+                    if (drawColor == 7 && times.mod(10) == 0 ) {
+                        console.log(drawColor+", "+RHS+", " + (RHS+ FOOD_ANGLE_TOLERANCE) + ", "+perfectAngle+", "+(LHS- FOOD_ANGLE_TOLERANCE)+", "+LHS ") found food: "+food);
+                        console.log("food "+clusterAllFood);
+                        times++;
+                    } else if (drawColor == 7) {
+                        console.log(times + " angle range (" + (RHS+ FOOD_ANGLE_TOLERANCE) + ", "+perfectAngle+", "+(LHS- FOOD_ANGLE_TOLERANCE)+") found food: "+food);
+                        times++
+                    }
+
+                    if ( !(times % 10)) {
+                        console.log(RHS+", "+((RHS+LHS)/2).mod(360) +", "+perfectAngle+", "+LHS);
+                    }
+*/                   
+                    times++;    
                     lastAngle = perfectAngle;
                     tempMoveX = line1[0];
                     tempMoveY = line1[1];
-                    drawColor = 7;
-                } else if ((goodAngles.length == 0) && (badAngles.length > 0)) {
+                } else if (keepRunning) {
+                    console.log("KEEP RUNNING!"); // seems never to happen....
                     var line1 = followAngle(lastAngle, player[0].x, player[0].y, 300);
                     tempMoveX = line1[0];
                     tempMoveY = line1[1];
@@ -914,6 +961,7 @@ console.log("Running Apos Bot!");
                         lastAngle = getAngle(player[0].x, player[0].y,tempMoveX, tempMoveY);
                         drawColor = 1;
                     } else {
+                        console.log("Hey, where is everybody?"); // seems never to happen....
                         var line1 = followAngle(lastAngle, player[0].x, player[0].y, 300);
                         tempMoveX = line1[0];
                         tempMoveY = line1[1];
