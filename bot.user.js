@@ -653,7 +653,7 @@ console.log("Running Apos Bot!");
                 var isMouseSafe = true;
 
                 var clusterAllFood = clusterFood(allPossibleFood, player[0].size);
-
+                var isCurrentThreat = false;
                 for (var i = 0; i < allPossibleThreats.length; i++) {
 
                     var enemyDistance = computeDistance(allPossibleThreats[i].x, allPossibleThreats[i].y, player[0].x, player[0].y);
@@ -676,9 +676,12 @@ console.log("Running Apos Bot!");
                         allPossibleThreats[i].dangerTimeOut = f.getLastUpdate();
                         keepRunning = true;
                     }
-
-                    if ((canSplit(player[0], allPossibleThreats[i]) && enemyDistance < allPossibleThreats[i].size + 710 + player[0].size) || (!canSplit(player[0], allPossibleThreats[i]) && enemyDistance < allPossibleThreats[i].size + player[0].size) || allPossibleThreats[i].danger) {
 */
+                    if ((canSplit(player[0], allPossibleThreats[i]) && enemyDistance < allPossibleThreats[i].size + 710 + player[0].size) || (!canSplit(player[0], allPossibleThreats[i]) && enemyDistance < allPossibleThreats[i].size + player[0].size) || allPossibleThreats[i].danger) {
+                        isCurrentThreat = true;
+                        
+                    }
+                    
                     {
                         var offsetX = player[0].x;
                         var offsetY = player[0].y;
@@ -815,7 +818,7 @@ console.log("Running Apos Bot!");
                 //TODO: Step 1: Write code to substract angle ranges.
                 //console.log("---");
                 var sortedInterList = [];
-if (times.mod(100) == 0) {console.log(Date.now()+" "+"badAngles "+badAngles);}
+if (isCurrentThreat) {console.log(Date.now()+" "+"badAngles "+badAngles);}
                 // badAngles are [[base angle, degrees range]*]
                 for (var i = 0; i < badAngles.length; i++) {
 
@@ -825,15 +828,15 @@ if (times.mod(100) == 0) {console.log(Date.now()+" "+"badAngles "+badAngles);}
                     addSorted(sortedInterList, tempGroup[1]);
 
                 }
-if (times.mod(100) == 0) console.log(Date.now()+" "+"sortedInterList "+sortedInterList);
+if (isCurrentThreat) console.log(Date.now()+" "+"sortedInterList "+sortedInterList);
                 //console.log("Bad angles added!");
 
                 removeDuplicates(sortedInterList);
                 //console.log("Duplicates removed!");
-if (times.mod(100) == 0) console.log(Date.now()+" "+"sortedInterList "+sortedInterList);
+if (isCurrentThreat) console.log(Date.now()+" "+"sortedInterList "+sortedInterList);
 
                 goodAngles = mergeAngles(sortedInterList);
-if (times.mod(100) == 0) console.log(Date.now()+" "+"goodAngles "+goodAngles);
+if (isCurrentThreat) console.log(Date.now()+" "+"goodAngles "+goodAngles);
                 //console.log("Angles merged");
                 var perfectAngleI = 0;
                 if ((goodAngles.length > 0) && (allPossibleThreats.length > 0)) {
@@ -916,7 +919,7 @@ if (times.mod(100) == 0) console.log(Date.now()+" "+"goodAngles "+goodAngles);
                             }
                         }
                     }
-                    if (drawColor == 7 && times.mod(100) == 0){
+                    if (isCurrentThreat){
                         console.log(Date.now()+" "+drawColor+", "+RHS+", "+perfectAngle+", "+LHS);
                     }
                     /*
