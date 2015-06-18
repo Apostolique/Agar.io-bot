@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name        AposBot
-// @namespace   AposBot
-// @include     http://agar.io/
+// @name        OrhanBozbey 
+// @namespace   OrhanBozbey
+// @include     http://agario.biz/yasy/
 // @version     3.05
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
