@@ -18,6 +18,7 @@ Array.prototype.peek = function() {
 
 console.log("Running Apos Bot!");
 (function(f, g) {
+    var splitDistance = 710;
     console.log("Apos Bot!");
 
     if (f.botList == null) {
@@ -403,7 +404,7 @@ console.log("Running Apos Bot!");
         var radius = blob2.size;
 
         if (canSplit(blob1, blob2)) {
-            radius += 710;
+            radius += splitDistance;
         } else {
             radius += blob1.size * 2;
         }
@@ -755,7 +756,7 @@ console.log("Running Apos Bot!");
             var tempMoveY = getPointY();
 
             if (player.length > 0) {
-                drawCircle(player[0].x, player[0].y, player[0].size + 710, 5);
+                drawCircle(player[0].x, player[0].y, player[0].size + splitDistance, 5);
                 //drawPoint(player[0].x, player[0].y - player[0].size, 3, "" + Math.floor(player[0].x) + ", " + Math.floor(player[0].y));
 
                 //var allDots = processEverything(interNodes);
@@ -776,10 +777,18 @@ console.log("Running Apos Bot!");
                 for (var i = 0; i < allPossibleThreats.length; i++) {
 
                     var enemyDistance = computeDistance(allPossibleThreats[i].x, allPossibleThreats[i].y, player[0].x, player[0].y);
-
+                    
+                    for (var j = 0; j < clusterAllFood.length; j++) {
+                        if (clusterAllFood[j][0] > -100000) {
+                            var secureDistance = (canSplit(player[0], allPossibleThreats[i]) ? splitDistance : player[0].size*2) + allPossibleThreats[i].size;
+                            // HACK: instead of removing from array, just move the cluster point too far.
+                            if (computeDistance(allPossibleThreats[i].x, allPossibleThreats[i].y, clusterAllFood[j][0], clusterAllFood[j][1]) < secureDistance)
+                                clusterAllFood[j][0] = clusterAllFood[j][1] = -100001;
+                        }
+                    }
 
                     if (canSplit(player[0], allPossibleThreats[i])) {
-                        drawCircle(allPossibleThreats[i].x, allPossibleThreats[i].y, allPossibleThreats[i].size + 710, 0);
+                        drawCircle(allPossibleThreats[i].x, allPossibleThreats[i].y, allPossibleThreats[i].size + splitDistance, 0);
                     } else {
                         drawCircle(allPossibleThreats[i].x, allPossibleThreats[i].y, allPossibleThreats[i].size + player[0].size + player[0].size, 3);
                     }
@@ -789,13 +798,13 @@ console.log("Running Apos Bot!");
                         allPossibleThreats[i].danger = false;
                     }
 
-                    if ((canSplit(player[0], allPossibleThreats[i]) && enemyDistance < allPossibleThreats[i].size + 710 + player[0].size) || (!canSplit(player[0], allPossibleThreats[i]) && enemyDistance < allPossibleThreats[i].size + player[0].size + player[0].size)) {
+                    if ((canSplit(player[0], allPossibleThreats[i]) && enemyDistance < allPossibleThreats[i].size + splitDistance + player[0].size) || (!canSplit(player[0], allPossibleThreats[i]) && enemyDistance < allPossibleThreats[i].size + player[0].size + player[0].size)) {
 
                         allPossibleThreats[i].danger = true;
                         allPossibleThreats[i].dangerTimeOut = f.getLastUpdate();
                     }
 
-                    if ((canSplit(player[0], allPossibleThreats[i]) && enemyDistance < allPossibleThreats[i].size + 710 + player[0].size) || (!canSplit(player[0], allPossibleThreats[i]) && enemyDistance < allPossibleThreats[i].size + player[0].size) || allPossibleThreats[i].danger) {
+                    if ((canSplit(player[0], allPossibleThreats[i]) && enemyDistance < allPossibleThreats[i].size + splitDistance + player[0].size) || (!canSplit(player[0], allPossibleThreats[i]) && enemyDistance < allPossibleThreats[i].size + player[0].size) || allPossibleThreats[i].danger) {
 
                         var offsetX = player[0].x;
                         var offsetY = player[0].y;
