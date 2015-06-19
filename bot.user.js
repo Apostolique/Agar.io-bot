@@ -14,7 +14,7 @@ Number.prototype.mod = function(n) {
 
 Array.prototype.peek = function() {
     return this[this.length - 1];
-}
+};
 
 console.log("Running Apos Bot!");
 (function(f, g) {
@@ -1025,24 +1025,26 @@ console.log("Running Apos Bot!");
                         //console.log("mefore: " + clusterAllFood[i][2]);
                         //This is the cost function. Higher is better.
 
-                        var clusterAngle = getAngle(clusterAllFood[i][0], clusterAllFood[i][1], player[0].x, player[0].y);
+                            var clusterAngle = getAngle(clusterAllFood[i][0], clusterAllFood[i][1], player[0].x, player[0].y);
 
-                        clusterAllFood[i][2] = clusterAllFood[i][2] * 6 - computeDistance(clusterAllFood[i][0], clusterAllFood[i][1], player[0].x, player[0].y);
-                        //console.log("Current Value: " + clusterAllFood[i][2]);
+                            clusterAllFood[i][2] = clusterAllFood[i][2] * 6 - computeDistance(clusterAllFood[i][0], clusterAllFood[i][1], player[0].x, player[0].y);
+                            //console.log("Current Value: " + clusterAllFood[i][2]);
 
-                        //(goodAngles[bIndex][1] / 2 - (Math.abs(perfectAngle - clusterAngle)));
+                            //(goodAngles[bIndex][1] / 2 - (Math.abs(perfectAngle - clusterAngle)));
 
-                        clusterAllFood[i][3] = clusterAngle;
+                            clusterAllFood[i][3] = clusterAngle;
 
-
-                        drawPoint(clusterAllFood[i][0], clusterAllFood[i][1], 1, "");
-                        //console.log("After: " + clusterAllFood[i][2]);
+                            // HACK: 
+                            if (clusterAllFood[i][0] > -100)
+                                drawPoint(clusterAllFood[i][0], clusterAllFood[i][1], 1, "");
+                            //console.log("After: " + clusterAllFood[i][2]);
                     }
 
                     var bestFoodI = 0;
                     var bestFood = clusterAllFood[0][2];
                     for (var i = 1; i < clusterAllFood.length; i++) {
-                        if (bestFood < clusterAllFood[i][2]) {
+                        // HACK:
+                        if (bestFood < clusterAllFood[i][2] && clusterAllFood[i][0] > -100) {
                             bestFood = clusterAllFood[i][2];
                             bestFoodI = i;
                         }
