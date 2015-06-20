@@ -190,7 +190,7 @@ console.log("Running Bot Launcher!");
       },
       success: function (a) {
         a = a.split('\n');
-        '45.79.222.79:443' == a[0] ? pa()  : Ha('ws://' + a[0])
+        '45.79.222.79:443' == a[0] ? pa()  : Ha('ws://' + a[0], a[1])
       },
       dataType: 'text',
       method: 'POST',
@@ -202,7 +202,7 @@ console.log("Running Bot Launcher!");
   function W() {
     la && v && (f('#connecting').show(), pa())
   }
-  function Ha(a) {
+  function Ha(a, hash) {
     if (r) {
       r.onopen = null;
       r.onmessage = null;
@@ -235,7 +235,27 @@ console.log("Running Bot Launcher!");
     serverIP = a;
     r = new WebSocket(a);
     r.binaryType = 'arraybuffer';
-    r.onopen = Wa;
+    r.onopen = function() {
+      var a;
+      aa = 500;
+      f('#connecting').hide();
+      console.log('socket open');
+      a = N(5);
+      a.setUint8(0, 254);
+      a.setUint32(1, 4, !0);
+      O(a);
+      a = N(5);
+      a.setUint8(0, 255);
+      a.setUint32(1, 673720361, !0);
+      O(a);
+      a = N(1 + hash.length);
+      a.setUint8(0, 80);
+      for (var c = 0; c < hash.length; ++c) {
+        a.setUint8(c + 1, hash.charCodeAt(c));
+      }
+      O(a);
+      Ia()
+    }
     r.onmessage = Xa;
     r.onclose = Ya;
     r.onerror = function () {
@@ -247,21 +267,6 @@ console.log("Running Bot Launcher!");
   }
   function O(a) {
     r.send(a.buffer)
-  }
-  function Wa() {
-    var a;
-    aa = 500;
-    f('#connecting').hide();
-    console.log('socket open');
-    a = N(5);
-    a.setUint8(0, 254);
-    a.setUint32(1, 4, !0);
-    O(a);
-    a = N(5);
-    a.setUint8(0, 255);
-    a.setUint32(1, 673720361, !0);
-    O(a);
-    Ia()
   }
   function Ya() {
     console.log('socket close');
