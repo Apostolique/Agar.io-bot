@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        Launcher
 // @namespace   AposLauncher
-// @include     http://agar.io/
+// @include     http://agario.biz/yasy/
 // @version     2.2
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
