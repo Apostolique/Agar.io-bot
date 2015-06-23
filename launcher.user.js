@@ -17,9 +17,9 @@ Array.prototype.peek = function() {
 
 $.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/launcher.user.js', function(data) {
 	var latestVersion = data.replace(/(\r\n|\n|\r)/gm,"");
-	var latestVersion = latestVersion.substring(latestVersion.lastIndexOf("// @version")+11,latestVersion.lastIndexOf("// @grant"));
+	latestVersion = latestVersion.substring(latestVersion.indexOf("// @version")+11,latestVersion.indexOf("// @grant"));
     
-	var latestVersion = parseFloat(latestVersion);
+	latestVersion = parseFloat(latestVersion);
     var myVersion = parseFloat(GM_info.script.version); 
 	
 	if(latestVersion > myVersion)
@@ -27,7 +27,7 @@ $.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/launcher
 		alert("Update Available for launcher.user.js: V" + latestVersion + "\nGet the latest version from the GitHub page.");
         window.open('https://github.com/Apostolique/Agar.io-bot/blob/master/launcher.user.js','_blank');
 	}
-	console.log('Current launcher.user.js Version: ' + myVersion);
+	console.log('Current launcher.user.js Version: ' + myVersion + " on Github: " + latestVersion);
 });
 
 console.log("Running Bot Launcher!");
