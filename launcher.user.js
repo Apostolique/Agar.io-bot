@@ -2,7 +2,7 @@
 // @name        Launcher
 // @namespace   AposLauncher
 // @include     http://agar.io/
-// @version     2.3
+// @version     2.4
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
