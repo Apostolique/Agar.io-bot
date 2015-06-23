@@ -2,7 +2,7 @@
 // @name        AposBot
 // @namespace   AposBot
 // @include     http://agar.io/
-// @version     3.06
+// @version     3.07
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -19,9 +19,9 @@ Array.prototype.peek = function() {
 
 $.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/bot.user.js', function(data) {
 	var latestVersion = data.replace(/(\r\n|\n|\r)/gm,"");
-	var latestVersion = latestVersion.substring(latestVersion.lastIndexOf("// @version")+11,latestVersion.lastIndexOf("// @grant"));
+	latestVersion = latestVersion.substring(latestVersion.indexOf("// @version") + 11, latestVersion.indexOf("// @grant"));
     
-	var latestVersion = parseFloat(latestVersion);
+	latestVersion = parseFloat(latestVersion);
     var myVersion = parseFloat(GM_info.script.version); 
 	
 	if(latestVersion > myVersion)
@@ -29,7 +29,7 @@ $.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/bot.user
 		alert("Update Available for bot.user.js: V" + latestVersion + "\nGet the latest version from the GitHub page.");
         window.open('https://github.com/Apostolique/Agar.io-bot/blob/master/bot.user.js','_blank');
 	}
-	console.log('Current bot.user.js Version: ' + myVersion);
+	console.log('Current bot.user.js Version: ' + myVersion + " on Github: " + latestVersion);
 });
 
 
@@ -639,7 +639,7 @@ console.log("Running Apos Bot!");
             var angle1 = listToUse[(i + startIndex).mod(listToUse.length)][0]; 
             var angle2 = listToUse[(i + 1 + startIndex).mod(listToUse.length)][0];
 
-            console.log("Current Index: " + (i + startIndex).mod(listToUse.length) + " angle: " + angle1 + ", " + angle2);
+            //console.log("Current Index: " + (i + startIndex).mod(listToUse.length) + " angle: " + angle1 + ", " + angle2);
 
             var segmentRange = (angle2 - angle1).mod(360);
 
@@ -686,12 +686,12 @@ console.log("Running Apos Bot!");
             }
 
             if (!endBool) {
-                console.log("Truly added end: " + endMark + " value: " + range[1]);
+                //console.log("Truly added end: " + endMark + " value: " + range[1]);
                 listToUse.splice(endMark, 0, range[1]);
                 //endMark = (endMark + 1).mod(tempLen);
             }
             if (!startBool) {
-                console.log("Truly added sta: " + startMark + " value: " + range[0]);
+                //console.log("Truly added sta: " + startMark + " value: " + range[0]);
                 listToUse.splice(startMark, 0, range[0]);
                 //startMark = (startMark + 1).mod(listToUse.length);
             }
@@ -703,56 +703,56 @@ console.log("Running Apos Bot!");
             }
 
             if (!startBool) {
-                console.log("Truly added sta: " + startMark + " value: " + range[0]);
+                //console.log("Truly added sta: " + startMark + " value: " + range[0]);
                 listToUse.splice(startMark, 0, range[0]);
                 //startMark = (startMark + 1).mod(tempLen);
             }
             if (!endBool) {
-                console.log("Truly added end: " + endMark + " value: " + range[1]);
+                //console.log("Truly added end: " + endMark + " value: " + range[1]);
                 listToUse.splice(endMark, 0, range[1]);
                 //endMark = (endMark + 1).mod(listToUse.length);
             }
         }
 
-        console.log("Okay... " + startMark + ", " + endMark + " len: " + listToUse.length + " sb:" + startBool + " eb: " + endBool);
+        //console.log("Okay... " + startMark + ", " + endMark + " len: " + listToUse.length + " sb:" + startBool + " eb: " + endBool);
 
         /*if (startBool && endBool) {
             startMark = (startMark - 1).mod(listToUse.length);
         }*/
 
         for (var i = 0; i < listToUse.length; i++) {
-            console.log("Hands are clean: " + i + " " + listToUse[i]);
+            //console.log("Hands are clean: " + i + " " + listToUse[i]);
         }
 
         var startDist = (listToUse[startMark][0] - range[0][0]).mod(360);
         var endDist = (listToUse[endMark][0] - range[1][0]).mod(360);
 
         if (startMark != endMark && listToUse.length > 2) {
-            console.log("I really should get rid of someone.");
+            //console.log("I really should get rid of someone.");
             var diff = (endMark - startMark);
 
             if (endMark > startMark) {
                 for (var i = endMark; i > (endMark - diff); i--) {
-                    console.log("#lolRekt1 " + (i).mod(listToUse.length) + " value: " + listToUse[(i).mod(listToUse.length)][0]);
+                    //console.log("#lolRekt1 " + (i).mod(listToUse.length) + " value: " + listToUse[(i).mod(listToUse.length)][0]);
                     listToUse.splice((i).mod(listToUse.length), 1);
                 }
             } else {
                 for (var i = endMark - 1; i >= 0; i--) {
-                    console.log("#lolRekt2 " + (i).mod(listToUse.length) + " value: " + listToUse[(i).mod(listToUse.length)][0]);
+                    //console.log("#lolRekt2 " + (i).mod(listToUse.length) + " value: " + listToUse[(i).mod(listToUse.length)][0]);
                     listToUse.splice((i).mod(listToUse.length), 1);
                     startMark = (startMark - 1).mod(listToUse.length);
                 }
-                console.log("Secret agent! Keep out: " + (listToUse.length - 1) + " to " + startMark);
+                //console.log("Secret agent! Keep out: " + (listToUse.length - 1) + " to " + startMark);
                 for (var i = listToUse.length - 1; i > startMark; i--) {
-                    console.log("#lolRekt3 " + (i).mod(listToUse.length) + " value: " + listToUse[(i).mod(listToUse.length)][0]);
+                    //console.log("#lolRekt3 " + (i).mod(listToUse.length) + " value: " + listToUse[(i).mod(listToUse.length)][0]);
                     listToUse.splice((i).mod(listToUse.length), 1);
                 }
             }
         } else if (startMark != endMark) {
-            console.log("startMark: " + startMark + " endMark " + endMark);
+            //console.log("startMark: " + startMark + " endMark " + endMark);
         } else if (startMark == endMark && startBool && endBool && startDist < endDist) {
             for (var i = listToUse.length - 1; i >= 0; i--) {
-                console.log("#lolRekt4 " + (i).mod(listToUse.length) + " value: " + listToUse[(i).mod(listToUse.length)][0]);
+                //console.log("#lolRekt4 " + (i).mod(listToUse.length) + " value: " + listToUse[(i).mod(listToUse.length)][0]);
                 listToUse.splice((i).mod(listToUse.length), 1);
             }
         }
@@ -971,12 +971,12 @@ console.log("Running Apos Bot!");
                 stupidList.push([[270, true], [300, false]]);
                 stupidList.push([[45, true], [20, false]]);*/
 
-                console.log("Added random noob stuff.");
+                //console.log("Added random noob stuff.");
 
                 var sortedInterList = [];
 
                 for (var i = 0; i < stupidList.length; i++) {
-                    console.log("Adding: " + stupidList[i][0][0] + ", " + stupidList[i][1][0]);
+                    //console.log("Adding: " + stupidList[i][0][0] + ", " + stupidList[i][1][0]);
                     sortedInterList = addAngle(sortedInterList, stupidList[i])
 
                     if (sortedInterList.length == 0) {
@@ -996,11 +996,11 @@ console.log("Running Apos Bot!");
                     var angle2 = sortedInterList[(i + 1 + offsetI).mod(sortedInterList.length)][0];
                     var diff = (angle2 - angle1).mod(360);
                     goodAngles.push([angle1, diff]);
-                    console.log("Yo man! Cool stuff added man! " + angle1 + ", " + diff + ", " + angle2 + " len: " + sortedInterList.length);
+                    //console.log("Yo man! Cool stuff added man! " + angle1 + ", " + diff + ", " + angle2 + " len: " + sortedInterList.length);
                 }
 
 
-                console.log("Already done? That was quick.");
+                //console.log("Already done? That was quick.");
 
                 for (var i = 0; i < goodAngles.length; i++) {
                     if (goodAngles[i][0] != goodAngles[i][1].mod(360)) {
@@ -1083,7 +1083,7 @@ console.log("Running Apos Bot!");
             }
             //console.log("MOVING RIGHT NOW!");
 
-            console.log("______Never lied ever in my life.");
+            //console.log("______Never lied ever in my life.");
 
             return [tempMoveX, tempMoveY];
         }
