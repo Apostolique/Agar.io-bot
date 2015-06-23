@@ -205,7 +205,7 @@ console.log("Running Bot Launcher!");
       },
       success: function (a) {
         a = a.split('\n');
-        '45.79.222.79:443' == a[0] ? pa()  : Ha('ws://' + a[0], a[1])
+        Ha('ws://' + a[0], a[1])
       },
       dataType: 'text',
       method: 'POST',
@@ -228,9 +228,10 @@ console.log("Running Bot Launcher!");
       }
       r = null
     }
-    var c = h.location.search.slice(1);
-    /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+:[0-9]+$/.test(c) && (a = 'ws://' + c);
-    Va && (a = a.split(':'), a = a[0] + 's://ip-' + a[1].replace(/\./g, '-').replace(/\//g, '') + '.tech.agar.io:' + ( + a[2] + 2000));
+    if (Va) {
+      var d = a.split(':');
+      a = d[0] + 's://ip-' + d[1].replace(/\./g, '-').replace(/\//g, '') + '.tech.agar.io:' + ( + d[2] + 2000)
+    }
     F = [
     ];
     m = [
@@ -261,7 +262,7 @@ console.log("Running Bot Launcher!");
       O(a);
       a = N(5);
       a.setUint8(0, 255);
-      a.setUint32(1, 673720361, !0);
+      a.setUint32(1, 154669859, !0);
       O(a);
       a = N(1 + hash.length);
       a.setUint8(0, 80);
