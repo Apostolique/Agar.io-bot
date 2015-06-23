@@ -2,7 +2,7 @@
 // @name        Launcher
 // @namespace   AposLauncher
 // @include     http://agar.io/
-// @version     2.2
+// @version     2.3
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -14,6 +14,21 @@ Number.prototype.mod = function(n) {
 Array.prototype.peek = function() {
     return this[this.length-1];
 }
+
+$.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/launcher.user.js', function(data) {
+	var latestVersion = data.replace(/(\r\n|\n|\r)/gm,"");
+	var latestVersion = latestVersion.substring(latestVersion.lastIndexOf("// @version")+11,latestVersion.lastIndexOf("// @grant"));
+    
+	var latestVersion = parseFloat(latestVersion);
+    var myVersion = parseFloat(GM_info.script.version); 
+	
+	if(latestVersion > myVersion)
+	{
+		alert("Update Available for launcher.user.js: V" + latestVersion + "\nGet the latest version from the GitHub page.");
+        window.open('https://github.com/Apostolique/Agar.io-bot/blob/master/launcher.user.js','_blank');
+	}
+	console.log('Current launcher.user.js Version: ' + myVersion);
+});
 
 console.log("Running Bot Launcher!");
 (function (h, f) {
