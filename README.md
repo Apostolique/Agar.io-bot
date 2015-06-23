@@ -17,9 +17,7 @@ http://jlynx.net/bot/
 
 Created by https://www.youtube.com/user/karter61/
 
-https://www.youtube.com/watch?v=xjGsO9GsLaM - Chrome install.
-
-https://www.youtube.com/watch?v=j13H5Pgx7mk - FireFox install.
+https://www.youtube.com/watch?v=Zvq38nmCm1s - Install Tutorial.
 
 #Hotkeys
 
