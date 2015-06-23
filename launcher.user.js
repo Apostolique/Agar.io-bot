@@ -1824,3 +1824,8 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','//www.google-analytics.com/analytics.js','apos');
 
 apos('create', 'UA-64394184-1', 'auto');
+
+//Reload the page on script errors.
+window.onerror = function() {
+    location.reload();
+};
