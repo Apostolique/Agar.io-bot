@@ -11,17 +11,17 @@ Make sure to install both bot.user.js and launcher.user.js
 There are other people working on bots, you can check the forks, as well as GamerLio's Github which uses genetic algorithms: https://github.com/leomwu/agario-bot
 
 #How to Install
+**Web Tutorial**
+
+http://jlynx.net/bot/
+
 **Videos**
 
 Created by https://www.youtube.com/user/karter61/
 
-https://www.youtube.com/watch?v=j13H5Pgx7mk - Latest install way.
-
 https://www.youtube.com/watch?v=xjGsO9GsLaM - Chrome install.
 
-Created by twitch.tv/ismite3
-
-https://www.youtube.com/watch?v=NND6nqJih3U - Full fledged instructions.
+https://www.youtube.com/watch?v=j13H5Pgx7mk - FireFox install.
 
 #Hotkeys
 
