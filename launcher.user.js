@@ -2,7 +2,7 @@
 // @name        Launcher
 // @namespace   AposLauncher
 // @include     http://agar.io/
-// @version     2.4
+// @version     2.5
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -506,9 +506,19 @@ console.log("Running Bot Launcher!");
   function K() {
 
     //UPDATE
-    if (getPlayer().length == 0) {
-        setNick(originalName);
+    if (getPlayer().length == 0 && !reviving) {
+        apos('send', 'pageview');
     }
+    
+    if (getPlayer().length == 0) {
+        console.log("Revive");
+        setNick(originalName);
+        reviving = true;
+    } else if (getPlayer().length > 0 && reviving) {
+        reviving = false;
+    }
+
+
 
     var a;
     if (ua()) {
@@ -913,6 +923,7 @@ console.log("Running Bot Launcher!");
   lifeTimer = new Date(),
   bestTime = 0,
   botIndex = 0,
+  reviving = false,
 
   ma,
   e,
@@ -1806,3 +1817,10 @@ console.log("Running Bot Launcher!");
     h.onload = Sa
   }
 }) (window, window.jQuery);
+
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','apos');
+
+apos('create', 'UA-64394184-1', 'auto');
