@@ -2,7 +2,7 @@
 // @name        Launcher
 // @namespace   AposLauncher
 // @include     http://agar.io/
-// @version     2.7
+// @version     2.8
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -515,6 +515,7 @@ console.log("Running Bot Launcher!");
         setNick(originalName);
         reviving = true;
     } else if (getPlayer().length > 0 && reviving) {
+        deaths++;
         reviving = false;
     }
 
@@ -637,7 +638,7 @@ console.log("Running Bot Launcher!");
     I = Math.max(I, db());
     //UPDATE
     sessionScore = Math.max(I, sessionScore); 
-    0 != I && (null == ia && (ia = new ja(24, '#FFFFFF', true,'#000000')), ia.u('Score: ' + ~~(I / 100) + ' || Best Score: ' + ~~(sessionScore / 100) + " || Best time alive: " + bestTime + " seconds"), c = ia.G(), a = c.width, e.globalAlpha = 0.2, e.fillStyle = '#000000', e.fillRect(10, q - 10 - 24 - 10, a + 10, 34), e.globalAlpha = 1, e.drawImage(c, 15, q - 10 - 24 - 5));
+    0 != I && (null == ia && (ia = new ja(24, '#FFFFFF', true,'#000000')), ia.u('Score: ' + ~~(I / 100) + ' || Best Score: ' + ~~(sessionScore / 100) + " || Best time alive: " + bestTime + " seconds || Deaths: " + deaths), c = ia.G(), a = c.width, e.globalAlpha = 0.2, e.fillStyle = '#000000', e.fillRect(10, q - 10 - 24 - 10, a + 10, 34), e.globalAlpha = 1, e.drawImage(c, 15, q - 10 - 24 - 5));
     eb();
     b = Date.now() - b;
     b > 1000 / 60 ? y -= 0.01 : b < 1000 /
@@ -922,6 +923,7 @@ console.log("Running Bot Launcher!");
   interNodes = [],
   lifeTimer = new Date(),
   bestTime = 0,
+  deaths = -1,
   botIndex = 0,
   reviving = false,
 
