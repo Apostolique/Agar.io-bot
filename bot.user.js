@@ -2,7 +2,7 @@
 // @name        AposBot
 // @namespace   AposBot
 // @include     http://agar.io/
-// @version     3.07
+// @version     3.06
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -19,9 +19,9 @@ Array.prototype.peek = function() {
 
 $.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/bot.user.js', function(data) {
 	var latestVersion = data.replace(/(\r\n|\n|\r)/gm,"");
-	latestVersion = latestVersion.substring(latestVersion.indexOf("// @version") + 11, latestVersion.indexOf("// @grant"));
+	var latestVersion = latestVersion.substring(latestVersion.lastIndexOf("// @version")+11,latestVersion.lastIndexOf("// @grant"));
     
-	latestVersion = parseFloat(latestVersion);
+	var latestVersion = parseFloat(latestVersion);
     var myVersion = parseFloat(GM_info.script.version); 
 	
 	if(latestVersion > myVersion)
@@ -29,7 +29,7 @@ $.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/bot.user
 		alert("Update Available for bot.user.js: V" + latestVersion + "\nGet the latest version from the GitHub page.");
         window.open('https://github.com/Apostolique/Agar.io-bot/blob/master/bot.user.js','_blank');
 	}
-	console.log('Current bot.user.js Version: ' + myVersion + " on Github: " + latestVersion);
+	console.log('Current bot.user.js Version: ' + myVersion);
 });
 
 
@@ -857,111 +857,61 @@ console.log("Running Apos Bot!");
                 }
 
                 var goodAngles = [];
+                var stupidList = [];
                 //TODO: Add wall angles here. Hardcoding temporary values.
                 if (player[0].x < 1000 && badAngles.length > 0) {
                     //LEFT
                     //console.log("Left");
-                    var wallI = 1;
-                    if (!interNodes.hasOwnProperty(wallI)) {
-                        console.log("Creating Wall");
-                        var newX = -100 - screenDistance();
-                        console.log("Got distance");
-                        var n = f.createFake(wallI, newX, player[0].y, player[0].size * 10, "#000", false, "Left Wall");
-                        console.log("n ID: " + n.id);
-                        delete getCells()[wallI];
-                        getCellsArray().pop();
 
-                        interNodes[wallI] = n;
-                        interNodes[wallI].L = getUpdate();
-                        //console.log("Added corner enemy");
-                    } else {
-                        //console.log("Update Wall!");
-                        interNodes[wallI].L = getUpdate();
-                        interNodes[wallI].y = player[0].y;
-                    }
-                } else if (player[0].x < 1000 && interNodes.hasOwnProperty(1)) {
-                    delete interNodes[1];
+                    stupidList.push([[135, true], [225, false]]);
+
+                    var lineLeft = followAngle(135, player[0].x, player[0].y, 190 + player[0].size);
+                    var lineRight = followAngle(225, player[0].x, player[0].y, 190 + player[0].size);
+                    drawLine(player[0].x, player[0].y, lineLeft[0], lineLeft[1], 5);
+                    drawLine(player[0].x, player[0].y, lineRight[0], lineRight[1], 5);
+                    drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], player[0].x, player[0].y, 5);
                 }
                 if (player[0].y < 1000 && badAngles.length > 0) {
                     //TOP
                     //console.log("TOP");
-                    var wallI = 2;
-                    if (!interNodes.hasOwnProperty(wallI)) {
-                        console.log("Creating Wall");
-                        var newY = -100 - screenDistance();
-                        console.log("Got distance");
-                        var n = f.createFake(wallI, player[0].x, newY, player[0].size * 10, "#000", false, "Top Wall");
-                        console.log("n ID: " + n.id);
-                        delete getCells()[wallI];
-                        getCellsArray().pop();
+                    
+                    stupidList.push([[225, true], [315, false]]);
 
-                        interNodes[wallI] = n;
-                        interNodes[wallI].L = getUpdate();
-                        //console.log("Added corner enemy");
-                    } else {
-                        //console.log("Update Wall!");
-                        interNodes[wallI].L = getUpdate();
-                        interNodes[wallI].x = player[0].x;
-                    }
-                } else if (player[0].y < 1000 && interNodes.hasOwnProperty(2)) {
-                    delete interNodes[2];
+                    var lineLeft = followAngle(225, player[0].x, player[0].y, 190 + player[0].size);
+                    var lineRight = followAngle(315, player[0].x, player[0].y, 190 + player[0].size);
+                    drawLine(player[0].x, player[0].y, lineLeft[0], lineLeft[1], 5);
+                    drawLine(player[0].x, player[0].y, lineRight[0], lineRight[1], 5);
+                    drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], player[0].x, player[0].y, 5);
                 }
                 if (player[0].x > 11180 - 1000 && badAngles.length > 0) {
                     //RIGHT
                     //console.log("RIGHT");
-                    var wallI = 3;
-                    if (!interNodes.hasOwnProperty(wallI)) {
-                        console.log("Creating Wall");
-                        var newX = 11180 + 100 + screenDistance();
-                        console.log("Got distance");
-                        var n = f.createFake(wallI, newX, player[0].y, player[0].size * 10, "#000", false, "Right Wall");
-                        console.log("n ID: " + n.id);
-                        delete getCells()[wallI];
-                        getCellsArray().pop();
 
-                        interNodes[wallI] = n;
-                        interNodes[wallI].L = getUpdate();
-                        //console.log("Added corner enemy");
-                    } else {
-                        //console.log("Update Wall!");
-                        interNodes[wallI].L = getUpdate();
-                        interNodes[wallI].y = player[0].y;
-                    }
-                } else if (player[0].x > 11180 - 1000 && interNodes.hasOwnProperty(3)) {
-                    delete interNodes[3];
+                    stupidList.push([[315, true], [45, false]]);
+                    
+                    var lineLeft = followAngle(315, player[0].x, player[0].y, 190 + player[0].size);
+                    var lineRight = followAngle(45, player[0].x, player[0].y, 190 + player[0].size);
+                    drawLine(player[0].x, player[0].y, lineLeft[0], lineLeft[1], 5);
+                    drawLine(player[0].x, player[0].y, lineRight[0], lineRight[1], 5);
+                    drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], player[0].x, player[0].y, 5);
                 }
                 if (player[0].y > 11180 - 1000 && badAngles.length > 0) {
                     //BOTTOM
                     //console.log("BOTTOM");
-                    var wallI = 4;
-                    if (!interNodes.hasOwnProperty(wallI)) {
-                        console.log("Creating Wall");
-                        var newY = 11180 + 100 + screenDistance();
-                        console.log("Got distance");
-                        var n = f.createFake(wallI, player[0].x, newY, player[0].size * 10, "#000", false, "Bottom Wall");
-                        console.log("n ID: " + n.id);
-                        delete getCells()[wallI];
-                        getCellsArray().pop();
 
-                        interNodes[wallI] = n;
-                        interNodes[wallI].L = getUpdate();
-                        //console.log("Added corner enemy");
-                    } else {
-                        //console.log("Update Wall!");
-                        interNodes[wallI].L = getUpdate();
-                        interNodes[wallI].x = player[0].x;
-                    }
-                } else if (player[0].y > 11180 - 1000 && interNodes.hasOwnProperty(4)) {
-                    delete interNodes[4];
+                    stupidList.push([[45, true], [135, false]]);
+                    
+                    var lineLeft = followAngle(45, player[0].x, player[0].y, 190 + player[0].size);
+                    var lineRight = followAngle(135, player[0].x, player[0].y, 190 + player[0].size);
+                    drawLine(player[0].x, player[0].y, lineLeft[0], lineLeft[1], 5);
+                    drawLine(player[0].x, player[0].y, lineRight[0], lineRight[1], 5);
+                    drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], player[0].x, player[0].y, 5);
                 }
-
-                var stupidList = [];
 
                 for (var i = 0; i < badAngles.length; i++) {
                     var angle1 = badAngles[i][0];
                     var angle2 = rangeToAngle(badAngles[i]);
                     stupidList.push([[angle1, true], [angle2, false]]);
-
                 }
 
                 /*stupidList.push([[0, true], [90, false]]);
