@@ -2,7 +2,7 @@
 // @name        AposBot
 // @namespace   AposBot
 // @include     http://agar.io/
-// @version     3.07
+// @version     3.08
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -21,8 +21,8 @@ $.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/bot.user
 	var latestVersion = data.replace(/(\r\n|\n|\r)/gm,"");
 	var latestVersion = latestVersion.substring(latestVersion.lastIndexOf("// @version")+11,latestVersion.lastIndexOf("// @grant"));
     
-	var latestVersion = parseFloat(latestVersion);
-    var myVersion = parseFloat(GM_info.script.version); 
+	var latestVersion = parseFloat(latestVersion + 0.0000);
+    	var myVersion = parseFloat(GM_info.script.version + 0.0000); 
 	
 	if(latestVersion > myVersion)
 	{
