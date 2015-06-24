@@ -8,34 +8,33 @@
 // ==/UserScript==
 
 
-Number.prototype.mod = function(n) {
+Number.prototype.mod = function (n) {
     return ((this % n) + n) % n;
 };
 
-Array.prototype.peek = function() {
+Array.prototype.peek = function () {
     return this[this.length - 1];
 };
 
 
-$.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/bot.user.js?1', function(data) {
-    var latestVersion = data.replace(/(\r\n|\n|\r)/gm,"");
-    latestVersion = latestVersion.substring(latestVersion.indexOf("// @version")+11,latestVersion.indexOf("// @grant"));
+$.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/bot.user.js?1', function (data) {
+    var latestVersion = data.replace(/(\r\n|\n|\r)/gm, "");
+    latestVersion = latestVersion.substring(latestVersion.indexOf("// @version") + 11, latestVersion.indexOf("// @grant"));
 
     latestVersion = parseFloat(latestVersion + 0.0000);
-    var myVersion = parseFloat(GM_info.script.version + 0.0000); 
-	
-	if(latestVersion > myVersion)
-	{
-		alert("Update Available for bot.user.js: V" + latestVersion + "\nGet the latest version from the GitHub page.");
-        window.open('https://github.com/Apostolique/Agar.io-bot/blob/master/bot.user.js','_blank');
-	}
-	console.log('Current bot.user.js Version: ' + myVersion + " on Github: " + latestVersion);
+    var myVersion = parseFloat(GM_info.script.version + 0.0000);
+
+    if (latestVersion > myVersion) {
+        alert("Update Available for bot.user.js: V" + latestVersion + "\nGet the latest version from the GitHub page.");
+        window.open('https://github.com/Apostolique/Agar.io-bot/blob/master/bot.user.js', '_blank');
+    }
+    console.log('Current bot.user.js Version: ' + myVersion + " on Github: " + latestVersion);
 });
 
 
 
 console.log("Running Apos Bot!");
-(function(f, g) {
+(function (f, g) {
     var splitDistance = 710;
     console.log("Apos Bot!");
 
@@ -48,7 +47,7 @@ console.log("Running Apos Bot!");
     f.botList.push(["AposBot", findDestination]);
 
     var bList = g('#bList');
-    g('<option />', {value: (f.botList.length - 1), text: "AposBot"}).appendTo(bList);
+    g('<option />', { value: (f.botList.length - 1), text: "AposBot" }).appendTo(bList);
 
     //Given an angle value that was gotten from valueAndleBased(),
     //returns a new value that scales it appropriately.
@@ -96,7 +95,7 @@ console.log("Running Apos Bot!");
     function getListBasedOnFunction(booleanFunction, listToUse) {
         var dotList = [];
         var interNodes = getMemoryCells();
-        Object.keys(listToUse).forEach(function(element, index) {
+        Object.keys(listToUse).forEach(function (element, index) {
             if (booleanFunction(element)) {
                 dotList.push(interNodes[element]);
             }
@@ -118,7 +117,7 @@ console.log("Running Apos Bot!");
     }
 
     function processEverything(listToUse) {
-        Object.keys(listToUse).forEach(function(element, index) {
+        Object.keys(listToUse).forEach(function (element, index) {
             computeAngleRanges(listToUse[element], getPlayer()[0]);
         });
     }
@@ -130,7 +129,7 @@ console.log("Running Apos Bot!");
         var interNodes = getMemoryCells();
 
         if (player.length == 1) {
-            dotList = getListBasedOnFunction(function(element) {
+            dotList = getListBasedOnFunction(function (element) {
                 //Check this see if this is still right.
                 if (interNodes[element].d && compareSize(interNodes[element], player[0], 1.10) && !compareSize(interNodes[element], player[0], 1.15)) {
                     return true;
@@ -147,7 +146,7 @@ console.log("Running Apos Bot!");
         var player = getPlayer();
         var interNodes = getMemoryCells();
 
-        dotList = getListBasedOnFunction(function(element) {
+        dotList = getListBasedOnFunction(function (element) {
             var isMe = false;
 
             for (var i = 0; i < player.length; i++) {
@@ -173,7 +172,7 @@ console.log("Running Apos Bot!");
         var player = getPlayer();
         var interNodes = getMemoryCells();
 
-        dotList = getListBasedOnFunction(function(element) {
+        dotList = getListBasedOnFunction(function (element) {
             var isMe = false;
 
             for (var i = 0; i < player.length; i++) {
@@ -202,7 +201,7 @@ console.log("Running Apos Bot!");
         var player = getPlayer();
         var interNodes = getMemoryCells();
 
-        elementList = getListBasedOnFunction(function(element) {
+        elementList = getListBasedOnFunction(function (element) {
             var isMe = false;
 
             for (var i = 0; i < player.length; i++) {
@@ -490,7 +489,7 @@ console.log("Running Apos Bot!");
         if (blob.y < 1000) {
             //TOP
             //console.log("TOP");
-            
+
             listToUse.push([[225, true], [315, false]]);
 
             var lineLeft = followAngle(225, blob.x, blob.y, 190 + blob.size);
@@ -504,7 +503,7 @@ console.log("Running Apos Bot!");
             //console.log("RIGHT");
 
             listToUse.push([[315, true], [45, false]]);
-            
+
             var lineLeft = followAngle(315, blob.x, blob.y, 190 + blob.size);
             var lineRight = followAngle(45, blob.x, blob.y, 190 + blob.size);
             drawLine(blob.x, blob.y, lineLeft[0], lineLeft[1], 5);
@@ -516,7 +515,7 @@ console.log("Running Apos Bot!");
             //console.log("BOTTOM");
 
             listToUse.push([[45, true], [135, false]]);
-            
+
             var lineLeft = followAngle(45, blob.x, blob.y, 190 + blob.size);
             var lineRight = followAngle(135, blob.x, blob.y, 190 + blob.size);
             drawLine(blob.x, blob.y, lineLeft[0], lineLeft[1], 5);
@@ -530,7 +529,7 @@ console.log("Running Apos Bot!");
     //listToUse contains angles in the form of [angle, boolean].
     //boolean is true when the range is starting. False when it's ending.
     //range = [[angle1, true], [angle2, false]]
-    
+
     function getAngleIndex(listToUse, angle) {
         if (listToUse.length == 0) {
             return 0;
@@ -544,7 +543,7 @@ console.log("Running Apos Bot!");
 
         return listToUse.length;
     }
-    
+
     function addAngle(listToUse, range) {
         //#1 Find first open element
         //#2 Try to add range1 to the list. If it is within other range, don't add it, set a boolean.
@@ -573,7 +572,7 @@ console.log("Running Apos Bot!");
                 biggerList = 1;
             }
 
-            for (var i = startMark; i < startMark + (endMark - startMark).mod(listToUse.length + biggerList); i++) {
+            for (var i = startMark; i < startMark + (endMark - startMark).mod(listToUse.length + biggerList) ; i++) {
                 removeList.push((i).mod(listToUse.length));
             }
         } else if (startMark < listToUse.length && endMark < listToUse.length) {
@@ -587,7 +586,7 @@ console.log("Running Apos Bot!");
             }
         }
 
-        removeList.sort(function(a, b){return b-a});
+        removeList.sort(function (a, b) { return b - a });
 
         for (var i = 0; i < removeList.length; i++) {
             listToUse.splice(removeList[i], 1);
@@ -638,10 +637,10 @@ console.log("Running Apos Bot!");
                 for (var i = 0; i < allPossibleThreats.length; i++) {
 
                     var enemyDistance = computeDistance(allPossibleThreats[i].x, allPossibleThreats[i].y, player[0].x, player[0].y);
-                    
+
                     for (var j = 0; j < clusterAllFood.length; j++) {
                         if (clusterAllFood[j][0] > -100000) {
-                            var secureDistance = (canSplit(player[0], allPossibleThreats[i]) ? splitDistance : player[0].size*2) + allPossibleThreats[i].size;
+                            var secureDistance = (canSplit(player[0], allPossibleThreats[i]) ? splitDistance : player[0].size * 2) + allPossibleThreats[i].size;
                             // HACK: instead of removing from array, just move the cluster point too far.
                             if (computeDistance(allPossibleThreats[i].x, allPossibleThreats[i].y, clusterAllFood[j][0], clusterAllFood[j][1]) < secureDistance)
                                 clusterAllFood[j][0] = clusterAllFood[j][1] = -100001;
@@ -781,19 +780,19 @@ console.log("Running Apos Bot!");
                         //console.log("mefore: " + clusterAllFood[i][2]);
                         //This is the cost function. Higher is better.
 
-                            var clusterAngle = getAngle(clusterAllFood[i][0], clusterAllFood[i][1], player[0].x, player[0].y);
+                        var clusterAngle = getAngle(clusterAllFood[i][0], clusterAllFood[i][1], player[0].x, player[0].y);
 
-                            clusterAllFood[i][2] = clusterAllFood[i][2] * 6 - computeDistance(clusterAllFood[i][0], clusterAllFood[i][1], player[0].x, player[0].y);
-                            //console.log("Current Value: " + clusterAllFood[i][2]);
+                        clusterAllFood[i][2] = clusterAllFood[i][2] * 6 - computeDistance(clusterAllFood[i][0], clusterAllFood[i][1], player[0].x, player[0].y);
+                        //console.log("Current Value: " + clusterAllFood[i][2]);
 
-                            //(goodAngles[bIndex][1] / 2 - (Math.abs(perfectAngle - clusterAngle)));
+                        //(goodAngles[bIndex][1] / 2 - (Math.abs(perfectAngle - clusterAngle)));
 
-                            clusterAllFood[i][3] = clusterAngle;
+                        clusterAllFood[i][3] = clusterAngle;
 
-                            // HACK: 
-                            if (clusterAllFood[i][0] > -100)
-                                drawPoint(clusterAllFood[i][0], clusterAllFood[i][1], 1, "");
-                            //console.log("After: " + clusterAllFood[i][2]);
+                        // HACK: 
+                        if (clusterAllFood[i][0] > -100)
+                            drawPoint(clusterAllFood[i][0], clusterAllFood[i][1], 1, "");
+                        //console.log("After: " + clusterAllFood[i][2]);
                     }
 
                     var bestFoodI = 0;
