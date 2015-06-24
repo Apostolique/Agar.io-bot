@@ -19,9 +19,9 @@ Array.prototype.peek = function() {
 
 $.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/bot.user.js', function(data) {
 	var latestVersion = data.replace(/(\r\n|\n|\r)/gm,"");
-	var latestVersion = latestVersion.substring(latestVersion.lastIndexOf("// @version")+11,latestVersion.lastIndexOf("// @grant"));
-    
-	var latestVersion = parseFloat(latestVersion + 0.0000);
+	latestVersion = latestVersion.substring(latestVersion.indexOf("// @version")+11,latestVersion.indexOf("// @grant"));
+
+	latestVersion = parseFloat(latestVersion + 0.0000);
     	var myVersion = parseFloat(GM_info.script.version + 0.0000); 
 	
 	if(latestVersion > myVersion)
