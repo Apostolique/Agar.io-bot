@@ -2,7 +2,7 @@
 // @name        Launcher
 // @namespace   AposLauncher
 // @include     http://agar.io/
-// @version     2.71
+// @version     2.8
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -19,8 +19,8 @@ $.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/launcher
 	var latestVersion = data.replace(/(\r\n|\n|\r)/gm,"");
 	latestVersion = latestVersion.substring(latestVersion.indexOf("// @version")+11,latestVersion.indexOf("// @grant"));
     
-	latestVersion = parseFloat(latestVersion);
-    var myVersion = parseFloat(GM_info.script.version); 
+	latestVersion = parseFloat(latestVersion + 0.0000);
+    	var myVersion = parseFloat(GM_info.script.version + 0.0000); 
 	
 	if(latestVersion > myVersion)
 	{
