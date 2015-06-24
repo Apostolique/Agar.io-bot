@@ -915,7 +915,7 @@ console.log("Running Bot Launcher!");
   dArc = [],
   dText = [],
   lines = [],
-  names = ["NotReallyABot"],
+  names = ["2ch.hk", "4chan", "8", "8ch", "9gag", "argentina", "australia", "austria", "ayy lmao", "bait", "bangladesh", "belarus", "belgium", "bosnia", "botswana", "brazil", "bulgaria", "byzantium", "cambodia", "canada", "chile", "china", "cia", "confederate", "croatia", "denmark", "doge", "ea", "earth", "estonia", "european union", "facepunch", "feminism", "finland", "france", "french kingdom", "german empire", "germany", "greece", "hitler", "hong kong", "hungary", "imperial japan", "india", "indiana", "indonesia", "iran", "iraq", "ireland", "italy", "jamaica", "japan", "kc", "latvia", "lithuania", "luxembourg", "maldivas", "mars", "matriarchy", "mexico", "moon", "nasa", "nazi*", "netherlands", "nigeria", "north korea", "norway", "origin", "pakistan", "patriarchy", "peru", "piccolo", "pokerface", "poland", "portugal", "prodota", "prussia", "qing dynasty", "quebec", "reddit", "romania", "russia", "sanik", "satanist", "scotland", "sealand", "sir", "somalia", "south korea", "spain", "stalin", "steam", "stussy", "sweden", "switzerland", "taiwan", "texas", "thailand", "tsarist russia", "tumblr", "turkey", "ukraine", "united kingdom", "usa", "ussr", "vinesauce", "wojak", "yaranaika"],
   originalName = names[Math.floor(Math.random() * names.length)],
   sessionScore = 0,
   serverIP = "",
