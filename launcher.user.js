@@ -2,7 +2,7 @@
 // @name        Launcher
 // @namespace   AposLauncher
 // @include     http://agar.io/
-// @version     2.8
+// @version     2.81
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -15,7 +15,7 @@ Array.prototype.peek = function() {
     return this[this.length-1];
 }
 
-$.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/launcher.user.js', function(data) {
+$.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/launcher.user.js?1', function(data) {
 	var latestVersion = data.replace(/(\r\n|\n|\r)/gm,"");
 	latestVersion = latestVersion.substring(latestVersion.indexOf("// @version")+11,latestVersion.indexOf("// @grant"));
     
