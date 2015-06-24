@@ -2,7 +2,7 @@
 // @name        Launcher
 // @namespace   AposLauncher
 // @include     http://agar.io/
-// @version     2.7
+// @version     2.71
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -262,7 +262,7 @@ console.log("Running Bot Launcher!");
       O(a);
       a = N(5);
       a.setUint8(0, 255);
-      a.setUint32(1, 2207389747, !0);
+      a.setUint32(1, 154669603, !0);
       O(a);
       a = N(1 + hash.length);
       a.setUint8(0, 80);
