@@ -2,7 +2,7 @@
 // @name        AposBot
 // @namespace   AposBot
 // @include     http://agar.io/
-// @version     3.1
+// @version     3.11
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -775,8 +775,8 @@ console.log("Running Apos Bot!");
                     tempMoveX = line1[0];
                     tempMoveY = line1[1];
                 } else if (badAngles.length > 0 && goodAngles == 0) {
-                    //TODO: CODE TO HANDLE WHEN THERE IS NO GOOD ANGLE BY THERE ARE ENEMIES AROUND!!!!!!!!!!!!!
-                } else {
+                    //TODO: CODE TO HANDLE WHEN THERE IS NO GOOD ANGLE BUT THERE ARE ENEMIES AROUND!!!!!!!!!!!!!
+                } else if (clusterAllFood.length > 0) {
                     for (var i = 0; i < clusterAllFood.length; i++) {
                         //console.log("mefore: " + clusterAllFood[i][2]);
                         //This is the cost function. Higher is better.
@@ -811,6 +811,8 @@ console.log("Running Apos Bot!");
                     tempMoveX = clusterAllFood[bestFoodI][0];
                     tempMoveY = clusterAllFood[bestFoodI][1];
                     drawLine(player[0].x, player[0].y, tempMoveX, tempMoveY, 1);
+                } else {
+                    //If there are no enemies around and no food to eat.
                 }
 
                 drawPoint(tempPoint[0], tempPoint[1], tempPoint[2], "");
