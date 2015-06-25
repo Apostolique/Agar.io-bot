@@ -2,7 +2,7 @@
 // @name        AposBot
 // @namespace   AposBot
 // @include     http://agar.io/
-// @version     3.12
+// @version     3.13
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -475,7 +475,7 @@ console.log("Running Apos Bot!");
     }
 
     function addWall(listToUse, blob) {
-        if (blob.x < 1000) {
+        if (blob.x < f.getMapStartX() + 1000) {
             //LEFT
             //console.log("Left");
 
@@ -487,7 +487,7 @@ console.log("Running Apos Bot!");
             drawLine(blob.x, blob.y, lineRight[0], lineRight[1], 5);
             drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
         }
-        if (blob.y < 1000) {
+        if (blob.y < f.getMapStartY() + 1000) {
             //TOP
             //console.log("TOP");
             
@@ -499,7 +499,7 @@ console.log("Running Apos Bot!");
             drawLine(blob.x, blob.y, lineRight[0], lineRight[1], 5);
             drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
         }
-        if (blob.x > 11180 - 1000) {
+        if (blob.x > f.getMapEndX() - 1000) {
             //RIGHT
             //console.log("RIGHT");
 
@@ -511,7 +511,7 @@ console.log("Running Apos Bot!");
             drawLine(blob.x, blob.y, lineRight[0], lineRight[1], 5);
             drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
         }
-        if (blob.y > 11180 - 1000) {
+        if (blob.y > f.getMapEndY() - 1000) {
             //BOTTOM
             //console.log("BOTTOM");
 
