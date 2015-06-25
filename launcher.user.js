@@ -2,7 +2,7 @@
 // @name        Launcher
 // @namespace   AposLauncher
 // @include     http://agar.io/
-// @version     2.81
+// @version     2.82
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -18,9 +18,9 @@ Array.prototype.peek = function() {
 $.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/launcher.user.js?1', function(data) {
 	var latestVersion = data.replace(/(\r\n|\n|\r)/gm,"");
 	latestVersion = latestVersion.substring(latestVersion.indexOf("// @version")+11,latestVersion.indexOf("// @grant"));
-    
+
 	latestVersion = parseFloat(latestVersion + 0.0000);
-    	var myVersion = parseFloat(GM_info.script.version + 0.0000); 
+    var myVersion = parseFloat(GM_info.script.version + 0.0000); 
 	
 	if(latestVersion > myVersion)
 	{
@@ -48,6 +48,17 @@ console.log("Running Bot Launcher!");
     }
     if (70 == e.keyCode) {
       window.setShowMass(!getMassBool());
+    }
+    if (69 == e.keyCode) {
+        if (message.length > 0) {
+            window.setMessage([]);
+            window.onmouseup = function () {
+            };
+            window.ignoreStream = true;
+        } else {
+            window.ignoreStream = false;
+            window.refreshTwitch();
+        }
     }
   }
 
@@ -506,7 +517,8 @@ console.log("Running Bot Launcher!");
   function K() {
 
     //UPDATE
-    if (getPlayer().length == 0 && !reviving) {
+    if (getPlayer().length == 0 && !reviving && ~~(getCurrentScore() / 100) > 0) {
+        console.log("Dead: " + ~~(getCurrentScore() / 100));
         apos('send', 'pageview');
     }
     
@@ -789,6 +801,7 @@ console.log("Running Bot Launcher!");
     d.restore();
   }
   function drawStats(d) {
+    d.save()
     var currentDate = new Date();
 
     var nbSeconds = 0;
@@ -817,6 +830,39 @@ console.log("Running Bot Launcher!");
       d.drawImage(textRender, 20, offsetValue);
       offsetValue += textRender.height;
     }
+
+    if (message.length > 0) {
+        var mRender = [];
+        var mWidth = 0;
+        var mHeight = 0;
+
+        for (var i = 0; i < message.length; i++) {
+            var mText = new ja(28, '#FF0000', true,'#000000');
+            mText.u(message[i]);
+            mRender.push(mText.G());
+
+            if (mRender[i].width > mWidth) {
+                mWidth = mRender[i].width;
+            }
+            mHeight += mRender[i].height;
+        }
+
+        var mX = getWidth() / 2 - mWidth / 2;
+        var mY = 20;
+
+        d.globalAlpha = 0.4;
+        d.fillStyle = '#000000';
+        d.fillRect(mX - 10, mY - 10, mWidth + 20, mHeight + 20);
+        d.globalAlpha = 1;
+
+        var mOffset = mY;
+        for (var i = 0; i < mRender.length; i++) {
+            d.drawImage(mRender[i], getWidth() / 2 - mRender[i].width / 2, mOffset);
+            mOffset += mRender[i].height;
+        }
+    }
+
+    d.restore();
   }
 
   function cb() {
@@ -924,6 +970,7 @@ console.log("Running Bot Launcher!");
   bestTime = 0,
   botIndex = 0,
   reviving = false,
+  message = [],
 
   ma,
   e,
@@ -1416,12 +1463,32 @@ console.log("Running Bot Launcher!");
       return U;
     }
 
+    window.getMapStartX = function() {
+      return da;
+    }
+
+    window.getMapStartY = function() {
+      return ea;
+    }
+
+    window.getMapEndX = function() {
+      return fa;
+    }
+
+    window.getMapEndY = function() {
+      return ga;
+    }
+
     window.getScreenDistance = function() {
       var temp = screenDistance();
       return temp;
     }
     window.getLastUpdate = function() {
       return G;
+    }
+
+    window.getCurrentScore = function() {
+        return I;
     }
 
     window.setPoint = function(x, y) {
@@ -1450,6 +1517,10 @@ console.log("Running Bot Launcher!");
     window.setBotIndex = function(a) {
       console.log("Changing bot");
       botIndex = a;
+    }
+
+    window.setMessage = function(a) {
+        message = a;
     }
 
     var aa = 500,
@@ -1824,3 +1895,32 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','//www.google-analytics.com/analytics.js','apos');
 
 apos('create', 'UA-64394184-1', 'auto');
+apos('send', 'pageview');
+
+window.ignoreStream = false,
+window.refreshTwitch = function() {
+    $.ajax({
+          url: "https://api.twitch.tv/kraken/streams/apostolique",
+          cache: false,
+          dataType: "jsonp"
+        }).done(function (data) {
+            if (data["stream"] == null) { 
+                //console.log("Apostolique is not online!");
+                window.setMessage([]);
+                window.onmouseup = function () {
+                };
+                window.ignoreStream = false;
+            } else {
+                //console.log("Apostolique is online!");
+                if (!window.ignoreStream) {
+                    window.setMessage(["twitch.tv/apostolique is online right now!", "Click the screen to open the stream!", "Press E to ignore."]);
+                    window.onmouseup = function () {
+                        window.open("http://www.twitch.tv/apostolique");
+                    };
+                }
+            }
+        }).fail(function () {
+        });
+};
+setInterval(window.refreshTwitch, 60000);
+window.refreshTwitch();
