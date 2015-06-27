@@ -440,13 +440,13 @@ console.log("Running Apos Bot!");
         var a = Math.asin(radius / dd);
         var b = Math.atan2(dy, dx);
 
-        var t = b - a
+        var t = b - a;
         var ta = {
             x: radius * Math.sin(t),
             y: radius * -Math.cos(t)
         };
 
-        t = b + a
+        t = b + a;
         var tb = {
             x: radius * -Math.sin(t),
             y: radius * Math.cos(t)
@@ -777,7 +777,7 @@ console.log("Running Apos Bot!");
 
                     for (var i = 0; i < stupidList.length; i++) {
                         //console.log("Adding to sorted: " + stupidList[i][0][0] + ", " + stupidList[i][1][0]);
-                        sortedInterList = addAngle(sortedInterList, stupidList[i])
+                        sortedInterList = addAngle(sortedInterList, stupidList[i]);
 
                         if (sortedInterList.length == 0) {
                             break;
@@ -785,7 +785,7 @@ console.log("Running Apos Bot!");
                     }
 
                     for (var i = 0; i < obstacleList.length; i++) {
-                        sortedObList = addAngle(sortedObList, obstacleList[i])
+                        sortedObList = addAngle(sortedObList, obstacleList[i]);
 
                         if (sortedObList.length == 0) {
                             break;
@@ -932,7 +932,7 @@ console.log("Running Apos Bot!");
     }
 
     function screenToGameY(y) {
-        return (y - getHeight() / 2) / getRatio() + getY();;
+        return (y - getHeight() / 2) / getRatio() + getY();
     }
 
     function drawPoint(x_1, y_1, drawColor, text) {
