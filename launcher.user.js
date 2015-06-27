@@ -952,6 +952,17 @@ console.log("Running Bot Launcher!");
   var $ = h.location.protocol,
   Va = 'https:' == $,
 
+function readCookie(name) {
+	var nameEQ = name + "=";
+	var ca = document.cookie.split(';');
+	for(var i=0;i < ca.length;i++) {
+		var c = ca[i];
+		while (c.charAt(0)==' ') c = c.substring(1,c.length);
+		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+	}
+	return null;
+}
+
   //UPDATE
   toggle = false,
   toggleDraw = false,
@@ -963,11 +974,19 @@ console.log("Running Bot Launcher!");
   lines = [],
   names = ["NotReallyABot"],
   originalName = names[Math.floor(Math.random() * names.length)],
-  sessionScore = 0,
+  if (typeof readCookie('sessionScore') == 'undefined') {
+    sessionScore = 0,
+  } else {
+    sessionScore = readCookie('sessionScore'),
+  }
   serverIP = "",
   interNodes = [],
   lifeTimer = new Date(),
-  bestTime = 0,
+  if (typeof readCookie('bestTime') == 'undefined') {
+    bestTime = 0,
+  } else {
+    bestTime = readCookie('bestTime'),
+  }
   botIndex = 0,
   reviving = false,
   message = [],
@@ -1503,10 +1522,12 @@ console.log("Running Bot Launcher!");
 
     window.setScore = function(a) {
       sessionScore = a * 100;
+      document.cookie="sessionScore=" + sessionScore;
     }
 
     window.setBestTime = function(a) {
       bestTime = a;
+      document.cookie="bestTime=" + bestTime;
     }
 
     window.best = function(a, b) {
