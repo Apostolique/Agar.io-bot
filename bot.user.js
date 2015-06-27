@@ -9,7 +9,7 @@
 
 
 Number.prototype.mod = function(n) {
-    return ((this % n) + n) % n;
+    return this % n;
 };
 
 Array.prototype.peek = function() {
