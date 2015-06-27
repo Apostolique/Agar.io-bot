@@ -137,12 +137,10 @@ console.log("Running Apos Bot!");
                 }
             }
 
-            for (var i = 0; i < player.length; i++) {
-                if (!isMe) {
-                    return true;
-                }
-                return false;
+            if (!isMe) {
+                return true;
             }
+            return false;
         }, interNodes);
 
         return dotList;
