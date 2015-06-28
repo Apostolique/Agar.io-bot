@@ -2,7 +2,7 @@
 // @name        Launcher
 // @namespace   AposLauncher
 // @include     http://agar.io/
-// @version     2.84
+// @version     2.85
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -822,7 +822,7 @@ console.log("Running Bot Launcher!");
     debugStrings.push("Current Bot: " + window.botList[botIndex][0]);
     debugStrings.push("T - Bot: " + (!toggle ? "On" : "Off"));
     debugStrings.push("R - Lines: " + (!toggleDraw ? "On" : "Off"));
-    debugStrings.push("Q - Follow Mouse: " + (!toggleFollow ? "On" : "Off"));
+    debugStrings.push("Q - Follow Mouse: " + (toggleFollow ? "On" : "Off"));
     debugStrings.push("Server: " + serverIP);
     debugStrings.push("Survived for: " + nbSeconds + " seconds");
 
@@ -1916,7 +1916,7 @@ window.refreshTwitch = function() {
           cache: false,
           dataType: "jsonp"
         }).done(function (data) {
-            /*if (data["stream"] == null) { 
+            if (data["stream"] == null) { 
                 //console.log("Apostolique is not online!");
                 window.setMessage([]);
                 window.onmouseup = function () {
@@ -1930,7 +1930,7 @@ window.refreshTwitch = function() {
                         window.open("http://www.twitch.tv/apostolique");
                     };
                 }
-            }*/
+            }
         }).fail(function () {
         });
 };
