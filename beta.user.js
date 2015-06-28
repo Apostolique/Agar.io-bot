@@ -1,11 +1,11 @@
 // ==UserScript==
-// @name        AposBotBeta
-// @namespace   AposBotBeta
+// @name        Tayfa Bot
+// @namespace   Tayfa Bot
 // @include     http://agar.io/
 // @version     3.4
 // @grant       none
-// @author      http://www.twitch.tv/apostolique
-// ==/UserScript==
+// @author      Isa Samet (Modifier)
+/ ==/UserScript==
 
 
 Number.prototype.mod = function(n) {
@@ -16,7 +16,7 @@ Array.prototype.peek = function() {
     return this[this.length - 1];
 };
 
-$.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/bot.user.js?1', function(data) {
+$.get('https://raw.githubusercontent.com/badmaan/Agar.io-bot/master/bot.user.js?1', function(data) {
     var latestVersion = data.replace(/(\r\n|\n|\r)/gm,"");
     latestVersion = latestVersion.substring(latestVersion.indexOf("// @version")+11,latestVersion.indexOf("// @grant"));
 
@@ -26,17 +26,17 @@ $.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/bot.user
 	if(latestVersion > myVersion)
 	{
 		alert("Update Available for bot.user.js: V" + latestVersion + "\nGet the latest version from the GitHub page.");
-        window.open('https://github.com/Apostolique/Agar.io-bot/blob/master/bot.user.js','_blank');
+        window.open('https://github.com/badmaan/Agar.io-bot/blob/master/bot.user.js','_blank');
 	}
 	console.log('Current bot.user.js Version: ' + myVersion + " on Github: " + latestVersion);
 });
 
 
 
-console.log("Running Apos Bot!");
+console.log("Running Tayfa Bot!");
 (function(f, g) {
     var splitDistance = 710;
-    console.log("Apos Bot!");
+    console.log("Tayfa Bot!");
 
     if (f.botList == null) {
         f.botList = [];
@@ -44,10 +44,10 @@ console.log("Running Apos Bot!");
         g('#locationUnknown').addClass('form-group');
     }
 
-    f.botList.push(["AposBotBeta", findDestination]);
+    f.botList.push(["TayfaBot", findDestination]);
 
     var bList = g('#bList');
-    g('<option />', {value: (f.botList.length - 1), text: "AposBotBeta"}).appendTo(bList);
+    g('<option />', {value: (f.botList.length - 1), text: "TayfaBot"}).appendTo(bList);
 
     //Given an angle value that was gotten from valueAndleBased(),
     //returns a new value that scales it appropriately.
