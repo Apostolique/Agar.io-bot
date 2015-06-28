@@ -2,7 +2,7 @@
 // @name        AposBot
 // @namespace   AposBot
 // @include     http://agar.io/
-// @version     3.3
+// @version     3.31
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -657,7 +657,7 @@ console.log("Running Apos Bot!");
         return angle;
     }
 
-    function findDestination() {
+    function findDestination(followMouse) {
         var player = getPlayer();
         var interNodes = getMemoryCells();
 
