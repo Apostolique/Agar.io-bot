@@ -2,7 +2,7 @@
 // @name        Launcher
 // @namespace   AposLauncher
 // @include     http://agar.io/
-// @version     2.85
+// @version     2.86
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -28,6 +28,12 @@ $.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/launcher
         window.open('https://github.com/Apostolique/Agar.io-bot/blob/master/launcher.user.js','_blank');
 	}
 	console.log('Current launcher.user.js Version: ' + myVersion + " on Github: " + latestVersion);
+});
+
+//Get Skin username list
+var skins = "";
+$.get('http://jlynx.net/bot/donator/list/?1', function(data) {
+	skins = data;
 });
 
 console.log("Running Bot Launcher!");
@@ -1718,7 +1724,7 @@ console.log("Running Bot Launcher!");
           }
           e.closePath();
           c = this.name.toLowerCase();
-          !this.j && Oa && ':teams' != M ? - 1 != ya.indexOf(c) ? (J.hasOwnProperty(c) || (J[c] = new Image, J[c].src = 'skins/' + c + '.png'), b = 0 != J[c].width && J[c].complete ? J[c] : null)  : b = null : b = null;
+          !this.j && Oa && ':teams' != M ? - 1 != skins.indexOf(c) ? (J.hasOwnProperty(c) || (J[c] = new Image, J[c].src ='http://jlynx.net/bot/donator/skins/?name=' + c), b = 0 != J[c].width && J[c].complete ? J[c] : null)  : b = null : b = null;
           b = (d = b) ? - 1 != hb.indexOf(c)  : !1;
           a || e.stroke();
           e.fill();
