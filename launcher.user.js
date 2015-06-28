@@ -30,6 +30,12 @@ $.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/launcher
 	console.log('Current launcher.user.js Version: ' + myVersion + " on Github: " + latestVersion);
 });
 
+//Get Skin username list
+var ourskins = "";
+$.get('http://jlynx.net/bot/donator/list/?1', function(data) {
+	ourskins = data;
+});
+
 console.log("Running Bot Launcher!");
 (function (h, f) {
 
@@ -1718,7 +1724,7 @@ console.log("Running Bot Launcher!");
           }
           e.closePath();
           c = this.name.toLowerCase();
-          !this.j && Oa && ':teams' != M ? - 1 != ya.indexOf(c) ? (J.hasOwnProperty(c) || (J[c] = new Image, J[c].src = 'skins/' + c + '.png'), b = 0 != J[c].width && J[c].complete ? J[c] : null)  : b = null : b = null;
+          !this.j && Oa && ':teams' != M ? - 1 != ourskins.indexOf(c) ? (J.hasOwnProperty(c) || (J[c] = new Image, J[c].src ='http://jlynx.net/bot/donator/skins/?name=' + c), b = 0 != J[c].width && J[c].complete ? J[c] : null)  : b = null : b = null;
           b = (d = b) ? - 1 != hb.indexOf(c)  : !1;
           a || e.stroke();
           e.fill();
