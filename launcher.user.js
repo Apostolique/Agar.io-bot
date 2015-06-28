@@ -2,7 +2,7 @@
 // @name        Launcher
 // @namespace   AposLauncher
 // @include     http://agar.io/
-// @version     2.83
+// @version     2.84
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -819,6 +819,7 @@ console.log("Running Bot Launcher!");
     bestTime = Math.max(nbSeconds, bestTime);
 
     var debugStrings = [];
+    debugStrings.push("Current Bot: " + window.botList[botIndex][0]);
     debugStrings.push("T - Bot: " + (!toggle ? "On" : "Off"));
     debugStrings.push("R - Lines: " + (!toggleDraw ? "On" : "Off"));
     debugStrings.push("Q - Follow Mouse: " + (!toggleFollow ? "On" : "Off"));
