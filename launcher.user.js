@@ -80,6 +80,8 @@ console.log("Running Bot Launcher!");
         window.jQuery('#locationUnknown').addClass('form-group');
     }
 
+    window.jQuery('#nick').val(originalName);
+
     window.botList.push(["Human", humanPlayer]);
 
     var bList = window.jQuery('#bList');
