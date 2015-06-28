@@ -1,10 +1,10 @@
 // ==UserScript==
-// @name        Launcher
-// @namespace   AposLauncher
+// @name        Tayfa Launcher(IsaSamet)
+// @namespace   Tayfa Launcher(IsaSamet)
 // @include     http://agar.io/
 // @version     2.85
 // @grant       none
-// @author      http://www.twitch.tv/apostolique
+// @author      Isa Samet (Modifier)
 // ==/UserScript==
 
 Number.prototype.mod = function(n) {
@@ -15,22 +15,8 @@ Array.prototype.peek = function() {
     return this[this.length-1];
 }
 
-$.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/launcher.user.js?1', function(data) {
-	var latestVersion = data.replace(/(\r\n|\n|\r)/gm,"");
-	latestVersion = latestVersion.substring(latestVersion.indexOf("// @version")+11,latestVersion.indexOf("// @grant"));
 
-	latestVersion = parseFloat(latestVersion + 0.0000);
-    var myVersion = parseFloat(GM_info.script.version + 0.0000); 
-	
-	if(latestVersion > myVersion)
-	{
-		alert("Update Available for launcher.user.js: V" + latestVersion + "\nGet the latest version from the GitHub page.");
-        window.open('https://github.com/Apostolique/Agar.io-bot/blob/master/launcher.user.js','_blank');
-	}
-	console.log('Current launcher.user.js Version: ' + myVersion + " on Github: " + latestVersion);
-});
-
-console.log("Running Bot Launcher!");
+console.log("Running Tayfa Launcher!");
 (function (h, f) {
 
   //UPDATE
@@ -528,7 +514,7 @@ console.log("Running Bot Launcher!");
     //UPDATE
     if (getPlayer().length == 0 && !reviving && ~~(getCurrentScore() / 100) > 0) {
         console.log("Dead: " + ~~(getCurrentScore() / 100));
-        apos('send', 'pageview');
+        Tayfa('send', 'pageview');
     }
     
     if (getPlayer().length == 0) {
@@ -658,7 +644,7 @@ console.log("Running Bot Launcher!");
     I = Math.max(I, db());
     //UPDATE
     sessionScore = Math.max(I, sessionScore); 
-    0 != I && (null == ia && (ia = new ja(24, '#FFFFFF', true,'#000000')), ia.u('Score: ' + ~~(I / 100) + ' || Best Score: ' + ~~(sessionScore / 100) + " || Best time alive: " + bestTime + " seconds"), c = ia.G(), a = c.width, e.globalAlpha = 0.2, e.fillStyle = '#000000', e.fillRect(10, q - 10 - 24 - 10, a + 10, 34), e.globalAlpha = 1, e.drawImage(c, 15, q - 10 - 24 - 5));
+    0 != I && (null == ia && (ia = new ja(24, '#FFFFFF', true,'#000000')), ia.u('Skor: ' + ~~(I / 100) + ' || En Iyi Skor: ' + ~~(sessionScore / 100) + " || En Uzun Süre Hayatta Kalma: " + bestTime + " seconds"), c = ia.G(), a = c.width, e.globalAlpha = 0.2, e.fillStyle = '#000000', e.fillRect(10, q - 10 - 24 - 10, a + 10, 34), e.globalAlpha = 1, e.drawImage(c, 15, q - 10 - 24 - 5));
     eb();
     b = Date.now() - b;
     b > 1000 / 60 ? y -= 0.01 : b < 1000 /
@@ -821,17 +807,17 @@ console.log("Running Bot Launcher!");
     bestTime = Math.max(nbSeconds, bestTime);
 
     var debugStrings = [];
-    debugStrings.push("Current Bot: " + window.botList[botIndex][0]);
+    debugStrings.push("Şu Anki Bot: " + window.botList[botIndex][0]);
     debugStrings.push("T - Bot: " + (!toggle ? "On" : "Off"));
-    debugStrings.push("R - Lines: " + (!toggleDraw ? "On" : "Off"));
-    debugStrings.push("Q - Follow Mouse: " + (toggleFollow ? "On" : "Off"));
-    debugStrings.push("Server: " + serverIP);
-    debugStrings.push("Survived for: " + nbSeconds + " seconds");
+    debugStrings.push("R - Çizgiler: " + (!toggleDraw ? "On" : "Off"));
+    debugStrings.push("Q - Fareyi Takip Et: " + (toggleFollow ? "On" : "Off"));
+    debugStrings.push("Sunucu: " + serverIP);
+    debugStrings.push("Hayatta Kalındı: " + nbSeconds + " saniye");
 
     if (getPlayer().length > 0) {
         var offsetX = -getMapStartX();
         var offsetY = -getMapStartY();
-        debugStrings.push("Location: " + Math.floor(getPlayer()[0].x + offsetX) + ", " + Math.floor(getPlayer()[0].y + offsetY));
+        debugStrings.push("Konum: " + Math.floor(getPlayer()[0].x + offsetX) + ", " + Math.floor(getPlayer()[0].y + offsetY));
     }
 
     var offsetValue = 20;
@@ -975,7 +961,7 @@ console.log("Running Bot Launcher!");
   dArc = [],
   dText = [],
   lines = [],
-  names = ["NotReallyABot"],
+  names = ["TAYFA®"],
   originalName = names[Math.floor(Math.random() * names.length)],
   sessionScore = 0,
   serverIP = "",
@@ -1906,30 +1892,30 @@ console.log("Running Bot Launcher!");
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','//www.google-analytics.com/analytics.js','apos');
+})(window,document,'script','//www.google-analytics.com/analytics.js','Tayfa');
 
-apos('create', 'UA-64394184-1', 'auto');
-apos('send', 'pageview');
+Tayfa('create', 'UA-64394184-1', 'auto');
+Tayfa('send', 'pageview');
 
 window.ignoreStream = false,
 window.refreshTwitch = function() {
     $.ajax({
-          url: "https://api.twitch.tv/kraken/streams/apostolique",
+          url: "https://api.twitch.tv/kraken/streams/Tayfatolique",
           cache: false,
           dataType: "jsonp"
         }).done(function (data) {
             if (data["stream"] == null) { 
-                //console.log("Apostolique is not online!");
+                //console.log("Tayfatolique is not online!");
                 window.setMessage([]);
                 window.onmouseup = function () {
                 };
                 window.ignoreStream = false;
             } else {
-                //console.log("Apostolique is online!");
+                //console.log("Tayfatolique is online!");
                 if (!window.ignoreStream) {
-                    window.setMessage(["twitch.tv/apostolique is online right now!", "Click the screen to open the stream!", "Press E to ignore."]);
+                    window.setMessage(["twitch.tv/Tayfatolique is online right now!", "Click the screen to open the stream!", "Press E to ignore."]);
                     window.onmouseup = function () {
-                        window.open("http://www.twitch.tv/apostolique");
+                        window.open("http://www.twitch.tv/Tayfatolique");
                     };
                 }
             }
