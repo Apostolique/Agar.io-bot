@@ -26,7 +26,7 @@ $.get('https://raw.githubusercontent.com/Daporan/Agar.io-bot/master/bot.user.js?
 	if(latestVersion > myVersion)
 	{
 		alert("Update Available for bot.user.js: V" + latestVersion + "\nGet the latest version from the GitHub page.");
-        window.open('https://github.com/Apostolique/Agar.io-bot/blob/master/bot.user.js','_blank');
+        window.open('https://github.com/Daporan/Agar.io-bot/blob/master/bot.user.js','_blank');
 	}
 	console.log('Current bot.user.js Version: ' + myVersion + " on Github: " + latestVersion);
 });
