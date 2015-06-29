@@ -2,7 +2,7 @@
 // @name        MyLauncher
 // @namespace   MyLauncher
 // @include     http://agar.io/
-// @version     2.85
+// @version     2.85.1
 // @grant       none
 // @author      Daporan
 // ==/UserScript==
