@@ -2,10 +2,12 @@
 // @name        Launcher
 // @namespace   AposLauncher
 // @include     http://agar.io/
-// @version     2.85
+// @version     2.86
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
+
+var demo = false;
 
 Number.prototype.mod = function(n) {
     return ((this%n)+n)%n;
@@ -874,6 +876,37 @@ console.log("Running Bot Launcher!");
             mOffset += mRender[i].height;
         }
     }
+      
+      if (donatorLead.length > 0) {
+        var mRender = [];
+        var mWidth = 0;
+        var mHeight = 0;
+
+        for (var i = 0; i < donatorLead.length; i++) {
+            var mText = new ja(20, '#FF0000', true,'#000000');
+            mText.u(donatorLead[i]);
+            mRender.push(mText.G());
+
+            if (mRender[i].width > mWidth) {
+                mWidth = mRender[i].width;
+            }
+            mHeight += mRender[i].height;
+        }
+
+        var mX = getWidth() / 2 - mWidth / 2;
+        var mY = 20;
+
+        // d.globalAlpha = 0.4;
+        // d.fillStyle = '#000000';
+        // d.fillRect( 20, 20, mWidth + 20, mHeight + 20);
+        // d.globalAlpha = 1;
+
+        var mOffset = mY;
+        for (var i = 0; i < mRender.length; i++) {
+            d.drawImage(mRender[i], 25, mOffset + 160);
+            mOffset += mRender[i].height;
+        }
+    }
 
     d.restore();
   }
@@ -985,6 +1018,7 @@ console.log("Running Bot Launcher!");
   botIndex = 0,
   reviving = false,
   message = [],
+  donatorLead = [],
 
   ma,
   e,
@@ -1536,6 +1570,10 @@ console.log("Running Bot Launcher!");
     window.setMessage = function(a) {
         message = a;
     }
+    
+    window.setMessageDon = function(a) {
+        donatorLead = a;
+    }
 
     var aa = 500,
     La = - 1,
@@ -1938,3 +1976,24 @@ window.refreshTwitch = function() {
 };
 setInterval(window.refreshTwitch, 60000);
 window.refreshTwitch();
+
+if(demo)
+{
+	$.get('http://jlynx.net/bot/donator/?1', function(data) {
+		var donatorInfo = data.split("<br>");
+		var listArray = ["Top Donators"];
+		for (i = 0; i < donatorInfo.length; i++) 
+		{ 
+			var name = donatorInfo[i].split("|")[0];
+			var amount = donatorInfo[i].split("|")[1];
+			if(name.length != 0)
+			{
+				console.log(name + " donated $" + amount);
+				listArray.push(i+1 + ". " + name + " - $" + amount);
+			}
+		}
+		window.setMessageDon(listArray);
+	});
+}
+
+ 
