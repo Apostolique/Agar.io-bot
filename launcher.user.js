@@ -25,7 +25,7 @@ $.get('https://raw.githubusercontent.com/Daporan/Agar.io-bot/master/launcher.use
 	if(latestVersion > myVersion)
 	{
 		alert("Update Available for launcher.user.js: V" + latestVersion + "\nGet the latest version from the GitHub page.");
-        window.open('https://github.com/Apostolique/Agar.io-bot/blob/master/launcher.user.js','_blank');
+        window.open('https://github.com/Daporan/Agar.io-bot/blob/master/launcher.user.js','_blank');
 	}
 	console.log('Current launcher.user.js Version: ' + myVersion + " on Github: " + latestVersion);
 });
