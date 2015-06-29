@@ -1,10 +1,10 @@
 // ==UserScript==
-// @name        AposBot
-// @namespace   AposBot
+// @name        MyBot
+// @namespace   MyBot
 // @include     http://agar.io/
 // @version     3.31
 // @grant       none
-// @author      http://www.twitch.tv/apostolique
+// @author      Daporan
 // ==/UserScript==
 
 
@@ -16,7 +16,7 @@ Array.prototype.peek = function() {
     return this[this.length - 1];
 };
 
-$.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/bot.user.js?1', function(data) {
+$.get('https://raw.githubusercontent.com/Daporan/Agar.io-bot/master/bot.user.js?1', function(data) {
     var latestVersion = data.replace(/(\r\n|\n|\r)/gm,"");
     latestVersion = latestVersion.substring(latestVersion.indexOf("// @version")+11,latestVersion.indexOf("// @grant"));
 
