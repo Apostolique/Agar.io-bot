@@ -11,7 +11,7 @@ There are other people working on bots, you can check the forks, as well as Game
 #How to Install
 **Web Tutorial**
 
-http://jlynx.net/bot/
+http://bot.jlynx.net/
 
 **Videos**
 
