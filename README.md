@@ -19,6 +19,8 @@ Created by https://www.youtube.com/user/karter61/
 
 https://www.youtube.com/watch?v=Zvq38nmCm1s - Install Tutorial.
 
+https://www.youtube.com/watch?v=x2-DFRnEFBU - Android Tutorial.
+
 #Hotkeys
 
 * Press 'R' if you want to toggle the line and dot drawing.
