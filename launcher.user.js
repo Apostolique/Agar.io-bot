@@ -2,7 +2,7 @@
 // @name        Launcher
 // @namespace   AposLauncher
 // @include     http://agar.io/
-// @version     2.85
+// @version     2.86
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -657,8 +657,19 @@ console.log("Running Bot Launcher!");
     w && w.width && e.drawImage(w, p - w.width - 10, 10);
     I = Math.max(I, db());
     //UPDATE
-    sessionScore = Math.max(I, sessionScore); 
-    0 != I && (null == ia && (ia = new ja(24, '#FFFFFF', true,'#000000')), ia.u('Score: ' + ~~(I / 100) + ' || Best Score: ' + ~~(sessionScore / 100) + " || Best time alive: " + bestTime + " seconds"), c = ia.G(), a = c.width, e.globalAlpha = 0.2, e.fillStyle = '#000000', e.fillRect(10, q - 10 - 24 - 10, a + 10, 34), e.globalAlpha = 1, e.drawImage(c, 15, q - 10 - 24 - 5));
+
+    var currentDate = new Date();
+
+    var nbSeconds = 0;
+    if (getPlayer().length > 0) {
+        nbSeconds = (currentDate.getSeconds() + (currentDate.getMinutes() * 60) + (currentDate.getHours() * 60 * 60)) - (lifeTimer.getSeconds() + (lifeTimer.getMinutes() * 60) + (lifeTimer.getHours() * 60 * 60));
+    }
+
+    bestTime = Math.max(nbSeconds, bestTime);
+
+    var displayText = 'Score: ' + ~~(I / 100) + " Current Time: " + nbSeconds + " seconds.";
+
+    0 != I && (null == ia && (ia = new ja(24, '#FFFFFF', true,'#000000')), ia.u(displayText), c = ia.G(), a = c.width, e.globalAlpha = 0.2, e.fillStyle = '#000000', e.fillRect(10, q - 10 - 24 - 10, a + 10, 34), e.globalAlpha = 1, e.drawImage(c, 15, q - 10 - 24 - 5));
     eb();
     b = Date.now() - b;
     b > 1000 / 60 ? y -= 0.01 : b < 1000 /
@@ -811,22 +822,19 @@ console.log("Running Bot Launcher!");
   }
   function drawStats(d) {
     d.save()
-    var currentDate = new Date();
 
-    var nbSeconds = 0;
-    if (getPlayer().length > 0) {
-        nbSeconds = (currentDate.getSeconds() + (currentDate.getMinutes() * 60) + (currentDate.getHours() * 60 * 60)) - (lifeTimer.getSeconds() + (lifeTimer.getMinutes() * 60) + (lifeTimer.getHours() * 60 * 60));
-    }
-
-    bestTime = Math.max(nbSeconds, bestTime);
+    sessionScore = Math.max(I, sessionScore); 
 
     var debugStrings = [];
     debugStrings.push("Current Bot: " + window.botList[botIndex][0]);
     debugStrings.push("T - Bot: " + (!toggle ? "On" : "Off"));
     debugStrings.push("R - Lines: " + (!toggleDraw ? "On" : "Off"));
     debugStrings.push("Q - Follow Mouse: " + (toggleFollow ? "On" : "Off"));
-    debugStrings.push("Server: " + serverIP);
-    debugStrings.push("Survived for: " + nbSeconds + " seconds");
+    debugStrings.push("");
+    debugStrings.push("Best Score: " + ~~(sessionScore / 100));
+    debugStrings.push("Best Time: " + bestTime + " seconds");
+    debugStrings.push("");
+    debugStrings.push(serverIP);
 
     if (getPlayer().length > 0) {
         var offsetX = -getMapStartX();
@@ -1926,12 +1934,12 @@ window.refreshTwitch = function() {
                 window.ignoreStream = false;
             } else {
                 //console.log("Apostolique is online!");
-                if (!window.ignoreStream) {
+                /*if (!window.ignoreStream) {
                     window.setMessage(["twitch.tv/apostolique is online right now!", "Click the screen to open the stream!", "Press E to ignore."]);
                     window.onmouseup = function () {
                         window.open("http://www.twitch.tv/apostolique");
                     };
-                }
+                }*/
             }
         }).fail(function () {
         });
