@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        AposBot
 // @namespace   AposBot
-// @include     http://agar.io/
+// @include     http://www.dakaragar.ga/
 // @version     3.31
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
