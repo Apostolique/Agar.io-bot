@@ -2,7 +2,7 @@
 // @name        AposBotBeta
 // @namespace   AposBotBeta
 // @include     http://agar.io/
-// @version     3.4
+// @version     3.41
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -163,7 +163,7 @@ console.log("Running Apos Bot!");
                 }
             }
 
-            if (!isMe && interNodes[element].d && compareSize(interNodes[element], blob, 1.30)) {
+            if (!isMe && interNodes[element].isVirus() && compareSize(interNodes[element], blob, 1.30)) {
                 return true;
             }
             return false;
@@ -187,7 +187,7 @@ console.log("Running Apos Bot!");
                 }
             }
 
-            if (!isMe && (!interNodes[element].d && compareSize(blob, interNodes[element], 1.30))) {
+            if (!isMe && (!interNodes[element].isVirus() && compareSize(blob, interNodes[element], 1.30))) {
                 return true;
             }
             return false;
@@ -212,7 +212,7 @@ console.log("Running Apos Bot!");
                 }
             }
 
-            if (!isMe && !interNodes[element].d && compareSize(interNodes[element], blob, 1.30) || (interNodes[element].size <= 11)) {
+            if (!isMe && !interNodes[element].isVirus() && compareSize(interNodes[element], blob, 1.30) || (interNodes[element].size <= 11)) {
                 return true;
             } else {
                 return false;
@@ -417,7 +417,7 @@ console.log("Running Apos Bot!");
 
         //var radius = blob2.size;
 
-        /*if (blob2.d) {
+        /*if (blob2.isVirus()) {
             radius = blob1.size;
         } else if(canSplit(blob1, blob2)) {
             radius += splitDistance;
@@ -616,7 +616,7 @@ console.log("Running Apos Bot!");
         var lineLeft = followAngle(leftAngle, blob1.x, blob1.y, 150 + blob1.size - index * 10);
         var lineRight = followAngle(rightAngle, blob1.x, blob1.y, 150 + blob1.size - index * 10);
 
-        if (blob2.d) {
+        if (blob2.isVirus()) {
             drawLine(blob1.x, blob1.y, lineLeft[0], lineLeft[1], 6);
             drawLine(blob1.x, blob1.y, lineRight[0], lineRight[1], 6);
             drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob1.x, blob1.y, 6);
@@ -709,18 +709,18 @@ console.log("Running Apos Bot!");
 
                         var enemyDistance = computeDistance(allPossibleThreats[i].x, allPossibleThreats[i].y, player[k].x, player[k].y);
 
-                        var splitDangerDistance = allPossibleThreats[i].size + splitDistance;
+                        var splitDangerDistance = allPossibleThreats[i].size + splitDistance + 150;
 
-                        var normalDangerDistance = Math.max(allPossibleThreats[i].size + player[k].size, allPossibleThreats[i].size + 150);
+                        var normalDangerDistance = allPossibleThreats[i].size + 150;
 
-                        var shiftDistance = player[k].size * 3;
+                        var shiftDistance = player[k].size * 2;
 
                         //console.log("Found distance.");
 
                         var enemyCanSplit = canSplit(player[k], allPossibleThreats[i]);
                         
                         for (var j = clusterAllFood.length - 1; j >= 0 ; j--) {
-                            var secureDistance = (enemyCanSplit ? splitDistance : player[k].size) + allPossibleThreats[i].size;
+                            var secureDistance = (enemyCanSplit ? splitDangerDistance : normalDangerDistance);
                             if (computeDistance(allPossibleThreats[i].x, allPossibleThreats[i].y, clusterAllFood[j][0], clusterAllFood[j][1]) < secureDistance)
                                 clusterAllFood.splice(j, 1);
                         }
@@ -730,11 +730,11 @@ console.log("Running Apos Bot!");
                         if (enemyCanSplit) {
                             drawCircle(allPossibleThreats[i].x, allPossibleThreats[i].y, splitDangerDistance, 0);
                             drawCircle(allPossibleThreats[i].x, allPossibleThreats[i].y, splitDangerDistance + shiftDistance, 6);
-                            drawCircle(allPossibleThreats[i].x, allPossibleThreats[i].y, splitDangerDistance + shiftDistance / 3, 2);
+                            drawCircle(allPossibleThreats[i].x, allPossibleThreats[i].y, splitDangerDistance + shiftDistance / 2, 2);
                         } else {
                             drawCircle(allPossibleThreats[i].x, allPossibleThreats[i].y, normalDangerDistance, 3);
                             drawCircle(allPossibleThreats[i].x, allPossibleThreats[i].y, normalDangerDistance + shiftDistance, 6);
-                            drawCircle(allPossibleThreats[i].x, allPossibleThreats[i].y, normalDangerDistance + shiftDistance / 3, 2);
+                            drawCircle(allPossibleThreats[i].x, allPossibleThreats[i].y, normalDangerDistance + shiftDistance / 2, 2);
                         }
 
                         if (allPossibleThreats[i].danger && f.getLastUpdate() - allPossibleThreats[i].dangerTimeOut > 1000) {
@@ -760,13 +760,13 @@ console.log("Running Apos Bot!");
                             badAngles.push(getAngleRange(player[k], allPossibleThreats[i], i, normalDangerDistance));
 
                         } else if (enemyCanSplit && enemyDistance < splitDangerDistance + shiftDistance) {
-                            var tempOb = getAngleRange(player[k], allPossibleThreats[i], i, splitDangerDistance + shiftDistance / 3);
+                            var tempOb = getAngleRange(player[k], allPossibleThreats[i], i, splitDangerDistance + shiftDistance / 2);
                             var angle1 = tempOb[0];
                             var angle2 = rangeToAngle(tempOb);
 
                             obstacleList.push([[angle1, true], [angle2, false]]);
                         } else if (!enemyCanSplit && enemyDistance < normalDangerDistance + shiftDistance) {
-                            var tempOb = getAngleRange(player[k], allPossibleThreats[i], i, normalDangerDistance + shiftDistance / 3);
+                            var tempOb = getAngleRange(player[k], allPossibleThreats[i], i, normalDangerDistance + shiftDistance / 2);
                             var angle1 = tempOb[0];
                             var angle2 = rangeToAngle(tempOb);
 
