@@ -2,7 +2,7 @@
 // @name        Launcher
 // @namespace   AposLauncher
 // @include     http://agar.io/
-// @version     2.86
+// @version     2.87
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -455,8 +455,7 @@ console.log("Running Bot Launcher!");
         //console.log("start: " + interNodes[element].updateTime + " current: " + D + " life: " + (D - interNodes[element].updateTime));
         var isRemoved = !window.getCells().hasOwnProperty(element);
 
-
-        if (isRemoved  && (getLastUpdate() - interNodes[element].L) > 3000) {
+        if (isRemoved  && (getLastUpdate() - interNodes[element].getUptimeTime()) > 3000) {
             delete interNodes[element];
         } else if (isRemoved && computeDistance(getOffsetX(), getOffsetY(), interNodes[element].x, interNodes[element].y) < screenDistance()) {
             //console.log("Too close! Remove " + computeDistance(getOffsetX(), getOffsetY(), interNodes[element].x, interNodes[element].y) + " || " + screenDistance());
@@ -1589,6 +1588,12 @@ console.log("Running Bot Launcher!");
       updateCode: 0,
       danger: false,
       dangerTimeOut: 0,
+      isVirus: function () {
+        return this.d;
+      },
+      getUptimeTime: function () {
+        return this.L;
+      },
       S: function () {
         var a;
         for (a = 0; a < u.length; a++) if (u[a] == this) {
@@ -1680,7 +1685,7 @@ console.log("Running Bot Launcher!");
           a[d].y = this.y + Math.sin(e * d + h) * l
         }
       },
-      K: function () {
+      K: function () { //updatePos
         var a;
         a = (G - this.L) / 120;
         a = 0 > a ? 0 : 1 < a ? 1 : a;
@@ -1934,12 +1939,12 @@ window.refreshTwitch = function() {
                 window.ignoreStream = false;
             } else {
                 //console.log("Apostolique is online!");
-                /*if (!window.ignoreStream) {
+                if (!window.ignoreStream) {
                     window.setMessage(["twitch.tv/apostolique is online right now!", "Click the screen to open the stream!", "Press E to ignore."]);
                     window.onmouseup = function () {
                         window.open("http://www.twitch.tv/apostolique");
                     };
-                }*/
+                }
             }
         }).fail(function () {
         });
