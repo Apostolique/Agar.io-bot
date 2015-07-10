@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name        BetaLauncher
-// @namespace   BetaLauncher
+// @name        Launcher
+// @namespace   AposLauncher
 // @include     http://agar.io/
-// @version     2.90
+// @version     2.91
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -121,7 +121,7 @@ console.log("Running Bot Launcher!");
             c = !1;
         d.onkeydown = function(l) {
             //UPDATE
-            //if (!window.jQuery('#nick').is(":focus")) {
+            if (!window.jQuery('#nick').is(":focus")) {
                 32 != l.keyCode || a || (V(), H(17), a = !0);
                 81 != l.keyCode || b || (H(18), b = !0);
                 87 != l.keyCode || c || (V(), H(21), c = !0);
@@ -129,7 +129,7 @@ console.log("Running Bot Launcher!");
 
                 //UPDATE
                 keyAction(l);
-            //}
+            }
         };
         d.onkeyup = function(l) {
             32 == l.keyCode && (a = !1);
@@ -513,7 +513,7 @@ console.log("Running Bot Launcher!");
         b += 4;
         for (u = 0; u < c; u++) d = a.getUint32(b, !0), b += 4, n = E[d], null != n && n.X();
         //UPDATE
-        //Ha && 0 == k.length && Sa(!1)
+        Ha && 0 == k.length && Sa(!1)
     }
 
     //UPDATE
@@ -737,7 +737,6 @@ console.log("Running Bot Launcher!");
 
     //UPDATE
     function customRender(d) {
-        console.log("This is 1");
         d.save();
         for (var i = 0; i < lines.length; i++) {
             d.beginPath();
@@ -770,7 +769,6 @@ console.log("Running Bot Launcher!");
             d.stroke();
         }
         d.restore();
-        console.log("This is 2");
         d.save();
         for (var i = 0; i < circles.length; i++) {
             if (circles[i][3] == 0) {
@@ -803,7 +801,6 @@ console.log("Running Bot Launcher!");
             d.stroke();
         }
         d.restore();
-        console.log("This is 3");
         d.save();
         for (var i = 0; i < dArc.length; i++) {
             if (dArc[i][7] == 0) {
@@ -838,7 +835,6 @@ console.log("Running Bot Launcher!");
             d.stroke();
         }
         d.restore();
-        console.log("This is 4");
         d.save();
         for (var i = 0; i < dPoints.length; i++) {
             if (dText[i] == "") {
@@ -877,13 +873,12 @@ console.log("Running Bot Launcher!");
 
         }
         d.restore();
-        console.log("This is done");
     }
 
     function drawStats(d) {
         d.save()
 
-        sessionScore = Math.max(I, sessionScore);
+        sessionScore = Math.max(getCurrentScore(), sessionScore);
 
         var debugStrings = [];
         debugStrings.push("Current Bot: " + window.botList[botIndex][0]);
