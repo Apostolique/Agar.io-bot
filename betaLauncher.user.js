@@ -2,7 +2,7 @@
 // @name        Launcher
 // @namespace   AposLauncher
 // @include     http://agar.io/
-// @version     2.91
+// @version     2.92
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -33,7 +33,6 @@ console.log("Running Bot Launcher!");
 
     //UPDATE
     function keyAction(e) {
-        console.log("Perhaps?");
         if (84 == e.keyCode) {
             console.log("Toggle");
             toggle = !toggle;
@@ -92,7 +91,11 @@ console.log("Running Bot Launcher!");
         ya = !0;
         Pa();
         setInterval(Pa, 18E4);
-        G = za = document.getElementById("canvas");
+
+        window.jQuery("#canvas").parent().prepend("<canvas id='canvas1' height='520' width='584'>");
+        window.jQuery("#canvas").remove();
+
+        G = za = document.getElementById("canvas1");
         f = G.getContext("2d");
         G.onmousedown = function(a) {
             if (Qa) {
