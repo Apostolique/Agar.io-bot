@@ -2,7 +2,7 @@
 // @name        Launcher
 // @namespace   AposLauncher
 // @include     http://agar.io/
-// @version     2.87
+// @version     2.88
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -1094,7 +1094,9 @@ console.log("Running Bot Launcher!");
       Ga()
     };
     h.setGameMode = function (a) {
-      a != M && (M = a, W())
+      window.jQuery("#helloContainer").attr("data-gamemode", a);
+      window.jQuery("#gamemode").val(a);
+      a != M && (M = a, W());
     };
     h.setAcid = function (a) {
       va = a
