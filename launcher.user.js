@@ -2,7 +2,7 @@
 // @name        Launcher
 // @namespace   AposLauncher
 // @include     http://agar.io/*
-// @version     2.93
+// @version     2.94
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -15,7 +15,7 @@ Array.prototype.peek = function() {
     return this[this.length - 1];
 }
 
-$.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/launcher.user.js?1', function(data) {
+$.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/launcher.user.js?' + Math.floor((Math.random() * 1000000) + 1), function(data) {
     var latestVersion = data.replace(/(\r\n|\n|\r)/gm, "");
     latestVersion = latestVersion.substring(latestVersion.indexOf("// @version") + 11, latestVersion.indexOf("// @grant"));
 
@@ -534,7 +534,7 @@ console.log("Running Bot Launcher!");
     }
 
     window.verticalDistance = function() {
-        return computeDistance(0, 0, screenToGameY(getWidth()), screenToGameY(getHeight()));
+        return computeDistance(0, 0, screenToGameX(getWidth()), screenToGameY(getHeight()));
     }
 
     function screenToGameX(x) {
@@ -625,20 +625,6 @@ console.log("Running Bot Launcher!");
             for (var b = 0; b < B.length; ++b) a.setUint8(b + 1, B.charCodeAt(b));
             O(a)
         }
-    }
-
-    //UPDATE HACK
-    function wazza() {
-        m = d.innerWidth;
-        r = d.innerHeight;
-        za.width = G.width = m;
-        za.height = G.height = r;
-        var a = e("#helloContainer");
-        a.css("transform", "none");
-        var b = a.height(),
-            c = d.innerHeight;
-        b > c / 1.1 ? a.css("transform", "translate(-50%, -50%) scale(" + c / b / 1.1 + ")") : a.css("transform", "translate(-50%, -50%)");
-        gb()
     }
 
     function Ta() {
@@ -1748,7 +1734,7 @@ console.log("Running Bot Launcher!");
                             d.requestAnimationFrame(Ua);
                             var c = Date.now(),
                                 l = c - a;
-                            l > b && (a = c - l % b, !T() || 240 > Date.now() - bb ? wazza() : console.warn("Skipping draw"), Fb())
+                            l > b && (a = c - l % b, !T() || 240 > Date.now() - bb ? gb() : console.warn("Skipping draw"), Fb())
                         }
                     }(),
                     U = {},
