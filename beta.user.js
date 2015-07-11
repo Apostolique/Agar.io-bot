@@ -2,7 +2,7 @@
 // @name        AposBotBeta
 // @namespace   AposBotBeta
 // @include     http://agar.io/*
-// @version     3.44
+// @version     3.45
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -23,21 +23,16 @@ Array.prototype.peek = function() {
     return this[this.length - 1];
 };
 
-function createDialog(title, text) {
-    return window.jQuery("<div class='dialog' title='" + title + "'><p>" + text + "</p></div>")
-    .dialog({
-        resizable: false,
-        height:140,
-        modal: true,
-        buttons: {
-            Confirm: function() {
-                window.jQuery( this ).dialog( "close" );
-            },
-            Cancel: function() {
-                window.jQuery( this ).dialog( "close" );
-            }
-        }
+function update(prefix, name, url) {
+    window.jQuery(document.body).prepend("<div id='" + prefix + "Dialog' style='position: absolute; left: 0px; right: 0px; top: 0px; bottom: 0px; z-index: 100; display: none;'>");
+    window.jQuery('#' + prefix + 'Dialog').append("<div id='" + prefix + "Message' style='width: 350px; background-color: #FFFFFF; margin: 100px auto; border-radius: 15px; padding: 5px 15px 5px 15px;'>");
+    window.jQuery('#' + prefix + 'Message').append("<h2>UPDATE TIME!!!</h2>");
+    window.jQuery('#' + prefix + 'Message').append("<p>Grab the update for: <a id='" + prefix + "Link' href='" + url + "' target=\"_blank\">" + name + "</a></p>");
+    window.jQuery('#' + prefix + 'Link').on('click', function() {
+        window.jQuery("#" + prefix + "Dialog").hide();
+        window.jQuery("#" + prefix + "Dialog").remove();
     });
+    window.jQuery("#" + prefix + "Dialog").show();
 }
 
 $.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/bot.user.js?' + Math.floor((Math.random() * 1000000) + 1), function(data) {
@@ -49,8 +44,7 @@ $.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/bot.user
     
     if(latestVersion > myVersion)
     {
-        alert("Update Available for bot.user.js: V" + latestVersion + "\nGet the latest version from the GitHub page.");
-        window.open('https://github.com/Apostolique/Agar.io-bot/blob/master/bot.user.js','_blank');
+        update("aposBeta", "bot.user.js", "https://github.com/Apostolique/Agar.io-bot/blob/master/bot.user.js/");
     }
     console.log('Current bot.user.js Version: ' + myVersion + " on Github: " + latestVersion);
 });
@@ -766,7 +760,7 @@ console.log("Running Apos Bot!");
 
                         var normalDangerDistance = allPossibleThreats[i].size + 150;
 
-                        var shiftDistance = player[k].size * 2;
+                        var shiftDistance = player[k].size;
 
                         //console.log("Found distance.");
 
@@ -783,11 +777,9 @@ console.log("Running Apos Bot!");
                         if (enemyCanSplit) {
                             drawCircle(allPossibleThreats[i].x, allPossibleThreats[i].y, splitDangerDistance, 0);
                             drawCircle(allPossibleThreats[i].x, allPossibleThreats[i].y, splitDangerDistance + shiftDistance, 6);
-                            drawCircle(allPossibleThreats[i].x, allPossibleThreats[i].y, splitDangerDistance + shiftDistance / 2, 2);
                         } else {
                             drawCircle(allPossibleThreats[i].x, allPossibleThreats[i].y, normalDangerDistance, 3);
                             drawCircle(allPossibleThreats[i].x, allPossibleThreats[i].y, normalDangerDistance + shiftDistance, 6);
-                            drawCircle(allPossibleThreats[i].x, allPossibleThreats[i].y, normalDangerDistance + shiftDistance / 2, 2);
                         }
 
                         if (allPossibleThreats[i].danger && f.getLastUpdate() - allPossibleThreats[i].dangerTimeOut > 1000) {
@@ -813,13 +805,13 @@ console.log("Running Apos Bot!");
                             badAngles.push(getAngleRange(player[k], allPossibleThreats[i], i, normalDangerDistance));
 
                         } else if (enemyCanSplit && enemyDistance < splitDangerDistance + shiftDistance) {
-                            var tempOb = getAngleRange(player[k], allPossibleThreats[i], i, splitDangerDistance + shiftDistance / 2);
+                            var tempOb = getAngleRange(player[k], allPossibleThreats[i], i, splitDangerDistance + shiftDistance);
                             var angle1 = tempOb[0];
                             var angle2 = rangeToAngle(tempOb);
 
                             obstacleList.push([[angle1, true], [angle2, false]]);
                         } else if (!enemyCanSplit && enemyDistance < normalDangerDistance + shiftDistance) {
-                            var tempOb = getAngleRange(player[k], allPossibleThreats[i], i, normalDangerDistance + shiftDistance / 2);
+                            var tempOb = getAngleRange(player[k], allPossibleThreats[i], i, normalDangerDistance + shiftDistance);
                             var angle1 = tempOb[0];
                             var angle2 = rangeToAngle(tempOb);
 
