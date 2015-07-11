@@ -1,12 +1,19 @@
 // ==UserScript==
 // @name        AposBotBeta
 // @namespace   AposBotBeta
-// @include     http://agar.io/
-// @version     3.41
+// @include     http://agar.io/*
+// @version     3.42
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
+//TODO: Team mode
+//      Detect when people are merging
+//      Protect all cells when split
+//      Split to catch smaller targets
+//      Angle based cluster code
+//      Better wall code
+//      In team mode, make allies be obstacles.
 
 Number.prototype.mod = function(n) {
     return ((this % n) + n) % n;
@@ -44,7 +51,7 @@ console.log("Running Apos Bot!");
         g('#locationUnknown').addClass('form-group');
     }
 
-    f.botList.push(["AposBotBeta", findDestination]);
+    f.botList.push(["AposBotBeta " + GM_info.script.version, findDestination]);
 
     var bList = g('#bList');
     g('<option />', {value: (f.botList.length - 1), text: "AposBotBeta"}).appendTo(bList);
@@ -172,20 +179,56 @@ console.log("Running Apos Bot!");
         return dotList;
     }
 
+    function getTeam(red, green, blue) {
+        if (red > green && red > blue) {
+            return 0;
+        } else if (green > red && green > blue) {
+            return 1;
+        }
+        return 2;
+    }
+
+    function isItMe(player, cell2) {
+        if (getMode() == ":teams") {
+            var currentColor = player[0].color;
+
+            var currentRed = parseInt(currentColor.substring(1,3), 16);
+            var currentGreen = parseInt(currentColor.substring(3,5), 16);
+            var currentBlue = parseInt(currentColor.substring(5,7), 16);
+
+            var currentTeam = getTeam(currentRed, currentGreen, currentBlue);
+
+            var cellColor = cell2.color;
+
+            var cellRed = parseInt(cellColor.substring(1,3), 16);
+            var cellGreen = parseInt(cellColor.substring(3,5), 16);
+            var cellBlue = parseInt(cellColor.substring(5,7), 16);
+
+            var cellTeam = getTeam(cellRed, cellGreen, cellBlue);
+
+            if (currentTeam == cellTeam) {
+                return true;
+            }
+
+            //console.log("COLOR: " + color);
+
+        } else {
+            for (var i = 0; i < player.length; i++) {
+                if (cell2.id == player[i].id) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     function getAllThreats(blob) {
         var dotList = [];
         var player = getPlayer();
         var interNodes = getMemoryCells();
 
         dotList = getListBasedOnFunction(function(element) {
-            var isMe = false;
-
-            for (var i = 0; i < player.length; i++) {
-                if (interNodes[element].id == player[i].id) {
-                    isMe = true;
-                    break;
-                }
-            }
+            var isMe = isItMe(player, interNodes[element]);
 
             if (!isMe && (!interNodes[element].isVirus() && compareSize(blob, interNodes[element], 1.30))) {
                 return true;
@@ -203,14 +246,7 @@ console.log("Running Apos Bot!");
         var interNodes = getMemoryCells();
 
         elementList = getListBasedOnFunction(function(element) {
-            var isMe = false;
-
-            for (var i = 0; i < player.length; i++) {
-                if (interNodes[element].id == player[i].id) {
-                    isMe = true;
-                    break;
-                }
-            }
+            var isMe = isItMe(player, interNodes[element]);
 
             if (!isMe && !interNodes[element].isVirus() && compareSize(interNodes[element], blob, 1.30) || (interNodes[element].size <= 11)) {
                 return true;
@@ -679,6 +715,8 @@ console.log("Running Apos Bot!");
 
             if (player.length > 0) {
 
+                var destinationChoices = []; //destination, size, danger
+
                 for (var k = 0; k < player.length; k++) {
 
                     //console.log("Working on blob: " + k);
@@ -788,7 +826,7 @@ console.log("Running Apos Bot!");
                     for (var i = 0; i < allPossibleViruses.length; i++) {
                         var virusDistance = computeDistance(allPossibleViruses[i].x, allPossibleViruses[i].y, player[k].x, player[k].y);
                         if (virusDistance < (player[k].size * 2)) {
-                            var tempOb = getAngleRange(player[k], allPossibleViruses[i], i, player[k].size);
+                            var tempOb = getAngleRange(player[k], allPossibleViruses[i], i, player[k].size + 50);
                             var angle1 = tempOb[0];
                             var angle2 = rangeToAngle(tempOb);
                             obstacleList.push([[angle1, true], [angle2, false]]);
@@ -894,9 +932,10 @@ console.log("Running Apos Bot!");
 
                         var destination = followAngle(shiftedAngle, player[k].x, player[k].y, distance);
 
-                        tempMoveX = destination[0];
-                        tempMoveY = destination[1];
-                        drawLine(player[k].x, player[k].y, tempMoveX, tempMoveY, 1);
+                        destinationChoices.push([destination, player[k].size, false]);
+                        drawLine(player[k].x, player[k].y, destination[0], destination[1], 1);
+                        //tempMoveX = destination[0];
+                        //tempMoveY = destination[1];
 
                     } else if (goodAngles.length > 0) {
                         var bIndex = goodAngles[0];
@@ -912,11 +951,12 @@ console.log("Running Apos Bot!");
 
                         perfectAngle = shiftAngle(obstacleAngles, perfectAngle, bIndex);
 
-                        var line1 = followAngle(perfectAngle, player[k].x, player[k].y, 300);
+                        var line1 = followAngle(perfectAngle, player[k].x, player[k].y, f.verticalDistance());
 
+                        destinationChoices.push([line1, player[k].size, true]);
                         drawLine(player[k].x, player[k].y, line1[0], line1[1], 7);
-                        tempMoveX = line1[0];
-                        tempMoveY = line1[1];
+                        //tempMoveX = line1[0];
+                        //tempMoveY = line1[1];
                     } else if (badAngles.length > 0 && goodAngles == 0) {
                         //TODO: CODE TO HANDLE WHEN THERE IS NO GOOD ANGLE BUT THERE ARE ENEMIES AROUND!!!!!!!!!!!!!
                     } else if (clusterAllFood.length > 0) {
@@ -954,9 +994,10 @@ console.log("Running Apos Bot!");
 
                         var destination = followAngle(shiftedAngle, player[k].x, player[k].y, distance);
 
-                        tempMoveX = destination[0];
-                        tempMoveY = destination[1];
-                        drawLine(player[k].x, player[k].y, tempMoveX, tempMoveY, 1);
+                        destinationChoices.push([destination, player[k].size, false]);
+                        //tempMoveX = destination[0];
+                        //tempMoveY = destination[1];
+                        drawLine(player[k].x, player[k].y, destination[0], destination[1], 1);
                     } else {
                         //If there are no enemies around and no food to eat.
                     }
@@ -968,6 +1009,33 @@ console.log("Running Apos Bot!");
                     tempPoint[2] = 1;
 
                     //console.log("Done working on blob: " + i);
+                }
+
+                //TODO: Find where to go based on destinationChoices.
+                var dangerFound = false;
+                for (var i = 0; i < destinationChoices.length; i++) {
+                    if (destinationChoices[i][2]) {
+                        dangerFound = true;
+                        console.log("Danger!");
+                        break;
+                    }
+                }
+
+                destinationChoices.sort(function(a, b){return b[1] - a[1]});
+
+                if (dangerFound) {
+                    for (var i = 0; i < destinationChoices.length; i++) {
+                        if (destinationChoices[i][2]) {
+                            tempMoveX = destinationChoices[i][0][0];
+                            tempMoveY = destinationChoices[i][0][1];
+                            console.log("Danger at index: " + i);
+                            break;
+                        }
+                    }
+                } else {
+                    tempMoveX = destinationChoices.peek()[0][0];
+                    tempMoveY = destinationChoices.peek()[0][1];
+                    //console.log("Done " + tempMoveX + ", " + tempMoveY);
                 }
             }
             //console.log("MOVING RIGHT NOW!");
@@ -1077,5 +1145,9 @@ console.log("Running Apos Bot!");
 
     function getUpdate() {
         return f.getLastUpdate();
+    }
+
+    function getMode() {
+        return f.getMode();
     }
 })(window, jQuery);
