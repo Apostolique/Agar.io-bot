@@ -2,7 +2,7 @@
 // @name        AposBotBeta
 // @namespace   AposBotBeta
 // @include     http://agar.io/*
-// @version     3.43
+// @version     3.44
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -23,22 +23,37 @@ Array.prototype.peek = function() {
     return this[this.length - 1];
 };
 
-$.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/bot.user.js?1', function(data) {
+function createDialog(title, text) {
+    return window.jQuery("<div class='dialog' title='" + title + "'><p>" + text + "</p></div>")
+    .dialog({
+        resizable: false,
+        height:140,
+        modal: true,
+        buttons: {
+            Confirm: function() {
+                window.jQuery( this ).dialog( "close" );
+            },
+            Cancel: function() {
+                window.jQuery( this ).dialog( "close" );
+            }
+        }
+    });
+}
+
+$.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/bot.user.js?' + Math.floor((Math.random() * 1000000) + 1), function(data) {
     var latestVersion = data.replace(/(\r\n|\n|\r)/gm,"");
     latestVersion = latestVersion.substring(latestVersion.indexOf("// @version")+11,latestVersion.indexOf("// @grant"));
 
     latestVersion = parseFloat(latestVersion + 0.0000);
     var myVersion = parseFloat(GM_info.script.version + 0.0000); 
-	
-	if(latestVersion > myVersion)
-	{
-		alert("Update Available for bot.user.js: V" + latestVersion + "\nGet the latest version from the GitHub page.");
+    
+    if(latestVersion > myVersion)
+    {
+        alert("Update Available for bot.user.js: V" + latestVersion + "\nGet the latest version from the GitHub page.");
         window.open('https://github.com/Apostolique/Agar.io-bot/blob/master/bot.user.js','_blank');
-	}
-	console.log('Current bot.user.js Version: ' + myVersion + " on Github: " + latestVersion);
+    }
+    console.log('Current bot.user.js Version: ' + myVersion + " on Github: " + latestVersion);
 });
-
-
 
 console.log("Running Apos Bot!");
 (function(f, g) {
@@ -959,6 +974,7 @@ console.log("Running Apos Bot!");
                         //tempMoveY = line1[1];
                     } else if (badAngles.length > 0 && goodAngles == 0) {
                         //TODO: CODE TO HANDLE WHEN THERE IS NO GOOD ANGLE BUT THERE ARE ENEMIES AROUND!!!!!!!!!!!!!
+                        destinationChoices.push([[tempMoveX, tempMoveY], player[k].size, false]);
                     } else if (clusterAllFood.length > 0) {
                         for (var i = 0; i < clusterAllFood.length; i++) {
                             //console.log("mefore: " + clusterAllFood[i][2]);
@@ -1000,6 +1016,7 @@ console.log("Running Apos Bot!");
                         drawLine(player[k].x, player[k].y, destination[0], destination[1], 1);
                     } else {
                         //If there are no enemies around and no food to eat.
+                        destinationChoices.push([[tempMoveX, tempMoveY], player[k].size, false]);
                     }
 
                     drawPoint(tempPoint[0], tempPoint[1], tempPoint[2], "");
@@ -1016,7 +1033,6 @@ console.log("Running Apos Bot!");
                 for (var i = 0; i < destinationChoices.length; i++) {
                     if (destinationChoices[i][2]) {
                         dangerFound = true;
-                        console.log("Danger!");
                         break;
                     }
                 }
@@ -1028,7 +1044,6 @@ console.log("Running Apos Bot!");
                         if (destinationChoices[i][2]) {
                             tempMoveX = destinationChoices[i][0][0];
                             tempMoveY = destinationChoices[i][0][1];
-                            console.log("Danger at index: " + i);
                             break;
                         }
                     }
