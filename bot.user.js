@@ -2,7 +2,7 @@
 // @name        AposBot
 // @namespace   AposBot
 // @include     http://agar.io/
-// @version     3.32
+// @version     3.33
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -44,7 +44,7 @@ console.log("Running Apos Bot!");
         g('#locationUnknown').addClass('form-group');
     }
 
-    f.botList.push(["AposBot", findDestination]);
+    f.botList.push(["AposBot " + GM_info.script.version, findDestination]);
 
     var bList = g('#bList');
     g('<option />', {value: (f.botList.length - 1), text: "AposBot"}).appendTo(bList);
