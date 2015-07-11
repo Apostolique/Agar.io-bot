@@ -2,7 +2,7 @@
 // @name        AposBotBeta
 // @namespace   AposBotBeta
 // @include     http://agar.io/*
-// @version     3.42
+// @version     3.43
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -819,7 +819,7 @@ console.log("Running Apos Bot!");
                     var stupidList = [];
 
                     for (var i = 0; i < allPossibleViruses.length; i++) {
-                        drawCircle(allPossibleViruses[i].x, allPossibleViruses[i].y, player[k].size, 3);
+                        drawCircle(allPossibleViruses[i].x, allPossibleViruses[i].y, player[k].size + 50, 3);
                         drawCircle(allPossibleViruses[i].x, allPossibleViruses[i].y, player[k].size * 2, 6);
                     }
 
