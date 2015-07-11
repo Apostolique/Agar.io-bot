@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name        Launcher
 // @namespace   AposLauncher
-// @include     http://agar.io/
-// @version     2.92
+// @include     http://agar.io/*
+// @version     2.93
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -88,15 +88,15 @@ console.log("Running Bot Launcher!");
             text: "Human"
         }).appendTo(bList);
 
-
         ya = !0;
         Pa();
         setInterval(Pa, 18E4);
 
-        window.jQuery("#canvas").parent().prepend("<canvas id='canvas1' height='520' width='584'>");
+        var father = window.jQuery("#canvas").parent();
         window.jQuery("#canvas").remove();
+        father.prepend("<canvas id='canvas'>");
 
-        G = za = document.getElementById("canvas1");
+        G = za = document.getElementById("canvas");
         f = G.getContext("2d");
         G.onmousedown = function(a) {
             if (Qa) {
@@ -517,7 +517,7 @@ console.log("Running Bot Launcher!");
         b += 4;
         for (u = 0; u < c; u++) d = a.getUint32(b, !0), b += 4, n = E[d], null != n && n.X();
         //UPDATE
-        Ha && 0 == k.length && Sa(!1)
+        //Ha && 0 == k.length && Sa(!1)
     }
 
     //UPDATE
@@ -531,6 +531,10 @@ console.log("Running Bot Launcher!");
 
     function screenDistance() {
         return Math.min(computeDistance(getOffsetX(), getOffsetY(), screenToGameX(getWidth()), getOffsetY()), computeDistance(getOffsetX(), getOffsetY(), getOffsetX(), screenToGameY(getHeight())));
+    }
+
+    window.verticalDistance = function() {
+        return computeDistance(0, 0, screenToGameY(getWidth()), screenToGameY(getHeight()));
     }
 
     function screenToGameX(x) {
@@ -621,6 +625,20 @@ console.log("Running Bot Launcher!");
             for (var b = 0; b < B.length; ++b) a.setUint8(b + 1, B.charCodeAt(b));
             O(a)
         }
+    }
+
+    //UPDATE HACK
+    function wazza() {
+        m = d.innerWidth;
+        r = d.innerHeight;
+        za.width = G.width = m;
+        za.height = G.height = r;
+        var a = e("#helloContainer");
+        a.css("transform", "none");
+        var b = a.height(),
+            c = d.innerHeight;
+        b > c / 1.1 ? a.css("transform", "translate(-50%, -50%) scale(" + c / b / 1.1 + ")") : a.css("transform", "translate(-50%, -50%)");
+        gb()
     }
 
     function Ta() {
@@ -1682,6 +1700,10 @@ console.log("Running Bot Launcher!");
                     return R;
                 }
 
+                window.getMode = function() {
+                    return P;
+                }
+
                 window.setPoint = function(x, y) {
                     ia = x;
                     ja = y;
@@ -1709,6 +1731,10 @@ console.log("Running Bot Launcher!");
                     message = a;
                 }
 
+                window.fixMe = function() {
+                    Ta();
+                }
+
                 var ma = 500,
                     eb = -1,
                     fb = -1,
@@ -1722,7 +1748,7 @@ console.log("Running Bot Launcher!");
                             d.requestAnimationFrame(Ua);
                             var c = Date.now(),
                                 l = c - a;
-                            l > b && (a = c - l % b, !T() || 240 > Date.now() - bb ? gb() : console.warn("Skipping draw"), Fb())
+                            l > b && (a = c - l % b, !T() || 240 > Date.now() - bb ? wazza() : console.warn("Skipping draw"), Fb())
                         }
                     }(),
                     U = {},
