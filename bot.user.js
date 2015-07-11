@@ -2,7 +2,7 @@
 // @name        AposBot
 // @namespace   AposBot
 // @include     http://agar.io/
-// @version     3.31
+// @version     3.32
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -161,7 +161,7 @@ console.log("Running Apos Bot!");
                 }
             }
 
-            if (!isMe && interNodes[element].d && compareSize(interNodes[element], blob, 1.30)) {
+            if (!isMe && interNodes[element].isVirus() && compareSize(interNodes[element], blob, 1.30)) {
                 return true;
             }
             return false;
@@ -185,7 +185,7 @@ console.log("Running Apos Bot!");
                 }
             }
 
-            if (!isMe && (!interNodes[element].d && compareSize(blob, interNodes[element], 1.30))) {
+            if (!isMe && (!interNodes[element].isVirus() && compareSize(blob, interNodes[element], 1.30))) {
                 return true;
             }
             return false;
@@ -210,7 +210,7 @@ console.log("Running Apos Bot!");
                 }
             }
 
-            if (!isMe && !interNodes[element].d && compareSize(interNodes[element], blob, 1.30) || (interNodes[element].size <= 11)) {
+            if (!isMe && !interNodes[element].isVirus() && compareSize(interNodes[element], blob, 1.30) || (interNodes[element].size <= 11)) {
                 return true;
             } else {
                 return false;
@@ -417,7 +417,7 @@ console.log("Running Apos Bot!");
 
         var radius = blob2.size;
 
-        if (blob2.d) {
+        if (blob2.isVirus()) {
             radius = blob1.size;
         } else if(canSplit(blob1, blob2)) {
             radius += splitDistance;
@@ -616,7 +616,7 @@ console.log("Running Apos Bot!");
         var lineLeft = followAngle(leftAngle, blob1.x, blob1.y, 150 + blob1.size - index * 10);
         var lineRight = followAngle(rightAngle, blob1.x, blob1.y, 150 + blob1.size - index * 10);
 
-        if (blob2.d) {
+        if (blob2.isVirus()) {
             drawLine(blob1.x, blob1.y, lineLeft[0], lineLeft[1], 6);
             drawLine(blob1.x, blob1.y, lineRight[0], lineRight[1], 6);
             drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob1.x, blob1.y, 6);
