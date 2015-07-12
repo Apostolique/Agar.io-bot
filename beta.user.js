@@ -2,7 +2,7 @@
 // @name        AposBotBeta
 // @namespace   AposBotBeta
 // @include     http://agar.io/*
-// @version     3.45
+// @version     3.46
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -180,6 +180,10 @@ console.log("Running Apos Bot!");
             }
 
             if (!isMe && interNodes[element].isVirus() && compareSize(interNodes[element], blob, 1.30)) {
+                return true;
+            } else if (/*getMode() == ":experimental" && */!isMe && interNodes[element].isVirus() && interNodes[element].color.substring(3,5).toLowerCase() != "ff") {
+                console.dir(interNodes[element]);
+                console.log("Yes " + interNodes[element].color);
                 return true;
             }
             return false;
@@ -826,17 +830,32 @@ console.log("Running Apos Bot!");
                     var stupidList = [];
 
                     for (var i = 0; i < allPossibleViruses.length; i++) {
-                        drawCircle(allPossibleViruses[i].x, allPossibleViruses[i].y, player[k].size + 50, 3);
-                        drawCircle(allPossibleViruses[i].x, allPossibleViruses[i].y, player[k].size * 2, 6);
+                        if (player[k].size < allPossibleViruses[i].size) {
+                            drawCircle(allPossibleViruses[i].x, allPossibleViruses[i].y, allPossibleViruses[i].size + 10, 3);
+                            drawCircle(allPossibleViruses[i].x, allPossibleViruses[i].y, allPossibleViruses[i].size * 2, 6);
+
+                        } else {
+                            drawCircle(allPossibleViruses[i].x, allPossibleViruses[i].y, player[k].size + 50, 3);
+                            drawCircle(allPossibleViruses[i].x, allPossibleViruses[i].y, player[k].size * 2, 6);
+                        }
                     }
 
                     for (var i = 0; i < allPossibleViruses.length; i++) {
                         var virusDistance = computeDistance(allPossibleViruses[i].x, allPossibleViruses[i].y, player[k].x, player[k].y);
-                        if (virusDistance < (player[k].size * 2)) {
-                            var tempOb = getAngleRange(player[k], allPossibleViruses[i], i, player[k].size + 50);
-                            var angle1 = tempOb[0];
-                            var angle2 = rangeToAngle(tempOb);
-                            obstacleList.push([[angle1, true], [angle2, false]]);
+                        if (player[k].size < allPossibleViruses[i].size) {
+                            if (virusDistance < (allPossibleViruses[i].size * 2)) {
+                                var tempOb = getAngleRange(player[k], allPossibleViruses[i], i, allPossibleViruses[i].size + 10);
+                                var angle1 = tempOb[0];
+                                var angle2 = rangeToAngle(tempOb);
+                                obstacleList.push([[angle1, true], [angle2, false]]);
+                            }
+                        } else {
+                            if (virusDistance < (player[k].size * 2)) {
+                                var tempOb = getAngleRange(player[k], allPossibleViruses[i], i, player[k].size + 50);
+                                var angle1 = tempOb[0];
+                                var angle2 = rangeToAngle(tempOb);
+                                obstacleList.push([[angle1, true], [angle2, false]]);
+                            }
                         }
                     }
 
