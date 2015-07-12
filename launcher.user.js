@@ -2,7 +2,7 @@
 // @name        Launcher
 // @namespace   AposLauncher
 // @include     http://agar.io/*
-// @version     2.95
+// @version     2.96
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -515,9 +515,10 @@ console.log("Running Bot Launcher!");
             //console.log("start: " + interNodes[element].updateTime + " current: " + D + " life: " + (D - interNodes[element].updateTime));
             var isRemoved = !window.getCells().hasOwnProperty(element);
 
-            if (isRemoved && (getLastUpdate() - interNodes[element].getUptimeTime()) > 3000) {
+            if (isRemoved && (window.getLastUpdate() - interNodes[element].getUptimeTime()) > 3000) {
                 delete interNodes[element];
             } else if (isRemoved && computeDistance(getOffsetX(), getOffsetY(), interNodes[element].x, interNodes[element].y) < screenDistance()) {
+
                 //console.log("Too close! Remove " + computeDistance(getOffsetX(), getOffsetY(), interNodes[element].x, interNodes[element].y) + " || " + screenDistance());
 
                 delete interNodes[element];
@@ -545,7 +546,7 @@ console.log("Running Bot Launcher!");
     }
 
     window.verticalDistance = function() {
-        return computeDistance(0, 0, screenToGameX(getWidth()), screenToGameY(getHeight()));
+        return computeDistance(screenToGameX(0), screenToGameY(0), screenToGameX(getWidth()), screenToGameY(getHeight()));
     }
 
     function screenToGameX(x) {
@@ -1726,10 +1727,6 @@ console.log("Running Bot Launcher!");
 
                 window.setMessage = function(a) {
                     message = a;
-                }
-
-                window.fixMe = function() {
-                    Ta();
                 }
 
                 var ma = 500,
