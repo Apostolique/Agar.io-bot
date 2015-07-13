@@ -7,6 +7,7 @@
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
+var version = 3.34;
 
 Number.prototype.mod = function(n) {
     return ((this % n) + n) % n;
@@ -33,7 +34,7 @@ $.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/bot.user
     latestVersion = latestVersion.substring(latestVersion.indexOf("// @version")+11,latestVersion.indexOf("// @grant"));
 
     latestVersion = parseFloat(latestVersion + 0.0000);
-    var myVersion = parseFloat(GM_info.script.version + 0.0000); 
+    var myVersion = parseFloat(version + 0.0000); 
     
     if(latestVersion > myVersion)
     {
@@ -55,7 +56,7 @@ console.log("Running Apos Bot!");
         g('#locationUnknown').addClass('form-group');
     }
 
-    f.botList.push(["AposBot " + GM_info.script.version, findDestination]);
+    f.botList.push(["AposBot " + version, findDestination]);
 
     var bList = g('#bList');
     g('<option />', {value: (f.botList.length - 1), text: "AposBot"}).appendTo(bList);
