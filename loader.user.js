@@ -3,17 +3,31 @@
 // @namespace   AposLoader
 // @description Grabs latest versions of the bot scripts automatically.
 // @include     http://agar.io/
-// @version     1.0
+// @version     1.1
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposLoaderVersion = 1.0;
+var aposLoaderVersion = 1.1;
+window.jQuery.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/launcher.user.js?' + Math.floor((Math.random() * 1000000) + 1), function(data) {
+    var latestVersion = data.replace(/(\r\n|\n|\r)/gm, "");
+    latestVersion = latestVersion.substring(latestVersion.indexOf("// @version") + 11, latestVersion.indexOf("// @grant"));
 
-var script1 = "https://github.com/Apostolique/Agar.io-bot/raw/master/launcher.user.js";
-window.jQuery("body").append('<script type="text/javascript" src="' + script1 + '"></script>');
-var script2 = "https://github.com/Apostolique/Agar.io-bot/raw/master/beta.user.js";
-window.jQuery("body").append('<script type="text/javascript" src="' + script2 + '"></script>');
+    latestVersion = parseFloat(latestVersion + 0.0000);
+    var script1 = "https://cdn.rawgit.com/Apostolique/Agar.io-bot/master/launcher.user.js?version=" + latestVersion;
+    console.log("Script: " + script1);
+    window.jQuery("body").append('<script type="text/javascript" src="' + script1 + '"></script>');
+    
+});
+window.jQuery.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/beta.user.js?' + Math.floor((Math.random() * 1000000) + 1), function(data) {
+    var latestVersion = data.replace(/(\r\n|\n|\r)/gm, "");
+    latestVersion = latestVersion.substring(latestVersion.indexOf("// @version") + 11, latestVersion.indexOf("// @grant"));
+
+    latestVersion = parseFloat(latestVersion + 0.0000);
+    var script2 = "https://cdn.rawgit.com/Apostolique/Agar.io-bot/master/beta.user.js?version=" + latestVersion;
+    console.log("Script: " + script2);
+    window.jQuery("body").append('<script type="text/javascript" src="' + script2 + '"></script>');
+});
 
 function update(prefix, name, url) {
     window.jQuery(document.body).prepend("<div id='" + prefix + "Dialog' style='position: absolute; left: 0px; right: 0px; top: 0px; bottom: 0px; z-index: 100; display: none;'>");
