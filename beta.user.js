@@ -7,7 +7,7 @@
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var version = 3.46;
+var aposBetaVersion = 3.46;
 
 //TODO: Team mode
 //      Detect when people are merging
@@ -42,7 +42,7 @@ $.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/bot.user
     latestVersion = latestVersion.substring(latestVersion.indexOf("// @version")+11,latestVersion.indexOf("// @grant"));
 
     latestVersion = parseFloat(latestVersion + 0.0000);
-    var myVersion = parseFloat(version + 0.0000); 
+    var myVersion = parseFloat(aposBetaVersion + 0.0000); 
     
     if(latestVersion > myVersion)
     {
@@ -62,7 +62,7 @@ console.log("Running Apos Bot!");
         g('#locationUnknown').addClass('form-group');
     }
 
-    f.botList.push(["AposBotBeta " + version, findDestination]);
+    f.botList.push(["AposBotBeta " + aposBetaVersion, findDestination]);
 
     var bList = g('#bList');
     g('<option />', {value: (f.botList.length - 1), text: "AposBotBeta"}).appendTo(bList);
