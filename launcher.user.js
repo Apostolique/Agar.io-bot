@@ -255,7 +255,8 @@ console.log("Running Bot Launcher!");
     function sb() {
         la && (la = !1, setTimeout(function() {
             la = !0
-        }, 6E4 * Ya), d.googletag && d.googletag.pubads && d.googletag.pubads().refresh(d.aa))
+        //UPDATE
+        }, 6E4 * Ya))
     }
 
     function Z(a) {
