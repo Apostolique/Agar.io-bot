@@ -3,12 +3,12 @@
 // @namespace   AposLoader
 // @description Grabs latest versions of the bot scripts automatically.
 // @include     http://agar.io/
-// @version     1
+// @version     1.0
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposLoaderVersion = 1;
+var aposLoaderVersion = 1.0;
 
 var script1 = "https://github.com/Apostolique/Agar.io-bot/raw/master/launcher.user.js";
 window.jQuery("body").append('<script type="text/javascript" src="' + script1 + '"></script>');
