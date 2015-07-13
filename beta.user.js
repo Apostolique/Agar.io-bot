@@ -37,7 +37,7 @@ function update(prefix, name, url) {
     window.jQuery("#" + prefix + "Dialog").show();
 }
 
-$.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/bot.user.js?' + Math.floor((Math.random() * 1000000) + 1), function(data) {
+window.jQuery.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/bot.user.js?' + Math.floor((Math.random() * 1000000) + 1), function(data) {
     var latestVersion = data.replace(/(\r\n|\n|\r)/gm,"");
     latestVersion = latestVersion.substring(latestVersion.indexOf("// @version")+11,latestVersion.indexOf("// @grant"));
 
