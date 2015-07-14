@@ -1,10 +1,10 @@
 // ==UserScript==
-// @name        AposBot
-// @namespace   AposBot
+// @name        CubeBot
+// @namespace   CubeBot
 // @include     http://agar.io/
-// @version     3.34
+// @version     1.33.7
 // @grant       none
-// @author      http://www.twitch.tv/apostolique
+// @author      ClapCube
 // ==/UserScript==
 
 var aposBotVersion = 3.34;
