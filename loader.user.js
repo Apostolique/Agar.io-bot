@@ -3,12 +3,12 @@
 // @namespace   AposLoader
 // @description Grabs latest versions of the bot scripts automatically.
 // @include     http://agar.io/
-// @version     1.2
+// @version     1.3
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposLoaderVersion = 1.2;
+var aposLoaderVersion = 1.3;
 
 var sha = "efde0488cc2cc176db48dd23b28a20b90314352b";
 function getLatestCommit() {
@@ -32,12 +32,12 @@ function getLatestCommit() {
                 window.jQuery("body").append('<script type="text/javascript" src="' + script1 + '"></script>');
                 
             });
-            window.jQuery.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/beta.user.js?' + Math.floor((Math.random() * 1000000) + 1), function(data) {
+            window.jQuery.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/bot.user.js?' + Math.floor((Math.random() * 1000000) + 1), function(data) {
                 var latestVersion = data.replace(/(\r\n|\n|\r)/gm, "");
                 latestVersion = latestVersion.substring(latestVersion.indexOf("// @version") + 11, latestVersion.indexOf("// @grant"));
 
                 latestVersion = parseFloat(latestVersion + 0.0000);
-                var script2 = "https://cdn.rawgit.com/Apostolique/Agar.io-bot/" + sha + "/beta.user.js";
+                var script2 = "https://cdn.rawgit.com/Apostolique/Agar.io-bot/" + sha + "/bot.user.js";
                 console.log("Script: " + script2);
                 window.jQuery("body").append('<script type="text/javascript" src="' + script2 + '"></script>');
             });
