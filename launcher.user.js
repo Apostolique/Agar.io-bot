@@ -2,12 +2,12 @@
 // @name        AposLauncher
 // @namespace   AposLauncher
 // @include     http://agar.io/*
-// @version     2.96
+// @version     2.97
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposLauncherVersion = 2.96;
+var aposLauncherVersion = 2.97;
 
 Number.prototype.mod = function(n) {
     return ((this % n) + n) % n;
@@ -1063,22 +1063,22 @@ console.log("Running Bot Launcher!");
             d.localStorage.loginCache = JSON.stringify(l)
         }
         if (c) {
-            var u = +e("#agario-exp-bar .progress-bar-text").text().split("/")[0],
-                c = +e("#agario-exp-bar .progress-bar-text").text().split("/")[1].split(" ")[0],
-                l = e(".agario-profile-panel .progress-bar-star").text();
+            var u = +e(".agario-exp-bar .progress-bar-text").first().text().split("/")[0],
+                c = +e(".agario-exp-bar .progress-bar-text").first().text().split("/")[1].split(" ")[0],
+                l = e(".agario-profile-panel .progress-bar-star").first().text();
             if (l != a.e) S({
                 f: c,
                 d: c,
                 e: l
             }, function() {
                 e(".agario-profile-panel .progress-bar-star").text(a.e);
-                e("#agario-exp-bar .progress-bar").css("width", "100%");
+                e(".agario-exp-bar .progress-bar").css("width", "100%");
                 e(".progress-bar-star").addClass("animated tada").one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend",
                     function() {
                         e(".progress-bar-star").removeClass("animated tada")
                     });
                 setTimeout(function() {
-                    e("#agario-exp-bar .progress-bar-text").text(a.d + "/" + a.d + " XP");
+                    e(".agario-exp-bar .progress-bar-text").text(a.d + "/" + a.d + " XP");
                     S({
                         f: 0,
                         d: a.d,
@@ -1095,14 +1095,14 @@ console.log("Running Bot Launcher!");
                         c = (Date.now() - p) / 1E3;
                         c = 0 > c ? 0 : 1 < c ? 1 : c;
                         c = c * c * (3 - 2 * c);
-                        e("#agario-exp-bar .progress-bar-text").text(~~(u + (a.f - u) * c) + "/" + a.d + " XP");
-                        e("#agario-exp-bar .progress-bar").css("width", (88 * (u + (a.f - u) * c) / a.d).toFixed(2) + "%");
+                        e(".agario-exp-bar .progress-bar-text").text(~~(u + (a.f - u) * c) + "/" + a.d + " XP");
+                        e(".agario-exp-bar .progress-bar").css("width", (88 * (u + (a.f - u) * c) / a.d).toFixed(2) + "%");
                         1 > c ? d.requestAnimationFrame(g) : b && b()
                     };
                 d.requestAnimationFrame(g)
             }
         } else e(".agario-profile-panel .progress-bar-star").text(a.e),
-            e("#agario-exp-bar .progress-bar-text").text(a.f + "/" + a.d + " XP"), e("#agario-exp-bar .progress-bar").css("width", (88 * a.f / a.d).toFixed(2) + "%"), b && b()
+            e(".agario-exp-bar .progress-bar-text").text(a.f + "/" + a.d + " XP"), e(".agario-exp-bar .progress-bar").css("width", (88 * a.f / a.d).toFixed(2) + "%"), b && b()
     }
 
     function jb(a) {
