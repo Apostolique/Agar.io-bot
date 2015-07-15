@@ -1,13 +1,13 @@
 // ==UserScript==
-// @name        AposBotBeta
-// @namespace   AposBotBeta
+// @name        AposBot
+// @namespace   AposBot
 // @include     http://agar.io/*
-// @version     3.51
+// @version     3.52
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposBetaVersion = 3.51;
+var aposBotVersion = 3.52;
 
 //TODO: Team mode
 //      Detect when people are merging
@@ -42,11 +42,11 @@ $.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/bot.user
     latestVersion = latestVersion.substring(latestVersion.indexOf("// @version")+11,latestVersion.indexOf("// @grant"));
 
     latestVersion = parseFloat(latestVersion + 0.0000);
-    var myVersion = parseFloat(aposBetaVersion + 0.0000); 
+    var myVersion = parseFloat(aposBotVersion + 0.0000); 
     
     if(latestVersion > myVersion)
     {
-        update("aposBeta", "bot.user.js", "https://github.com/Apostolique/Agar.io-bot/blob/master/bot.user.js/");
+        update("aposBot", "bot.user.js", "https://github.com/Apostolique/Agar.io-bot/blob/master/bot.user.js/");
     }
     console.log('Current bot.user.js Version: ' + myVersion + " on Github: " + latestVersion);
 });
@@ -62,10 +62,10 @@ console.log("Running Apos Bot!");
         g('#locationUnknown').addClass('form-group');
     }
 
-    f.botList.push(["AposBotBeta " + aposBetaVersion, findDestination]);
+    f.botList.push(["AposBot " + aposBotVersion, findDestination]);
 
     var bList = g('#bList');
-    g('<option />', {value: (f.botList.length - 1), text: "AposBotBeta"}).appendTo(bList);
+    g('<option />', {value: (f.botList.length - 1), text: "AposBot"}).appendTo(bList);
 
     //Given an angle value that was gotten from valueAndleBased(),
     //returns a new value that scales it appropriately.
