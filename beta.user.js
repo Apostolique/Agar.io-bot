@@ -2,12 +2,12 @@
 // @name        AposBotBeta
 // @namespace   AposBotBeta
 // @include     http://agar.io/*
-// @version     3.46
+// @version     3.50
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposBetaVersion = 3.46;
+var aposBetaVersion = 3.50;
 
 //TODO: Team mode
 //      Detect when people are merging
@@ -37,7 +37,7 @@ function update(prefix, name, url) {
     window.jQuery("#" + prefix + "Dialog").show();
 }
 
-window.jQuery.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/bot.user.js?' + Math.floor((Math.random() * 1000000) + 1), function(data) {
+$.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/bot.user.js?' + Math.floor((Math.random() * 1000000) + 1), function(data) {
     var latestVersion = data.replace(/(\r\n|\n|\r)/gm,"");
     latestVersion = latestVersion.substring(latestVersion.indexOf("// @version")+11,latestVersion.indexOf("// @grant"));
 
@@ -110,19 +110,6 @@ console.log("Running Apos Bot!");
         return computeDistance(x1, y1, offsetX, offsetY);
     }
 
-    function getListBasedOnFunction(booleanFunction, listToUse) {
-        var dotList = [];
-        var interNodes = getMemoryCells();
-        Object.keys(listToUse).forEach(function(element, index) {
-            if (booleanFunction(element)) {
-                dotList.push(interNodes[element]);
-            }
-        });
-
-        return dotList;
-    }
-
-
     function compareSize(player1, player2, ratio) {
         if (player1.size * player1.size * ratio < player2.size * player2.size) {
             return true;
@@ -132,75 +119,6 @@ console.log("Running Apos Bot!");
 
     function canSplit(player1, player2) {
         return compareSize(player1, player2, 2.30) && !compareSize(player1, player2, 9);
-    }
-
-    function processEverything(listToUse) {
-        Object.keys(listToUse).forEach(function(element, index) {
-            computeAngleRanges(listToUse[element], getPlayer()[0]);
-        });
-    }
-
-    function getAll() {
-        var dotList = [];
-        var player = getPlayer();
-        var interNodes = getMemoryCells();
-
-        dotList = getListBasedOnFunction(function(element) {
-            var isMe = false;
-
-            for (var i = 0; i < player.length; i++) {
-                if (interNodes[element].id == player[i].id) {
-                    isMe = true;
-                    break;
-                }
-            }
-
-            for (var i = 0; i < player.length; i++) {
-                if (!isMe) {
-                    return true;
-                }
-                return false;
-            }
-        }, interNodes);
-
-        return dotList;
-    }
-
-    function getAllViruses(blob) {
-        var dotList = [];
-        var player = getPlayer();
-        var interNodes = getMemoryCells();
-
-        dotList = getListBasedOnFunction(function(element) {
-            var isMe = false;
-
-            for (var i = 0; i < player.length; i++) {
-                if (interNodes[element].id == player[i].id) {
-                    isMe = true;
-                    break;
-                }
-            }
-
-            if (!isMe && interNodes[element].isVirus() && compareSize(interNodes[element], blob, 1.30)) {
-                return true;
-            } else if (/*getMode() == ":experimental" && */!isMe && interNodes[element].isVirus() && interNodes[element].color.substring(3,5).toLowerCase() != "ff") {
-                console.dir(interNodes[element]);
-                console.log("Yes " + interNodes[element].color);
-                return true;
-            }
-            return false;
-        }, interNodes);
-
-        return dotList;
-    }
-
-    function getTeam(red, green, blue) {
-        if (red > green && red > blue) {
-            return 0;
-        } else if (green > red && green > blue) {
-            return 1;
-        }
-        return 2;
     }
 
     function isItMe(player, cell2) {
@@ -221,7 +139,7 @@ console.log("Running Apos Bot!");
 
             var cellTeam = getTeam(cellRed, cellGreen, cellBlue);
 
-            if (currentTeam == cellTeam) {
+            if (currentTeam == cellTeam && !cell2.isVirus()) {
                 return true;
             }
 
@@ -237,42 +155,79 @@ console.log("Running Apos Bot!");
         return false;
     }
 
-    function getAllThreats(blob) {
-        var dotList = [];
-        var player = getPlayer();
-        var interNodes = getMemoryCells();
-
-        dotList = getListBasedOnFunction(function(element) {
-            var isMe = isItMe(player, interNodes[element]);
-
-            if (!isMe && (!interNodes[element].isVirus() && compareSize(blob, interNodes[element], 1.30))) {
-                return true;
-            }
-            return false;
-        }, interNodes);
-
-        return dotList;
+    function getTeam(red, green, blue) {
+        if (red > green && red > blue) {
+            return 0;
+        } else if (green > red && green > blue) {
+            return 1;
+        }
+        return 2;
     }
 
-    function getAllFood(blob) {
-        var elementList = [];
+    function isFood(blob, cell) {
+        if (!cell.isVirus() && compareSize(cell, blob, 1.30) || (cell.size <= 11)) {
+            return true;
+        }
+        return false;
+    }
+
+    function isThreat(blob, cell) {
+        if (!cell.isVirus() && compareSize(blob, cell, 1.30)) {
+            return true;
+        }
+        return false;
+    }
+
+    function isVirus(blob, cell) {
+        if (cell.isVirus() && compareSize(cell, blob, 1.30)) {
+            return true;
+        } else if (cell.isVirus() && cell.color.substring(3,5).toLowerCase() != "ff") {
+            return true;
+        }
+        return false;
+    }
+
+    function separateListBasedOnFunction(listToUse, blob) {
+        var foodElementList = [];
+        var threatList = [];
+        var virusList = [];
+
+        var player = getPlayer();
+
+        Object.keys(listToUse).forEach(function(element, index) {
+            var isMe = isItMe(player, listToUse[element]);
+
+            if (!isMe) {
+                if (isFood(blob, listToUse[element])) {
+                    //IT'S FOOD!
+                    console.log("Found some food");
+                    foodElementList.push(listToUse[element]);
+                } else if (isThreat(blob, listToUse[element])) {
+                    //IT'S DANGER!
+                    threatList.push(listToUse[element]);
+                } else if (isVirus(blob, listToUse[element])) {
+                    //IT'S VIRUS!
+                    virusList.push(listToUse[element]);
+                }
+            }
+        });
+
+        foodList = [];
+        for (var i = 0; i < foodElementList.length; i++) {
+            foodList.push([foodElementList[i].x, foodElementList[i].y, foodElementList[i].size]);
+        }
+
+        console.log("Len: " + foodList.length);
+
+        return [foodList, threatList, virusList];
+    }
+
+    function getAll(blob) {
         var dotList = [];
         var player = getPlayer();
         var interNodes = getMemoryCells();
 
-        elementList = getListBasedOnFunction(function(element) {
-            var isMe = isItMe(player, interNodes[element]);
-
-            if (!isMe && !interNodes[element].isVirus() && compareSize(interNodes[element], blob, 1.30) || (interNodes[element].size <= 11)) {
-                return true;
-            } else {
-                return false;
-            }
-        }, interNodes);
-
-        for (var i = 0; i < elementList.length; i++) {
-            dotList.push([elementList[i].x, elementList[i].y, elementList[i].size]);
-        }
+        dotList = separateListBasedOnFunction(interNodes, blob);
 
         return dotList;
     }
@@ -728,9 +683,9 @@ console.log("Running Apos Bot!");
             var tempMoveX = getPointX();
             var tempMoveY = getPointY();
 
-            if (player.length > 0) {
+            var destinationChoices = []; //destination, size, danger
 
-                var destinationChoices = []; //destination, size, danger
+            if (player.length > 0) {
 
                 for (var k = 0; k < player.length; k++) {
 
@@ -741,12 +696,20 @@ console.log("Running Apos Bot!");
 
                     //var allDots = processEverything(interNodes);
 
-                    var allPossibleFood = null;
-                    allPossibleFood = getAllFood(player[k]); // #1
+                    var allIsAll = getAll(player[k]);
 
-                    var allPossibleThreats = getAllThreats(player[k]);
-                    //console.log("Internodes: " + interNodes.length + " Food: " + allPossibleFood.length + " Threats: " + allPossibleThreats.length);
-                    var allPossibleViruses = getAllViruses(player[k]);
+                    console.log("Getting stuff.");
+                    var allPossibleFood = allIsAll[0];
+                    //allPossibleFood = getAllFood(player[k]); // #1
+                    console.log("Got food.");
+
+                    var allPossibleThreats = allIsAll[1];
+                    //var allPossibleThreats = getAllThreats(player[k]);
+                    console.log("Got Danger.");
+
+                    var allPossibleViruses = allIsAll[2];
+                    //var allPossibleViruses = getAllViruses(player[k]);
+                    console.log("Got virus.");
 
                     var badAngles = [];
                     var obstacleList = [];
@@ -960,7 +923,7 @@ console.log("Running Apos Bot!");
 
                         var destination = followAngle(shiftedAngle, player[k].x, player[k].y, distance);
 
-                        destinationChoices.push([destination, player[k].size, false]);
+                        destinationChoices.push(destination);
                         drawLine(player[k].x, player[k].y, destination[0], destination[1], 1);
                         //tempMoveX = destination[0];
                         //tempMoveY = destination[1];
@@ -981,13 +944,13 @@ console.log("Running Apos Bot!");
 
                         var line1 = followAngle(perfectAngle, player[k].x, player[k].y, f.verticalDistance());
 
-                        destinationChoices.push([line1, player[k].size, true]);
+                        destinationChoices.push(line1);
                         drawLine(player[k].x, player[k].y, line1[0], line1[1], 7);
                         //tempMoveX = line1[0];
                         //tempMoveY = line1[1];
                     } else if (badAngles.length > 0 && goodAngles == 0) {
                         //TODO: CODE TO HANDLE WHEN THERE IS NO GOOD ANGLE BUT THERE ARE ENEMIES AROUND!!!!!!!!!!!!!
-                        destinationChoices.push([[tempMoveX, tempMoveY], player[k].size, false]);
+                        destinationChoices.push([tempMoveX, tempMoveY]);
                     } else if (clusterAllFood.length > 0) {
                         for (var i = 0; i < clusterAllFood.length; i++) {
                             //console.log("mefore: " + clusterAllFood[i][2]);
@@ -1023,13 +986,13 @@ console.log("Running Apos Bot!");
 
                         var destination = followAngle(shiftedAngle, player[k].x, player[k].y, distance);
 
-                        destinationChoices.push([destination, player[k].size, false]);
+                        destinationChoices.push(destination);
                         //tempMoveX = destination[0];
                         //tempMoveY = destination[1];
                         drawLine(player[k].x, player[k].y, destination[0], destination[1], 1);
                     } else {
                         //If there are no enemies around and no food to eat.
-                        destinationChoices.push([[tempMoveX, tempMoveY], player[k].size, false]);
+                        destinationChoices.push([tempMoveX, tempMoveY]);
                     }
 
                     drawPoint(tempPoint[0], tempPoint[1], tempPoint[2], "");
@@ -1042,7 +1005,7 @@ console.log("Running Apos Bot!");
                 }
 
                 //TODO: Find where to go based on destinationChoices.
-                var dangerFound = false;
+                /*var dangerFound = false;
                 for (var i = 0; i < destinationChoices.length; i++) {
                     if (destinationChoices[i][2]) {
                         dangerFound = true;
@@ -1064,13 +1027,13 @@ console.log("Running Apos Bot!");
                     tempMoveX = destinationChoices.peek()[0][0];
                     tempMoveY = destinationChoices.peek()[0][1];
                     //console.log("Done " + tempMoveX + ", " + tempMoveY);
-                }
+                }*/
             }
             //console.log("MOVING RIGHT NOW!");
 
             //console.log("______Never lied ever in my life.");
 
-            return [tempMoveX, tempMoveY];
+            return destinationChoices;
         }
     }
 
