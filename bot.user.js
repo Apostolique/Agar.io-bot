@@ -2,16 +2,15 @@
 // @name        AposBot
 // @namespace   AposBot
 // @include     http://agar.io/*
-// @version     3.52
+// @version     3.53
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposBotVersion = 3.52;
+var aposBotVersion = 3.53;
 
 //TODO: Team mode
 //      Detect when people are merging
-//      Protect all cells when split
 //      Split to catch smaller targets
 //      Angle based cluster code
 //      Better wall code
@@ -25,31 +24,46 @@ Array.prototype.peek = function() {
     return this[this.length - 1];
 };
 
-function update(prefix, name, url) {
-    window.jQuery(document.body).prepend("<div id='" + prefix + "Dialog' style='position: absolute; left: 0px; right: 0px; top: 0px; bottom: 0px; z-index: 100; display: none;'>");
-    window.jQuery('#' + prefix + 'Dialog').append("<div id='" + prefix + "Message' style='width: 350px; background-color: #FFFFFF; margin: 100px auto; border-radius: 15px; padding: 5px 15px 5px 15px;'>");
-    window.jQuery('#' + prefix + 'Message').append("<h2>UPDATE TIME!!!</h2>");
-    window.jQuery('#' + prefix + 'Message').append("<p>Grab the update for: <a id='" + prefix + "Link' href='" + url + "' target=\"_blank\">" + name + "</a></p>");
-    window.jQuery('#' + prefix + 'Link').on('click', function() {
-        window.jQuery("#" + prefix + "Dialog").hide();
-        window.jQuery("#" + prefix + "Dialog").remove();
-    });
-    window.jQuery("#" + prefix + "Dialog").show();
+var sha = "efde0488cc2cc176db48dd23b28a20b90314352b";
+function getLatestCommit() {
+    window.jQuery.ajax({
+            url: "https://api.github.com/repos/apostolique/Agar.io-bot/git/refs/heads/master",
+            cache: false,
+            dataType: "jsonp"
+        }).done(function(data) {
+            console.dir(data["data"])
+            console.log("hmm: " + data["data"]["object"]["sha"]);
+            sha = data["data"]["object"]["sha"];
+
+            function update(prefix, name, url) {
+                window.jQuery(document.body).prepend("<div id='" + prefix + "Dialog' style='position: absolute; left: 0px; right: 0px; top: 0px; bottom: 0px; z-index: 100; display: none;'>");
+                window.jQuery('#' + prefix + 'Dialog').append("<div id='" + prefix + "Message' style='width: 350px; background-color: #FFFFFF; margin: 100px auto; border-radius: 15px; padding: 5px 15px 5px 15px;'>");
+                window.jQuery('#' + prefix + 'Message').append("<h2>UPDATE TIME!!!</h2>");
+                window.jQuery('#' + prefix + 'Message').append("<p>Grab the update for: <a id='" + prefix + "Link' href='" + url + "' target=\"_blank\">" + name + "</a></p>");
+                window.jQuery('#' + prefix + 'Link').on('click', function() {
+                    window.jQuery("#" + prefix + "Dialog").hide();
+                    window.jQuery("#" + prefix + "Dialog").remove();
+                });
+                window.jQuery("#" + prefix + "Dialog").show();
+            }
+
+            $.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/bot.user.js?' + Math.floor((Math.random() * 1000000) + 1), function(data) {
+                var latestVersion = data.replace(/(\r\n|\n|\r)/gm,"");
+                latestVersion = latestVersion.substring(latestVersion.indexOf("// @version")+11,latestVersion.indexOf("// @grant"));
+
+                latestVersion = parseFloat(latestVersion + 0.0000);
+                var myVersion = parseFloat(aposBotVersion + 0.0000); 
+                
+                if(latestVersion > myVersion)
+                {
+                    update("aposBot", "bot.user.js", "https://github.com/Apostolique/Agar.io-bot/blob/" + sha + "/bot.user.js/");
+                }
+                console.log('Current bot.user.js Version: ' + myVersion + " on Github: " + latestVersion);
+            });
+
+        }).fail(function() {});
 }
-
-$.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/bot.user.js?' + Math.floor((Math.random() * 1000000) + 1), function(data) {
-    var latestVersion = data.replace(/(\r\n|\n|\r)/gm,"");
-    latestVersion = latestVersion.substring(latestVersion.indexOf("// @version")+11,latestVersion.indexOf("// @grant"));
-
-    latestVersion = parseFloat(latestVersion + 0.0000);
-    var myVersion = parseFloat(aposBotVersion + 0.0000); 
-    
-    if(latestVersion > myVersion)
-    {
-        update("aposBot", "bot.user.js", "https://github.com/Apostolique/Agar.io-bot/blob/master/bot.user.js/");
-    }
-    console.log('Current bot.user.js Version: ' + myVersion + " on Github: " + latestVersion);
-});
+getLatestCommit();
 
 console.log("Running Apos Bot!");
 (function(f, g) {
@@ -200,7 +214,6 @@ console.log("Running Apos Bot!");
             if (!isMe) {
                 if (isFood(blob, listToUse[element])) {
                     //IT'S FOOD!
-                    console.log("Found some food");
                     foodElementList.push(listToUse[element]);
                 } else if (isThreat(blob, listToUse[element])) {
                     //IT'S DANGER!
@@ -216,8 +229,6 @@ console.log("Running Apos Bot!");
         for (var i = 0; i < foodElementList.length; i++) {
             foodList.push([foodElementList[i].x, foodElementList[i].y, foodElementList[i].size]);
         }
-
-        console.log("Len: " + foodList.length);
 
         return [foodList, threatList, virusList];
     }
@@ -698,18 +709,9 @@ console.log("Running Apos Bot!");
 
                     var allIsAll = getAll(player[k]);
 
-                    console.log("Getting stuff.");
                     var allPossibleFood = allIsAll[0];
-                    //allPossibleFood = getAllFood(player[k]); // #1
-                    console.log("Got food.");
-
                     var allPossibleThreats = allIsAll[1];
-                    //var allPossibleThreats = getAllThreats(player[k]);
-                    console.log("Got Danger.");
-
                     var allPossibleViruses = allIsAll[2];
-                    //var allPossibleViruses = getAllViruses(player[k]);
-                    console.log("Got virus.");
 
                     var badAngles = [];
                     var obstacleList = [];
