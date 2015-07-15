@@ -2,12 +2,12 @@
 // @name        AposBot
 // @namespace   AposBot
 // @include     http://agar.io/*
-// @version     3.53
+// @version     3.55
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposBotVersion = 3.53;
+var aposBotVersion = 3.55;
 
 //TODO: Team mode
 //      Detect when people are merging
@@ -74,6 +74,12 @@ console.log("Running Apos Bot!");
         f.botList = [];
         g('#locationUnknown').append(g('<select id="bList" class="form-control" onchange="setBotIndex($(this).val());" />'));
         g('#locationUnknown').addClass('form-group');
+    }
+
+    for (var i = f.botList.length - 1; i >= 0; i++) {
+        if (f.botList[i][0] == "Human") {
+            f.botList.splice(i, 1);
+        }
     }
 
     f.botList.push(["AposBot " + aposBotVersion, findDestination]);
