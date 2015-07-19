@@ -972,8 +972,8 @@ console.log("Running Apos Bot!");
                     } else if (badAngles.length > 0 && goodAngles == 0) {
 						var angleWeights = [] //Put weights on the angles according to enemy distance
 						for (var i = 0; i < allPossibleThreats.length; i++){
-							var dist = computeDistance(player[k].x,player[k].y,allPossibleThreats[i].x,allPossibleThreats[i].y);
-							var angle = Math.atan2(allPossibleThreats[i].y-player[k].y,allPossibleThreats[i].x-player[k].x)*180/3.1459;
+							var dist = computeDistance(player[k].x, player[k].y, allPossibleThreats[i].x, allPossibleThreats[i].y);
+							var angle = getAngle(allPossibleThreats[i].x, allPossibleThreats[i].y, player[k].x, player[k].y);
 							angleWeights.push([angle,dist]);
 						}
 						var maxDist = 0;
@@ -981,11 +981,12 @@ console.log("Running Apos Bot!");
 						for (var i = 0; i < angleWeights.length; i++){
 							if (angleWeights[i][1] > maxDist){
 								maxDist = angleWeights[i][1];
-								finalAngle = angleWeights[i][0] + 180;
+								finalAngle = (angleWeights[i][0] + 180).mod(360);
 							}
 						}
-						var line = followAngle(finalAngle,player[k].x,player[k].y,f.verticalDistance());
-						destinationChoices.push(line);
+						var line1 = followAngle(finalAngle,player[k].x,player[k].y,f.verticalDistance());
+                        drawLine(player[k].x, player[k].y, line1[0], line1[1], 2);
+						destinationChoices.push(line1);
                     } else if (clusterAllFood.length > 0) {
                         for (var i = 0; i < clusterAllFood.length; i++) {
                             //console.log("mefore: " + clusterAllFood[i][2]);
