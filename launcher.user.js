@@ -236,7 +236,15 @@ console.log("Running Bot Launcher!");
     }
 
     function Pa() {
-        null == ka && (ka = {}, e("#region").children().each(function() {
+        /* "When either the equality operator in a test for null or undefined,
+         * or the logical operator that follows it is reversed, the code has
+         * the appearance of safely null-testing the object before dereferencing it.
+         * Unfortunately the effect is just the opposite - the object is null-tested
+         * and then dereferenced only if it is null/undefined, leading to a guaranteed TypeError."
+         *
+         * From SonarQube Javascript rules (reliable source).
+         */
+        null == ka || (ka = {}, e("#region").children().each(function() {
             var a = e(this),
                 b = a.val();
             b && (ka[b] = a.text())
@@ -2033,7 +2041,8 @@ console.log("Running Bot Launcher!");
                         a != this.F && (this.F = a, this.k = !0)
                     },
                     L: function() {
-                        null == this.p && (this.p = document.createElement("canvas"), this.T = this.p.getContext("2d"));
+                        //See Pa(); function
+                        null == this.p || (this.p = document.createElement("canvas"), this.T = this.p.getContext("2d"));
                         if (this.k) {
                             this.k = !1;
                             var a = this.p,
