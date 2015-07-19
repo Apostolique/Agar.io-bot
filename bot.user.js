@@ -2,7 +2,7 @@
 // @name        AposBot
 // @namespace   AposBot
 // @include     http://agar.io/*
-// @version     3.55
+// @version     3.551
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -76,7 +76,7 @@ console.log("Running Apos Bot!");
         g('#locationUnknown').addClass('form-group');
     }
 
-    for (var i = f.botList.length - 1; i >= 0; i++) {
+    for (var i = f.botList.length - 1; i >= 0; i--) {
         if (f.botList[i][0] == "Human") {
             f.botList.splice(i, 1);
         }
