@@ -2,12 +2,12 @@
 // @name        AposLauncher
 // @namespace   AposLauncher
 // @include     http://agar.io/*
-// @version     3.05
+// @version     3.052
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposLauncherVersion = 3.05;
+var aposLauncherVersion = 3.052;
 
 Number.prototype.mod = function(n) {
     return ((this % n) + n) % n;
@@ -98,7 +98,15 @@ console.log("Running Bot Launcher!");
 
     function humanPlayer() {
         //Don't need to do anything.
-        return [getPointX(), getPointY()];
+        var player = getPlayer();
+
+        var destination = [];
+
+        for (var i = 0; i < player.length; i++) {
+            destination.push([getPointX(), getPointY()])
+        }
+
+        return destination;
     }
 
     function pb() {
@@ -112,13 +120,15 @@ console.log("Running Bot Launcher!");
 
         window.jQuery('#nick').val(originalName);
 
-        window.botList.push(["Human", humanPlayer]);
+        if (window.botList.length == 0) {
+            window.botList.push(["Human", humanPlayer]);
 
-        var bList = window.jQuery('#bList');
-        window.jQuery('<option />', {
-            value: (window.botList.length - 1),
-            text: "Human"
-        }).appendTo(bList);
+            var bList = window.jQuery('#bList');
+            window.jQuery('<option />', {
+                value: (window.botList.length - 1),
+                text: "Human"
+            }).appendTo(bList);
+        }
 
         ya = !0;
         Pa();
@@ -192,7 +202,7 @@ console.log("Running Bot Launcher!");
     function Ra(a) {
         J *= Math.pow(.9, a.wheelDelta / -120 || a.detail || 0);
         //UPDATE
-        0.3 > J && (J = 0.3);
+        0.07 > J && (J = 0.07);
         J > 4 / h && (J = 4 / h)
     }
 
@@ -749,6 +759,25 @@ console.log("Running Bot Launcher!");
         f.translate(m / 2, r / 2);
         f.scale(h, h);
         f.translate(-s, -t);
+        //UPDATE
+        f.save();
+        f.beginPath();
+        f.lineWidth = 5;
+        f.strokeStyle = "#FFFFFF";
+        f.moveTo(getMapStartX(), getMapStartY());
+        f.lineTo(getMapStartX(), getMapEndY());
+        f.stroke();
+        f.moveTo(getMapStartX(), getMapStartY());
+        f.lineTo(getMapEndX(), getMapStartY());
+        f.stroke();
+        f.moveTo(getMapEndX(), getMapStartY());
+        f.lineTo(getMapEndX(), getMapEndY());
+        f.stroke();
+        f.moveTo(getMapStartX(), getMapEndY());
+        f.lineTo(getMapEndX(), getMapEndY());
+        f.stroke();
+        f.restore();
+        
         for (d = 0; d < v.length; d++) v[d].w(f);
         for (d = 0; d < Q.length; d++) Q[d].w(f);
         //UPDATE
