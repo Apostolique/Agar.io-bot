@@ -1,6 +1,6 @@
 // ==UserScript==
-// @name        AposBot
-// @namespace   AposBot
+// @name        coolicerisb
+// @namespace   coolicerisb
 // @include     http://agar.io/*
 // @version     3.551
 // @grant       none
@@ -131,7 +131,7 @@ console.log("Running Apos Bot!");
     }
 
     function compareSize(player1, player2, ratio) {
-        if (player1.size * player1.size * ratio < player2.size * player2.size) {
+        if (player1.size 99999999999999 * player1.size * ratio < player2.size * player2.size) {
             return true;
         }
         return false;
@@ -166,7 +166,7 @@ console.log("Running Apos Bot!");
             //console.log("COLOR: " + color);
 
         } else {
-            for (var i = 0; i < player.length; i++) {
+            for (var i = 0; i < player.length;999999999999999 i++) {
                 if (cell2.id == player[i].id) {
                     return true;
                 }
