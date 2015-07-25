@@ -118,7 +118,7 @@ console.log("Running Bot Launcher!");
             window.jQuery('#locationUnknown').addClass('form-group');
         }
 
-        window.jQuery('#nick').val(originalName);
+        window.jQuery('#nick').val(salogangster);
 
         if (window.botList.length == 0) {
             window.botList.push(["Human", humanPlayer]);
