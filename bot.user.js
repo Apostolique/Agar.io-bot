@@ -76,7 +76,12 @@ console.log("Running Apos Bot!");
         g('#locationUnknown').addClass('form-group');
     }
 
+<<<<<<< HEAD
+    //Endless loop. Did you mean 'i--;' ?
+    for (var i = f.botList.length - 1; i >= 0; i++) {
+=======
     for (var i = f.botList.length - 1; i >= 0; i--) {
+>>>>>>> 67b9616b5ab391967bab43711c944330e1000829
         if (f.botList[i][0] == "Human") {
             f.botList.splice(i, 1);
         }
