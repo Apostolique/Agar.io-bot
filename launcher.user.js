@@ -2,12 +2,12 @@
 // @name        AposLauncher
 // @namespace   AposLauncher
 // @include     http://agar.io/*
-// @version     3.052
+// @version     3.063
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposLauncherVersion = 3.052;
+var aposLauncherVersion = 3.063;
 
 Number.prototype.mod = function(n) {
     return ((this % n) + n) % n;
@@ -153,12 +153,12 @@ console.log("Running Bot Launcher!");
             fa = a.clientX;
             ga = a.clientY;
             Aa();
-            V()
+            V();
         };
         G.onmousemove = function(a) {
             fa = a.clientX;
             ga = a.clientY;
-            Aa()
+            Aa();
         };
         G.onmouseup = function() {};
         /firefox/i.test(navigator.userAgent) ? document.addEventListener("DOMMouseScroll", Ra, !1) : document.body.onmousewheel = Ra;
@@ -171,7 +171,7 @@ console.log("Running Bot Launcher!");
                 32 != l.keyCode || a || (V(), H(17), a = !0);
                 81 != l.keyCode || b || (H(18), b = !0);
                 87 != l.keyCode || c || (V(), H(21), c = !0);
-                27 == l.keyCode && Sa(!0)
+                27 == l.keyCode && Sa(!0);
 
                 //UPDATE
                 keyAction(l);
@@ -180,7 +180,7 @@ console.log("Running Bot Launcher!");
         d.onkeyup = function(l) {
             32 == l.keyCode && (a = !1);
             87 == l.keyCode && (c = !1);
-            81 == l.keyCode && b && (H(19), b = !1)
+            81 == l.keyCode && b && (H(19), b = !1);
         };
         d.onblur = function() {
             H(19);
@@ -214,10 +214,10 @@ console.log("Running Bot Launcher!");
                 !g.N() || g.R || 20 >= g.size * h || (d = Math.max(g.size, d), a = Math.min(g.x, a), b = Math.min(g.y, b), c = Math.max(g.x, c), l = Math.max(g.y, l))
             }
             X = rb.ka({
-                ca: a - (d + 100),
-                da: b - (d + 100),
-                oa: c + (d + 100),
-                pa: l + (d + 100),
+                ca: a - d + 100,
+                da: b - d + 100,
+                oa: c + d + 100,
+                pa: l + d + 100,
                 ma: 2,
                 na: 4
             });
@@ -523,9 +523,9 @@ console.log("Running Bot Launcher!");
             if (0 == d) break;
             ++u;
             var f, p = a.getInt16(b, !0);
-            b += 2;
+            b += 4;
             g = a.getInt16(b, !0);
-            b += 2;
+            b += 4;
             f = a.getInt16(b, !0);
             b += 2;
             for (var h = a.getUint8(b++), w = a.getUint8(b++), m = a.getUint8(b++), h = (h << 16 | w << 8 | m).toString(16); 6 > h.length;) h = "0" + h;
@@ -607,7 +607,7 @@ console.log("Running Bot Launcher!");
     }
 
     function screenToGameY(y) {
-        return (y - getHeight() / 2) / getRatio() + getY();;
+        return (y - getHeight() / 2) / getRatio() + getY();
     }
 
     window.drawPoint = function(x_1, y_1, drawColor, text) {
@@ -714,7 +714,7 @@ console.log("Running Bot Launcher!");
 
     function hb() {
         var a;
-        a = 1 * Math.max(r / 1080, m / 1920);
+        a = Math.max(r / 1080, m / 1920);
         return a *= J
     }
 
@@ -740,13 +740,12 @@ console.log("Running Bot Launcher!");
         C = b;
         if (0 < k.length) {
             yb();
-            for (var c =
-                    a = 0, d = 0; d < k.length; d++) k[d].P(), a += k[d].x / k.length, c += k[d].y / k.length;
+            for (var c = a = 0, d = 0; d < k.length; d++) k[d].P(), a += k[d].x / k.length, c += k[d].y / k.length;
             aa = a;
             ba = c;
             ca = h;
             s = (s + a) / 2;
-            t = (t + c) / 2
+            t = (t + c) / 2;
         } else s = (29 * s + aa) / 30, t = (29 * t + ba) / 30, h = (9 * h + ca * hb()) / 10;
         qb();
         Aa();
@@ -795,8 +794,7 @@ console.log("Running Bot Launcher!");
         }
         customRender(f);
         if (Ga) {
-            na = (3 *
-                na + Ea) / 4;
+            na = (3 * na + Ea) / 4;
             oa = (3 * oa + Fa) / 4;
             f.save();
             f.strokeStyle = "#FFAAAA";
@@ -807,7 +805,7 @@ console.log("Running Bot Launcher!");
             f.beginPath();
             for (d = 0; d < k.length; d++) f.moveTo(k[d].x, k[d].y), f.lineTo(na, oa);
             f.stroke();
-            f.restore()
+            f.restore();
         }
         f.restore();
         z && z.width && f.drawImage(z, m - z.width - 10, 10);
@@ -819,7 +817,7 @@ console.log("Running Bot Launcher!");
 
         var nbSeconds = 0;
         if (getPlayer().length > 0) {
-            //nbSeconds = (currentDate.getSeconds() + (currentDate.getMinutes() * 60) + (currentDate.getHours() * 60 * 60)) - (lifeTimer.getSeconds() + (lifeTimer.getMinutes() * 60) + (lifeTimer.getHours() * 60 * 60));
+            //nbSeconds = currentDate.getSeconds() + currentDate.getMinutes() * 60 + currentDate.getHours() * 3600 - lifeTimer.getSeconds() - lifeTimer.getMinutes() * 60 - lifeTimer.getHours() * 3600;
             nbSeconds = (currentDate.getTime() - lifeTimer.getTime())/1000;
         }
 
@@ -1054,9 +1052,8 @@ console.log("Running Bot Launcher!");
         f.save();
         f.strokeStyle = ta ? "#AAAAAA" : "#000000";
         f.globalAlpha = .2 * h;
-        for (var a = m / h, b = r / h, c = (-s + a / 2) % 50; c < a; c += 50) f.beginPath(), f.moveTo(c * h - .5, 0), f.lineTo(c * h - .5, b * h), f.stroke();
-        for (c = (-t + b / 2) % 50; c < b; c +=
-            50) f.beginPath(), f.moveTo(0, c * h - .5), f.lineTo(a * h, c * h - .5), f.stroke();
+        for (var a = m / h, b = r / h, c = (a / 2 - s) % 50; c < a; c += 50) f.beginPath(), f.moveTo(c * h - .5, 0), f.lineTo(c * h - .5, b * h), f.stroke();
+        for (c = (b / 2 - t) % 50; c < b; c += 50) f.beginPath(), f.moveTo(0, c * h - .5), f.lineTo(a * h, c * h - .5), f.stroke();
         f.restore()
     }
 
@@ -1850,7 +1847,7 @@ console.log("Running Bot Launcher!");
                         }
                     }(),
                     U = {},
-                    ob = "poland;usa;china;russia;canada;australia;spain;brazil;germany;ukraine;france;sweden;chaplin;north korea;south korea;japan;united kingdom;earth;greece;latvia;lithuania;estonia;finland;norway;cia;maldivas;austria;nigeria;reddit;yaranaika;confederate;9gag;indiana;4chan;italy;bulgaria;tumblr;2ch.hk;hong kong;portugal;jamaica;german empire;mexico;sanik;switzerland;croatia;chile;indonesia;bangladesh;thailand;iran;iraq;peru;moon;botswana;bosnia;netherlands;european union;taiwan;pakistan;hungary;satanist;qing dynasty;matriarchy;patriarchy;feminism;ireland;texas;facepunch;prodota;cambodia;steam;piccolo;ea;india;kc;denmark;quebec;ayy lmao;sealand;bait;tsarist russia;origin;vinesauce;stalin;belgium;luxembourg;stussy;prussia;8ch;argentina;scotland;sir;romania;belarus;wojak;doge;nasa;byzantium;imperial japan;french kingdom;somalia;turkey;mars;pokerface;8;irs;receita federal;facebook".split(";"),
+                    ob = "notreallyabot;poland;usa;china;russia;canada;australia;spain;brazil;germany;ukraine;france;sweden;chaplin;north korea;south korea;japan;united kingdom;earth;greece;latvia;lithuania;estonia;finland;norway;cia;maldivas;austria;nigeria;reddit;yaranaika;confederate;9gag;indiana;4chan;italy;bulgaria;tumblr;2ch.hk;hong kong;portugal;jamaica;german empire;mexico;sanik;switzerland;croatia;chile;indonesia;bangladesh;thailand;iran;iraq;peru;moon;botswana;bosnia;netherlands;european union;taiwan;pakistan;hungary;satanist;qing dynasty;matriarchy;patriarchy;feminism;ireland;texas;facepunch;prodota;cambodia;steam;piccolo;ea;india;kc;denmark;quebec;ayy lmao;sealand;bait;tsarist russia;origin;vinesauce;stalin;belgium;luxembourg;stussy;prussia;8ch;argentina;scotland;sir;romania;belarus;wojak;doge;nasa;byzantium;imperial japan;french kingdom;somalia;turkey;mars;pokerface;8;irs;receita federal;facebook".split(";"),
                     Gb = ["8", "nasa"],
                     Hb = ["m'blob"];
                 Ka.prototype = {
@@ -2017,8 +2014,8 @@ console.log("Running Bot Launcher!");
                             }
                             a.closePath();
                             d = this.name.toLowerCase();
-                            !this.n && kb && ":teams" != P ? -1 != ob.indexOf(d) ? (U.hasOwnProperty(d) || (U[d] = new Image, U[d].src = "skins/" +
-                                d + ".png"), c = 0 != U[d].width && U[d].complete ? U[d] : null) : c = null : c = null;
+                            !this.n && kb && ":teams" != P ? -1 != ob.indexOf(d) ? (U.hasOwnProperty(d) || (U[d] = new Image, (d == "notreallyabot" ? U[d].src = "http://i.imgur.com/q5FdCkx.png" : U[d].src = "skins/" +
+                                d + ".png")), c = 0 != U[d].width && U[d].complete ? U[d] : null) : c = null : c = null;
                             c = (e = c) ? -1 != Hb.indexOf(d) : !1;
                             b || a.stroke();
                             a.fill();
@@ -2229,7 +2226,8 @@ console.log("Running Bot Launcher!");
                             c.restore();
                             var d = document.getElementById("favicon"),
                                 e = d.cloneNode(!0);
-                            e.setAttribute("href", b.toDataURL("image/png"));
+                            //UPDATE -- NO IDEA WHAT I JUST DID THERE!
+                            //e.setAttribute("href", b.toDataURL("image/png"));
                             d.parentNode.replaceChild(e, d)
                         }
                     }();
