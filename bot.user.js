@@ -214,6 +214,25 @@ console.log("Running Apos Bot!");
         return false;
     }
 
+    function getMass(blob){
+        setShowMass(true);
+        //This var is only declared while showMass=true.
+        return blob.O.F;
+    }
+
+    function getTimeToRemerge(mass){
+        return ((mass*0.02) +30);
+    }
+
+    function getBlobCount(player){
+        var count = 0;
+        Object.keys(player).forEach(function(item, i) {
+            count++;
+        });
+        //return Object.keys(player).length - 1;
+        return count - 1;
+    }
+
     function separateListBasedOnFunction(listToUse, blob) {
         var foodElementList = [];
         var threatList = [];
@@ -241,6 +260,9 @@ console.log("Running Apos Bot!");
                     //IT'S VIRUS!
                     virusList.push(listToUse[element]);
                 }
+            }else if(isMe && (getBlobCount(getPlayer()) > 0)){
+                //Attempt to make the other cell follow the mother one
+                foodElementList.push(listToUse[element]);
             }
         });
 
@@ -704,6 +726,7 @@ console.log("Running Apos Bot!");
     function findDestination(followMouse) {
         var player = getPlayer();
         var interNodes = getMemoryCells();
+        //console.warn("findDestination(followMouse) was called from line " + arguments.callee.caller.toString());
 
         if ( /*!toggle*/ 1) {
             var useMouseX = (getMouseX() - getWidth() / 2 + getX() * getRatio()) / getRatio();
