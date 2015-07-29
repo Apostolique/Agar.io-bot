@@ -76,12 +76,7 @@ console.log("Running Apos Bot!");
         g('#locationUnknown').addClass('form-group');
     }
 
-<<<<<<< HEAD
-    //Endless loop. Did you mean 'i--;' ?
-    for (var i = f.botList.length - 1; i >= 0; i++) {
-=======
     for (var i = f.botList.length - 1; i >= 0; i--) {
->>>>>>> 67b9616b5ab391967bab43711c944330e1000829
         if (f.botList[i][0] == "Human") {
             f.botList.splice(i, 1);
         }
@@ -219,6 +214,25 @@ console.log("Running Apos Bot!");
         return false;
     }
 
+    function getMass(blob){
+        setShowMass(true);
+        //This var is only declared while showMass=true.
+        return blob.O.F;
+    }
+
+    function getTimeToRemerge(mass){
+        return ((mass*0.02) +30);
+    }
+
+    function getBlobCount(player){
+        var count = 0;
+        Object.keys(player).forEach(function(item, i) {
+            count++;
+        });
+        //return Object.keys(player).length - 1;
+        return count - 1;
+    }
+
     function separateListBasedOnFunction(listToUse, blob) {
         var foodElementList = [];
         var threatList = [];
@@ -246,6 +260,9 @@ console.log("Running Apos Bot!");
                     //IT'S VIRUS!
                     virusList.push(listToUse[element]);
                 }
+            }else if(isMe && (getBlobCount(getPlayer()) > 0)){
+                //Attempt to make the other cell follow the mother one
+                foodElementList.push(listToUse[element]);
             }
         });
 
@@ -709,6 +726,7 @@ console.log("Running Apos Bot!");
     function findDestination(followMouse) {
         var player = getPlayer();
         var interNodes = getMemoryCells();
+        //console.warn("findDestination(followMouse) was called from line " + arguments.callee.caller.toString());
 
         if ( /*!toggle*/ 1) {
             var useMouseX = (getMouseX() - getWidth() / 2 + getX() * getRatio()) / getRatio();
