@@ -537,7 +537,7 @@ console.log("Running Apos Bot!");
         //var distanceFromWallY = mapSizeY/3;
         var distanceFromWallY = 2000;
         var distanceFromWallX = 2000;
-        if (Math.abs(f.getMapEndY - f.getMapStartY < distanceFromWallY) || Math.abs(f.getMapEndX - f.getMapEndX < distanceFromWallX)){
+        if (Math.abs(f.getMapEndY - f.getMapStartY) < distanceFromWallY || Math.abs(f.getMapEndX - f.getMapEndX) < distanceFromWallX){
             //MAPTOOSMALL
             //console.log("Map Too Small!");
             listToUse.push([
