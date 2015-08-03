@@ -138,7 +138,7 @@ console.log("Running Apos Bot!");
     }
 
     function canSplit(player1, player2) {
-        return compareSize(player1, player2, 2.30) && !compareSize(player1, player2, 9);
+        return compareSize(player1, player2, 2.30) && !compareSize(player1, player2, 7);
     }
 
     function isItMe(player, cell2) {
@@ -531,55 +531,124 @@ console.log("Running Apos Bot!");
     }
 
     function addWall(listToUse, blob) {
-        if (blob.x < f.getMapStartX() + 1000) {
+        //var mapSizeX = Math.abs(f.getMapStartX - f.getMapEndX);
+        //var mapSizeY = Math.abs(f.getMapStartY - f.getMapEndY);
+        //var distanceFromWallX = mapSizeX/3;
+        //var distanceFromWallY = mapSizeY/3;
+        var distanceFromWallY = 2000;
+        var distanceFromWallX = 2000;
+        if (Math.abs(f.getMapEndY - f.getMapStartY < distanceFromWallY) || Math.abs(f.getMapEndX - f.getMapEndX < distanceFromWallX)){
+            //MAPTOOSMALL
+            //console.log("Map Too Small!");
+            listToUse.push([
+                [0, true],
+                [0, false]
+            ]);
+        }
+        else if (blob.y < f.getMapStartY() + distanceFromWallY && blob.x < f.getMapStartX() + distanceFromWallX){
+            //TOPLEFT
+            //console.log("Top Left");
+            listToUse.push([
+                [90, true],
+                [360, false]
+            ]);
+            var lineLeft = followAngle(90, blob.x, blob.y, 190 + blob.size);
+            var lineRight = followAngle(360, blob.x, blob.y, 190 + blob.size);
+            drawLine(blob.x, blob.y, lineLeft[0], lineLeft[1], 5);
+            drawLine(blob.x, blob.y, lineRight[0], lineRight[1], 5);
+            drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
+        }
+        else if (blob.y < f.getMapStartY() + distanceFromWallY && blob.x > f.getMapEndX() - distanceFromWallX){
+            //TOPRIGHT
+            //console.log("Top Right");
+            listToUse.push([
+                [180, true],
+                [90, false]
+            ]);
+            var lineLeft = followAngle(180, blob.x, blob.y, 190 + blob.size);
+            var lineRight = followAngle(90, blob.x, blob.y, 190 + blob.size);
+            drawLine(blob.x, blob.y, lineLeft[0], lineLeft[1], 5);
+            drawLine(blob.x, blob.y, lineRight[0], lineRight[1], 5);
+            drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
+        }
+        else if (blob.y > f.getMapEndY() - distanceFromWallY && blob.x < f.getMapStartX() + distanceFromWallX){
+            //BOTTOMLEFT
+            //console.log("Bottom Left");
+            listToUse.push([
+                [0, true],
+                [270, false]
+            ]);
+            var lineLeft = followAngle(0, blob.x, blob.y, 190 + blob.size);
+            var lineRight = followAngle(270, blob.x, blob.y, 190 + blob.size);
+            drawLine(blob.x, blob.y, lineLeft[0], lineLeft[1], 5);
+            drawLine(blob.x, blob.y, lineRight[0], lineRight[1], 5);
+            drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
+        }
+        else if (blob.y > f.getMapEndY() - distanceFromWallY && blob.x > f.getMapEndX() - distanceFromWallX){
+            //BOTTOMRIGHT
+            //console.log("Bottom Right");
+            listToUse.push([
+                [270, true],
+                [180, false]
+            ]);
+            var lineLeft = followAngle(270, blob.x, blob.y, 190 + blob.size);
+            var lineRight = followAngle(180, blob.x, blob.y, 190 + blob.size);
+            drawLine(blob.x, blob.y, lineLeft[0], lineLeft[1], 5);
+            drawLine(blob.x, blob.y, lineRight[0], lineRight[1], 5);
+            drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
+        }
+        else if (blob.x < f.getMapStartX() + distanceFromWallX) {
             //LEFT
             //console.log("Left");
-
-            listToUse.push([[135, true], [225, false]]);
-
-            var lineLeft = followAngle(135, blob.x, blob.y, 190 + blob.size);
-            var lineRight = followAngle(225, blob.x, blob.y, 190 + blob.size);
+            listToUse.push([
+                [90, true],
+                [270, false]
+            ]);
+            var lineLeft = followAngle(90, blob.x, blob.y, 190 + blob.size);
+            var lineRight = followAngle(270, blob.x, blob.y, 190 + blob.size);
             drawLine(blob.x, blob.y, lineLeft[0], lineLeft[1], 5);
             drawLine(blob.x, blob.y, lineRight[0], lineRight[1], 5);
             drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
         }
-        if (blob.y < f.getMapStartY() + 1000) {
+        else if (blob.y < f.getMapStartY() + distanceFromWallY) {
             //TOP
             //console.log("TOP");
-            
-            listToUse.push([[225, true], [315, false]]);
-
-            var lineLeft = followAngle(225, blob.x, blob.y, 190 + blob.size);
-            var lineRight = followAngle(315, blob.x, blob.y, 190 + blob.size);
+            listToUse.push([
+                [180, true],
+                [360, false]
+            ]);
+            var lineLeft = followAngle(180, blob.x, blob.y, 190 + blob.size);
+            var lineRight = followAngle(360, blob.x, blob.y, 190 + blob.size);
             drawLine(blob.x, blob.y, lineLeft[0], lineLeft[1], 5);
             drawLine(blob.x, blob.y, lineRight[0], lineRight[1], 5);
             drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
         }
-        if (blob.x > f.getMapEndX() - 1000) {
+        else if (blob.x > f.getMapEndX() - distanceFromWallX) {
             //RIGHT
             //console.log("RIGHT");
-
-            listToUse.push([[315, true], [45, false]]);
-            
-            var lineLeft = followAngle(315, blob.x, blob.y, 190 + blob.size);
-            var lineRight = followAngle(45, blob.x, blob.y, 190 + blob.size);
+            listToUse.push([
+                [270, true],
+                [90, false]
+            ]);
+            var lineLeft = followAngle(270, blob.x, blob.y, 190 + blob.size);
+            var lineRight = followAngle(90, blob.x, blob.y, 190 + blob.size);
             drawLine(blob.x, blob.y, lineLeft[0], lineLeft[1], 5);
             drawLine(blob.x, blob.y, lineRight[0], lineRight[1], 5);
             drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
         }
-        if (blob.y > f.getMapEndY() - 1000) {
+        else if (blob.y > f.getMapEndY() - distanceFromWallY) {
             //BOTTOM
             //console.log("BOTTOM");
-
-            listToUse.push([[45, true], [135, false]]);
-            
-            var lineLeft = followAngle(45, blob.x, blob.y, 190 + blob.size);
-            var lineRight = followAngle(135, blob.x, blob.y, 190 + blob.size);
+            listToUse.push([
+                [0, true],
+                [180, false]
+            ]);
+            var lineLeft = followAngle(0, blob.x, blob.y, 190 + blob.size);
+            var lineRight = followAngle(180, blob.x, blob.y, 190 + blob.size);
             drawLine(blob.x, blob.y, lineLeft[0], lineLeft[1], 5);
             drawLine(blob.x, blob.y, lineRight[0], lineRight[1], 5);
             drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
         }
-
         return listToUse;
     }
 
@@ -1101,7 +1170,7 @@ console.log("Running Apos Bot!");
     }
 
     function screenToGameY(y) {
-        return (y - getHeight() / 2) / getRatio() + getY();;
+        return (y - getHeight() / 2) / getRatio() + getY();
     }
 
     function drawPoint(x_1, y_1, drawColor, text) {
