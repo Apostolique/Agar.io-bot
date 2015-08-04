@@ -137,8 +137,10 @@ console.log("Running Apos Bot!");
         return false;
     }
 
+    var notSplitDangerValue = 7;
+
     function canSplit(player1, player2) {
-        return compareSize(player1, player2, 2.30) && !compareSize(player1, player2, 7);
+        return compareSize(player1, player2, 2.30) && !compareSize(player1, player2, notSplitDangerValue);
     }
 
     function isItMe(player, cell2) {
@@ -1029,7 +1031,11 @@ console.log("Running Apos Bot!");
                     }
 
                     if (followMouse && goodAngles.length == 0) {
+                    	notSplitDangerNumber = 7;
                         //This is the follow the mouse mode
+                        
+                        
+                        
                         var distance = computeDistance(player[k].x, player[k].y, tempPoint[0], tempPoint[1]);
 
                         var shiftedAngle = shiftAngle(obstacleAngles, getAngle(tempPoint[0], tempPoint[1], player[k].x, player[k].y), [0, 360]);
@@ -1042,6 +1048,7 @@ console.log("Running Apos Bot!");
                         //tempMoveY = destination[1];
 
                     } else if (goodAngles.length > 0) {
+                    	notSplitDangerNumber = 7;
                         var bIndex = goodAngles[0];
                         var biggest = goodAngles[0][1];
                         for (var i = 1; i < goodAngles.length; i++) {
@@ -1062,6 +1069,7 @@ console.log("Running Apos Bot!");
                         //tempMoveX = line1[0];
                         //tempMoveY = line1[1];
                     } else if (badAngles.length > 0 && goodAngles == 0) {
+                    				notSplitDangerValue = 4;
 						var angleWeights = [] //Put weights on the angles according to enemy distance
 						for (var i = 0; i < allPossibleThreats.length; i++){
 							var dist = computeDistance(player[k].x, player[k].y, allPossibleThreats[i].x, allPossibleThreats[i].y);
