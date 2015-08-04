@@ -1,6 +1,6 @@
 // ==UserScript==
-// @name        AposBot
-// @namespace   AposBot
+// @name        Alexeyot
+// @namespace   Alexeyot
 // @include     http://agar.io/*
 // @version     3.56
 // @grant       none
