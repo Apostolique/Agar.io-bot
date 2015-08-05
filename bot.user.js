@@ -140,8 +140,6 @@ console.log("Running Apos Bot!");
     var notSplitDangerValue = 7;
 
     function canSplit(player1, player2) {
-    	//debug console log please remove
-    	console.log(notSplitDangerValue);
         return compareSize(player1, player2, 2.30) && !compareSize(player1, player2, notSplitDangerValue);
     }
 
