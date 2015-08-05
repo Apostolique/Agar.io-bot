@@ -140,6 +140,8 @@ console.log("Running Apos Bot!");
     var notSplitDangerValue = 7;
 
     function canSplit(player1, player2) {
+    	//debug console log please remove
+    	console.log(notSplitDangerValue);
         return compareSize(player1, player2, 2.30) && !compareSize(player1, player2, notSplitDangerValue);
     }
 
@@ -1029,9 +1031,8 @@ console.log("Running Apos Bot!");
                         drawPoint(line1[0], line1[1], 0, "" + i + ": 0");
                         drawPoint(line2[0], line2[1], 0, "" + i + ": 1");
                     }
-
+                    
                     if (followMouse && goodAngles.length == 0) {
-                    	notSplitDangerNumber = 7;
                         //This is the follow the mouse mode
                         
                         
@@ -1048,7 +1049,6 @@ console.log("Running Apos Bot!");
                         //tempMoveY = destination[1];
 
                     } else if (goodAngles.length > 0) {
-                    	notSplitDangerNumber = 7;
                         var bIndex = goodAngles[0];
                         var biggest = goodAngles[0][1];
                         for (var i = 1; i < goodAngles.length; i++) {
@@ -1069,7 +1069,10 @@ console.log("Running Apos Bot!");
                         //tempMoveX = line1[0];
                         //tempMoveY = line1[1];
                     } else if (badAngles.length > 0 && goodAngles == 0) {
-                    				notSplitDangerValue = 4;
+                    				if(notSplitDangerValue > 3.5){
+                    					notSplitDangerValue -= 0.5;
+                    					setTimeout(function(){ notSplitDangerValue = 7; }, 5000);
+                    				}
 						var angleWeights = [] //Put weights on the angles according to enemy distance
 						for (var i = 0; i < allPossibleThreats.length; i++){
 							var dist = computeDistance(player[k].x, player[k].y, allPossibleThreats[i].x, allPossibleThreats[i].y);
