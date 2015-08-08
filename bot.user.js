@@ -834,6 +834,19 @@ console.log("Running Apos Bot!");
 
                     //console.log("Looking for enemies!");
 
+
+                    for (var i = 0; i < allPossibleThreats.length; i++) {
+
+                        var enemyDistance = computeDistance(allPossibleThreats[i].x, allPossibleThreats[i].y, player[k].x, player[k].y);
+
+                        allPossibleThreats[i].enemyDist = enemyDistance;
+
+                    }
+
+                    allPossibleThreats.sort(function(a, b){
+                        return a.enemyDist-b.enemyDist;
+                    })
+
                     for (var i = 0; i < allPossibleThreats.length; i++) {
 
                         var enemyDistance = computeDistance(allPossibleThreats[i].x, allPossibleThreats[i].y, player[k].x, player[k].y);
