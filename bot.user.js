@@ -115,19 +115,19 @@ console.log("Running Apos Bot!");
         return distance;
     }
 
-    function computerDistanceFromCircleEdge(x1, y1, x2, y2, s2) {
-        var tempD = computeDistance(x2, y2, x1, y1);
+    function computeDistanceFromCircleEdge(x1, y1, x2, y2, s2) {
+        var tempD = computeDistance(x1, y1, x2, y2);
 
         var offsetX = 0;
         var offsetY = 0;
 
-        var ratioX = tempD / (x2 - x1);
-        var ratioY = tempD / (y2 - y1);
+        var ratioX = tempD / (x1 - x2);
+        var ratioY = tempD / (y1 - y2);
 
-        offsetX = x2 - (s2 / ratioX);
-        offsetY = y2 - (s2 / ratioY);
+        offsetX = x1 - (s2 / ratioX);
+        offsetY = y1 - (s2 / ratioY);
 
-        return computeDistance(x1, y1, offsetX, offsetY);
+        return computeDistance(x2, y2, offsetX, offsetY);
     }
 
     function compareSize(player1, player2, ratio) {
@@ -833,6 +833,19 @@ console.log("Running Apos Bot!");
                     var clusterAllFood = clusterFood(allPossibleFood, player[k].size);
 
                     //console.log("Looking for enemies!");
+
+
+                    for (var i = 0; i < allPossibleThreats.length; i++) {
+
+                        var enemyDistance = computeDistanceFromCircleEdge(allPossibleThreats[i].x, allPossibleThreats[i].y, player[k].x, player[k].y, allPossibleThreats[i].size);
+
+                        allPossibleThreats[i].enemyDist = enemyDistance;
+
+                    }
+
+                    allPossibleThreats.sort(function(a, b){
+                        return a.enemyDist-b.enemyDist;
+                    })
 
                     for (var i = 0; i < allPossibleThreats.length; i++) {
 
