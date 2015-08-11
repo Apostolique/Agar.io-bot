@@ -115,19 +115,19 @@ console.log("Running Apos Bot!");
         return distance;
     }
 
-    function computerDistanceFromCircleEdge(x1, y1, x2, y2, s2) {
-        var tempD = computeDistance(x2, y2, x1, y1);
+    function computeDistanceFromCircleEdge(x1, y1, x2, y2, s2) {
+        var tempD = computeDistance(x1, y1, x2, y2);
 
         var offsetX = 0;
         var offsetY = 0;
 
-        var ratioX = tempD / (x2 - x1);
-        var ratioY = tempD / (y2 - y1);
+        var ratioX = tempD / (x1 - x2);
+        var ratioY = tempD / (y1 - y2);
 
-        offsetX = x2 - (s2 / ratioX);
-        offsetY = y2 - (s2 / ratioY);
+        offsetX = x1 - (s2 / ratioX);
+        offsetY = y1 - (s2 / ratioY);
 
-        return computeDistance(x1, y1, offsetX, offsetY);
+        return computeDistance(x2, y2, offsetX, offsetY);
     }
 
     function compareSize(player1, player2, ratio) {
@@ -137,10 +137,8 @@ console.log("Running Apos Bot!");
         return false;
     }
 
-    var notSplitDangerValue = 7;
-
     function canSplit(player1, player2) {
-        return compareSize(player1, player2, 2.30) && !compareSize(player1, player2, notSplitDangerValue);
+        return compareSize(player1, player2, 2.30) && !compareSize(player1, player2, 7);
     }
 
     function isItMe(player, cell2) {
@@ -836,9 +834,22 @@ console.log("Running Apos Bot!");
 
                     //console.log("Looking for enemies!");
 
+
                     for (var i = 0; i < allPossibleThreats.length; i++) {
 
-                        var enemyDistance = computeDistance(allPossibleThreats[i].x, allPossibleThreats[i].y, player[k].x, player[k].y);
+                        var enemyDistance = computeDistanceFromCircleEdge(allPossibleThreats[i].x, allPossibleThreats[i].y, player[k].x, player[k].y, allPossibleThreats[i].size);
+
+                        allPossibleThreats[i].enemyDist = enemyDistance;
+
+                    }
+
+                    allPossibleThreats.sort(function(a, b){
+                        return a.enemyDist-b.enemyDist;
+                    })
+
+                    for (var i = 0; i < allPossibleThreats.length; i++) {
+
+                        //var enemyDistance = computeDistance(allPossibleThreats[i].x, allPossibleThreats[i].y, player[k].x, player[k].y);
 
                         var splitDangerDistance = allPossibleThreats[i].size + splitDistance + 150;
 
@@ -871,8 +882,8 @@ console.log("Running Apos Bot!");
                             allPossibleThreats[i].danger = false;
                         }
 
-                        /*if ((enemyCanSplit && enemyDistance < splitDangerDistance) ||
-                            (!enemyCanSplit && enemyDistance < normalDangerDistance)) {
+                        /*if ((enemyCanSplit && allPossibleThreats[i].enemyDist < splitDangerDistance) ||
+                            (!enemyCanSplit && allPossibleThreats[i].enemyDist < normalDangerDistance)) {
 
                             allPossibleThreats[i].danger = true;
                             allPossibleThreats[i].dangerTimeOut = f.getLastUpdate();
@@ -880,21 +891,21 @@ console.log("Running Apos Bot!");
 
                         //console.log("Figured out who was important.");
 
-                        if ((enemyCanSplit && enemyDistance < splitDangerDistance) || (enemyCanSplit && allPossibleThreats[i].danger)) {
+                        if ((enemyCanSplit && allPossibleThreats[i].enemyDist < splitDangerDistance) || (enemyCanSplit && allPossibleThreats[i].danger)) {
 
                             badAngles.push(getAngleRange(player[k], allPossibleThreats[i], i, splitDangerDistance));
 
-                        } else if ((!enemyCanSplit && enemyDistance < normalDangerDistance) || (!enemyCanSplit && allPossibleThreats[i].danger)) {
+                        } else if ((!enemyCanSplit && allPossibleThreats[i].enemyDist < normalDangerDistance) || (!enemyCanSplit && allPossibleThreats[i].danger)) {
 
                             badAngles.push(getAngleRange(player[k], allPossibleThreats[i], i, normalDangerDistance));
 
-                        } else if (enemyCanSplit && enemyDistance < splitDangerDistance + shiftDistance) {
+                        } else if (enemyCanSplit && allPossibleThreats[i].enemyDist < splitDangerDistance + shiftDistance) {
                             var tempOb = getAngleRange(player[k], allPossibleThreats[i], i, splitDangerDistance + shiftDistance);
                             var angle1 = tempOb[0];
                             var angle2 = rangeToAngle(tempOb);
 
                             obstacleList.push([[angle1, true], [angle2, false]]);
-                        } else if (!enemyCanSplit && enemyDistance < normalDangerDistance + shiftDistance) {
+                        } else if (!enemyCanSplit && allPossibleThreats[i].enemyDist < normalDangerDistance + shiftDistance) {
                             var tempOb = getAngleRange(player[k], allPossibleThreats[i], i, normalDangerDistance + shiftDistance);
                             var angle1 = tempOb[0];
                             var angle2 = rangeToAngle(tempOb);
@@ -1029,12 +1040,9 @@ console.log("Running Apos Bot!");
                         drawPoint(line1[0], line1[1], 0, "" + i + ": 0");
                         drawPoint(line2[0], line2[1], 0, "" + i + ": 1");
                     }
-                    
+
                     if (followMouse && goodAngles.length == 0) {
                         //This is the follow the mouse mode
-                        
-                        
-                        
                         var distance = computeDistance(player[k].x, player[k].y, tempPoint[0], tempPoint[1]);
 
                         var shiftedAngle = shiftAngle(obstacleAngles, getAngle(tempPoint[0], tempPoint[1], player[k].x, player[k].y), [0, 360]);
@@ -1067,10 +1075,6 @@ console.log("Running Apos Bot!");
                         //tempMoveX = line1[0];
                         //tempMoveY = line1[1];
                     } else if (badAngles.length > 0 && goodAngles == 0) {
-                    				if(notSplitDangerValue > 3.5){
-                    					notSplitDangerValue -= 0.5;
-                    					setTimeout(function(){ notSplitDangerValue = 7; }, 5000);
-                    				}
 						var angleWeights = [] //Put weights on the angles according to enemy distance
 						for (var i = 0; i < allPossibleThreats.length; i++){
 							var dist = computeDistance(player[k].x, player[k].y, allPossibleThreats[i].x, allPossibleThreats[i].y);
