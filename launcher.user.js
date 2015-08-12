@@ -2,12 +2,12 @@
 // @name        AposLauncher
 // @namespace   AposLauncher
 // @include     http://agar.io/*
-// @version     3.064
+// @version     3.065
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposLauncherVersion = 3.064;
+var aposLauncherVersion = 3.065;
 
 Number.prototype.mod = function(n) {
     return ((this % n) + n) % n;
@@ -636,9 +636,13 @@ console.log("Running Bot Launcher!");
         }
 
         if (getPlayer().length == 0) {
-            console.log("Revive");
-            setNick(originalName);
-            reviving = true;
+            if ((d.localStorage.wannaLogin != null && fbDone) || d.localStorage.wannaLogin == null) {
+                console.log("Revive " + d.localStorage.wannaLogin);
+                setNick(originalName);
+                reviving = true;
+            } else {
+                console.log("Wait!");
+            }
         } else if (getPlayer().length > 0 && reviving) {
             reviving = false;
         }
@@ -1172,9 +1176,11 @@ console.log("Running Bot Launcher!");
                         1 > c ? d.requestAnimationFrame(g) : b && b()
                     };
                 d.requestAnimationFrame(g)
+
             }
         } else e(".agario-profile-panel .progress-bar-star").text(a.e),
             e(".agario-exp-bar .progress-bar-text").text(a.f + "/" + a.d + " XP"), e(".agario-exp-bar .progress-bar").css("width", (88 * a.f / a.d).toFixed(2) + "%"), b && b()
+
     }
 
     function jb(a) {
@@ -1219,7 +1225,9 @@ console.log("Running Bot Launcher!");
                         e: +a[0],
                         f: +a[1],
                         d: +a[2]
-                    })
+                    });
+                    console.log("Facebook?");
+                    fbDone = true;
                 },
                 dataType: "text",
                 method: "POST",
@@ -1304,6 +1312,7 @@ console.log("Running Bot Launcher!");
                 reviving = false,
                 message = [],
                 selectedCell = 0,
+                fbDone = false,
 
                 q = null,
                 s = 0,
