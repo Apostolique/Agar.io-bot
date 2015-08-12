@@ -2,12 +2,12 @@
 // @name        AposBot
 // @namespace   AposBot
 // @include     http://agar.io/*
-// @version     3.56
+// @version     3.561
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposBotVersion = 3.56;
+var aposBotVersion = 3.561;
 
 //TODO: Team mode
 //      Detect when people are merging
@@ -141,7 +141,7 @@ console.log("Running Apos Bot!");
         return compareSize(player1, player2, 2.30) && !compareSize(player1, player2, 7);
     }
 
-    function isItMe(player, cell2) {
+    function isItMe(player, cell) {
         if (getMode() == ":teams") {
             var currentColor = player[0].color;
 
@@ -151,7 +151,7 @@ console.log("Running Apos Bot!");
 
             var currentTeam = getTeam(currentRed, currentGreen, currentBlue);
 
-            var cellColor = cell2.color;
+            var cellColor = cell.color;
 
             var cellRed = parseInt(cellColor.substring(1,3), 16);
             var cellGreen = parseInt(cellColor.substring(3,5), 16);
@@ -159,7 +159,7 @@ console.log("Running Apos Bot!");
 
             var cellTeam = getTeam(cellRed, cellGreen, cellBlue);
 
-            if (currentTeam == cellTeam && !cell2.isVirus()) {
+            if (currentTeam == cellTeam && !cell.isVirus()) {
                 return true;
             }
 
@@ -167,7 +167,8 @@ console.log("Running Apos Bot!");
 
         } else {
             for (var i = 0; i < player.length; i++) {
-                if (cell2.id == player[i].id) {
+                if (cell.id == player[i].id) {
+                    console.log("Unit: " + i);
                     return true;
                 }
             }
@@ -260,10 +261,10 @@ console.log("Running Apos Bot!");
                     //IT'S VIRUS!
                     virusList.push(listToUse[element]);
                 }
-            }else if(isMe && (getBlobCount(getPlayer()) > 0)){
+            }/*else if(isMe && (getBlobCount(getPlayer()) > 0)){
                 //Attempt to make the other cell follow the mother one
                 foodElementList.push(listToUse[element]);
-            }
+            }*/
         });
 
         foodList = [];
