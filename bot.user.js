@@ -2,12 +2,12 @@
 // @name        AposBot
 // @namespace   AposBot
 // @include     http://agar.io/*
-// @version     3.561
+// @version     3.562
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposBotVersion = 3.561;
+var aposBotVersion = 3.562;
 
 //TODO: Team mode
 //      Detect when people are merging
@@ -168,7 +168,6 @@ console.log("Running Apos Bot!");
         } else {
             for (var i = 0; i < player.length; i++) {
                 if (cell.id == player[i].id) {
-                    console.log("Unit: " + i);
                     return true;
                 }
             }
