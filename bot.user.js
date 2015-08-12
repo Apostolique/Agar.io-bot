@@ -849,7 +849,7 @@ console.log("Running Apos Bot!");
 
                     for (var i = 0; i < allPossibleThreats.length; i++) {
 
-                        var enemyDistance = computeDistance(allPossibleThreats[i].x, allPossibleThreats[i].y, player[k].x, player[k].y);
+                        //var enemyDistance = computeDistance(allPossibleThreats[i].x, allPossibleThreats[i].y, player[k].x, player[k].y);
 
                         var splitDangerDistance = allPossibleThreats[i].size + splitDistance + 150;
 
@@ -882,8 +882,8 @@ console.log("Running Apos Bot!");
                             allPossibleThreats[i].danger = false;
                         }
 
-                        /*if ((enemyCanSplit && enemyDistance < splitDangerDistance) ||
-                            (!enemyCanSplit && enemyDistance < normalDangerDistance)) {
+                        /*if ((enemyCanSplit && allPossibleThreats[i].enemyDist < splitDangerDistance) ||
+                            (!enemyCanSplit && allPossibleThreats[i].enemyDist < normalDangerDistance)) {
 
                             allPossibleThreats[i].danger = true;
                             allPossibleThreats[i].dangerTimeOut = f.getLastUpdate();
@@ -891,21 +891,21 @@ console.log("Running Apos Bot!");
 
                         //console.log("Figured out who was important.");
 
-                        if ((enemyCanSplit && enemyDistance < splitDangerDistance) || (enemyCanSplit && allPossibleThreats[i].danger)) {
+                        if ((enemyCanSplit && allPossibleThreats[i].enemyDist < splitDangerDistance) || (enemyCanSplit && allPossibleThreats[i].danger)) {
 
                             badAngles.push(getAngleRange(player[k], allPossibleThreats[i], i, splitDangerDistance));
 
-                        } else if ((!enemyCanSplit && enemyDistance < normalDangerDistance) || (!enemyCanSplit && allPossibleThreats[i].danger)) {
+                        } else if ((!enemyCanSplit && allPossibleThreats[i].enemyDist < normalDangerDistance) || (!enemyCanSplit && allPossibleThreats[i].danger)) {
 
                             badAngles.push(getAngleRange(player[k], allPossibleThreats[i], i, normalDangerDistance));
 
-                        } else if (enemyCanSplit && enemyDistance < splitDangerDistance + shiftDistance) {
+                        } else if (enemyCanSplit && allPossibleThreats[i].enemyDist < splitDangerDistance + shiftDistance) {
                             var tempOb = getAngleRange(player[k], allPossibleThreats[i], i, splitDangerDistance + shiftDistance);
                             var angle1 = tempOb[0];
                             var angle2 = rangeToAngle(tempOb);
 
                             obstacleList.push([[angle1, true], [angle2, false]]);
-                        } else if (!enemyCanSplit && enemyDistance < normalDangerDistance + shiftDistance) {
+                        } else if (!enemyCanSplit && allPossibleThreats[i].enemyDist < normalDangerDistance + shiftDistance) {
                             var tempOb = getAngleRange(player[k], allPossibleThreats[i], i, normalDangerDistance + shiftDistance);
                             var angle1 = tempOb[0];
                             var angle2 = rangeToAngle(tempOb);
