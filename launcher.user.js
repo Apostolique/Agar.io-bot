@@ -2,12 +2,12 @@
 // @name        AposLauncher
 // @namespace   AposLauncher
 // @include     http://agar.io/*
-// @version     3.065
+// @version     3.067
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposLauncherVersion = 3.065;
+var aposLauncherVersion = 3.067;
 
 Number.prototype.mod = function(n) {
     return ((this % n) + n) % n;
@@ -1203,7 +1203,9 @@ console.log("Running Bot Launcher!");
             e: +a[4],
             f: +a[5],
             d: +a[6]
-        })
+        });
+        fbDone = true;
+        console.log("Hello Facebook?");
     }
 
     function La(a) {
@@ -1216,6 +1218,7 @@ console.log("Running Bot Launcher!");
             e("#helloContainer").attr("data-logged-in", "1");
             null != B ? e.ajax("https://m.agar.io/checkToken", {
                 error: function() {
+                    console.log("Facebook Fail!");
                     B = null;
                     La(a)
                 },
@@ -1226,8 +1229,8 @@ console.log("Running Bot Launcher!");
                         f: +a[1],
                         d: +a[2]
                     });
-                    console.log("Facebook?");
                     fbDone = true;
+                    console.log("Facebook connected!");
                 },
                 dataType: "text",
                 method: "POST",
@@ -1236,6 +1239,7 @@ console.log("Running Bot Launcher!");
                 data: B
             }) : e.ajax("https://m.agar.io/facebookLogin", {
                 error: function() {
+                    console.log("You have a Facebook problem!");
                     B = null;
                     e("#helloContainer").attr("data-logged-in", "0")
                 },
@@ -2269,6 +2273,7 @@ console.log("Running Bot Launcher!");
                     delete d.localStorage.wannaLogin;
                     delete d.localStorage.loginCache;
                     delete d.localStorage.fbPictureCache;
+                    fbDone = false;
                     I()
                 };
                 var Fb = function() {
