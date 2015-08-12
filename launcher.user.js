@@ -2,12 +2,12 @@
 // @name        AposLauncher
 // @namespace   AposLauncher
 // @include     http://agar.io/*
-// @version     3.063
+// @version     3.064
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposLauncherVersion = 3.063;
+var aposLauncherVersion = 3.064;
 
 Number.prototype.mod = function(n) {
     return ((this % n) + n) % n;
@@ -214,10 +214,10 @@ console.log("Running Bot Launcher!");
                 !g.N() || g.R || 20 >= g.size * h || (d = Math.max(g.size, d), a = Math.min(g.x, a), b = Math.min(g.y, b), c = Math.max(g.x, c), l = Math.max(g.y, l))
             }
             X = rb.ka({
-                ca: a - d + 100,
-                da: b - d + 100,
-                oa: c + d + 100,
-                pa: l + d + 100,
+                ca: a - 10,
+                da: b - 10,
+                oa: c + 10,
+                pa: l + 10,
                 ma: 2,
                 na: 4
             });
@@ -305,14 +305,14 @@ console.log("Running Bot Launcher!");
     function Za() {
         var a = ++Ba;
         console.log("Find " + y + P);
-        e.ajax("https://m.agar.io/", {
+        e.ajax("https://m.agar.io/findServer", {
             error: function() {
                 setTimeout(Za, 1E3)
             },
             success: function(b) {
-                a == Ba && (b = b.split("\n"), b[2] && alert(b[2]), Ca("ws://" + b[0], b[1]))
+                a == Ba && (b.alert && alert(b.alert), Ca("ws://" + b.ip, b.token))
             },
-            dataType: "text",
+            dataType: "json",
             method: "POST",
             cache: !1,
             crossDomain: !0,
@@ -343,8 +343,7 @@ console.log("Running Bot Launcher!");
         }
         if (tb) {
             var d = a.split(":");
-            a = d[0] + "s://ip-" + d[1].replace(/\./g, "-").replace(/\//g,
-                "") + ".tech.agar.io:" + (+d[2] + 2E3)
+            a = d[0] + "s://ip-" + d[1].replace(/\./g, "-").replace(/\//g, "") + ".tech.agar.io:" + (+d[2] + 2E3)
         }
         M = [];
         k = [];
@@ -365,7 +364,7 @@ console.log("Running Bot Launcher!");
             console.log("socket open");
             a = N(5);
             a.setUint8(0, 254);
-            a.setUint32(1, 4, !0);
+            a.setUint32(1, 5, !0);
             O(a);
             a = N(5);
             a.setUint8(0, 255);
@@ -645,13 +644,13 @@ console.log("Running Bot Launcher!");
         }
         
         
-        var a;
         if (T()) {
-            a = fa - m / 2;
+            var a = fa - m / 2;
             var b = ga - r / 2;
             for (var i = 0; i < getPlayer().length; i++) {
                 var tempID = getPlayer()[i].id;
-                64 > a * a + b * b || .01 > Math.abs(eb - ia[i]) && .01 > Math.abs(fb - ja[i]) || (eb = ia[i], fb = ja[i], a = N(21), a.setUint8(0, 16), a.setFloat64(1, ia[i], !0), a.setFloat64(9, ja[i], !0), a.setUint32(17, tempID, !0), O(a))
+                64 > a * a + b * b || .01 > Math.abs(eb - ia[i]) &&
+                    .01 > Math.abs(fb - ja[i]) || (eb = ia[i], fb = ja[i], a = N(13), a.setUint8(0, 16), a.setInt32(1, ia[i], !0), a.setInt32(5, ja[i], !0), a.setUint32(9, tempID, !0), O(a))
             }
         }
     }
