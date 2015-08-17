@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        AposLauncher
 // @namespace   AposLauncher
-// @include     http://agar.io/*
+// @include     http://agar.com.hr/*
 // @version     3.067
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
@@ -20,7 +20,7 @@ Array.prototype.peek = function() {
 var sha = "efde0488cc2cc176db48dd23b28a20b90314352b";
 function getLatestCommit() {
     window.jQuery.ajax({
-            url: "https://api.github.com/repos/apostolique/Agar.io-bot/git/refs/heads/master",
+            url: "https://api.github.com/repos/apostolique/agar.com.hr-bot/git/refs/heads/master",
             cache: false,
             dataType: "jsonp"
         }).done(function(data) {
@@ -40,7 +40,7 @@ function getLatestCommit() {
                 window.jQuery("#" + prefix + "Dialog").show();
             }
 
-            window.jQuery.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/launcher.user.js?' + Math.floor((Math.random() * 1000000) + 1), function(data) {
+            window.jQuery.get('https://raw.githubusercontent.com/Apostolique/agar.com.hr-bot/master/launcher.user.js?' + Math.floor((Math.random() * 1000000) + 1), function(data) {
                 var latestVersion = data.replace(/(\r\n|\n|\r)/gm, "");
                 latestVersion = latestVersion.substring(latestVersion.indexOf("// @version") + 11, latestVersion.indexOf("// @grant"));
 
@@ -48,7 +48,7 @@ function getLatestCommit() {
                 var myVersion = parseFloat(aposLauncherVersion + 0.0000);
 
                 if (latestVersion > myVersion) {
-                    update("aposLauncher", "launcher.user.js", "https://github.com/Apostolique/Agar.io-bot/blob/" + sha + "/launcher.user.js/");
+                    update("aposLauncher", "launcher.user.js", "https://github.com/Apostolique/agar.com.hr-bot/blob/" + sha + "/launcher.user.js/");
                 }
                 console.log('Current launcher.user.js Version: ' + myVersion + " on Github: " + latestVersion);
             });
@@ -251,7 +251,7 @@ console.log("Running Bot Launcher!");
                 b = a.val();
             b && (ka[b] = a.text())
         }));
-        e.get("https://m.agar.io/info", function(a) {
+        e.get("https://m.agar.com.hr/info", function(a) {
                 var b = {},
                     c;
                 for (c in a.regions) {
@@ -305,7 +305,7 @@ console.log("Running Bot Launcher!");
     function Za() {
         var a = ++Ba;
         console.log("Find " + y + P);
-        e.ajax("https://m.agar.io/findServer", {
+        e.ajax("https://m.agar.com.hr/findServer", {
             error: function() {
                 setTimeout(Za, 1E3)
             },
@@ -343,7 +343,7 @@ console.log("Running Bot Launcher!");
         }
         if (tb) {
             var d = a.split(":");
-            a = d[0] + "s://ip-" + d[1].replace(/\./g, "-").replace(/\//g, "") + ".tech.agar.io:" + (+d[2] + 2E3)
+            a = d[0] + "s://ip-" + d[1].replace(/\./g, "-").replace(/\//g, "") + ".tech.agar.com.hr:" + (+d[2] + 2E3)
         }
         M = [];
         k = [];
@@ -1139,22 +1139,22 @@ console.log("Running Bot Launcher!");
             d.localStorage.loginCache = JSON.stringify(l)
         }
         if (c) {
-            var u = +e(".agario-exp-bar .progress-bar-text").first().text().split("/")[0],
-                c = +e(".agario-exp-bar .progress-bar-text").first().text().split("/")[1].split(" ")[0],
-                l = e(".agario-profile-panel .progress-bar-star").first().text();
+            var u = +e(".agar.com.hr-exp-bar .progress-bar-text").first().text().split("/")[0],
+                c = +e(".agar.com.hr-exp-bar .progress-bar-text").first().text().split("/")[1].split(" ")[0],
+                l = e(".agar.com.hr-profile-panel .progress-bar-star").first().text();
             if (l != a.e) S({
                 f: c,
                 d: c,
                 e: l
             }, function() {
-                e(".agario-profile-panel .progress-bar-star").text(a.e);
-                e(".agario-exp-bar .progress-bar").css("width", "100%");
+                e(".agar.com.hr-profile-panel .progress-bar-star").text(a.e);
+                e(".agar.com.hr-exp-bar .progress-bar").css("width", "100%");
                 e(".progress-bar-star").addClass("animated tada").one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend",
                     function() {
                         e(".progress-bar-star").removeClass("animated tada")
                     });
                 setTimeout(function() {
-                    e(".agario-exp-bar .progress-bar-text").text(a.d + "/" + a.d + " XP");
+                    e(".agar.com.hr-exp-bar .progress-bar-text").text(a.d + "/" + a.d + " XP");
                     S({
                         f: 0,
                         d: a.d,
@@ -1171,22 +1171,22 @@ console.log("Running Bot Launcher!");
                         c = (Date.now() - p) / 1E3;
                         c = 0 > c ? 0 : 1 < c ? 1 : c;
                         c = c * c * (3 - 2 * c);
-                        e(".agario-exp-bar .progress-bar-text").text(~~(u + (a.f - u) * c) + "/" + a.d + " XP");
-                        e(".agario-exp-bar .progress-bar").css("width", (88 * (u + (a.f - u) * c) / a.d).toFixed(2) + "%");
+                        e(".agar.com.hr-exp-bar .progress-bar-text").text(~~(u + (a.f - u) * c) + "/" + a.d + " XP");
+                        e(".agar.com.hr-exp-bar .progress-bar").css("width", (88 * (u + (a.f - u) * c) / a.d).toFixed(2) + "%");
                         1 > c ? d.requestAnimationFrame(g) : b && b()
                     };
                 d.requestAnimationFrame(g)
 
             }
-        } else e(".agario-profile-panel .progress-bar-star").text(a.e),
-            e(".agario-exp-bar .progress-bar-text").text(a.f + "/" + a.d + " XP"), e(".agario-exp-bar .progress-bar").css("width", (88 * a.f / a.d).toFixed(2) + "%"), b && b()
+        } else e(".agar.com.hr-profile-panel .progress-bar-star").text(a.e),
+            e(".agar.com.hr-exp-bar .progress-bar-text").text(a.f + "/" + a.d + " XP"), e(".agar.com.hr-exp-bar .progress-bar").css("width", (88 * a.f / a.d).toFixed(2) + "%"), b && b()
 
     }
 
     function jb(a) {
         "string" == typeof a && (a = JSON.parse(a));
-        Date.now() + 18E5 > a.ja ? e("#helloContainer").attr("data-logged-in", "0") : (d.localStorage.loginCache = JSON.stringify(a), B = a.fa, e(".agario-profile-name").text(a.name), $a(), S({
-            f: a.f,
+        Date.now() + 18E5 > a.ja ? e("#helloContainer").attr("data-logged-in", "0") : (d.localStorage.loginCache = JSON.stringify(a), B = a.fa, e(".io-profile-name").text(a.name), $a(), S({
+            f: a.f,agar
             d: a.d,
             e: a.e
         }), e("#helloContainer").attr("data-logged-in", "1"))
@@ -1213,10 +1213,10 @@ console.log("Running Bot Launcher!");
             var b = a.authResponse.accessToken;
             d.FB.api("/me/picture?width=180&height=180", function(a) {
                 d.localStorage.fbPictureCache = a.data.url;
-                e(".agario-profile-picture").attr("src", a.data.url)
+                e(".agar.com.hr-profile-picture").attr("src", a.data.url)
             });
             e("#helloContainer").attr("data-logged-in", "1");
-            null != B ? e.ajax("https://m.agar.io/checkToken", {
+            null != B ? e.ajax("https://m.agar.com.hr/checkToken", {
                 error: function() {
                     console.log("Facebook Fail!");
                     B = null;
@@ -1237,7 +1237,7 @@ console.log("Running Bot Launcher!");
                 cache: !1,
                 crossDomain: !0,
                 data: B
-            }) : e.ajax("https://m.agar.io/facebookLogin", {
+            }) : e.ajax("https://m.agar.com.hr/facebookLogin", {
                 error: function() {
                     console.log("You have a Facebook problem!");
                     B = null;
