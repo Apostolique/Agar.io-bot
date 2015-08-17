@@ -90,6 +90,42 @@ console.log("Running Apos Bot!");
     //Given an angle value that was gotten from valueAndleBased(),
     //returns a new value that scales it appropriately.
     function paraAngleValue(angleValue, range) {
+    // ==UserScript==
+// @name        AposBot
+// @namespace   AposBot
+// @include     http://agar.io/
+// @version     3.05
+// @grant       none
+// @author      http://www.twitch.tv/apostolique
+// ==/UserScript==
+
+
+Number.prototype.mod = function(n) {
+    return ((this % n) + n) % n;
+};
+
+Array.prototype.peek = function() {
+    return this[this.length - 1];
+}
+
+console.log("Running Apos Bot!");
+(function(f, g) {
+    console.log("Apos Bot!");
+
+    if (f.botList == null) {
+        f.botList = [];
+        g('#locationUnknown').append(g('<select id="bList" class="form-control" onchange="setBotIndex($(this).val());" />'));
+        g('#locationUnknown').addClass('form-group');
+    }
+
+    f.botList.push(["AposBot", findDestination]);
+
+    var bList = g('#bList');
+    g('<option />', {value: (f.botList.length - 1), text: "AposBot"}).appendTo(bList);
+
+    //Given an angle value that was gotten from valueAndleBased(),
+    //returns a new value that scales it appropriately.
+    function paraAngleValue(angleValue, range) {
         return (15 / (range[1])) * (angleValue * angleValue) - (range[1] / 6);
     }
 
