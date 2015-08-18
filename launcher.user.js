@@ -29,7 +29,7 @@ SOFTWARE.*/
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposLauncherVersion = 3.067;
+var aposLauncherVersion = 3.068;
 
 Number.prototype.mod = function(n) {
     return ((this % n) + n) % n;
