@@ -978,7 +978,7 @@ console.log("Running Apos Bot!");
                     }
 
                     for (var i = 0; i < allPossibleViruses.length; i++) {
-                        var virusDistance = computeDistance(allPossibleViruses[i].x, allPossibleViruses[i].y, player[k].x, player[k].y);
+                        var virusDistance = computeDistanceFromCircleEdge(allPossibleViruses[i].x, allPossibleViruses[i].y, player[k].x, player[k].y, player[k].size);
                         if (player[k].size < allPossibleViruses[i].size) {
                             if (virusDistance < (allPossibleViruses[i].size * 2)) {
                                 var tempOb = getAngleRange(player[k], allPossibleViruses[i], i, allPossibleViruses[i].size + 10);
