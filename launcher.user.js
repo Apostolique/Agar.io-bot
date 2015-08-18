@@ -334,7 +334,7 @@ console.log("Running Bot Launcher!");
             success: function(b) {
                 a == Ba && (b.alert && alert(b.alert), Ca("ws://" + b.ip, b.token))
             },
-            dataType: "json",
+            dataType: "jsonp",
             method: "POST",
             cache: !1,
             crossDomain: !0,
