@@ -1,8 +1,30 @@
+/*The MIT License (MIT)
+
+Copyright (c) 2015 Apostolique
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.*/
+
 // ==UserScript==
 // @name        AposLauncher
 // @namespace   AposLauncher
 // @include     http://agar.io/*
-// @version     3.067
+// @version     3.068
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -636,17 +658,13 @@ console.log("Running Bot Launcher!");
         }
 
         if (getPlayer().length == 0) {
-            if ((d.localStorage.wannaLogin != null && fbDone) || d.localStorage.wannaLogin == null) {
-                console.log("Revive " + d.localStorage.wannaLogin);
-                setNick(originalName);
-                reviving = true;
-            } else {
-                console.log("Wait!");
-            }
+            console.log("Revive");
+            setNick(originalName);
+            reviving = true;
         } else if (getPlayer().length > 0 && reviving) {
             reviving = false;
+            console.log("Done Reviving!");
         }
-        
         
         if (T()) {
             var a = fa - m / 2;
@@ -1204,7 +1222,6 @@ console.log("Running Bot Launcher!");
             f: +a[5],
             d: +a[6]
         });
-        fbDone = true;
         console.log("Hello Facebook?");
     }
 
@@ -1229,7 +1246,6 @@ console.log("Running Bot Launcher!");
                         f: +a[1],
                         d: +a[2]
                     });
-                    fbDone = true;
                     console.log("Facebook connected!");
                 },
                 dataType: "text",
@@ -1316,7 +1332,6 @@ console.log("Running Bot Launcher!");
                 reviving = false,
                 message = [],
                 selectedCell = 0,
-                fbDone = false,
 
                 q = null,
                 s = 0,
@@ -2273,7 +2288,6 @@ console.log("Running Bot Launcher!");
                     delete d.localStorage.wannaLogin;
                     delete d.localStorage.loginCache;
                     delete d.localStorage.fbPictureCache;
-                    fbDone = false;
                     I()
                 };
                 var Fb = function() {
