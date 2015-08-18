@@ -24,12 +24,12 @@ SOFTWARE.*/
 // @name        AposBot
 // @namespace   AposBot
 // @include     http://agar.io/*
-// @version     3.562
+// @version     3.563
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposBotVersion = 3.562;
+var aposBotVersion = 3.563;
 
 //TODO: Team mode
 //      Detect when people are merging
@@ -148,6 +148,8 @@ console.log("Running Apos Bot!");
 
         offsetX = x1 - (s2 / ratioX);
         offsetY = y1 - (s2 / ratioY);
+
+        drawPoint(offsetX, offsetY, 5, "");
 
         return computeDistance(x2, y2, offsetX, offsetY);
     }
@@ -699,16 +701,18 @@ console.log("Running Apos Bot!");
 
         //TODO: Only add the new range at the end after the right stuff has been removed.
 
+        var newListToUse = listToUse.slice();
+
         var startIndex = 1;
 
-        if (listToUse.length > 0 && !listToUse[0][1]) {
+        if (newListToUse.length > 0 && !newListToUse[0][1]) {
             startIndex = 0;
         }
 
-        var startMark = getAngleIndex(listToUse, range[0][0]);
+        var startMark = getAngleIndex(newListToUse, range[0][0]);
         var startBool = startMark.mod(2) != startIndex;
 
-        var endMark = getAngleIndex(listToUse, range[1][0]);
+        var endMark = getAngleIndex(newListToUse, range[1][0]);
         var endBool = endMark.mod(2) != startIndex;
 
         var removeList = [];
@@ -716,19 +720,19 @@ console.log("Running Apos Bot!");
         if (startMark != endMark) {
             //Note: If there is still an error, this would be it.
             var biggerList = 0;
-            if (endMark == listToUse.length) {
+            if (endMark == newListToUse.length) {
                 biggerList = 1;
             }
 
-            for (var i = startMark; i < startMark + (endMark - startMark).mod(listToUse.length + biggerList); i++) {
-                removeList.push((i).mod(listToUse.length));
+            for (var i = startMark; i < startMark + (endMark - startMark).mod(newListToUse.length + biggerList); i++) {
+                removeList.push((i).mod(newListToUse.length));
             }
-        } else if (startMark < listToUse.length && endMark < listToUse.length) {
-            var startDist = (listToUse[startMark][0] - range[0][0]).mod(360);
-            var endDist = (listToUse[endMark][0] - range[1][0]).mod(360);
+        } else if (startMark < newListToUse.length && endMark < newListToUse.length) {
+            var startDist = (newListToUse[startMark][0] - range[0][0]).mod(360);
+            var endDist = (newListToUse[endMark][0] - range[1][0]).mod(360);
 
             if (startDist < endDist) {
-                for (var i = 0; i < listToUse.length; i++) {
+                for (var i = 0; i < newListToUse.length; i++) {
                     removeList.push(i);
                 }
             }
@@ -737,17 +741,17 @@ console.log("Running Apos Bot!");
         removeList.sort(function(a, b){return b-a});
 
         for (var i = 0; i < removeList.length; i++) {
-            listToUse.splice(removeList[i], 1);
+            newListToUse.splice(removeList[i], 1);
         }
 
         if (startBool) {
-            listToUse.splice(getAngleIndex(listToUse, range[0][0]), 0, range[0]);
+            newListToUse.splice(getAngleIndex(newListToUse, range[0][0]), 0, range[0]);
         }
         if (endBool) {
-            listToUse.splice(getAngleIndex(listToUse, range[1][0]), 0, range[1]);
+            newListToUse.splice(getAngleIndex(newListToUse, range[1][0]), 0, range[1]);
         }
 
-        return listToUse;
+        return newListToUse;
     }
 
     function getAngleRange(blob1, blob2, index, radius) {
@@ -1016,10 +1020,13 @@ console.log("Running Apos Bot!");
 
                     for (var i = 0; i < stupidList.length; i++) {
                         //console.log("Adding to sorted: " + stupidList[i][0][0] + ", " + stupidList[i][1][0]);
-                        sortedInterList = addAngle(sortedInterList, stupidList[i])
+                        var tempList = addAngle(sortedInterList, stupidList[i]);
 
-                        if (sortedInterList.length == 0) {
+                        if (tempList.length == 0) {
+                            console.log("MAYDAY IT'S HAPPENING!");
                             break;
+                        } else {
+                            sortedInterList = tempList;
                         }
                     }
 
@@ -1120,7 +1127,12 @@ console.log("Running Apos Bot!");
                         //tempMoveX = line1[0];
                         //tempMoveY = line1[1];
                     } else if (badAngles.length > 0 && goodAngles == 0) {
-						var angleWeights = [] //Put weights on the angles according to enemy distance
+                        //When there are enemies around but no good angles
+                        //You're likely screwed. (This should never happen.)
+
+                        console.log("Failed");
+                        destinationChoices.push([tempMoveX, tempMoveY]);
+						/*var angleWeights = [] //Put weights on the angles according to enemy distance
 						for (var i = 0; i < allPossibleThreats.length; i++){
 							var dist = computeDistance(player[k].x, player[k].y, allPossibleThreats[i].x, allPossibleThreats[i].y);
 							var angle = getAngle(allPossibleThreats[i].x, allPossibleThreats[i].y, player[k].x, player[k].y);
@@ -1136,7 +1148,7 @@ console.log("Running Apos Bot!");
 						}
 						var line1 = followAngle(finalAngle,player[k].x,player[k].y,f.verticalDistance());
                         drawLine(player[k].x, player[k].y, line1[0], line1[1], 2);
-						destinationChoices.push(line1);
+						destinationChoices.push(line1);*/
                     } else if (clusterAllFood.length > 0) {
                         for (var i = 0; i < clusterAllFood.length; i++) {
                             //console.log("mefore: " + clusterAllFood[i][2]);
