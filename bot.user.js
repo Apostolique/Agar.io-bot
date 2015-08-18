@@ -1,3 +1,25 @@
+/*The MIT License (MIT)
+
+Copyright (c) 2015 Apostolique
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.*/
+
 // ==UserScript==
 // @name        AposBot
 // @namespace   AposBot
@@ -792,23 +814,40 @@ console.log("Running Apos Bot!");
         return angle;
     }
 
+    /**
+     * This is the main bot logic. This is called quite often.
+     * @param  followMouse Is a boolean. If set to true, it means the user is asking for the bot to follow the mouse coordinates.
+     * @return A 2 dimensional array with coordinates for every cells.  [[x, y], [x, y]]
+     */
     function findDestination(followMouse) {
         var player = getPlayer();
         var interNodes = getMemoryCells();
         //console.warn("findDestination(followMouse) was called from line " + arguments.callee.caller.toString());
 
         if ( /*!toggle*/ 1) {
-            var useMouseX = (getMouseX() - getWidth() / 2 + getX() * getRatio()) / getRatio();
-            var useMouseY = (getMouseY() - getHeight() / 2 + getY() * getRatio()) / getRatio();
+
+            //The following code converts the mouse position into an
+            //absolute game coordinate.
+            var useMouseX = screenToGameX(getMouseX());
+            var useMouseY = screenToGameY(getMouseY());
             tempPoint = [useMouseX, useMouseY, 1];
 
+            //The current destination that the cells where going towards.
             var tempMoveX = getPointX();
             var tempMoveY = getPointY();
 
+            //This variable will be returned at the end.
+            //It will contain the destination choices for all the cells.
+            //BTW!!! ERROR ERROR ABORT MISSION!!!!!!! READ BELOW -----------
+            //
+            //SINCE IT'S STUPID NOW TO ASK EACH CELL WHERE THEY WANT TO GO,
+            //THE BOT SHOULD SIMPLY PICK ONE AND THAT'S IT, I MEAN WTF....
             var destinationChoices = []; //destination, size, danger
 
+            //Just to make sure the player is alive.
             if (player.length > 0) {
 
+                //Loop through all the player's cells.
                 for (var k = 0; k < player.length; k++) {
 
                     //console.log("Working on blob: " + k);
@@ -818,12 +857,19 @@ console.log("Running Apos Bot!");
 
                     //var allDots = processEverything(interNodes);
 
+                    //loop through everything that is on the screen and
+                    //separate everything in it's own category.
                     var allIsAll = getAll(player[k]);
 
+                    //The food stored in element 0 of allIsAll
                     var allPossibleFood = allIsAll[0];
+                    //The threats are stored in element 1 of allIsAll
                     var allPossibleThreats = allIsAll[1];
+                    //The viruses are stored in element 2 of allIsAll
                     var allPossibleViruses = allIsAll[2];
 
+                    //The bot works by removing angles in which it is too
+                    //dangerous to travel towards to.
                     var badAngles = [];
                     var obstacleList = [];
 
@@ -834,13 +880,12 @@ console.log("Running Apos Bot!");
 
                     //console.log("Looking for enemies!");
 
-
+                    //Loop through all the cells that were identified as threats.
                     for (var i = 0; i < allPossibleThreats.length; i++) {
 
                         var enemyDistance = computeDistanceFromCircleEdge(allPossibleThreats[i].x, allPossibleThreats[i].y, player[k].x, player[k].y, allPossibleThreats[i].size);
 
                         allPossibleThreats[i].enemyDist = enemyDistance;
-
                     }
 
                     allPossibleThreats.sort(function(a, b){
@@ -1178,10 +1223,22 @@ console.log("Running Apos Bot!");
         }
     }
 
+    /**
+     * A conversion from the screen's horizontal coordinate system
+     * to the game's horizontal coordinate system.
+     * @param x in the screen's coordinate system
+     * @return x in the game's coordinate system
+     */
     function screenToGameX(x) {
         return (x - getWidth() / 2) / getRatio() + getX();
     }
 
+    /**
+     * A conversion from the screen's vertical coordinate system
+     * to the game's vertical coordinate system.
+     * @param y in the screen's coordinate system
+     * @return y in the game's coordinate system
+     */
     function screenToGameY(y) {
         return (y - getHeight() / 2) / getRatio() + getY();
     }
@@ -1202,47 +1259,95 @@ console.log("Running Apos Bot!");
         f.drawCircle(x_1, y_1, radius, drawColor);
     }
 
+    /**
+     * Some horse shit of some sort.
+     * @return Horse Shit
+     */
     function screenDistance() {
         var temp = f.getScreenDistance();
         return temp;
     }
 
+    /**
+     * Tells you if the game is in Dark mode.
+     * @return Boolean for dark mode.
+     */
     function getDarkBool() {
         return f.getDarkBool();
     }
 
+    /**
+     * Tells you if the mass is shown.
+     * @return Boolean for player's mass.
+     */
     function getMassBool() {
         return f.getMassBool();
     }
 
+    /**
+     * This is a copy of everything that is shown on screen.
+     * Normally stuff will time out when off the screen, this
+     * memorizes everything that leaves the screen for a little
+     * while longer.
+     * @return The memory object.
+     */
     function getMemoryCells() {
         return f.getMemoryCells();
     }
 
+    /**
+     * [getCellsArray description]
+     * @return {[type]} [description]
+     */
     function getCellsArray() {
         return f.getCellsArray();
     }
 
+    /**
+     * This is the original "getMemoryCells" without the memory part.
+     * @return Non memorized object.
+     */
     function getCells() {
         return f.getCells();
     }
 
+    /**
+     * Returns an array with all the player's cells.
+     * @return Player's cells
+     */
     function getPlayer() {
         return f.getPlayer();
     }
 
+    /**
+     * The canvas' width.
+     * @return Integer Width
+     */
     function getWidth() {
         return f.getWidth();
     }
 
+    /**
+     * The canvas' height
+     * @return Integer Height
+     */
     function getHeight() {
         return f.getHeight();
     }
 
+    /**
+     * Scaling ratio of the canvas. The bigger this ration,
+     * the further that you see.
+     * @return Screen scaling ratio.
+     */
     function getRatio() {
         return f.getRatio();
     }
 
+    /**
+     * [getOffsetX description]
+     * @return {[type]} [description]
+     */
     function getOffsetX() {
         return f.getOffsetX();
     }
@@ -1267,18 +1372,34 @@ console.log("Running Apos Bot!");
         return f.getPointY();
     }
 
+    /**
+     * The X location of the mouse.
+     * @return Integer X
+     */
     function getMouseX() {
         return f.getMouseX();
     }
 
+    /**
+     * The Y location of the mouse.
+     * @return Integer Y
+     */
     function getMouseY() {
         return f.getMouseY();
     }
 
+    /**
+     * A timestamp since the last time the server sent any data.
+     * @return Last update timestamp
+     */
     function getUpdate() {
         return f.getLastUpdate();
     }
 
+    /**
+     * The game's current mode. (":ffa", ":experimental", ":teams". ":party")
+     * @return {[type]} [description]
+     */
     function getMode() {
         return f.getMode();
     }
