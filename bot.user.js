@@ -884,17 +884,18 @@ console.log("Running Apos Bot!");
                     for (var i = 0; i < allPossibleThreats.length; i++) {
 
                         var enemyDistance = computeDistanceFromCircleEdge(allPossibleThreats[i].x, allPossibleThreats[i].y, player[k].x, player[k].y, allPossibleThreats[i].size);
-
+                        //Add enemy distance as a property of all enemies for sorting (read below for sorting)
                         allPossibleThreats[i].enemyDist = enemyDistance;
                     }
 
+                    //Sort all posible theats by enemy distance from player
                     allPossibleThreats.sort(function(a, b){
                         return a.enemyDist-b.enemyDist;
                     })
 
                     for (var i = 0; i < allPossibleThreats.length; i++) {
 
-                        var enemyDistance = computeDistance(allPossibleThreats[i].x, allPossibleThreats[i].y, player[k].x, player[k].y);
+                        var enemyDistance = computeDistanceFromCircleEdge(allPossibleThreats[i].x, allPossibleThreats[i].y, player[k].x, player[k].y, player[k].size);
 
                         var splitDangerDistance = allPossibleThreats[i].size + splitDistance + 150;
 
@@ -977,7 +978,7 @@ console.log("Running Apos Bot!");
                     }
 
                     for (var i = 0; i < allPossibleViruses.length; i++) {
-                        var virusDistance = computeDistance(allPossibleViruses[i].x, allPossibleViruses[i].y, player[k].x, player[k].y);
+                        var virusDistance = computeDistanceFromCircleEdge(allPossibleViruses[i].x, allPossibleViruses[i].y, player[k].x, player[k].y, player[k].size);
                         if (player[k].size < allPossibleViruses[i].size) {
                             if (virusDistance < (allPossibleViruses[i].size * 2)) {
                                 var tempOb = getAngleRange(player[k], allPossibleViruses[i], i, allPossibleViruses[i].size + 10);
@@ -1120,23 +1121,23 @@ console.log("Running Apos Bot!");
                         //tempMoveX = line1[0];
                         //tempMoveY = line1[1];
                     } else if (badAngles.length > 0 && goodAngles == 0) {
-						var angleWeights = [] //Put weights on the angles according to enemy distance
-						for (var i = 0; i < allPossibleThreats.length; i++){
-							var dist = computeDistance(player[k].x, player[k].y, allPossibleThreats[i].x, allPossibleThreats[i].y);
-							var angle = getAngle(allPossibleThreats[i].x, allPossibleThreats[i].y, player[k].x, player[k].y);
-							angleWeights.push([angle,dist]);
-						}
-						var maxDist = 0;
-						var finalAngle = 0;
-						for (var i = 0; i < angleWeights.length; i++){
-							if (angleWeights[i][1] > maxDist){
-								maxDist = angleWeights[i][1];
-								finalAngle = (angleWeights[i][0] + 180).mod(360);
-							}
-						}
-						var line1 = followAngle(finalAngle,player[k].x,player[k].y,f.verticalDistance());
+                        var angleWeights = [] //Put weights on the angles according to enemy distance
+                        for (var i = 0; i < allPossibleThreats.length; i++){
+                            var dist = computeDistance(player[k].x, player[k].y, allPossibleThreats[i].x, allPossibleThreats[i].y);
+                            var angle = getAngle(allPossibleThreats[i].x, allPossibleThreats[i].y, player[k].x, player[k].y);
+                            angleWeights.push([angle,dist]);
+                        }
+                        var maxDist = 0;
+                        var finalAngle = 0;
+                        for (var i = 0; i < angleWeights.length; i++){
+                            if (angleWeights[i][1] > maxDist){
+                                maxDist = angleWeights[i][1];
+                                finalAngle = (angleWeights[i][0] + 180).mod(360);
+                            }
+                        }
+                        var line1 = followAngle(finalAngle,player[k].x,player[k].y,f.verticalDistance());
                         drawLine(player[k].x, player[k].y, line1[0], line1[1], 2);
-						destinationChoices.push(line1);
+                        destinationChoices.push(line1);
                     } else if (clusterAllFood.length > 0) {
                         for (var i = 0; i < clusterAllFood.length; i++) {
                             //console.log("mefore: " + clusterAllFood[i][2]);
