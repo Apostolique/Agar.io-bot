@@ -1406,7 +1406,7 @@ console.log("Running Bot Launcher!");
             })();
             var Qa = "ontouchstart" in d && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(d.navigator.userAgent),
                 Ja = new Image;
-            Ja.src = "img/split.png";
+            Ja.src = "http://agar.io/img/split.png";
             var nb = document.createElement("canvas");
             if ("undefined" == typeof console || "undefined" ==
                 typeof DataView || "undefined" == typeof WebSocket || null == nb || null == nb.getContext || null == d.localStorage) alert("You browser does not support this game, we recommend you to use Firefox to play this");
