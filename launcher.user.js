@@ -274,6 +274,7 @@ console.log("Running Bot Launcher!");
             b && (ka[b] = a.text())
         }));
         e.get("http://cors.io/?u=https://m.agar.io/info", function(a) {
+                console.log("Do I ever reach this spot?");
                 var b = {},
                     c;
                 for (c in a.regions) {
