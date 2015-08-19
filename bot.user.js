@@ -625,8 +625,8 @@ console.log("Running Apos Bot!");
             //LEFT
             //console.log("Left");
             listToUse.push([
-                [89, true],
-                [271, false], computeDistance(getMapStartX(), blob.y, blob.x, blob.y)
+                [90, true],
+                [270, false], computeDistance(getMapStartX(), blob.y, blob.x, blob.y)
             ]);
             var lineLeft = followAngle(90, blob.x, blob.y, 190 + blob.size);
             var lineRight = followAngle(270, blob.x, blob.y, 190 + blob.size);
@@ -638,8 +638,8 @@ console.log("Running Apos Bot!");
             //TOP
             //console.log("TOP");
             listToUse.push([
-                [179, true],
-                [1, false], computeDistance(blob.x, getMapStartY, blob.x, blob.y)
+                [180, true],
+                [0, false], computeDistance(blob.x, getMapStartY, blob.x, blob.y)
             ]);
             var lineLeft = followAngle(180, blob.x, blob.y, 190 + blob.size);
             var lineRight = followAngle(360, blob.x, blob.y, 190 + blob.size);
@@ -651,8 +651,8 @@ console.log("Running Apos Bot!");
             //RIGHT
             //console.log("RIGHT");
             listToUse.push([
-                [269, true],
-                [91, false], computeDistance(getMapEndX(), blob.y, blob.x, blob.y)
+                [270, true],
+                [90, false], computeDistance(getMapEndX(), blob.y, blob.x, blob.y)
             ]);
             var lineLeft = followAngle(270, blob.x, blob.y, 190 + blob.size);
             var lineRight = followAngle(90, blob.x, blob.y, 190 + blob.size);
@@ -664,8 +664,8 @@ console.log("Running Apos Bot!");
             //BOTTOM
             //console.log("BOTTOM");
             listToUse.push([
-                [359, true],
-                [181, false], computeDistance(blob.x, getMapEndY, blob.x, blob.y)
+                [0, true],
+                [180, false], computeDistance(blob.x, getMapEndY, blob.x, blob.y)
             ]);
             var lineLeft = followAngle(0, blob.x, blob.y, 190 + blob.size);
             var lineRight = followAngle(180, blob.x, blob.y, 190 + blob.size);
