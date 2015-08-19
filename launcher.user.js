@@ -328,7 +328,7 @@ console.log("Running Bot Launcher!");
         var a = ++Ba;
         console.log("Find " + y + P);
         window.jQuery.ajax({
-            url: "https://m.agar.io/findServer",
+            url: "http://cors.io/?u=https://m.agar.io/findServer",
             cache: false,
             dataType: "jsonp"
         }).done(function(b) {
