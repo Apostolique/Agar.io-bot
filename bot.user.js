@@ -209,14 +209,14 @@ console.log("Running Apos Bot!");
     }
 
     function isFood(blob, cell) {
-        if (!cell.isVirus() && compareSize(cell, blob, 1.30) || (cell.size <= 11)) {
+        if ((!cell.isVirus() && compareSize(cell, blob, 1.15) && !isItMe(blob, cell)) || blob.size < 10) {
             return true;
         }
         return false;
     }
 
     function isThreat(blob, cell) {
-        if (!cell.isVirus() && compareSize(blob, cell, 1.30)) {
+        if (!cell.isVirus() && compareSize(blob, cell, 1.15) && !isItMe(blob, cell)) {
             return true;
         }
         return false;
@@ -898,7 +898,7 @@ console.log("Running Apos Bot!");
 
                     for (var i = 0; i < allPossibleThreats.length; i++) {
 
-                        var enemyDistance = computeDistance(allPossibleThreats[i].x, allPossibleThreats[i].y, player[k].x, player[k].y);
+                        var enemyDistance = computeDistanceFromCircleEdge(allPossibleThreats[i].x, allPossibleThreats[i].y, player[k].x, player[k].y, player[k].size);
 
                         var splitDangerDistance = allPossibleThreats[i].size + splitDistance + 150;
 
