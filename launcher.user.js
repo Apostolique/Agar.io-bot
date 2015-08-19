@@ -327,7 +327,14 @@ console.log("Running Bot Launcher!");
     function Za() {
         var a = ++Ba;
         console.log("Find " + y + P);
-        e.ajax("http://cors.io/?u=https://m.agar.io/findServer", {
+        window.jQuery.ajax({
+            url: "https://m.agar.io/findServer",
+            cache: false,
+            dataType: "jsonp"
+        }).done(function(b) {
+            a == Ba && (b.alert && alert(b.alert), Ca("ws://" + b.ip, b.token))
+        }
+        /*e.ajax("https://m.agar.io/findServer", {
             error: function() {
                 setTimeout(Za, 1E3)
             },
@@ -336,10 +343,10 @@ console.log("Running Bot Launcher!");
             },
             dataType: "jsonp",
             method: "POST",
-            cache: !1,
-            crossDomain: !0,
+            cache: false,
+            crossDomain: true,
             data: (y + P || "?") + "\n154669603"
-        })
+        })*/
     }
 
     function I() {
