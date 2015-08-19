@@ -162,7 +162,7 @@ console.log("Running Apos Bot!");
     }
 
     function canSplit(player1, player2) {
-        return compareSize(player1, player2, 2.30) && !compareSize(player1, player2, 7);
+        return compareSize(player1, player2, 2.30);// && !compareSize(player1, player2, 7);
     }
 
     function isItMe(player, cell) {
@@ -209,14 +209,14 @@ console.log("Running Apos Bot!");
     }
 
     function isFood(blob, cell) {
-        if (!cell.isVirus() && compareSize(cell, blob, 1.30) || (cell.size <= 11)) {
+        if (/*!cell.isVirus() && compareSize(cell, blob, 1.30) ||*/ (cell.size <= 15)) {
             return true;
         }
         return false;
     }
 
     function isThreat(blob, cell) {
-        if (!cell.isVirus() && compareSize(blob, cell, 1.30)) {
+        if (!cell.isVirus() && compareSize(blob, cell, 1.10)) {
             return true;
         }
         return false;
