@@ -9,17 +9,22 @@ Make sure to install both bot.user.js and launcher.user.js. If you don't mind ha
 There are other people working on bots, you can check the forks, as well as GamerLio's Github which uses genetic algorithms: https://github.com/leomwu/agario-bot
 
 #How to Install
-**Web Tutorial**
+Get Fiddler: http://www.telerik.com/fiddler
 
-http://bot.jlynx.net/
+In the menu, click on "Rules" then "Customize Rules" (CTRL + R).
 
-**Videos**
-
-Created by https://www.youtube.com/user/karter61/
-
-https://www.youtube.com/watch?v=Zvq38nmCm1s - Install Tutorial.
-
-https://www.youtube.com/watch?v=x2-DFRnEFBU - Android Tutorial.
+Under the part that says:
+````
+static function OnBeforeRequest(oSession: Session) {
+````
+add:
+````
+        if (oSession.oRequest["origin"] == "http://apostolique.github.io")
+        {
+            oSession.oRequest["origin"] = "http://agar.io";
+        }
+````
+Then go to: http://apostolique.github.io/Agar.io-bot/
 
 #Hotkeys
 
