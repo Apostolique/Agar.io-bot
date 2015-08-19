@@ -333,7 +333,7 @@ console.log("Running Bot Launcher!");
             cache: false,
             dataType: "json"
         }).done(function(b) {
-            console.log("Got here at least! ip: " + b.ip + " token:" + b.token);
+            console.log("Got here at least! ip: " + b.ip + " token: " + b.token);
             a == Ba && (b.alert && alert(b.alert), Ca("ws://" + b.ip, b.token))
         });
         /*e.ajax("https://m.agar.io/findServer", {
