@@ -333,7 +333,7 @@ console.log("Running Bot Launcher!");
             dataType: "jsonp"
         }).done(function(b) {
             a == Ba && (b.alert && alert(b.alert), Ca("ws://" + b.ip, b.token))
-        }
+        })
         /*e.ajax("https://m.agar.io/findServer", {
             error: function() {
                 setTimeout(Za, 1E3)
