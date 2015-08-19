@@ -327,7 +327,7 @@ console.log("Running Bot Launcher!");
     function Za() {
         var a = ++Ba;
         console.log("Find " + y + P);
-        e.ajax("https://m.agar.io/findServer", {
+        e.ajax("http://cors.io/?u=https://m.agar.io/findServer", {
             error: function() {
                 setTimeout(Za, 1E3)
             },
