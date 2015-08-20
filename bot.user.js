@@ -127,7 +127,7 @@ console.log("Running Apos Bot!");
         //this.color = gameServer.getRandomColor();
 
         // AI only
-        this.everything = f.getMemoryCells90;
+        this.everything = f.getMemoryCells();
         this.gameState = 0;
         this.path = [];
         this.cells = f.getPlayer();
