@@ -164,49 +164,47 @@ console.log("Running Apos Bot!");
     function canSplit(player1, player2) {
         return compareSize(player1, player2, 2.30) && !compareSize(player1, player2, 7);
     }
-
     function isItMe(player, cell) {
-        if (getMode() == ":teams") {
-            var currentColor = player[0].color;
+    if (getMode() == ":teams") {
+        var currentColor = player[0].color;
+        var currentRed = currentColor.substring(1,3);
+        var currentGreen = currentColor.substring(3,5);
+        var currentBlue = currentColor.substring(5,7);
+        
+        var currentTeam = getTeam(currentRed, currentGreen, currentBlue);
 
-            var currentRed = parseInt(currentColor.substring(1,3), 16);
-            var currentGreen = parseInt(currentColor.substring(3,5), 16);
-            var currentBlue = parseInt(currentColor.substring(5,7), 16);
+        var cellColor = cell.color;
 
-            var currentTeam = getTeam(currentRed, currentGreen, currentBlue);
+        var cellRed = cellColor.substring(1,3);
+        var cellGreen = cellColor.substring(3,5);
+        var cellBlue = cellColor.substring(5,7);
 
-            var cellColor = cell.color;
+        var cellTeam = getTeam(cellRed, cellGreen, cellBlue);
 
-            var cellRed = parseInt(cellColor.substring(1,3), 16);
-            var cellGreen = parseInt(cellColor.substring(3,5), 16);
-            var cellBlue = parseInt(cellColor.substring(5,7), 16);
+        if (currentTeam == cellTeam && !cell.isVirus()) {
+            return true;
+        }
 
-            var cellTeam = getTeam(cellRed, cellGreen, cellBlue);
+        //console.log("COLOR: " + color);
 
-            if (currentTeam == cellTeam && !cell.isVirus()) {
+    } else {
+        for (var i = 0; i < player.length; i++) {
+            if (cell.id == player[i].id) {
                 return true;
             }
-
-            //console.log("COLOR: " + color);
-
-        } else {
-            for (var i = 0; i < player.length; i++) {
-                if (cell.id == player[i].id) {
-                    return true;
-                }
-            }
         }
-        return false;
     }
+    return false;
+}
 
-    function getTeam(red, green, blue) {
-        if (red > green && red > blue) {
-            return 0;
-        } else if (green > red && green > blue) {
-            return 1;
-        }
-        return 2;
+function getTeam(red, green, blue) {
+    if (red == "ff") {
+        return 0;
+    } else if (green == "ff") {
+        return 1;
     }
+    return 2;
+}
 
     function isFood(blob, cell) {
         if (!cell.isVirus() && compareSize(cell, blob, 1.30) || (cell.size <= 11)) {
