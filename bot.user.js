@@ -24,12 +24,12 @@ SOFTWARE.*/
 // @name        AposBot
 // @namespace   AposBot
 // @include     http://agar.io/*
-// @version     3.564
+// @version     3.565
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposBotVersion = 3.564;
+var aposBotVersion = 3.565;
 
 //TODO: Team mode
 //      Detect when people are merging
@@ -162,8 +162,9 @@ console.log("Running Apos Bot!");
     }
 
     function canSplit(player1, player2) {
-        return compareSize(player1, player2, 2.30) && !compareSize(player1, player2, 7);
+        return compareSize(player1, player2, 2.66) && !compareSize(player1, player2, 7);
     }
+
     function isItMe(player, cell) {
         if (getMode() == ":teams") {
             var currentColor = player[0].color;
@@ -207,17 +208,21 @@ console.log("Running Apos Bot!");
     }
 
     function isFood(blob, cell) {
-        if (!cell.isVirus() && compareSize(cell, blob, 1.30) || (cell.size <= 11)) {
+        if (!cell.isVirus() && compareSize(cell, blob, 1.33) || (cell.size <= 11)) {
             return true;
         }
         return false;
     }
 
     function isThreat(blob, cell) {
-        if (!cell.isVirus() && compareSize(blob, cell, 1.30)) {
+        if (!cell.isVirus() && isFood(cell, blob)) {
             return true;
         }
         return false;
+        /*if (!cell.isVirus() && compareSize(blob, cell, 1.33)) {
+            return true;
+        }
+        return false;*/
     }
 
     function isVirus(blob, cell) {
