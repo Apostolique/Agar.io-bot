@@ -578,7 +578,7 @@ console.log("Running Bot Launcher!");
             //console.log("start: " + interNodes[element].updateTime + " current: " + D + " life: " + (D - interNodes[element].updateTime));
             var isRemoved = !window.getCells().hasOwnProperty(element);
 
-            if (isRemoved && (window.getLastUpdate() - interNodes[element].getUptimeTime()) > 3000) {
+            if (isRemoved && (window.getLastUpdate() - 0) > 3000) {
                 delete interNodes[element];
             } else {
                 for (var i = 0; i < getPlayer().length; i++) {
