@@ -124,8 +124,7 @@ console.log("Running Apos Bot!");
         if (bestValue <= range[1]) {
             return paraAngleValue(bestValue, range);
         }
-        var banana = -1;
-        return banana;
+            return -1;
 
     }
 
@@ -855,7 +854,7 @@ console.log("Running Apos Bot!");
             if (player.length > 0) {
 
                 //Loop through all the player's cells.
-                for (var k = 0; k < player.length; k++) {
+                for (var k = 0; k < 1;/*player.length;*/ k++) { //Right now you can't control them separately, so let's just use the first one..
 
                     //console.log("Working on blob: " + k);
 
