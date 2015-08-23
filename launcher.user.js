@@ -24,12 +24,12 @@ SOFTWARE.*/
 // @name        AposLauncher
 // @namespace   AposLauncher
 // @include     http://agar.io/*
-// @version     3.068
+// @version     3.069
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposLauncherVersion = 3.068;
+var aposLauncherVersion = 3.069;
 
 Number.prototype.mod = function(n) {
     return ((this % n) + n) % n;
@@ -92,10 +92,6 @@ console.log("Running Bot Launcher!");
             console.log("ToggleDraw");
             toggleDraw = !toggleDraw;
         }
-        if (83 == e.keyCode) {
-            selectedCell = (selectedCell + 1).mod(getPlayer().length + 1);
-            console.log("Next Cell " + selectedCell);
-        }
         if (68 == e.keyCode) {
             window.setDarkTheme(!getDarkBool());
         }
@@ -120,15 +116,7 @@ console.log("Running Bot Launcher!");
 
     function humanPlayer() {
         //Don't need to do anything.
-        var player = getPlayer();
-
-        var destination = [];
-
-        for (var i = 0; i < player.length; i++) {
-            destination.push([getPointX(), getPointY()])
-        }
-
-        return destination;
+        return [getPointX(), getPointY()];
     }
 
     function pb() {
@@ -252,18 +240,8 @@ console.log("Running Bot Launcher!");
 
     function Aa() {
         //UPDATE
-        if (selectedCell > 0 && selectedCell <= getPlayer().length) {
-            setPoint(((fa - m / 2) / h + s), ((ga - r / 2) / h + t), selectedCell - 1);
-            drawCircle(getPlayer()[selectedCell - 1].x, getPlayer()[selectedCell - 1].y, getPlayer()[selectedCell - 1].size, 8);
-            drawCircle(getPlayer()[selectedCell - 1].x, getPlayer()[selectedCell - 1].y, getPlayer()[selectedCell - 1].size / 2, 8);
-        } else if (selectedCell > getPlayer().length) {
-            selectedCell = 0;
-        }
         if (toggle || window.botList[botIndex][0] == "Human") {
-            var startIndex = (selectedCell == 0 ? 0 : selectedCell - 1);
-            for (var i = 0; i < getPlayer().length - (selectedCell == 0 ? 0 : 1); i++) {
-                setPoint(((fa - m / 2) / h + s) + i, ((ga - r / 2) / h + t) + i, (i + startIndex).mod(getPlayer().length));
-                }
+            setPoint(((fa - m / 2) / h + s), ((ga - r / 2) / h + t));
         }
     }
 
@@ -567,7 +545,7 @@ console.log("Running Bot Launcher!");
             n.sa = c;
             n.Q = C;
             n.ba = w;
-            q && n.B(q); - 1 != M.indexOf(d) && -1 == k.indexOf(n) && (document.getElementById("overlays").style.display = "none", k.push(n), 1 == k.length && (s = n.x, t = n.y, db()))
+            q && n.B(q); - 1 != M.indexOf(d) && -1 == k.indexOf(n) && (document.getElementById("overlays").style.display = "none", k.push(n), n.birth = getLastUpdate(), n.birthMass = (n.size * n.size / 100), 1 == k.length && (s = n.x, t = n.y, db()))
 
             //UPDATE
             interNodes[d] = window.getCells()[d];
@@ -578,6 +556,7 @@ console.log("Running Bot Launcher!");
             //console.log("start: " + interNodes[element].updateTime + " current: " + D + " life: " + (D - interNodes[element].updateTime));
             var isRemoved = !window.getCells().hasOwnProperty(element);
 
+            //console.log("Time not updated: " + (window.getLastUpdate() - interNodes[element].getUptimeTime()));
             if (isRemoved && (window.getLastUpdate() - interNodes[element].getUptimeTime()) > 3000) {
                 delete interNodes[element];
             } else {
@@ -669,11 +648,8 @@ console.log("Running Bot Launcher!");
         if (T()) {
             var a = fa - m / 2;
             var b = ga - r / 2;
-            for (var i = 0; i < getPlayer().length; i++) {
-                var tempID = getPlayer()[i].id;
-                64 > a * a + b * b || .01 > Math.abs(eb - ia[i]) &&
-                    .01 > Math.abs(fb - ja[i]) || (eb = ia[i], fb = ja[i], a = N(13), a.setUint8(0, 16), a.setInt32(1, ia[i], !0), a.setInt32(5, ja[i], !0), a.setUint32(9, tempID, !0), O(a))
-            }
+            64 > a * a + b * b || .01 > Math.abs(eb - ia) &&
+                .01 > Math.abs(fb - ja) || (eb = ia, fb = ja, a = N(13), a.setUint8(0, 16), a.setInt32(1, ia, !0), a.setInt32(5, ja, !0), a.setUint32(9, 0, !0), O(a))
         }
     }
 
@@ -795,14 +771,8 @@ console.log("Running Bot Launcher!");
         //UPDATE
         if (getPlayer().length > 0) {
             var moveLoc = window.botList[botIndex][1](toggleFollow);
-            if (selectedCell > 0) {
-                Aa();
-            }
             if (!toggle) {
-                var startIndex = (selectedCell == 0 ? 0 : selectedCell);
-                for (var i = 0; i < getPlayer().length - (selectedCell == 0 ? 0 : 1); i++) {
-                    setPoint(moveLoc[(i + startIndex).mod(getPlayer().length)][0], moveLoc[(i + startIndex).mod(getPlayer().length)][1], (i + startIndex).mod(getPlayer().length));
-                }
+                setPoint(moveLoc[0], moveLoc[1]);
             }
         }
         customRender(f);
@@ -985,7 +955,7 @@ console.log("Running Bot Launcher!");
 
                 text.C(dText[i]);
                 var textRender = text.L();
-                d.drawImage(textRender, dPoints[i][0], dPoints[i][1]);
+                d.drawImage(textRender, dPoints[i][0] - (textRender.width / 2), dPoints[i][1] - (textRender.height / 2));
             }
 
         }
@@ -1002,7 +972,6 @@ console.log("Running Bot Launcher!");
         debugStrings.push("T - Bot: " + (!toggle ? "On" : "Off"));
         debugStrings.push("R - Lines: " + (!toggleDraw ? "On" : "Off"));
         debugStrings.push("Q - Follow Mouse: " + (toggleFollow ? "On" : "Off"));
-        debugStrings.push("S - Manual Cell: " + (selectedCell == 0 ? "None" : selectedCell) + " of " + getPlayer().length);
         debugStrings.push("");
         debugStrings.push("Best Score: " + ~~(sessionScore / 100));
         debugStrings.push("Best Time: " + bestTime + " seconds");
@@ -1331,7 +1300,6 @@ console.log("Running Bot Launcher!");
                 botIndex = 0,
                 reviving = false,
                 message = [],
-                selectedCell = 0,
 
                 q = null,
                 s = 0,
@@ -1346,8 +1314,8 @@ console.log("Running Bot Launcher!");
                 ga = 0,
 
                 //UPDATE
-                ia = [-1],
-                ja = [-1],
+                ia = -1,
+                ja = -1,
 
                 zb = 0,
                 C = 0,
@@ -1809,22 +1777,9 @@ console.log("Running Bot Launcher!");
                     return P;
                 }
 
-                window.setPoint = function(x, y, index) {
-                    while (ia.length > getPlayer().length) {
-                        ia.pop();
-                        ja.pop();
-                    }
-                    if (index < ia.length) {
-                        ia[index] = x;
-                        ja[index] = y;
-                    } else {
-                        while (index < ia.length - 1) {
-                            ia.push(-1);
-                            ja.push(-1);
-                        }
-                        ia.push(x);
-                        ja.push(y);
-                    }
+                window.setPoint = function(x, y) {
+                    ia = x;
+                    ja = y;
                 }
 
                 window.setScore = function(a) {
