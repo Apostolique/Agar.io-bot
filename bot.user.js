@@ -24,12 +24,12 @@ SOFTWARE.*/
 // @name        AposBot
 // @namespace   AposBot
 // @include     http://agar.io/*
-// @version     3.565
+// @version     3.566
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposBotVersion = 3.565;
+var aposBotVersion = 3.566;
 
 //TODO: Team mode
 //      Detect when people are merging
@@ -628,8 +628,8 @@ console.log("Running Apos Bot!");
             //LEFT
             //console.log("Left");
             listToUse.push([
-                [90, true],
-                [270, false], computeDistance(getMapStartX(), blob.y, blob.x, blob.y)
+                [89, true],
+                [271, false], computeDistance(getMapStartX(), blob.y, blob.x, blob.y)
             ]);
             var lineLeft = followAngle(90, blob.x, blob.y, 190 + blob.size);
             var lineRight = followAngle(270, blob.x, blob.y, 190 + blob.size);
@@ -641,8 +641,8 @@ console.log("Running Apos Bot!");
             //TOP
             //console.log("TOP");
             listToUse.push([
-                [180, true],
-                [0, false], computeDistance(blob.x, getMapStartY, blob.x, blob.y)
+                [179, true],
+                [1, false], computeDistance(blob.x, getMapStartY, blob.x, blob.y)
             ]);
             var lineLeft = followAngle(180, blob.x, blob.y, 190 + blob.size);
             var lineRight = followAngle(360, blob.x, blob.y, 190 + blob.size);
@@ -654,8 +654,8 @@ console.log("Running Apos Bot!");
             //RIGHT
             //console.log("RIGHT");
             listToUse.push([
-                [270, true],
-                [90, false], computeDistance(getMapEndX(), blob.y, blob.x, blob.y)
+                [269, true],
+                [91, false], computeDistance(getMapEndX(), blob.y, blob.x, blob.y)
             ]);
             var lineLeft = followAngle(270, blob.x, blob.y, 190 + blob.size);
             var lineRight = followAngle(90, blob.x, blob.y, 190 + blob.size);
@@ -667,8 +667,8 @@ console.log("Running Apos Bot!");
             //BOTTOM
             //console.log("BOTTOM");
             listToUse.push([
-                [0, true],
-                [180, false], computeDistance(blob.x, getMapEndY, blob.x, blob.y)
+                [359, true],
+                [181, false], computeDistance(blob.x, getMapEndY, blob.x, blob.y)
             ]);
             var lineLeft = followAngle(0, blob.x, blob.y, 190 + blob.size);
             var lineRight = followAngle(180, blob.x, blob.y, 190 + blob.size);
@@ -856,6 +856,14 @@ console.log("Running Apos Bot!");
 
                 //Loop through all the player's cells.
                 for (var k = 0; k < player.length; k++) {
+                    if (true) {
+                        drawPoint(player[k].x, player[k].y + player[k].size, 0, "" + (getLastUpdate() - player[k].birth) + " / " + (30000 + (player[k].birthMass * 57) - (getLastUpdate() - player[k].birth)) + " / " + player[k].birthMass);
+                    }
+                }
+
+
+                //Loops only for one cell for now.
+                for (var k = 0; /*k < player.length*/ k < 1; k++) {
 
                     //console.log("Working on blob: " + k);
 
@@ -1110,7 +1118,7 @@ console.log("Running Apos Bot!");
 
                         var destination = followAngle(shiftedAngle, player[k].x, player[k].y, distance);
 
-                        destinationChoices.push(destination);
+                        destinationChoices = destination;
                         drawLine(player[k].x, player[k].y, destination[0], destination[1], 1);
                         //tempMoveX = destination[0];
                         //tempMoveY = destination[1];
@@ -1131,7 +1139,7 @@ console.log("Running Apos Bot!");
 
                         var line1 = followAngle(perfectAngle, player[k].x, player[k].y, f.verticalDistance());
 
-                        destinationChoices.push(line1);
+                        destinationChoices = line1;
                         drawLine(player[k].x, player[k].y, line1[0], line1[1], 7);
                         //tempMoveX = line1[0];
                         //tempMoveY = line1[1];
@@ -1140,7 +1148,7 @@ console.log("Running Apos Bot!");
                         //You're likely screwed. (This should never happen.)
 
                         console.log("Failed");
-                        destinationChoices.push([tempMoveX, tempMoveY]);
+                        destinationChoices = [tempMoveX, tempMoveY];
                         /*var angleWeights = [] //Put weights on the angles according to enemy distance
                         for (var i = 0; i < allPossibleThreats.length; i++){
                             var dist = computeDistance(player[k].x, player[k].y, allPossibleThreats[i].x, allPossibleThreats[i].y);
@@ -1193,13 +1201,13 @@ console.log("Running Apos Bot!");
 
                         var destination = followAngle(shiftedAngle, player[k].x, player[k].y, distance);
 
-                        destinationChoices.push(destination);
+                        destinationChoices = destination;
                         //tempMoveX = destination[0];
                         //tempMoveY = destination[1];
                         drawLine(player[k].x, player[k].y, destination[0], destination[1], 1);
                     } else {
                         //If there are no enemies around and no food to eat.
-                        destinationChoices.push([tempMoveX, tempMoveY]);
+                        destinationChoices = [tempMoveX, tempMoveY];
                     }
 
                     drawPoint(tempPoint[0], tempPoint[1], tempPoint[2], "");
@@ -1418,7 +1426,7 @@ console.log("Running Apos Bot!");
     }
 
     /**
-     * The game's current mode. (FFA is "", ":experimental", ":teams". ":party")
+     * The game's current mode. (":ffa", ":experimental", ":teams". ":party")
      * @return {[type]} [description]
      */
     function getMode() {
