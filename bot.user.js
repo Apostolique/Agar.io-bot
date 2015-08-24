@@ -24,12 +24,12 @@ SOFTWARE.*/
 // @name        AposBot
 // @namespace   AposBot
 // @include     http://agar.io/*
-// @version     3.568
+// @version     3.5681
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposBotVersion = 3.568;
+var aposBotVersion = 3.5681;
 
 //TODO: Team mode
 //      Detect when people are merging
@@ -184,7 +184,7 @@ u.isItMe = function(player, cell) {
         var cellGreen = cellColor.substring(3,5);
         var cellBlue = cellColor.substring(5,7);
 
-        var cellTeam = getTeam(cellRed, cellGreen, cellBlue);
+        var cellTeam = u.getTeam(cellRed, cellGreen, cellBlue);
 
         if (currentTeam == cellTeam && !cell.isVirus()) {
             return true;
