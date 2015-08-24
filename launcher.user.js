@@ -24,12 +24,12 @@ SOFTWARE.*/
 // @name        AposLauncher
 // @namespace   AposLauncher
 // @include     http://agar.io/*
-// @version     3.0691
+// @version     3.0692
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposLauncherVersion = 3.0691;
+var aposLauncherVersion = 3.0692;
 
 Number.prototype.mod = function(n) {
     return ((this % n) + n) % n;
@@ -1859,6 +1859,9 @@ console.log("Running Bot Launcher!");
                     updateCode: 0,
                     danger: false,
                     dangerTimeOut: 0,
+                    isNotMoving: function() {
+                        return (this.x == this.s && this.y == this.t);
+                    },
                     isVirus: function() {
                         return this.h;
                     },
