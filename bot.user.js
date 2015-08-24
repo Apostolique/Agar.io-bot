@@ -24,12 +24,12 @@ SOFTWARE.*/
 // @name        AposBot
 // @namespace   AposBot
 // @include     http://agar.io/*
-// @version     3.567
+// @version     3.5671
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposBotVersion = 3.567;
+var aposBotVersion = 3.5671;
 
 //TODO: Team mode
 //      Detect when people are merging
@@ -1066,7 +1066,7 @@ u.findDestination = function(followMouse) {
                     //This is the follow the mouse mode
                     var distance = u.computeDistance(player[k].x, player[k].y, tempPoint[0], tempPoint[1]);
 
-                    var shiftedAngle = u.shiftAngle(obstacleAngles, getAngle(tempPoint[0], tempPoint[1], player[k].x, player[k].y), [0, 360]);
+                    var shiftedAngle = u.shiftAngle(obstacleAngles, u.getAngle(tempPoint[0], tempPoint[1], player[k].x, player[k].y), [0, 360]);
 
                     var destination = u.followAngle(shiftedAngle, player[k].x, player[k].y, distance);
 
