@@ -24,12 +24,12 @@ SOFTWARE.*/
 // @name        AposBot
 // @namespace   AposBot
 // @include     http://agar.io/*
-// @version     3.5671
+// @version     3.568
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposBotVersion = 3.5671;
+var aposBotVersion = 3.568;
 
 //TODO: Team mode
 //      Detect when people are merging
@@ -239,7 +239,7 @@ u.isVirus = function(blob, cell) {
 };
 
 u.isSplitTarget = function(blob, cell) {
-    /*if (canSplit(cell, blob)) {
+    /*if (u.canSplit(cell, blob)) {
         return true;
     }*/
     return false;
@@ -261,7 +261,7 @@ u.separateListBasedOnFunction = function(listToUse, blob) {
         var isMe = u.isItMe(player, listToUse[element]);
 
         if (!isMe) {
-            if (u.isFood(blob, listToUse[element])) {
+            if (u.isFood(blob, listToUse[element])/* && listToUse[element].isNotMoving()*/) {
                 //IT'S FOOD!
                 foodElementList.push(listToUse[element]);
 
@@ -684,11 +684,6 @@ u.addAngle = function(listToUse, range) {
         newListToUse.splice(u.getAngleIndex(newListToUse, range[1][0]), 0, range[1]);
     }
 
-    console.log("***********" + range[0] + ", " + range[1]);
-    for (var i = 0; i < newListToUse.length; i++) {
-        console.log(newListToUse[i][0] + ", " + newListToUse[i][1]);
-    }
-
     return newListToUse;
 };
 
@@ -950,10 +945,6 @@ u.findDestination = function(followMouse) {
                     stupidList = u.addWall(stupidList, player[k]);
                 }
 
-                for (var i = 0; i < stupidList.length; i++) {
-                    console.log("AddWallDone: " + stupidList[i][0] + ", " + stupidList[i][1]);
-                }
-
                 for (var i = 0; i < badAngles.length; i++) {
                     var angle1 = badAngles[i][0];
                     var angle2 = u.rangeToAngle(badAngles[i]);
@@ -963,18 +954,10 @@ u.findDestination = function(followMouse) {
                 //stupidList.push([[45, true], [135, false]]);
                 //stupidList.push([[10, true], [200, false]]);
 
-                for (var i = 0; i < stupidList.length; i++) {
-                    console.log("HelloWorld: " + stupidList[i][0] + ", " + stupidList[i][1]);
-                }
-
                 stupidList.sort(function(a, b){
                     //console.log("Distance: " + a[2] + ", " + b[2]);
                     return a[2]-b[2];
                 });
-
-                for (var i = 0; i < stupidList.length; i++) {
-                    console.log("zzzzzzzzzzz: " + stupidList[i][0] + ", " + stupidList[i][1]);
-                }
 
                 //console.log("Added random noob stuff.");
 
@@ -992,12 +975,6 @@ u.findDestination = function(followMouse) {
                         sortedInterList = tempList;
                     }
                 }
-
-                console.log("_________");
-                for (var i = 0; i < sortedInterList.length; i++) {
-                    console.log(sortedInterList[i][0] + ", " + sortedInterList[i][1]);
-                }
-                console.log("_________");
 
                 for (var i = 0; i < obstacleList.length; i++) {
                     sortedObList = u.addAngle(sortedObList, obstacleList[i]);
