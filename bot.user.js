@@ -90,7 +90,7 @@ getLatestCommit();
 console.log("Running Apos Bot!");
 
 var f = window;
-var g = window.jQuery;
+var $ = window.jQuery;
 
 var aposBot = aposBot || {};
 aposBot.name = "AposBot " + aposBotVersion;
@@ -104,8 +104,8 @@ console.log("Apos Bot!");
 
 if (f.botList == null) {
     f.botList = [];
-    g('#locationUnknown').append(g('<select id="bList" class="form-control" onchange="setBotIndex($(this).val());" />'));
-    g('#locationUnknown').addClass('form-group');
+    $('#locationUnknown').append($('<select id="bList" class="form-control" onchange="setBotIndex($(this).val());" />'));
+    $('#locationUnknown').addClass('form-group');
 }
 
 for (var i = f.botList.length - 1; i >= 0; i--) {
@@ -614,7 +614,7 @@ u.addWall = function(listToUse, blob) {
 //range = [[angle1, true], [angle2, false]]
 
 u.getAngleIndex = function(listToUse, angle) {
-    if (listToUse.length == 0) {
+    if (listToUse.length === 0) {
         return 0;
     }
 
@@ -968,8 +968,8 @@ u.findDestination = function(followMouse) {
                     //console.log("Adding to sorted: " + stupidList[i][0][0] + ", " + stupidList[i][1][0]);
                     var tempList = u.addAngle(sortedInterList, stupidList[i]);
 
-                    if (tempList.length == 0) {
-                        console.log("MAYDAY IT'S HAPPENING!");
+                    if (tempList.length === 0) {
+                        //console.log("MAYDAY IT'S HAPPENING!");
                         break;
                     } else {
                         sortedInterList = tempList;
@@ -979,7 +979,7 @@ u.findDestination = function(followMouse) {
                 for (var i = 0; i < obstacleList.length; i++) {
                     sortedObList = u.addAngle(sortedObList, obstacleList[i]);
 
-                    if (sortedObList.length == 0) {
+                    if (sortedObList.length === 0) {
                         break;
                     }
                 }
@@ -1039,7 +1039,7 @@ u.findDestination = function(followMouse) {
                     u.drawPoint(line2[0], line2[1], 0, "" + i + ": 1");
                 }
 
-                if (followMouse && goodAngles.length == 0) {
+                if (followMouse && goodAngles.length === 0) {
                     //This is the follow the mouse mode
                     var distance = u.computeDistance(player[k].x, player[k].y, tempPoint[0], tempPoint[1]);
 
@@ -1072,7 +1072,7 @@ u.findDestination = function(followMouse) {
                     u.drawLine(player[k].x, player[k].y, line1[0], line1[1], 7);
                     //tempMoveX = line1[0];
                     //tempMoveY = line1[1];
-                } else if (badAngles.length > 0 && goodAngles == 0) {
+                } else if (badAngles.length > 0 && goodAngles === 0) {
                     //When there are enemies around but no good angles
                     //You're likely screwed. (This should never happen.)
 
@@ -1364,5 +1364,5 @@ u.getMode = function() {
 
 f.botList.push(["AposBot " + aposBotVersion, u.findDestination]);
 
-u.bList = g('#bList');
-g('<option />', {value: (f.botList.length - 1), text: "AposBot"}).appendTo(bList);
+u.bList = $('#bList');
+$('<option />', {value: (f.botList.length - 1), text: "AposBot"}).appendTo(bList);
