@@ -24,7 +24,7 @@ SOFTWARE.*/
 // @name        AposLauncher
 // @namespace   AposLauncher
 // @include     http://agar.io/*
-// @version     3.0692
+// @version     3.07
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
@@ -37,7 +37,7 @@ Number.prototype.mod = function(n) {
 
 Array.prototype.peek = function() {
     return this[this.length - 1];
-}
+};
 
 var sha = "efde0488cc2cc176db48dd23b28a20b90314352b";
 function getLatestCommit() {
@@ -46,9 +46,9 @@ function getLatestCommit() {
             cache: false,
             dataType: "jsonp"
         }).done(function(data) {
-            console.dir(data["data"])
-            console.log("hmm: " + data["data"]["object"]["sha"]);
-            sha = data["data"]["object"]["sha"];
+            console.dir(data.data);
+            console.log("hmm: " + data.data.object.sha);
+            sha = data.data.object.sha;
 
             function update(prefix, name, url) {
                 window.jQuery(document.body).prepend("<div id='" + prefix + "Dialog' style='position: absolute; left: 0px; right: 0px; top: 0px; bottom: 0px; z-index: 100; display: none;'>");
@@ -119,26 +119,27 @@ console.log("Running Bot Launcher!");
         return [getPointX(), getPointY()];
     }
 
+
+
     function pb() {
 
         //UPDATE
-        if (window.botList == null) {
-            window.botList = [];
-            window.jQuery('#locationUnknown').append(window.jQuery('<select id="bList" class="form-control" onchange="setBotIndex($(this).val());" />'));
-            window.jQuery('#locationUnknown').addClass('form-group');
-        }
+
+        window.botList = window.botList || [];
 
         window.jQuery('#nick').val(originalName);
 
-        if (window.botList.length == 0) {
-            window.botList.push(["Human", humanPlayer]);
-
-            var bList = window.jQuery('#bList');
-            window.jQuery('<option />', {
-                value: (window.botList.length - 1),
-                text: "Human"
-            }).appendTo(bList);
+        function HumanPlayerObject() {
+            this.name = "Human";
+            this.displayText = function(a) {};
+            this.mainLoop = humanPlayer;
         }
+
+        var hpo = new HumanPlayerObject();
+
+        window.botList.push(hpo);
+
+        window.updateBotList();
 
         ya = !0;
         Pa();
@@ -240,7 +241,7 @@ console.log("Running Bot Launcher!");
 
     function Aa() {
         //UPDATE
-        if (toggle || window.botList[botIndex][0] == "Human") {
+        if (toggle || window.botList[botIndex].name == "Human") {
             setPoint(((fa - m / 2) / h + s), ((ga - r / 2) / h + t));
         }
     }
@@ -586,6 +587,10 @@ console.log("Running Bot Launcher!");
         return distance;
     }
 
+    /**
+     * Some horse shit of some sort.
+     * @return Horse Shit
+     */
     function screenDistance() {
         return Math.min(computeDistance(getOffsetX(), getOffsetY(), screenToGameX(getWidth()), getOffsetY()), computeDistance(getOffsetX(), getOffsetY(), getOffsetX(), screenToGameY(getHeight())));
     }
@@ -594,11 +599,11 @@ console.log("Running Bot Launcher!");
         return computeDistance(screenToGameX(0), screenToGameY(0), screenToGameX(getWidth()), screenToGameY(getHeight()));
     }
 
-    function screenToGameX(x) {
+    window.screenToGameX = function(x) {
         return (x - getWidth() / 2) / getRatio() + getX();
     }
 
-    function screenToGameY(y) {
+    window.screenToGameY = function(y) {
         return (y - getHeight() / 2) / getRatio() + getY();
     }
 
@@ -770,7 +775,7 @@ console.log("Running Bot Launcher!");
         for (d = 0; d < Q.length; d++) Q[d].w(f);
         //UPDATE
         if (getPlayer().length > 0) {
-            var moveLoc = window.botList[botIndex][1](toggleFollow);
+            var moveLoc = window.botList[botIndex].mainLoop(toggleFollow);
             if (!toggle) {
                 setPoint(moveLoc[0], moveLoc[1]);
             }
@@ -968,7 +973,7 @@ console.log("Running Bot Launcher!");
         sessionScore = Math.max(getCurrentScore(), sessionScore);
 
         var debugStrings = [];
-        debugStrings.push("Current Bot: " + window.botList[botIndex][0]);
+        debugStrings.push("Current Bot: " + window.botList[botIndex].name);
         debugStrings.push("T - Bot: " + (!toggle ? "On" : "Off"));
         debugStrings.push("R - Lines: " + (!toggleDraw ? "On" : "Off"));
         debugStrings.push("Q - Follow Mouse: " + (toggleFollow ? "On" : "Off"));
@@ -1678,41 +1683,86 @@ console.log("Running Bot Launcher!");
                 d.connect = Ca;
 
                 //UPDATE
+                /**
+                 * Tells you if the game is in Dark mode.
+                 * @return Boolean for dark mode.
+                 */
                 window.getDarkBool = function() {
                     return ta;
                 }
+
+                /**
+                 * Tells you if the mass is shown.
+                 * @return Boolean for player's mass.
+                 */
                 window.getMassBool = function() {
                     return lb;
                 }
 
+                /**
+                 * This is a copy of everything that is shown on screen.
+                 * Normally stuff will time out when off the screen, this
+                 * memorizes everything that leaves the screen for a little
+                 * while longer.
+                 * @return The memory object.
+                 */
                 window.getMemoryCells = function() {
                     return interNodes;
                 }
 
+                /**
+                 * [getCellsArray description]
+                 * @return {[type]} [description]
+                 */
                 window.getCellsArray = function() {
                     return v;
                 }
 
+                /**
+                 * [getCellsArray description]
+                 * @return {[type]} [description]
+                 */
                 window.getCells = function() {
                     return E;
                 }
 
+                /**
+                 * Returns an array with all the player's cells.
+                 * @return Player's cells
+                 */
                 window.getPlayer = function() {
                     return k;
                 }
 
+                /**
+                 * The canvas' width.
+                 * @return Integer Width
+                 */
                 window.getWidth = function() {
                     return m;
                 }
 
+                /**
+                 * The canvas' height
+                 * @return Integer Height
+                 */
                 window.getHeight = function() {
                     return r;
                 }
 
+                /**
+                 * Scaling ratio of the canvas. The bigger this ration,
+                 * the further that you see.
+                 * @return Screen scaling ratio.
+                 */
                 window.getRatio = function() {
                     return h;
                 }
 
+                /**
+                 * [getOffsetX description]
+                 * @return {[type]} [description]
+                 */
                 window.getOffsetX = function() {
                     return aa;
                 }
@@ -1737,10 +1787,18 @@ console.log("Running Bot Launcher!");
                     return ja;
                 }
 
+                /**
+                 * The X location of the mouse.
+                 * @return Integer X
+                 */
                 window.getMouseX = function() {
                     return fa;
                 }
 
+                /**
+                 * The Y location of the mouse.
+                 * @return Integer Y
+                 */
                 window.getMouseY = function() {
                     return ga;
                 }
@@ -1765,6 +1823,11 @@ console.log("Running Bot Launcher!");
                     var temp = screenDistance();
                     return temp;
                 }
+
+                /**
+                 * A timestamp since the last time the server sent any data.
+                 * @return Last update timestamp
+                 */
                 window.getLastUpdate = function() {
                     return C;
                 }
@@ -1773,6 +1836,10 @@ console.log("Running Bot Launcher!");
                     return R;
                 }
 
+                /**
+                 * The game's current mode. (":ffa", ":experimental", ":teams". ":party")
+                 * @return {[type]} [description]
+                 */
                 window.getMode = function() {
                     return P;
                 }
@@ -1802,6 +1869,26 @@ console.log("Running Bot Launcher!");
 
                 window.setMessage = function(a) {
                     message = a;
+                }
+                window.updateBotList = function() {
+                    window.botList = window.botList || [];
+
+                    window.jQuery('#locationUnknown').text("");
+
+                    window.jQuery('#locationUnknown').append(window.jQuery('<select id="bList" class="form-control" onchange="setBotIndex($(this).val());" />'));
+                    window.jQuery('#locationUnknown').addClass('form-group');
+
+                    for (var i = 0; i < window.botList.length; i++) {
+                        if (window.botList[i].name == "Human" && window.botList.length > 1) {
+                            continue;
+                        }
+
+                        var bList = window.jQuery('#bList');
+                        window.jQuery('<option />', {
+                            value: i,
+                            text: window.botList[i].name
+                        }).appendTo(bList);
+                    }
                 }
 
                 var ma = 500,
