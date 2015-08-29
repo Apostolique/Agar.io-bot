@@ -24,7 +24,7 @@ SOFTWARE.*/
 // @name        AposBot
 // @namespace   AposBot
 // @include     http://agar.io/*
-// @version     3.5682
+// @version     3.569
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
