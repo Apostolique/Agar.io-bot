@@ -24,12 +24,12 @@ SOFTWARE.*/
 // @name        AposLauncher
 // @namespace   AposLauncher
 // @include     http://agar.io/*
-// @version     3.07
+// @version     4.0
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposLauncherVersion = 3.07;
+var aposLauncherVersion = 4.0;
 
 Number.prototype.mod = function(n) {
     return ((this % n) + n) % n;
@@ -108,10 +108,7 @@ console.log("Running Bot Launcher!");
                 window.refreshTwitch();
             }
         }
-        if (81 == e.keyCode) {
-            console.log("ToggleFollowMouse");
-            toggleFollow = !toggleFollow;
-        }
+        window.botList[botIndex].keyAction(e);
     }
 
     function humanPlayer() {
@@ -131,7 +128,8 @@ console.log("Running Bot Launcher!");
 
         function HumanPlayerObject() {
             this.name = "Human";
-            this.displayText = function(a) {};
+            this.keyAction = function(key) {};
+            this.displayText = function() {return [];};
             this.mainLoop = humanPlayer;
         }
 
@@ -775,7 +773,7 @@ console.log("Running Bot Launcher!");
         for (d = 0; d < Q.length; d++) Q[d].w(f);
         //UPDATE
         if (getPlayer().length > 0) {
-            var moveLoc = window.botList[botIndex].mainLoop(toggleFollow);
+            var moveLoc = window.botList[botIndex].mainLoop();
             if (!toggle) {
                 setPoint(moveLoc[0], moveLoc[1]);
             }
@@ -972,11 +970,17 @@ console.log("Running Bot Launcher!");
 
         sessionScore = Math.max(getCurrentScore(), sessionScore);
 
+        var botString = window.botList[botIndex].displayText();
+
         var debugStrings = [];
         debugStrings.push("Current Bot: " + window.botList[botIndex].name);
         debugStrings.push("T - Bot: " + (!toggle ? "On" : "Off"));
         debugStrings.push("R - Lines: " + (!toggleDraw ? "On" : "Off"));
-        debugStrings.push("Q - Follow Mouse: " + (toggleFollow ? "On" : "Off"));
+
+        for (var i = 0; i < botString.length; i++) {
+            debugStrings.push(botString[i]);
+        }
+
         debugStrings.push("");
         debugStrings.push("Best Score: " + ~~(sessionScore / 100));
         debugStrings.push("Best Time: " + bestTime + " seconds");
@@ -1288,7 +1292,6 @@ console.log("Running Bot Launcher!");
                 //UPDATE
                 toggle = false,
                 toggleDraw = false,
-                toggleFollow = false,
                 tempPoint = [0, 0, 1],
                 dPoints = [],
                 circles = [],
