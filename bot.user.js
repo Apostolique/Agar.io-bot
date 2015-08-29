@@ -24,12 +24,12 @@ SOFTWARE.*/
 // @name        AposBot
 // @namespace   AposBot
 // @include     http://agar.io/*
-// @version     3.569
+// @version     3.6
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposBotVersion = 3.569;
+var aposBotVersion = 3.6;
 
 //TODO: Team mode
 //      Detect when people are merging
@@ -99,7 +99,8 @@ window.botList = window.botList || [];
 
 /*function QuickBot() {
     this.name = "QuickBot V1";
-    this.displayText = function() {};
+    this.keyAction = function(key) {};
+    this.displayText = function() {return [];};
     this.mainLoop = function() {
         return [screenToGameX(getMouseX()),
                 screenToGameY(getMouseY())];
@@ -108,10 +109,20 @@ window.botList = window.botList || [];
 
 window.botList.push(new QuickBot());*/
 
-
 function AposBot() {
     this.name = "AposBot " + aposBotVersion;
-    this.displayText = function() {};
+
+    this.toggleFollow = false;
+    this.keyAction = function(key) {
+        if (81 == key.keyCode) {
+            console.log("Toggle Follow Mouse!");
+            this.toggleFollow = !this.toggleFollow;
+        }
+    };
+
+    this.displayText = function() {
+        return ["Q - Follow Mouse: " + (this.toggleFollow ? "On" : "Off")];
+    };
 
     this.splitDistance = 710;
 
@@ -774,13 +785,11 @@ function AposBot() {
 
     /**
      * This is the main bot logic. This is called quite often.
-     * @param  followMouse Is a boolean. If set to true, it means the user is asking for the bot to follow the mouse coordinates.
      * @return A 2 dimensional array with coordinates for every cells.  [[x, y], [x, y]]
      */
-    this.mainLoop = function(followMouse) {
+    this.mainLoop = function() {
         var player = getPlayer();
         var interNodes = getMemoryCells();
-        //console.warn("findDestination(followMouse) was called from line " + arguments.callee.caller.toString());
 
         if ( /*!toggle*/ 1) {
             //The following code converts the mouse position into an
@@ -1059,7 +1068,7 @@ function AposBot() {
                         drawPoint(line2[0], line2[1], 0, "" + i + ": 1");
                     }
 
-                    if (followMouse && goodAngles.length == 0) {
+                    if (this.toggleFollow && goodAngles.length == 0) {
                         //This is the follow the mouse mode
                         var distance = this.computeDistance(player[k].x, player[k].y, tempPoint[0], tempPoint[1]);
 
