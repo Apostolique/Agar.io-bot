@@ -272,14 +272,11 @@ function AposBot() {
             var isMe = that.isItMe(player, listToUse[element]);
 
             if (!isMe) {
-                if (that.isFood(blob, listToUse[element])/* && listToUse[element].isNotMoving()*/) {
+                if (that.isFood(blob, listToUse[element]) && listToUse[element].isNotMoving()) {
                     //IT'S FOOD!
                     foodElementList.push(listToUse[element]);
 
-                    if (that.isSplitTarget(that, blob, listToUse[element])) {
-                        drawCircle(listToUse[element].x, listToUse[element].y, listToUse[element].size + 50, 7);
-                        splitTargetList.push(listToUse[element]);
-                    }
+                    
                 } else if (that.isThreat(blob, listToUse[element])) {
                     //IT'S DANGER!
                     threatList.push(listToUse[element]);
@@ -287,6 +284,11 @@ function AposBot() {
                     //IT'S VIRUS!
                     virusList.push(listToUse[element]);
                 }
+                else if (that.isSplitTarget(that, blob, listToUse[element])) {
+                        drawCircle(listToUse[element].x, listToUse[element].y, listToUse[element].size + 50, 7);
+                        splitTargetList.push(listToUse[element]);
+                        foodElementList.push(listToUse[element]);
+                    }
             }/*else if(isMe && (getBlobCount(getPlayer()) > 0)){
                 //Attempt to make the other cell follow the mother one
                 foodElementList.push(listToUse[element]);
