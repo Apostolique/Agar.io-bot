@@ -1,17 +1,13 @@
 /*The MIT License (MIT)
-
 Copyright (c) 2015 Apostolique
-
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
-
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
-
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,12 +20,12 @@ SOFTWARE.*/
 // @name        AposLauncher
 // @namespace   AposLauncher
 // @include     http://agar.io/*
-// @version     4.11
+// @version     4.12
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposLauncherVersion = 4.11;
+var aposLauncherVersion = 4.12;
 
 Number.prototype.mod = function(n) {
     return ((this % n) + n) % n;
@@ -1896,6 +1892,9 @@ console.log("Running Bot Launcher!");
 
                     for (var i = 0; i < window.botList.length; i++) {
                         if (window.botList[i].name == "Human" && window.botList.length > 1) {
+                            if (botIndex == i) {
+                                botIndex = (botIndex + 1).mod(window.botList.length);
+                            }
                             continue;
                         }
 
