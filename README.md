@@ -28,3 +28,9 @@ https://www.youtube.com/watch?v=x2-DFRnEFBU - Android Tutorial.
 * Press 'D' to toggle the dark mode.
 * Press 'F' to toggle the show mass option.
 * Press 'ESC' for the option menu.
+
+#Bot creation!
+**It's really easy!**
+[Bot creation using the Launcher](https://github.com/Apostolique/Agar.io-bot/wiki/Bot-creation-using-the-Launcher)
+If you start working on a bot, make sure to start an issue and tell me about it so that I can add it to the bot list:
+[Alternate Bots](https://github.com/Apostolique/Agar.io-bot/wiki/Alternate-Bots)
