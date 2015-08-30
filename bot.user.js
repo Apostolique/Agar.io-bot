@@ -177,7 +177,7 @@ function AposBot() {
     },
 
     this.canSplit = function(player1, player2) {
-        return this.compareSize(player1, player2, 2.66) && !this.compareSize(player1, player2, 7);
+        return this.compareSize(player1, player2, 2.8) && !this.compareSize(player1, player2, 20);
     };
 
     this.isItMe = function(player, cell) {
@@ -223,25 +223,22 @@ function AposBot() {
     };
 
     this.isFood = function(blob, cell) {
-        if (!cell.isVirus() && this.compareSize(cell, blob, 1.33) || (cell.size <= 11)) {
+        if (!cell.isVirus() && this.compareSize(cell, blob, 1.33) || (cell.size <= 13)) {
             return true;
         }
         return false;
     };
 
     this.isThreat = function(blob, cell) {
-        if (!cell.isVirus() && this.isFood(cell, blob)) {
+        
+        if (!cell.isVirus() && this.compareSize(blob, cell, 1.30)) {
             return true;
         }
         return false;
-        /*if (!cell.isVirus() && this.compareSize(blob, cell, 1.33)) {
-            return true;
-        }
-        return false;*/
     };
 
     this.isVirus = function(blob, cell) {
-        if (cell.isVirus() && this.compareSize(cell, blob, 1.30)) {
+        if (cell.isVirus() && this.compareSize(cell, blob, 1.2)) {
             return true;
         } else if (cell.isVirus() && cell.color.substring(3,5).toLowerCase() != "ff") {
             return true;
