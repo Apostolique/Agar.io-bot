@@ -24,12 +24,12 @@ SOFTWARE.*/
 // @name        AposLauncher
 // @namespace   AposLauncher
 // @include     http://agar.io/*
-// @version     4.1
+// @version     4.11
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposLauncherVersion = 4.1;
+var aposLauncherVersion = 4.11;
 
 Number.prototype.mod = function(n) {
     return ((this % n) + n) % n;
@@ -597,10 +597,22 @@ console.log("Running Bot Launcher!");
         return computeDistance(screenToGameX(0), screenToGameY(0), screenToGameX(getWidth()), screenToGameY(getHeight()));
     }
 
+    /**
+     * A conversion from the screen's horizontal coordinate system
+     * to the game's horizontal coordinate system.
+     * @param x in the screen's coordinate system
+     * @return x in the game's coordinate system
+     */
     window.screenToGameX = function(x) {
         return (x - getWidth() / 2) / getRatio() + getX();
     }
 
+    /**
+     * A conversion from the screen's vertical coordinate system
+     * to the game's vertical coordinate system.
+     * @param y in the screen's coordinate system
+     * @return y in the game's coordinate system
+     */
     window.screenToGameY = function(y) {
         return (y - getHeight() / 2) / getRatio() + getY();
     }
