@@ -24,12 +24,12 @@ SOFTWARE.*/
 // @name        AposBot
 // @namespace   AposBot
 // @include     http://agar.io/*
-// @version     3.61
+// @version     3.62
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposBotVersion = 3.61;
+var aposBotVersion = 3.62;
 
 //TODO: Team mode
 //      Detect when people are merging
@@ -764,27 +764,6 @@ function AposBot() {
         return angle;
     };
 
-
-    /**
-     * A conversion from the screen's horizontal coordinate system
-     * to the game's horizontal coordinate system.
-     * @param x in the screen's coordinate system
-     * @return x in the game's coordinate system
-     */
-    this.screenToGameX = function(x) {
-        return (x - getWidth() / 2) / getRatio() + getX();
-    };
-
-    /**
-     * A conversion from the screen's vertical coordinate system
-     * to the game's vertical coordinate system.
-     * @param y in the screen's coordinate system
-     * @return y in the game's coordinate system
-     */
-    this.screenToGameY = function(y) {
-        return (y - getHeight() / 2) / getRatio() + getY();
-    };
-
     /**
      * This is the main bot logic. This is called quite often.
      * @return A 2 dimensional array with coordinates for every cells.  [[x, y], [x, y]]
@@ -796,8 +775,8 @@ function AposBot() {
         if ( /*!toggle*/ 1) {
             //The following code converts the mouse position into an
             //absolute game coordinate.
-            var useMouseX = this.screenToGameX(getMouseX());
-            var useMouseY = this.screenToGameY(getMouseY());
+            var useMouseX = screenToGameX(getMouseX());
+            var useMouseY = screenToGameY(getMouseY());
             tempPoint = [useMouseX, useMouseY, 1];
 
             //The current destination that the cells were going towards.
