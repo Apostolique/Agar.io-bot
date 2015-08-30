@@ -20,12 +20,12 @@ SOFTWARE.*/
 // @name        AposLauncher
 // @namespace   AposLauncher
 // @include     http://agar.io/*
-// @version     4.121
+// @version     4.122
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposLauncherVersion = 4.121;
+var aposLauncherVersion = 4.122;
 
 Number.prototype.mod = function(n) {
     return ((this % n) + n) % n;
@@ -856,7 +856,7 @@ console.log("Running Bot Launcher!");
             } else if (lines[i][4] == 6) {
                 d.strokeStyle = "#008080";
             } else if (lines[i][4] == 7) {
-                d.strokeStyle = "#FFFFFF";
+                d.strokeStyle = (getDarkBool() ? '#F2FBFF' : '#111111');
             } else {
                 d.strokeStyle = "#000000";
             }
@@ -884,7 +884,7 @@ console.log("Running Bot Launcher!");
             } else if (circles[i][3] == 6) {
                 d.strokeStyle = "#008080";
             } else if (circles[i][3] == 7) {
-                d.strokeStyle = "#FFFFFF";
+                d.strokeStyle = (getDarkBool() ? '#F2FBFF' : '#111111');
             } else {
                 d.strokeStyle = "#000000";
             }
@@ -916,7 +916,7 @@ console.log("Running Bot Launcher!");
             } else if (dArc[i][7] == 6) {
                 d.strokeStyle = "#008080";
             } else if (dArc[i][7] == 7) {
-                d.strokeStyle = "#FFFFFF";
+                d.strokeStyle = (getDarkBool() ? '#F2FBFF' : '#111111');
             } else {
                 d.strokeStyle = "#000000";
             }
