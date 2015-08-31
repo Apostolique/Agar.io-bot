@@ -811,8 +811,8 @@ console.log("Running Bot Launcher!");
 
         var nbSeconds = 0;
         if (getPlayer().length > 0) {
-            //nbSeconds = currentDate.getSeconds() + currentDate.getMinutes() * 60 + currentDate.getHours() * 3600 - lifeTimer.getSeconds() - lifeTimer.getMinutes() * 60 - lifeTimer.getHours() * 3600;
-            nbSeconds = (currentDate.getSeconds());
+            nbSeconds = currentDate.getSeconds() + currentDate.getMinutes() * 60 + currentDate.getHours() * 3600 - lifeTimer.getSeconds() - lifeTimer.getMinutes() * 60 - lifeTimer.getHours() * 3600;
+            
         }
 
         bestTime = Math.max(nbSeconds, bestTime);
