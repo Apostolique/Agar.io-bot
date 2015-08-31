@@ -812,12 +812,12 @@ console.log("Running Bot Launcher!");
         var nbSeconds = 0;
         if (getPlayer().length > 0) {
             //nbSeconds = currentDate.getSeconds() + currentDate.getMinutes() * 60 + currentDate.getHours() * 3600 - lifeTimer.getSeconds() - lifeTimer.getMinutes() * 60 - lifeTimer.getHours() * 3600;
-            nbSeconds = (currentDate.getTime() - lifeTimer.getTime())/1000;
+            nbSeconds = (currentDate.getTime() - lifeTimer.getTime())/10;
         }
 
         bestTime = Math.max(nbSeconds, bestTime);
 
-        var displayText = 'Score: ' + ~~(R / 100) + " Current Time: " + nbSeconds + " seconds.";
+        var displayText = 'S: ' + ~~(R / 100) + "  t: " + nbSeconds + " sec.";
 
         0 != R && (null == ua && (ua = new va(24, "#FFFFFF")), ua.C(displayText), c = ua.L(), a = c.width, f.globalAlpha = .2, f.fillStyle = "#000000", f.fillRect(10, r - 10 - 24 - 10, a + 10, 34), f.globalAlpha = 1, f.drawImage(c, 15, r -
             10 - 24 - 5));
@@ -981,18 +981,18 @@ console.log("Running Bot Launcher!");
         var botString = window.botList[botIndex].displayText();
 
         var debugStrings = [];
-        debugStrings.push("Bot: " + window.botList[botIndex].name);
-        debugStrings.push("Launcher: AposLauncher " + aposLauncherVersion);
-        debugStrings.push("T - Bot: " + (!toggle ? "On" : "Off"));
-        debugStrings.push("R - Lines: " + (!toggleDraw ? "On" : "Off"));
+        debugStrings.push( window.botList[botIndex].name);
+        debugStrings.push("AposLauncher " + aposLauncherVersion);
+        debugStrings.push("|T| AI " + (!toggle ? "On" : "Off"));
+        debugStrings.push("|R| UI " + (!toggleDraw ? "On" : "Off"));
 
         for (var i = 0; i < botString.length; i++) {
             debugStrings.push(botString[i]);
         }
 
-        debugStrings.push("");
-        debugStrings.push("Best Score: " + ~~(sessionScore / 100));
-        debugStrings.push("Best Time: " + bestTime + " seconds");
+        
+        debugStrings.push("Top S " + ~~(sessionScore / 100));
+        debugStrings.push("Top t " + bestTime + "s");
         debugStrings.push("");
         debugStrings.push(serverIP);
 
@@ -1075,24 +1075,23 @@ console.log("Running Bot Launcher!");
             if (null != A || wa) {
                 z = document.createElement("canvas");
                 var a = z.getContext("2d"),
-                    b = 60,
+                    b = 20,
                     b = null == A ? b + 24 * F.length : b + 180,
                     c = Math.min(200, .3 * m) / 200;
                 z.width = 200 * c;
                 z.height = b * c;
                 a.scale(c, c);
-                a.globalAlpha = .4;
+                a.globalAlpha = .2;
                 a.fillStyle = "#000000";
                 a.fillRect(0, 0, 200, b);
                 a.globalAlpha =
-                    1;
+                    0.4;
                 a.fillStyle = "#FFFFFF";
-                c = null;
-                c = Z("leaderboard");
-                a.font = "30px Ubuntu";
-                a.fillText(c, 100 - a.measureText(c).width / 2, 40);
+                
+                
+                
                 if (null == A)
-                    for (a.font = "20px Ubuntu", b = 0; b < F.length; ++b) c = F[b].name || Z("unnamed_cell"), wa || (c = Z("unnamed_cell")), -1 != M.indexOf(F[b].id) ? (k[0].name && (c = k[0].name), a.fillStyle = "#FFAAAA") : a.fillStyle = "#FFFFFF", c = b + 1 + ". " + c, a.fillText(c, 100 - a.measureText(c).width / 2, 70 + 24 * b);
+                    for (a.font = "20px Ubuntu", b = 0; b < F.length; ++b) c = F[b].name || Z("unnamed_cell"), wa || (c = Z("unnamed_cell")), -1 != M.indexOf(F[b].id) ? (k[0].name && (c = k[0].name), a.fillStyle = "#FFAAAA") : a.fillStyle = "#FFFFFF", c = b + 1 + ". " + c, a.fillText(c, 100 - a.measureText(c).width / 2, 27 + 24 * b);
                 else
                     for (b = c = 0; b < A.length; ++b) {
                         var d = c + A[b] * Math.PI * 2;
@@ -2453,3 +2452,4 @@ window.refreshTwitch = function() {
 }
 setInterval(window.refreshTwitch, 60000);
 window.refreshTwitch();
+
