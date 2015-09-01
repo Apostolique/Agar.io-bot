@@ -113,15 +113,7 @@ console.log("Running Bot Launcher!");
 
     function humanPlayer() {
         //Don't need to do anything.
-        var player = getPlayer();
--
--        var destination = [];
--
--        for (var i = 0; i < player.length; i++) {
--            destination.push([getPointX(), getPointY()])
--        }
--
--        return destination;
+        return [getPointX(), getPointY()];
     }
 
 
@@ -247,17 +239,8 @@ console.log("Running Bot Launcher!");
 
     function Aa() {
         //UPDATE
-        if (selectedCell > 0 && selectedCell <= getPlayer().length) {
-            setPoint(((fa - m / 2) / h + s), ((ga - r / 2) / h + t), selectedCell - 1);
-            drawCircle(getPlayer()[selectedCell - 1].x, getPlayer()[selectedCell - 1].y, getPlayer()[selectedCell - 1].size, 8);
-            drawCircle(getPlayer()[selectedCell - 1].x, getPlayer()[selectedCell - 1].y, getPlayer()[selectedCell - 1].size / 2, 8);
-        } else if (selectedCell > getPlayer().length) {
-            selectedCell = 0;
-        }if (toggle || window.botList[botIndex].name == "Human") {
-            ar startIndex = (selectedCell == 0 ? 0 : selectedCell - 1);
-           for (var i = 0; i < getPlayer().length - (selectedCell == 0 ? 0 : 1); i++) {
-                setPoint(((fa - m / 2) / h + s) + i, ((ga - r / 2) / h + t) + i, (i + startIndex).mod(getPlayer().length));
-                }
+        if (toggle || window.botList[botIndex].name == "Human") {
+            setPoint(((fa - m / 2) / h + s), ((ga - r / 2) / h + t));
         }
     }
 
@@ -832,7 +815,8 @@ console.log("Running Bot Launcher!");
 
         var nbSeconds = 0;
         if (getPlayer().length > 0) {
-            nbSeconds = currentDate.getSeconds() + currentDate.getMinutes() * 60 + currentDate.getHours() * 3600 - lifeTimer.getSeconds() - lifeTimer.getMinutes() * 60 - lifeTimer.getHours() * 3600;
+            nbSeconds = ((currentDate.getTime() - lifeTimer.getTime())/1000).toFixed(0);
+           
         }
 
         bestTime = Math.max(nbSeconds, bestTime);
@@ -1005,10 +989,12 @@ console.log("Running Bot Launcher!");
         debugStrings.push("Launcher: AposLauncher " + aposLauncherVersion);
         debugStrings.push("T - Bot: " + (!toggle ? "On" : "Off"));
         debugStrings.push("R - Lines: " + (!toggleDraw ? "On" : "Off"));
+
         for (var i = 0; i < botString.length; i++) {
             debugStrings.push(botString[i]);
         }
 
+        
         debugStrings.push("");
         debugStrings.push("Best Score: " + ~~(sessionScore / 100));
         debugStrings.push("Best Time: " + bestTime + " seconds");
