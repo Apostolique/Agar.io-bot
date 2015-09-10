@@ -27,6 +27,7 @@ SOFTWARE.*/
 
 var aposLauncherVersion = 4.124;
 
+
 Number.prototype.mod = function(n) {
     return ((this % n) + n) % n;
 };
@@ -75,6 +76,7 @@ function getLatestCommit() {
 }
 getLatestCommit();
 
+
 console.log("Running Bot Launcher!");
 (function(d, e) {
 
@@ -94,6 +96,7 @@ console.log("Running Bot Launcher!");
         if (70 == e.keyCode) {
             window.setShowMass(!getMassBool());
         }
+        
         if (69 == e.keyCode) {
             if (message.length > 0) {
                 window.setMessage([]);
@@ -104,6 +107,7 @@ console.log("Running Bot Launcher!");
                 window.refreshTwitch();
             }
         }
+        
         window.botList[botIndex].keyAction(e);
     }
 
@@ -552,7 +556,7 @@ console.log("Running Bot Launcher!");
             var isRemoved = !window.getCells().hasOwnProperty(element);
 
             //console.log("Time not updated: " + (window.getLastUpdate() - interNodes[element].getUptimeTime()));
-            if (isRemoved && (window.getLastUpdate() - interNodes[element].getUptimeTime()) > 3000) {
+            if (isRemoved && (window.getLastUpdate() - interNodes[element].getUptimeTime()) > 500) {
                 delete interNodes[element];
             } else {
                 for (var i = 0; i < getPlayer().length; i++) {
@@ -811,8 +815,8 @@ console.log("Running Bot Launcher!");
 
         var nbSeconds = 0;
         if (getPlayer().length > 0) {
-            //nbSeconds = currentDate.getSeconds() + currentDate.getMinutes() * 60 + currentDate.getHours() * 3600 - lifeTimer.getSeconds() - lifeTimer.getMinutes() * 60 - lifeTimer.getHours() * 3600;
-            nbSeconds = (currentDate.getTime() - lifeTimer.getTime())/1000;
+            nbSeconds = ((currentDate.getTime() - lifeTimer.getTime())/1000).toFixed(0);
+           
         }
 
         bestTime = Math.max(nbSeconds, bestTime);
@@ -990,6 +994,7 @@ console.log("Running Bot Launcher!");
             debugStrings.push(botString[i]);
         }
 
+        
         debugStrings.push("");
         debugStrings.push("Best Score: " + ~~(sessionScore / 100));
         debugStrings.push("Best Time: " + bestTime + " seconds");
@@ -1075,24 +1080,23 @@ console.log("Running Bot Launcher!");
             if (null != A || wa) {
                 z = document.createElement("canvas");
                 var a = z.getContext("2d"),
-                    b = 60,
+                    b = 20,
                     b = null == A ? b + 24 * F.length : b + 180,
                     c = Math.min(200, .3 * m) / 200;
                 z.width = 200 * c;
                 z.height = b * c;
                 a.scale(c, c);
-                a.globalAlpha = .4;
+                a.globalAlpha = .2;
                 a.fillStyle = "#000000";
                 a.fillRect(0, 0, 200, b);
                 a.globalAlpha =
-                    1;
+                    0.4;
                 a.fillStyle = "#FFFFFF";
-                c = null;
-                c = Z("leaderboard");
-                a.font = "30px Ubuntu";
-                a.fillText(c, 100 - a.measureText(c).width / 2, 40);
+                
+                
+                
                 if (null == A)
-                    for (a.font = "20px Ubuntu", b = 0; b < F.length; ++b) c = F[b].name || Z("unnamed_cell"), wa || (c = Z("unnamed_cell")), -1 != M.indexOf(F[b].id) ? (k[0].name && (c = k[0].name), a.fillStyle = "#FFAAAA") : a.fillStyle = "#FFFFFF", c = b + 1 + ". " + c, a.fillText(c, 100 - a.measureText(c).width / 2, 70 + 24 * b);
+                    for (a.font = "20px Ubuntu", b = 0; b < F.length; ++b) c = F[b].name || Z("unnamed_cell"), wa || (c = Z("unnamed_cell")), -1 != M.indexOf(F[b].id) ? (k[0].name && (c = k[0].name), a.fillStyle = "#FFAAAA") : a.fillStyle = "#FFFFFF", c = b + 1 + ". " + c, a.fillText(c, 100 - a.measureText(c).width / 2, 27 + 24 * b);
                 else
                     for (b = c = 0; b < A.length; ++b) {
                         var d = c + A[b] * Math.PI * 2;
@@ -2417,6 +2421,7 @@ console.log("Running Bot Launcher!");
     }
 })(window, window.jQuery);
 
+
 (function(i, s, o, g, r, a, m) {
     i['GoogleAnalyticsObject'] = r;
     i[r] = i[r] || function() {
@@ -2429,11 +2434,13 @@ console.log("Running Bot Launcher!");
     m.parentNode.insertBefore(a, m)
 })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'apos');
 
+
 apos('create', 'UA-64394184-1', 'auto');
 apos('send', 'pageview');
 
-window.ignoreStream = false;
-window.refreshTwitch = function() {
+ 
+   window.ignoreStream = false;
+   window.refreshTwitch = function() {
     $.ajax({
         url: "https://api.twitch.tv/kraken/streams/apostolique",
         cache: false,
@@ -2457,3 +2464,6 @@ window.refreshTwitch = function() {
 }
 setInterval(window.refreshTwitch, 60000);
 window.refreshTwitch();
+
+
+
