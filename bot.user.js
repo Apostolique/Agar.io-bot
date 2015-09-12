@@ -928,6 +928,8 @@ function AposBot() {
                         }
                     }
 
+                    var drawVirusCircle = false;
+
                     for (var i = 0; i < allPossibleViruses.length; i++) {
                         var virusDistance = this.computeDistance(allPossibleViruses[i].x, allPossibleViruses[i].y, player[k].x, player[k].y);
                         if (player[k].size < allPossibleViruses[i].size) {
@@ -938,13 +940,25 @@ function AposBot() {
                                 obstacleList.push([[angle1, true], [angle2, false]]);
                             }
                         } else {
-                            if (virusDistance < (player[k].size * 2)) {
-                                var tempOb = this.getAngleRange(player[k], allPossibleViruses[i], i, player[k].size + 50);
-                                var angle1 = tempOb[0];
-                                var angle2 = this.rangeToAngle(tempOb);
-                                obstacleList.push([[angle1, true], [angle2, false]]);
+                            drawVirusCircle = true;
+                            if (virusDistance < allPossibleViruses[i].size + player[k].size + this.splitDistance / 2) {
+                                var virusSizeMean = player[k].size / allPossibleViruses[i].size;
+                                if (virusSizeMean > 1.18) {
+                                    console.log("We're too big for this virus - shooting some mass");
+                                    shoot();
+                                    return [player[k].x, player[k].y];
+                                } else {
+                                    if (virusDistance < player[k].size && virusSizeMean > 0.84 || virusSizeMean > 1.1) {
+                                        drawLine(player[k].x, player[k].y, allPossibleViruses[i].x, allPossibleViruses[i].y, 4);
+                                        return [allPossibleViruses[i].x, allPossibleViruses[i].y];
+                                    }
+                                }
                             }
                         }
+                    }
+
+                    if (drawVirusCircle) {
+                        drawCircle(player[k].x, player[k].y, player[k].size + this.splitDistance / 2, 4);
                     }
 
                     if (badAngles.length > 0) {
