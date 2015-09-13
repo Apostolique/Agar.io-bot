@@ -1155,10 +1155,6 @@ function AposBot() {
                             destinationChoices = [disguiseVirus.x, disguiseVirus.y];
                         }
 
-                        if (isDisguised) {
-                            console.log("Disguised 8)");
-                        }
-
                     } else if (clusterAllFood.length > 0) {
                         for (var i = 0; i < clusterAllFood.length; i++) {
                             //console.log("mefore: " + clusterAllFood[i][2]);
