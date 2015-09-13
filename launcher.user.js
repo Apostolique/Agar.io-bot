@@ -246,7 +246,8 @@ console.log("Running Bot Launcher!");
                 b = a.val();
             b && (ka[b] = a.text())
         }));
-        e.get("https://m.agar.io/info", function(a) {
+        e.get("http://cors.io/?u=https://m.agar.io/info", function(a) {
+                console.log("Do I ever reach this spot?");
                 var b = {},
                     c;
                 for (c in a.regions) {
@@ -300,19 +301,27 @@ console.log("Running Bot Launcher!");
     function Za() {
         var a = ++Ba;
         console.log("Find " + y + P);
-        e.ajax("https://m.agar.io/findServer", {
+        window.jQuery.ajax({
+            url: "http://cors.io/?u=https://m.agar.io/findServer",
+            cache: false,
+            dataType: "json"
+        }).done(function(b) {
+            console.log("Got here at least! ip: " + b.ip + " token: " + b.token);
+            a == Ba && (b.alert && alert(b.alert), Ca("ws://" + b.ip, b.token))
+        });
+        /*e.ajax("https://m.agar.io/findServer", {
             error: function() {
                 setTimeout(Za, 1E3)
             },
             success: function(b) {
                 a == Ba && (b.alert && alert(b.alert), Ca("ws://" + b.ip, b.token))
             },
-            dataType: "json",
+            dataType: "jsonp",
             method: "POST",
-            cache: !1,
-            crossDomain: !0,
+            cache: false,
+            crossDomain: true,
             data: (y + P || "?") + "\n154669603"
-        })
+        })*/
     }
 
     function I() {
@@ -1384,7 +1393,7 @@ console.log("Running Bot Launcher!");
             })();
             var Qa = "ontouchstart" in d && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(d.navigator.userAgent),
                 Ja = new Image;
-            Ja.src = "img/split.png";
+            Ja.src = "http://agar.io/img/split.png";
             var nb = document.createElement("canvas");
             if ("undefined" == typeof console || "undefined" ==
                 typeof DataView || "undefined" == typeof WebSocket || null == nb || null == nb.getContext || null == d.localStorage) alert("You browser does not support this game, we recommend you to use Firefox to play this");
@@ -2097,7 +2106,7 @@ console.log("Running Bot Launcher!");
                             }
                             a.closePath();
                             d = this.name.toLowerCase();
-                            !this.n && kb && ":teams" != P ? -1 != ob.indexOf(d) ? (U.hasOwnProperty(d) || (U[d] = new Image, (d == "notreallyabot" ? U[d].src = "http://i.imgur.com/q5FdCkx.png" : U[d].src = "skins/" +
+                            !this.n && kb && ":teams" != P ? -1 != ob.indexOf(d) ? (U.hasOwnProperty(d) || (U[d] = new Image, (d == "notreallyabot" ? U[d].src = "http://i.imgur.com/q5FdCkx.png" : U[d].src = "http://agar.io/skins/" +
                                 d + ".png")), c = 0 != U[d].width && U[d].complete ? U[d] : null) : c = null : c = null;
                             c = (e = c) ? -1 != Hb.indexOf(d) : !1;
                             b || a.stroke();

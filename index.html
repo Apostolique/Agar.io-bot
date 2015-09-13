@@ -1,0 +1,733 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="Eat cells smaller than you and don't get eaten by the bigger ones, as an MMO">
+<meta name="keywords" content="agario, agar, io, cell, cells, virus, bacteria, blob, game, games, web game, html5, fun, flash">
+<meta name="robots" content="index, follow">
+<meta name="viewport" content="minimal-ui, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta property="fb:app_id" content="677505792353827"/>
+<meta property="og:title" content="Agar.io"/>
+<meta property="og:description" content="Eat cells smaller than you and don't get eaten by the bigger ones, as an MMO"/>
+<meta property="og:url" content="http://agar.io"/>
+<meta property="og:image" content="http://agar.io/img/1200x630.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:type" content="website"/>
+<title>Agar.io</title>
+<link id="favicon" rel="icon" type="image/png" href="http://agar.io/favicon-32x32.png"/>
+ 
+<script type='text/javascript'>
+var googletag = googletag || {};
+googletag.cmd = googletag.cmd || [];
+(function() {
+var gads = document.createElement('script');
+gads.async = true;
+gads.type = 'text/javascript';
+var useSSL = 'https:' == document.location.protocol;
+gads.src = (useSSL ? 'https:' : 'http:') + 
+'//www.googletagservices.com/tag/js/gpt.js';
+var node = document.getElementsByTagName('script')[0];
+node.parentNode.insertBefore(gads, node);
+})();
+</script>
+<link href='https://fonts.googleapis.com/css?family=Ubuntu:700' rel='stylesheet' type='text/css'>
+<link href="http://agar.io/css/bootstrap.min.css" rel="stylesheet">
+<link href="http://agar.io/css/glyphicons-social.css" rel="stylesheet">
+<link href="http://agar.io/css/animate.css" rel="stylesheet">
+<style>body{padding:0;margin:0;overflow:hidden;}#canvas{position:absolute;left:0;right:0;top:0;bottom:0;width:100%;height:100%;}form{margin-bottom:0px;}.btn-play,.btn-settings,.btn-spectate,.btn-play-guest,.btn-login,.btn-logout{display:block;float:left;height:35px;}.btn-spectate,.btn-logout{height:35px;display:block;width:110px;margin-left:10px;margin-bottom:5px;}#helloContainer[data-logged-in="0"] .btn-play-guest{margin-left:5px;width:125px;}#helloContainer[data-logged-in="0"] .btn-login{margin-left:5px;width:145px;}#helloContainer[data-logged-in="0"] .agario-exp-bar,#helloContainer[data-logged-in="0"] .progress-bar-star,#helloContainer[data-logged-in="0"] #agario-main-buttons .agario-profile,#helloContainer[data-logged-in="0"] .btn-play{display:none;}#helloContainer[data-logged-in="0"] .btn-logout{display:none;}#helloContainer[data-logged-in="1"] .btn-play{margin-left:5px;width:275px;}#helloContainer[data-logged-in="1"] .btn-play-guest{display:none;}#helloContainer[data-logged-in="1"] .btn-login{display:none;}.btn-settings{width:40px;}.btn-spectate{display:block;float:right;}#adsBottom{position:absolute;left:0;right:0;bottom:0;}#adsBottomInner{margin:0px auto;width:728px;height:90px;border:5px solid white;border-radius:5px 5px 0px 0px;background-color:#FFFFFF;box-sizing:content-box;}.region-message{display:none;margin-bottom:12px;margin-left:6px;margin-right:6px;text-align:center;}#nick{width:65%;float:left;}#locationKnown #region{width:100%;}#locationUnknown #region{margin-bottom:15px;}#gamemode{width:33%;float:right;}.agario-panel{display:inline-block;width:350px;background-color:#FFFFFF;margin:2px;border-radius:10px;padding:5px 15px 5px 15px;vertical-align:top;}.agario-side-panel{display:inline-block;width:220px;}#helloContainer,.connecting-panel{position:absolute;top:50%;left:50%;margin-right:-50%;-webkit-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%);}#a300x250{width:300px;height:250px;background-repeat:no-repeat;background-size:contain;background-position:center center;}.agario-exp-bar{height:30px;position:relative;border:2px solid #01612B;}.agario-exp-bar .progress-bar{background-color:#338833;border-radius:0px 4px 4px 0px;-webkit-transition:none;transition:none;}.agario-exp-bar .progress-bar-text{font-size:12pt;cursor:default;opacity:0.75;color:#FFF;text-align:center;line-height:26px;text-shadow:0px 0px 3px #000000,-1px 0px 0px #000000,1px 0px 0px #000000,0px 1px 0px #000000,0px -1px 0px #000000,-1px -1px 0px #000000,1px 1px 0px #000000,-1px 1px 0px #000000,1px -1px 0px #000000;position:absolute;top:0;bottom:0;left:0;right:0;font-family:'Ubuntu',sans-serif;}#agario-results-table{width:100%;}#agario-results-table th{text-align:center;font-size:8pt;}#agario-results-table td{text-align:center;color:#999;font-size:11pt;padding-bottom:15px;}.progress-bar-star{position:absolute;top:-13px;right:-16px;width:50px;height:50px;background-image:url("http://agar.io/img/star.png");background-size:cover;-webkit-transform:rotate3d(0,0,1,10deg);transform:rotate3d(0,0,1,10deg);-webkit-animation-duration:1s;animation-duration:1s;-webkit-animation-delay:0s;animation-delay:0s;-webkit-animation-iteration-count:1;animation-iteration-count:1;cursor:default;color:#FFF;text-align:center;line-height:55px;font-size:12pt;text-shadow:0px 0px 3px #000000,-1px 0px 0px #000000,1px 0px 0px #000000,0px 1px 0px #000000,0px -1px 0px #000000,-1px -1px 0px #000000,1px 1px 0px #000000,-1px 1px 0px #000000,1px -1px 0px #000000;font-family:'Ubuntu',sans-serif;}.tooltip-inner{max-width:300px;}.agario-profile-panel{padding:15px 15px 15px 15px;}.agario-profile-panel .agario-profile-picture{float:left;display:block;width:64px;height:64px;border-radius:5px;border:2px solid #CCC;margin-right:6px;}.agario-profile-panel .agario-profile-name-container{float:left;display:table;width:120px;height:64px;position:relative;}.agario-profile-panel .agario-profile-name-container .agario-profile-name{display:table-cell;vertical-align:middle;text-align:center;font-weight:bold;}#helloContainer[data-has-account-data="0"] .agario-profile-panel{display:none;}.agario-party,.agario-party-0,.agario-party-1,.agario-party-2,.agario-party-3,.agario-party-4,.agario-party-5,.agario-party-6{display:none;}#helloContainer[data-gamemode=":party"] .agario-party{display:block;position:relative;}#helloContainer[data-gamemode=":party"] .agario-promo{display:none;}#helloContainer[data-party-state="0"] .agario-party-0{display:block;}#helloContainer[data-party-state="1"] .agario-party-1{display:block;}#helloContainer[data-party-state="2"] .agario-party-2{display:block;}#helloContainer[data-party-state="3"] .agario-party-3{display:block;}#helloContainer[data-party-state="4"] .agario-party-4{display:block;}#helloContainer[data-party-state="5"] .agario-party-5{display:block;}#helloContainer[data-party-state="6"] .agario-party-6{display:block;}.partyToken{margin-bottom:10px;}.side-container{vertical-align:top;display:inline-block;width:224px;}.cell-spinner{display:block;margin:0;}.creating-party-text{position:absolute;cursor:default;top:0;bottom:0;left:0;right:0;width:100%;height:100%;text-align:center;color:#FFF;font-size:24px;line-height:100px;text-shadow:0px 0px 3px #000000,-1px 0px 0px #000000,1px 0px 0px #000000,0px 1px 0px #000000,0px -1px 0px #000000,-1px -1px 0px #000000,1px 1px 0px #000000,-1px 1px 0px #000000,1px -1px 0px #000000;}.agario-results-0,.agario-results-1,.agario-results-2{display:none;}#helloContainer[data-results-state="0"] .agario-results-0{display:block;}#helloContainer[data-results-state="1"] .agario-results-1{display:block;}#helloContainer[data-results-state="2"] .agario-results-2{display:block;}#options>label{display:block;width:94px;float:left;}#stats{position:relative;width:350px;height:581px;padding:0px 0px 300px 0px;overflow:hidden;}#statsPelletsContainer,#statsTimeAliveContainer,#statsHighestMassContainer,#statsTimeLeaderboardContainer,#statsPlayerCellsEatenContainer,#statsTopPositionContainer{position:absolute;width:100px;height:100px;}#statsPelletsContainer{top:30px;left:50px;}#statsHighestMassContainer{top:30px;right:50px;}#statsTimeAliveContainer{top:85px;left:50px;}#statsTimeLeaderboardContainer{top:85px;right:50px;}#statsPlayerCellsEatenContainer{top:140px;left:50px;}#statsTopPositionContainer{top:140px;right:50px;}#statsPellets{position:absolute;top:0;left:0;bottom:0;right:0;margin:auto;}#statsText{position:absolute;top:0;bottom:0;left:0;right:0;line-height:100px;font-size:23px;}#statsSubtext{position:absolute;bottom:0;left:0;right:0;line-height:60px;font-size:12px;color:#000;text-align:center;}#statsChartText{position:absolute;left:20px;bottom:250px;line-height:40px;font-size:40px;}#statsChartText,#statsText{cursor:default;color:#444;text-align:center;font-weight:bold;}#statsContinue{position:absolute;left:25px;right:25px;width:300px;bottom:295px;}#statsGraph{position:absolute;bottom:350px;left:0px;right:0px;opacity:0.4;}#s300x250{position:absolute;bottom:10px;left:25px;right:25px;width:300px;height:250px;}.tosBox{z-index:1000;position:absolute;bottom:0;right:0;background-color:#FFF;border-radius:5px 0px 0px 0px;padding:5px 10px;}</style>
+<script src="http://agar.io/js/jquery.js"></script>
+<script src="http://agar.io/js/bootstrap.min.js"></script>
+<script>
+i18n_lang = "en";
+i18n_dict = {
+	"en": {
+		"connecting": "Connecting",
+		"connect_help": "If you cannot connect to the servers, check if you have some anti virus or firewall blocking the connection.",
+		"play": "Play",
+		"spectate": "Spectate",
+		"login_and_play": "Login and play",
+		"play_as_guest": "Play as guest",
+		"share": "Share",
+		"advertisement": "Advertisement",
+		"privacy_policy": "Privacy Policy",
+		"terms_of_service": "Terms of Service",
+		"changelog": "Changelog",
+		"instructions_mouse": "Move your mouse to control your cell",
+		"instructions_space": "Press <b>Space</b> to split",
+		"instructions_w": "Press <b>W</b> to eject some mass",
+		"gamemode_ffa": "FFA",
+		"gamemode_teams": "Teams",
+		"gamemode_experimental": "Experimental",
+		"region_select": " -- Select a Region -- ",
+		"region_us_east": "US East",
+		"region_us_west": "US West",
+		"region_north_america": "North America",
+		"region_south_america": "South America",
+		"region_europe": "Europe",
+		"region_turkey": "Turkey",
+		"region_poland": "Poland",
+		"region_east_asia": "East Asia",
+		"region_russia": "Russia",
+		"region_china": "China",
+		"region_oceania": "Oceania",
+		"region_australia": "Australia",
+		"region_players": "players",
+		"option_no_skins": "No skins",
+		"option_no_names": "No names",
+		"option_dark_theme": "Dark theme",
+		"option_no_colors": "No colors",
+		"option_show_mass": "Show mass",
+		"leaderboard": "Leaderboard",
+		"unnamed_cell": "An unnamed cell",
+		"last_match_results": "Last match results",
+		"score": "Score",
+		"leaderboard_time": "Leaderboard Time",
+		"mass_eaten": "Mass Eaten",
+		"top_position": "Top Position",
+		"position_1": "First",
+		"position_2": "Second",
+		"position_3": "Third",
+		"position_4": "Fourth",
+		"position_5": "Fifth",
+		"position_6": "Sixth",
+		"position_7": "Seventh",
+		"position_8": "Eighth",
+		"position_9": "Ninth",
+		"position_10": "Tenth",
+		"player_cells_eaten": "Player Cells Eaten",
+		"survival_time": "Survival Time",
+		
+		
+		"games_played": "Games played",
+		"highest_mass": "Highest mass",
+		"total_cells_eaten": "Total cells eaten",
+		"total_mass_eaten": "Total mass eaten",
+		"longest_survival": "Longest survival",
+		"logout": "Logout",
+		"stats": "Stats",
+		"shop": "Shop",
+		"party": "Party",
+		"party_description": "Play with your friends in the same map",
+		"create_party": "Create",
+		"creating_party": "Creating party...",
+		"join_party": "Join",
+		"back_button": "Back",
+		
+		"joining_party": "Joining party...",
+		"joined_party_instructions": "You are now playing with this party:",
+		"party_join_error": "There was a problem joining that party, please make sure the code is correct, or try creating another party",
+		"login_tooltip": "Login with Facebook and get:<br /><br /><br />Start the game with more mass!<br />Level up to get even more starting mass!",//<br />Track your progress with player stats!
+		"create_party_instructions": "Give this link to your friends:",
+		"join_party_instructions": "Your friend should have given you a code, type it here:",
+		"continue": "Continue",
+		"option_skip_stats": "Skip stats",
+		"stats_food_eaten": "food eaten",
+		"stats_highest_mass": "highest mass",
+		"stats_time_alive": "time alive",
+		"stats_leaderboard_time": "leaderboard time",
+		"stats_cells_eaten": "cells eaten",
+		"stats_top_position": "top position",
+		
+		"":""
+	},
+	/*
+	"fr": {
+		"connecting": "Connexion",
+		"connect_help": "Si vous ne pouvez pas vous connecter aux serveurs, vérifiez que votre anti-virus ou votre pare-feu ne bloque pas la connexion.",
+		"play": "Jouer",
+		"spectate": "REGARDER",
+		"login_and_play": "Se connecter et jouer",
+		"login_tooltip": "Connectez-vous avec Facebook et obtenez:<br /><br /><br />double masse de départ à chaque partie!<br />Montez en niveau pour obtenir encore plus de masse de départ!", //<br />Consultez vos progrès dans les statistiques de joueur!
+		"play_as_guest": "Jouer en tant qu'invité",
+		"advertisement": "Publicité",
+		"privacy_policy": "Confidentialité",
+		"terms_of_service": "Conditions de service",
+		"changelog": "Changements",
+		"instructions_mouse": "Bougez votre souris pour contrôler votre cellule.",
+		"instructions_space": "Appuyez pour le séparer.",
+		"instructions_w": "Appuyez pour éjecter de la masse.",
+		"gamemode_ffa": "Chacun pour soi",
+		"gamemode_teams": "Par équipe",
+		"gamemode_experimental": "Expérimental",
+		"region_select": " -- Sélectionner une région -- ",
+		"region_us_east": "E.-U. Est",
+		"region_us_west": "E.-U. Ouest",
+		"region_north_america": "Amérique du Nord",
+		"region_south_america": "Amérique du Sud",
+		"region_europe": "Europe",
+		"region_turkey": "Turquie",
+		"region_poland": "Pologne",
+		"region_east_asia": "Asie de l'Est",
+		"region_russia": "Russie",
+		"region_china": "Chine",
+		"region_oceania": "Océanie",
+		"region_australia": "Australie",
+		"region_players": "Joueurs",
+		"option_no_skins": " Aucun motif",
+		"option_no_names": " Aucun nom",
+		"option_dark_theme": " Thème sombre",
+		"option_no_colors": " Aucune couleur",
+		"option_show_mass": " Montrer la masse",
+		"leaderboard": "Classement",
+		"unnamed_cell": "Une cellule sans nom",
+		"last_match_results": "Derniers résultats",
+		"score": "Score",
+		"leaderboard_time": "Temps au classement",
+		"mass_eaten": "Masse ingérée",
+		"top_position": "Au top",
+		"position_1": "Premier",
+		"position_2": "Deuxième",
+		"position_3": "Troisième",
+		"position_4": "Quatrième",
+		"position_5": "Cinquième",
+		"position_6": "Sixième",
+		"position_7": "Septième",
+		"position_8": "Huitième",
+		"position_9": "Neuvième",
+		"position_10": "Dixième",
+		"player_cells_eaten": "Cellules de joueur ingérées",
+		"survival_time": "Temps de survie",
+		"share": "Partager",
+		"screenshot_1": "Diviser & Conquérir ! Grossir et dominer !",
+		"screenshot_2": "Un hit en multijoueur ! Mangez ou soyez mangé !",
+		"screenshot_3": "Lancez et partagez votre masse pour prendre l'avantage !",
+		"screenshot_4": "Jouez avec de nombreuses apparences différentes !"
+	},
+	"it": {
+		"connecting": "Connessione",
+		"connect_help": "Non puoi connetterti ai server, controlla che non ci sia un antivirus o un firewall che blocchino la connessione",
+		"play": "Gioca",
+		"spectate": "GUARDA",
+		"login_and_play": "Accedi e gioca",
+		"login_tooltip": "Accedi a Facebook per ottenere:<br /><br /><br />il doppio della massa iniziale a ogni partita!<br />Sali di livello per aumentare ulteriormente la massa iniziale!", //<br />Tieni traccia dei tuoi progressi con le statistiche del giocatore!
+		"play_as_guest": "Gioca come ospite",
+		"advertisement": "Pubblicità",
+		"privacy_policy": "Privacy",
+		"terms_of_service": "Termini del servizio",
+		"changelog": "Log dei cambiamenti",
+		"instructions_mouse": "Sposta il mouse per controllare la tua cellula",
+		"instructions_space": "Premi per dividere",
+		"instructions_w": "Premi per espellere della massa",
+		"gamemode_ffa": "FFA",
+		"gamemode_teams": "Squadre",
+		"gamemode_experimental": "Sperimentale",
+		"region_select": " -- Scegli una regione -- ",
+		"region_us_east": "USA orientali",
+		"region_us_west": "USA occidentali",
+		"region_north_america": "Nord America",
+		"region_south_america": "Sud America",
+		"region_europe": "Europa",
+		"region_turkey": "Turchia",
+		"region_poland": "Polonia",
+		"region_east_asia": "Asia orientale",
+		"region_russia": "Russia",
+		"region_china": "Cina",
+		"region_oceania": "Oceania",
+		"region_australia": "Australia",
+		"region_players": "Giocatori",
+		"option_no_skins": " Nessuna skin",
+		"option_no_names": " Nessun nome",
+		"option_dark_theme": " Tema scuro",
+		"option_no_colors": " Nessun colore",
+		"option_show_mass": " Mostra massa",
+		"leaderboard": "Classifica",
+		"unnamed_cell": "Una cellula senza nome",
+		"last_match_results": "Risultati ultimo incontro",
+		"score": "Punteggio",
+		"leaderboard_time": "Tempo classifica",
+		"mass_eaten": "Massa ingerita",
+		"top_position": "Posizione più alta",
+		"position_1": "Primo",
+		"position_2": "Secondo",
+		"position_3": "Terzo",
+		"position_4": "Quarto",
+		"position_5": "Quindi",
+		"position_6": "Sesto",
+		"position_7": "Settimo",
+		"position_8": "Ottavo",
+		"position_9": "Nono",
+		"position_10": "Decimo",
+		"player_cells_eaten": "Cellule giocatore ingerite",
+		"survival_time": "Tempo di sopravvivenza",
+		"share": "Condividi",
+		"screenshot_1": "Dividiti e conquista! Cresci e domina!",
+		"screenshot_2": "Un successo multigiocatore! Mangia o sarai mangiato!",
+		"screenshot_3": "Lancia e dividi la massa per ottenere un vantaggio!",
+		"screenshot_4": "Gioca con molte skin diverse!"
+	},
+	"de": {
+		"connecting": "Verbinde",
+		"connect_help": "Überprüfe bitte dein Antivirusprogramm oder deine Firewall, wenn du keine Verbindung zum Server herstellen kannst.",
+		"play": "Spielen",
+		"spectate": "ZUSCHAUEN",
+		"login_and_play": "Anmelden und spielen",
+		"login_tooltip": "Melde dich mit Facebook an und erhalte:<br /><br /><br />Doppelte Startmasse in jedem Spiel!<br />Erreiche eine höhere Stufe, um noch mehr Startmasse zu erhalten!", //<br />Verfolge deine Fortschritte mit Hilfe der Spielerstatistik!
+		"play_as_guest": "Als Gast spielen",
+		"advertisement": "Werbung",
+		"privacy_policy": "Datenschutz",
+		"terms_of_service": "Nutzungsbedingungen",
+		"changelog": "Changelog",
+		"instructions_mouse": "Bewege deine Maus, um deine Zelle zu kontrollieren",
+		"instructions_space": "Zum Teilen drücken",
+		"instructions_w": "Zur Abgabe von etwas Masse drücken",
+		"gamemode_ffa": "Für alle",
+		"gamemode_teams": "Teams",
+		"gamemode_experimental": "Experimentell",
+		"region_select": " -- Wähle eine Region -- ",
+		"region_us_east": "USA-Ost",
+		"region_us_west": "USA-West",
+		"region_north_america": "Nordamerika",
+		"region_south_america": "Südamerika",
+		"region_europe": "Europa",
+		"region_turkey": "Türkei",
+		"region_poland": "Polen",
+		"region_east_asia": "Ostasien",
+		"region_russia": "Russland",
+		"region_china": "China",
+		"region_oceania": "Ozeanien",
+		"region_australia": "Australien",
+		"region_players": "Spieler",
+		"option_no_skins": " Keine Skins",
+		"option_no_names": " Keine Namen",
+		"option_dark_theme": " Dunkelthema",
+		"option_no_colors": " Keine Farben",
+		"option_show_mass": " Masse anzeigen",
+		"leaderboard": "Bestenliste",
+		"unnamed_cell": "Eine unbenannte Zelle",
+		"last_match_results": "Letzte Spielergebnisse",
+		"score": "Punkte",
+		"leaderboard_time": "Bestenlistenzeit",
+		"mass_eaten": "Verzehrte Masse",
+		"top_position": "Spitzenposition",
+		"position_1": "Erster",
+		"position_2": "Zweiter",
+		"position_3": "Dritter",
+		"position_4": "Vierter",
+		"position_5": "Fünfter",
+		"position_6": "Sechster",
+		"position_7": "Siebenter",
+		"position_8": "Achter",
+		"position_9": "Neunter",
+		"position_10": "Zehnter",
+		"player_cells_eaten": "Verzehrte Spielerzellen",
+		"survival_time": "Überlebenszeit",
+		"share": "Teilen",
+		"screenshot_1": "Teile und erobere! Wachse und herrsche!",
+		"screenshot_2": "Ein Mehrspielerhit! Friss oder werde gefressen!",
+		"screenshot_3": "Spalte dich auf und wirf Masse ab, um einen Vorteil zu erringen!",
+		"screenshot_4": "Spiele mit vielen unterschiedlichen Skins!"
+	},
+	"es": {
+		"connecting": "Conectando",
+		"connect_help": "Si no puedes conectar con los servidores, comprueba si tu antivirus o tu cortafuegos están bloqueando la conexión.",
+		"play": "Jugar",
+		"spectate": "Observar",
+		"login_and_play": "Iniciar sesión y jugar",
+		"login_tooltip": "Inicia sesión con Facebook y consigue:<br /><br /><br />¡El doble de masa inicial en cada partida!<br />¡Sube de nivel y consigue aún más masa inicial!", //<br />¡Controla tus progresos con las estadísticas!
+		"play_as_guest": "Jugar como invitado",
+		"advertisement": "Anuncio",
+		"privacy_policy": "Privacidad",
+		"terms_of_service": "Condiciones del servicio",
+		"changelog": "Registro de cambios",
+		"instructions_mouse": "Mueve el ratón para controlar tu punto",
+		"instructions_space": "Pulsa para dividir",
+		"instructions_w": "Pulsa <b>W</b> para liberar parte de tu masa",
+		"gamemode_ffa": "TcT",
+		"gamemode_teams": "Equipos",
+		"gamemode_experimental": "Experimental",
+		"region_select": " -- Elige una región -- ",
+		"region_us_east": "Este de EE.UU.",
+		"region_us_west": "Oeste de de EE.UU.",
+		"region_north_america": "Norteamérica",
+		"region_south_america": "Sudamérica",
+		"region_europe": "Europa",
+		"region_turkey": "Turquía",
+		"region_poland": "Polonia",
+		"region_east_asia": "Este de Asia",
+		"region_russia": "Rusia",
+		"region_china": "China",
+		"region_oceania": "Oceanía",
+		"region_australia": "Australia",
+		"region_players": "jugadores",
+		"option_no_skins": " Sin texturas",
+		"option_no_names": " Sin nombres",
+		"option_dark_theme": " Tema oscuro",
+		"option_no_colors": " Sin colores",
+		"option_show_mass": " Mostrar masa",
+		"leaderboard": "Marcador",
+		"unnamed_cell": "Un punto sin nombre",
+		"last_match_results": "Resultados de la última partida",
+		"score": "Puntuación",
+		"leaderboard_time": "Tiempo del marcador",
+		"mass_eaten": "Masa comida",
+		"top_position": "Campeón",
+		"position_1": "Primero",
+		"position_2": "Segundo",
+		"position_3": "Tercero",
+		"position_4": "Cuarto",
+		"position_5": "Quinto",
+		"position_6": "Sexto",
+		"position_7": "Séptimo",
+		"position_8": "Octavo",
+		"position_9": "Noveno",
+		"position_10": "Décimo",
+		"player_cells_eaten": "Puntos comidos del jugador",
+		"survival_time": "Tiempo de supervivencia",
+		"share": "Compartir",
+		"screenshot_1": "¡Divide y vencerás! ¡Crece y dominarás!",
+		"screenshot_2": "¡Un exitoso juego multijgador! ¡Come o te comerán!",
+		"screenshot_3": "¡Lanza y divide tu masa para conseguir ventaja!",
+		"screenshot_4": "¡Juega con un montón de apariencias distintas!"
+	},
+	*/
+	
+	"?":{}
+};
+
+i18n_lang = (window.navigator.userLanguage || window.navigator.language || 'en').split('-')[0];
+//i18n_lang = 'de';
+if(!i18n_dict.hasOwnProperty(i18n_lang)) i18n_lang = "en";
+
+i18n = i18n_dict[i18n_lang];
+
+</script>
+<script src="launcher.user.js"></script>
+<script src="bot.user.js"></script>
+<script>
+
+var hasBottomAd = false;
+
+var dfp = null;
+var dfpBottom = null;
+var dfpStats = null;
+
+window['aa'] = [];
+window['ab'] = [];
+
+if(window.location.search.indexOf('fb') != -1){
+	dfp = '/53945695/agar_facebook/agar/300x250';
+	dfpStats = '/53945695/agar_facebook/agar/300x250_Stats';
+}else{
+	if(window.ABGroup < 77){
+		dfp = '/53945695/agar/300x250_CRL';
+		dfpStats = '/53945695/agar/300x250_CRL_stats';
+	}else if(window.ABGroup < 80){
+		dfp = '/53945695/agar/300x250_CRM';
+		dfpStats = '/53945695/agar/300x250_CRM_stats';
+	}else{
+		dfp = '/53945695/agar/300x250_CPL';
+		dfpStats = '/53945695/agar/300x250_CPL_stats';
+	}
+	dfpBottom = '/53945695/agar/728x90';
+}
+
+
+if(window.innerHeight > 960 && dfpBottom != null){
+	hasBottomAd = true;
+}
+
+googletag.cmd.push(function() {
+	window['aa'].push(googletag.defineSlot(dfp, [300, 250], 'a300x250').addService(googletag.pubads()));
+	if(hasBottomAd) window['aa'].push(googletag.defineSlot(dfpBottom, [728, 90], 'a728x90').addService(googletag.pubads()));
+	window['ab'].push(googletag.defineSlot(dfpStats, [300, 250], 's300x250').addService(googletag.pubads()));
+	googletag.pubads().enableSingleRequest();
+	googletag.pubads().disableInitialLoad();
+	googletag.enableServices();
+});
+
+</script>
+</head>
+<body>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<script src="http://agar.io/js/advertisement.js"></script>
+<div id="overlays" style="display:none; position: absolute; left: 0; right: 0; top: 0; bottom: 0; z-index: 200;">
+<div id="helloContainer" data-logged-in="0" data-has-account-data="0" data-party-state="0" data-results-state="0" data-gamemode="">
+<div class="side-container">
+<div class="agario-panel agario-side-panel agario-profile-panel">
+<div class="clearfix" style="margin-bottom: 16px;">
+<img class="agario-profile-picture"/>
+<div class="agario-profile-name-container">
+<span class="agario-profile-name"></span>
+</div>
+</div>
+<div style="position: relative; margin-bottom: -15px;" class="clearfix">
+<div class="agario-exp-bar progress">
+<span class="progress-bar-text"></span>
+<div class="progress-bar progress-bar-striped" style="width: 0%;"></div>
+</div>
+<div class="progress-bar-border"></div>
+<div class="progress-bar-star"></div>
+</div>
+</div>
+ 
+</div>
+<div id="mainPanel" class="agario-panel">
+<form role="form">
+<div class="form-group clearfix">
+<div style="float: left; margin-left: 20px;"><h2>Agar.io</h2></div>
+<div style="float: right; margin-top: 10px; height: 40px;">
+<div>
+<script src="https://apis.google.com/js/platform.js" async></script>
+<div class="g-ytsubscribe " data-channelid="UCC6hurPo_LxL7C0YFYgYnIw" data-layout="default" data-count="default"></div>
+</div>
+<div class="clearfix">
+<div class="fb-like pull-right" data-href="https://www.facebook.com/playagar.io" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
+</div>
+</div>
+</div>
+<div class="form-group clearfix">
+<input id="nick" class="form-control" placeholder="Nick" maxlength="15" autofocus />
+<select id="gamemode" class="form-control" onchange="setGameMode($(this).val());" required>
+<option selected value="" data-itr="gamemode_ffa"></option>
+<option value=":teams" data-itr="gamemode_teams"></option>
+<option value=":experimental" data-itr="gamemode_experimental"></option>
+<option value=":party" data-itr="party"></option>
+</select>
+</div>
+<div id="locationUnknown">
+<select id="region" class="form-control" onchange="setRegion($('#region').val());" required>
+<option selected disabled value="" data-itr="region_select"></option>
+<option value="US-Atlanta" data-itr="region_north_america"></option>
+<option value="BR-Brazil" data-itr="region_south_america"></option>
+<option value="EU-London" data-itr="region_europe"></option>
+<option value="RU-Russia" data-itr="region_russia"></option>
+<option value="TK-Turkey" data-itr="region_turkey"></option>
+<option value="JP-Tokyo" data-itr="region_east_asia"></option>
+<option value="CN-China" data-itr="region_china"></option>
+<option value="SG-Singapore" data-itr="region_oceania"></option>
+</select>
+</div>
+ 
+<div class="form-group" id="agario-main-buttons">
+<button type="button" onclick="$('#settings, #instructions').toggle();return false;" class="btn btn-info btn-settings"><i class="glyphicon glyphicon-cog"></i></button>
+<button disabled type="submit" onclick="setNick(document.getElementById('nick').value); return false;" class="btn btn-play btn-primary btn-needs-server" data-itr="play"></button>
+<button disabled type="submit" onclick="setNick(document.getElementById('nick').value); return false;" class="btn btn-play-guest btn-success btn-needs-server" data-itr="play_as_guest"></button>
+<button onclick="facebookLogin(); return false;" class="btn btn-login btn-primary" style="line-height: 24px;">
+<span class="social social-facebook" style="font-size:24px;margin-top:-6px;margin-left:-8px;vertical-align:middle;margin-right:5px;"></span>
+<span data-itr="login_and_play"></span>
+</button>
+<br clear="both"/>
+</div>
+<div id="settings" class="checkbox" style="display:none;">
+<div style="float: left; width: 200px;">
+<div id="locationKnown"></div>
+<div id="options" style="margin: 6px; font-size: 12px;">
+<label><input type="checkbox" onchange="setSkins(!$(this).is(':checked'));"><span data-itr="option_no_skins"></span></label>
+<label><input type="checkbox" onchange="setNames(!$(this).is(':checked'));"><span data-itr="option_no_names"></span></label>
+<label><input type="checkbox" onchange="setColors($(this).is(':checked'));"><span data-itr="option_no_colors"></span></label>
+<label><input type="checkbox" onchange="setShowMass($(this).is(':checked'));"><span data-itr="option_show_mass"></span></label>
+<label><input type="checkbox" onchange="setDarkTheme($(this).is(':checked'));"><span data-itr="option_dark_theme"></span></label>
+<label><input type="checkbox" onchange="setSkipStats($(this).is(':checked'));"><span data-itr="option_skip_stats"></span></label>
+</div>
+</div>
+<div style="float: right; width: 120px;">
+<button onclick="spectate(); return false;" disabled class="btn btn-warning btn-spectate btn-needs-server" data-itr="spectate"></button>
+<button onclick="logout(); return false;" class="btn btn-danger btn-logout" data-itr="logout"></button>
+</div>
+<br clear="both"/>
+</div>
+</form>
+<div id="instructions">
+<hr/>
+<center><span class="text-muted">
+<span data-itr="instructions_mouse"></span><br/>
+<span data-itr="instructions_space"></span><br/>
+<span data-itr="instructions_w"></span><br/>
+</span></center>
+</div>
+<hr/>
+<center>
+<div id="a300x250" style="margin-bottom: 10px;"></div>
+</center>
+</div>
+<div id="stats" style="display: none;" class="agario-panel">
+<h2><center>Match Results</center></h2>
+<canvas id="statsGraph" width="350" height="230"></canvas>
+<div id="statsPelletsContainer">
+ 
+<span id="statsText" class="stats-food-eaten"></span>
+<span id="statsSubtext" data-itr="stats_food_eaten"></span>
+</div>
+<div id="statsHighestMassContainer">
+ 
+<span id="statsText" class="stats-highest-mass"></span>
+<span id="statsSubtext" data-itr="stats_highest_mass"></span>
+</div>
+<div id="statsTimeAliveContainer">
+ 
+<span id="statsText" class="stats-time-alive"></span>
+<span id="statsSubtext" data-itr="stats_time_alive"></span>
+</div>
+<div id="statsTimeLeaderboardContainer">
+ 
+<span id="statsText" class="stats-leaderboard-time"></span>
+<span id="statsSubtext" data-itr="stats_leaderboard_time"></span>
+</div>
+<div id="statsPlayerCellsEatenContainer">
+ 
+<span id="statsText" class="stats-cells-eaten"></span>
+<span id="statsSubtext" data-itr="stats_cells_eaten"></span>
+</div>
+<div id="statsTopPositionContainer">
+ 
+<span id="statsText" class="stats-top-position">?</span>
+<span id="statsSubtext" data-itr="stats_top_position"></span>
+</div>
+<hr style="position:absolute;bottom:350px;width:100%;margin:0px;"/>
+<button id="statsContinue" class="btn btn-primary" data-itr="continue" onclick="closeStats();"></button>
+<hr style="position:absolute;bottom:255px;width:100%;"/>
+<div id="s300x250"></div>
+</div>
+<div class="side-container">
+<div class="agario-party">
+<div class="agario-panel agario-side-panel agario-party-0">
+<h4><center data-itr="party"></center></h4>
+<div style="margin-bottom: 12px;" data-itr="party_description"></div>
+<div class="clearfix" style="margin: 0px -10px 0px -10px;">
+<button class="btn btn-primary" style="width: 102.5px; float: left;" onclick="$('#helloContainer').attr('data-party-state', '3');createParty();" data-itr="create_party"></button>
+<button class="btn btn-primary" style="width: 102.5px; float: right;" onclick="$('#joinPartyToken').val('');$('#helloContainer').attr('data-party-state', '2');" data-itr="join_party"></button>
+</div>
+</div>
+<div class="agario-panel agario-side-panel agario-party-1">
+<h4><center data-itr="party"></center></h4>
+<div style="margin-bottom: 12px;" data-itr="create_party_instructions"></div>
+<div class="clearfix">
+<input type="text" value="??????" readonly class="partyToken form-control" style="cursor: text; width: 130px; float: left; border-radius: 4px 0px 0px 4px;"/>
+<button class="btn btn-primary copy-party-token" style="float: right; width: 60px; border-radius: 0px 4px 4px 0px;">Copy</button>
+</div>
+</div>
+<div class="agario-panel agario-side-panel agario-party-2">
+<h4><center data-itr="party"></center></h4>
+<div style="margin-bottom: 12px;" data-itr="join_party_instructions"></div>
+<input id="joinPartyToken" type="text" value="" class="form-control"/>
+<div class="clearfix" style="margin: 10px -10px 0px -10px;">
+<button class="btn btn-primary" style="width: 210px; float: right;" onclick="joinParty($('#joinPartyToken').val());" data-itr="join_party"></button>
+</div>
+</div>
+<div class="agario-panel agario-side-panel agario-party-3" style="padding: 0px; overflow: hidden; position: relative;">
+<canvas width="220" height="100" class="cell-spinner" data-size="26"></canvas>
+<div class="creating-party-text" data-itr="creating_party"></div>
+</div>
+<div class="agario-panel agario-side-panel agario-party-4" style="padding: 0px; overflow: hidden; position: relative;">
+<canvas width="220" height="100" class="cell-spinner" data-size="26"></canvas>
+<div class="creating-party-text" data-itr="joining_party"></div>
+</div>
+<div class="agario-panel agario-side-panel agario-party-5">
+<h4><center data-itr="party"></center></h4>
+<div style="margin-bottom: 12px;" data-itr="joined_party_instructions"></div>
+<div class="clearfix">
+<input type="text" value="??????" readonly class="partyToken form-control" style="cursor: text; width: 125px; float: left;"/>
+<button class="btn btn-primary copy-party-token" style="float: right; width: 60px;">Copy</button>
+</div>
+</div>
+<div class="agario-panel agario-side-panel agario-party-6">
+<h4><center data-itr="party"></center></h4>
+<div style="margin-bottom: 12px;" data-itr="party_join_error"></div>
+<div class="clearfix" style="margin: 10px -10px 0px -10px;">
+<button class="btn btn-primary btn-block" onclick="$('#helloContainer').attr('data-party-state', '0');" data-itr="back_button"></button>
+</div>
+</div>
+<div style="position: absolute; right: 10px; top: 4px;">
+<button type="button" class="close" onclick="cancelParty();">&times;</button>
+</div>
+</div>
+<div class="agario-promo" style="padding: 0px; width: 293px; height: 366px; position: relative; background-image: url(http://agar.io/img/promo.png);">
+<div style="text-align: center; position: absolute; bottom: 10px; width: 100%;">
+<a href="https://itunes.apple.com/app/agar.io/id995999703?mt=8&amp;at=1l3vajp" target="_blank" onclick="ga('send', 'event', 'MobilePromo', 'AppStore');"><img src="http://agar.io/img/appstore.png" alt="Download on the App Store"/></a>
+<a href="https://play.google.com/store/apps/details?id=com.miniclip.agar.io" target="_blank" onclick="ga('send', 'event', 'MobilePromo', 'PlayStore');"><img src="http://agar.io/img/google_play.png" alt="Get it on Google play"/></a>
+</div>
+</div>
+</div>
+</div>
+<script>
+	if(hasBottomAd){
+		document.write('<div id="adsBottom" style="z-index: 200;"><div id="adsBottomInner"><div id="a728x90"></div></div></div>');
+	}
+
+	</script>
+<div class="tosBox">
+<center>
+<a href="privacy.txt" class="text-muted" data-itr="privacy_policy"></a>
+|
+<a href="terms.txt" class="text-muted" data-itr="terms_of_service"></a>
+|
+<a href="changelog.txt" class="text-muted" data-itr="changelog"></a>
+</center>
+</div>
+</div>
+<div id="connecting" style="display: none; position: absolute; left: 0; right: 0; top: 0; bottom: 0; z-index: 100;">
+<div class="connecting-panel" style="width: 350px; background-color: #FFFFFF; margin: auto; border-radius: 15px; padding: 5px 15px 5px 15px;">
+<h2 data-itr="connecting"></h2>
+<p data-itr="connect_help"></p>
+</div>
+</div>
+<script>
+
+$('.partyToken').on('mouseover click mousemove mousedown mouseup select', function(e){
+	//this.setSelectionRange(0, this.value.length);
+	//e.preventDefault();
+});
+
+$('.copy-party-token').click(function(){
+	var i = $('.partyToken:visible')[0];
+	i.setSelectionRange(0, i.value.length);
+	i.select();
+	try {
+		document.execCommand('copy');
+	} catch (e) {}
+});
+
+googletag.cmd.push(function() { googletag.display('a300x250'); });
+if(hasBottomAd) googletag.cmd.push(function() { googletag.display('a728x90'); });
+googletag.cmd.push(function() { googletag.display('s300x250'); });
+
+var hasAdblock = (document.getElementById("tester") == null);
+
+if(hasAdblock){
+	$('#a300x250').css('background-image', "url('blocker.png')");
+}
+</script>
+<canvas id="canvas" width="800" height="600"></canvas>
+<div style="font-family:'Ubuntu'">&nbsp;</div>
+<script>
+
+$(function () {
+	$('[data-itr]').each(function(){
+		var $this = $(this);
+		var itr = $this.attr('data-itr');
+		$this.html(i18n[itr] || i18n_dict['en'][itr] || itr);
+		//$this.html('');
+	});
+	
+	$('.btn-login').tooltip({
+		'html': true,
+		'title': i18n['login_tooltip'],
+		'placement': 'bottom'
+	});
+});
+
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-62402209-1', 'auto');
+ga('send', 'pageview');
+ga('send', 'event', 'HasAdblock', hasAdblock ? 'Yes' : 'No', {'nonInteraction': 1});
+
+//ga('send', 'event', 'Protocol', window.location.protocol, {'nonInteraction': 1});
+
+</script>
+</body>
+</html>
