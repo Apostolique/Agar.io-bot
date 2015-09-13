@@ -238,7 +238,7 @@ function AposBot() {
     };
 
     this.isVirus = function(blob, cell) {
-        if (cell.isVirus() && this.compareSize(cell, blob, 1.2)) {
+        if (cell.isVirus()) {
             return true;
         } else if (cell.isVirus() && cell.color.substring(3,5).toLowerCase() != "ff") {
             return true;
@@ -827,8 +827,69 @@ function AposBot() {
 
                     var isSafeSpot = true;
                     var isMouseSafe = true;
+                    var isDisguised = false;
 
                     var clusterAllFood = this.clusterFood(allPossibleFood, player[k].size);
+
+                    for (var i = 0; i < allPossibleViruses.length; i++) {
+                        if (player[k].size > allPossibleViruses[i].size) {
+                            drawCircle(allPossibleViruses[i].x, allPossibleViruses[i].y, player[k].size + 50, 3);
+                            drawCircle(allPossibleViruses[i].x, allPossibleViruses[i].y, player[k].size * 2, 6);
+                        }
+                    }
+
+                    var disguiseVirusCandidates = [];
+                    var disguiseVirus = null;
+
+                    for (var i = 0; i < allPossibleViruses.length; i++) {
+                        var virusSizeMean = player[k].size / allPossibleViruses[i].size;
+                        var virusDistance = this.computeDistance(allPossibleViruses[i].x, allPossibleViruses[i].y, player[k].x, player[k].y);
+
+                        isDisguised = virusDistance < player[k].size && virusSizeMean > 0.93;
+
+                        if (virusSizeMean > 1.086 || isDisguised) {
+                            disguiseVirusCandidates.push(allPossibleViruses[i]);
+                        }
+                    }
+
+                    // Pick the virus to be disguised
+                    for (var i = 0; i < disguiseVirusCandidates.length; i++) {
+                        if (disguiseVirus === null) {
+                            disguiseVirus = disguiseVirusCandidates[i];
+                            continue;
+                        }
+
+                        if (isDisguised) {
+                            var virusDistance1 = this.computeDistance(disguiseVirusCandidates[i].x, disguiseVirusCandidates[i].y, player[k].x, player[k].y);
+                            var virusDistance2 = this.computeDistance(disguiseVirus.x, disguiseVirus.y, player[k].x, player[k].y);
+
+                            if (virusDistance1 < virusDistance2) {
+                                disguiseVirus = disguiseVirusCandidates[i];
+                            }
+                        }
+                        else {
+                            if (disguiseVirusCandidates[i].size > disguiseVirus.size) {
+                                disguiseVirus = disguiseVirusCandidates[i];
+                            }
+                        }
+                    }
+
+                    // Set all other viruses to be obstacles
+                    for (var i = 0; i < disguiseVirusCandidates.length; i++) {
+                        if (disguiseVirusCandidates[i] !== disguiseVirus) {
+                            var virusDistance = this.computeDistance(disguiseVirusCandidates[i].x, disguiseVirusCandidates[i].y, player[k].x, player[k].y);
+                            if (virusDistance < (player[k].size * 2)) {
+                                var tempOb = this.getAngleRange(player[k], disguiseVirusCandidates[i], i, player[k].size + 50);
+                                var angle1 = tempOb[0];
+                                var angle2 = this.rangeToAngle(tempOb);
+                                obstacleList.push([[angle1, true], [angle2, false]]);
+                            }
+                        }
+                    }
+
+                    if (disguiseVirus !== null) {
+                        drawCircle(player[k].x, player[k].y, player[k].size + this.splitDistance / 2, 5);
+                    }
 
                     //console.log("Looking for enemies!");
 
@@ -853,6 +914,11 @@ function AposBot() {
                         var normalDangerDistance = allPossibleThreats[i].size + 150;
 
                         var shiftDistance = player[k].size;
+
+                        if (disguiseVirus !== null) {
+                            normalDangerDistance -= 100;
+                            splitDangerDistance = normalDangerDistance;
+                        }
 
                         //console.log("Found distance.");
 
@@ -916,50 +982,6 @@ function AposBot() {
 
                     var goodAngles = [];
                     var stupidList = [];
-
-                    for (var i = 0; i < allPossibleViruses.length; i++) {
-                        if (player[k].size < allPossibleViruses[i].size) {
-                            drawCircle(allPossibleViruses[i].x, allPossibleViruses[i].y, allPossibleViruses[i].size + 10, 3);
-                            drawCircle(allPossibleViruses[i].x, allPossibleViruses[i].y, allPossibleViruses[i].size * 2, 6);
-
-                        } else {
-                            drawCircle(allPossibleViruses[i].x, allPossibleViruses[i].y, player[k].size + 50, 3);
-                            drawCircle(allPossibleViruses[i].x, allPossibleViruses[i].y, player[k].size * 2, 6);
-                        }
-                    }
-
-                    var drawVirusCircle = false;
-
-                    for (var i = 0; i < allPossibleViruses.length; i++) {
-                        var virusDistance = this.computeDistance(allPossibleViruses[i].x, allPossibleViruses[i].y, player[k].x, player[k].y);
-                        if (player[k].size < allPossibleViruses[i].size) {
-                            if (virusDistance < (allPossibleViruses[i].size * 2)) {
-                                var tempOb = this.getAngleRange(player[k], allPossibleViruses[i], i, allPossibleViruses[i].size + 10);
-                                var angle1 = tempOb[0];
-                                var angle2 = this.rangeToAngle(tempOb);
-                                obstacleList.push([[angle1, true], [angle2, false]]);
-                            }
-                        } else {
-                            drawVirusCircle = true;
-                            if (virusDistance < allPossibleViruses[i].size + player[k].size + this.splitDistance / 2) {
-                                var virusSizeMean = player[k].size / allPossibleViruses[i].size;
-                                if (virusSizeMean > 1.18) {
-                                    console.log("We're too big for this virus - shooting some mass");
-                                    shoot();
-                                    return [player[k].x, player[k].y];
-                                } else {
-                                    if (virusDistance < player[k].size && virusSizeMean > 0.84 || virusSizeMean > 1.1) {
-                                        drawLine(player[k].x, player[k].y, allPossibleViruses[i].x, allPossibleViruses[i].y, 4);
-                                        return [allPossibleViruses[i].x, allPossibleViruses[i].y];
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    if (drawVirusCircle) {
-                        drawCircle(player[k].x, player[k].y, player[k].size + this.splitDistance / 2, 4);
-                    }
 
                     if (badAngles.length > 0) {
                         //NOTE: This is only bandaid wall code. It's not the best way to do it.
@@ -1116,6 +1138,27 @@ function AposBot() {
                         var line1 = this.followAngle(finalAngle,player[k].x,player[k].y,f.verticalDistance());
                         drawLine(player[k].x, player[k].y, line1[0], line1[1], 2);
                         destinationChoices.push(line1);*/
+                    } else if (disguiseVirus !== null) {
+                        // We've found a virus smaller than our current cell
+                        // Let's disguise it with our "explosive" cell
+
+                        var virusSizeMean = player[k].size / disguiseVirus.size;
+                        var virusDistance = this.computeDistance(disguiseVirus.x, disguiseVirus.y, player[k].x, player[k].y);
+
+                        if (virusDistance < player[k].size + this.splitDistance / 2 && virusSizeMean > 1.169) {
+                            console.log("We're too big for this virus - shooting some mass");
+                            shoot();
+                            destinationChoices = [player[k].x + (Math.random() - 0.5) * 20, player[k].y + (Math.random() - 0.5) * 20];
+                        }
+                        else {
+                            drawLine(player[k].x, player[k].y, disguiseVirus.x, disguiseVirus.y, 4);
+                            destinationChoices = [disguiseVirus.x, disguiseVirus.y];
+                        }
+
+                        if (isDisguised) {
+                            console.log("Disguised 8)");
+                        }
+
                     } else if (clusterAllFood.length > 0) {
                         for (var i = 0; i < clusterAllFood.length; i++) {
                             //console.log("mefore: " + clusterAllFood[i][2]);
