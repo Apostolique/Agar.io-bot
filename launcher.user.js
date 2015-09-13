@@ -572,29 +572,6 @@ console.log("Running Bot Launcher!");
         //Ha && 0 == k.length && Sa(!1)
     }
 
-    function triggerKeyEvent(keyCode, eventName) {
-        var event = document.createEvent("KeyboardEvents");
-        
-        event.initKeyboardEvent(eventName);
-
-        var getterCode = {
-            get: function() {
-                return keyCode;
-            }
-        };
-
-        Object.defineProperties(event, {
-            keyCode: getterCode
-        });
-
-        window.dispatchEvent(event);
-    }
-
-    function triggerKeyPress(keyCode) {
-        triggerKeyEvent(keyCode, "keydown");
-        triggerKeyEvent(keyCode, "keyup");
-    }
-
     //UPDATE
     function computeDistance(x1, y1, x2, y2) {
         var xdis = x1 - x2; // <--- FAKE AmS OF COURSE!
@@ -665,7 +642,7 @@ console.log("Running Bot Launcher!");
     window.shoot = function() {
         if (!toggle && shootTime + shootCooldown < new Date().getTime()) {
             shootTime = new Date().getTime();
-            triggerKeyPress(87);
+            opCode(21);
         }
     }
 
@@ -673,7 +650,7 @@ console.log("Running Bot Launcher!");
 
         if (!toggle && splitTime + splitCooldown < new Date().getTime()) {
             splitTime = new Date().getTime();
-            triggerKeyPress(32);
+            opCode(17);
         }
     }
 
@@ -1341,7 +1318,7 @@ console.log("Running Bot Launcher!");
                 toggleDraw = false,
                 shootTime = 0,
                 splitTime = 0,
-                shootCooldown = 100,
+                shootCooldown = 330,
                 splitCooldown = 800,
                 tempPoint = [0, 0, 1],
                 dPoints = [],
