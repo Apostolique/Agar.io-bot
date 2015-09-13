@@ -21,15 +21,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
 
 // ==UserScript==
-// @name        AposBot
-// @namespace   AposBot
+// @name        ExplosiveBot
+// @namespace   ExplosiveBot
 // @include     http://agar.io/*
-// @version     3.63
+// @version     1.0
 // @grant       none
-// @author      http://www.twitch.tv/apostolique
+// @author      https://github.com/caiosm1005
 // ==/UserScript==
 
-var aposBotVersion = 3.63;
+var botVersion = 1.0;
 
 //TODO: Team mode
 //      Detect when people are merging
@@ -46,71 +46,13 @@ Array.prototype.peek = function() {
     return this[this.length - 1];
 };
 
-var sha = "efde0488cc2cc176db48dd23b28a20b90314352b";
-function getLatestCommit() {
-    window.jQuery.ajax({
-            url: "https://api.github.com/repos/apostolique/Agar.io-bot/git/refs/heads/master",
-            cache: false,
-            dataType: "jsonp"
-        }).done(function(data) {
-            console.dir(data.data);
-            console.log("hmm: " + data.data.object.sha);
-            sha = data.data.object.sha;
-
-            function update(prefix, name, url) {
-                window.jQuery(document.body).prepend("<div id='" + prefix + "Dialog' style='position: absolute; left: 0px; right: 0px; top: 0px; bottom: 0px; z-index: 100; display: none;'>");
-                window.jQuery('#' + prefix + 'Dialog').append("<div id='" + prefix + "Message' style='width: 350px; background-color: #FFFFFF; margin: 100px auto; border-radius: 15px; padding: 5px 15px 5px 15px;'>");
-                window.jQuery('#' + prefix + 'Message').append("<h2>UPDATE TIME!!!</h2>");
-                window.jQuery('#' + prefix + 'Message').append("<p>Grab the update for: <a id='" + prefix + "Link' href='" + url + "' target=\"_blank\">" + name + "</a></p>");
-                window.jQuery('#' + prefix + 'Link').on('click', function() {
-                    window.jQuery("#" + prefix + "Dialog").hide();
-                    window.jQuery("#" + prefix + "Dialog").remove();
-                });
-                window.jQuery("#" + prefix + "Dialog").show();
-            }
-
-            $.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/bot.user.js?' + Math.floor((Math.random() * 1000000) + 1), function(data) {
-                var latestVersion = data.replace(/(\r\n|\n|\r)/gm,"");
-                latestVersion = latestVersion.substring(latestVersion.indexOf("// @version")+11,latestVersion.indexOf("// @grant"));
-
-                latestVersion = parseFloat(latestVersion + 0.0000);
-                var myVersion = parseFloat(aposBotVersion + 0.0000); 
-                
-                if(latestVersion > myVersion)
-                {
-                    update("aposBot", "bot.user.js", "https://github.com/Apostolique/Agar.io-bot/blob/" + sha + "/bot.user.js/");
-                }
-                console.log('Current bot.user.js Version: ' + myVersion + " on Github: " + latestVersion);
-            });
-
-        }).fail(function() {});
-}
-getLatestCommit();
-
-console.log("Running Apos Bot!");
-
 var f = window;
 var g = window.jQuery;
 
-
-console.log("Apos Bot!");
-
 window.botList = window.botList || [];
 
-/*function QuickBot() {
-    this.name = "QuickBot V1";
-    this.keyAction = function(key) {};
-    this.displayText = function() {return [];};
-    this.mainLoop = function() {
-        return [screenToGameX(getMouseX()),
-                screenToGameY(getMouseY())];
-    };
-}
-
-window.botList.push(new QuickBot());*/
-
-function AposBot() {
-    this.name = "AposBot " + aposBotVersion;
+function ExplosiveBot() {
+    this.name = "ExplosiveBot " + botVersion;
 
     this.toggleFollow = false;
     this.keyAction = function(key) {
@@ -916,11 +858,11 @@ function AposBot() {
                         var shiftDistance = player[k].size;
 
                         if (isDisguised) {
-                            normalDangerDistance = allPossibleThreats[i].size + 35;
+                            normalDangerDistance = allPossibleThreats[i].size + 15;
                             splitDangerDistance = normalDangerDistance;
                         }
                         else if (disguiseVirus !== null) {
-                            splitDangerDistance = allPossibleThreats[i].size + this.splitDistance / 2 + 35;
+                            splitDangerDistance = allPossibleThreats[i].size + this.splitDistance / 2 + 15;
                         }
 
                         //console.log("Found distance.");
@@ -1244,6 +1186,6 @@ function AposBot() {
         }
     };
 };
-window.botList.push(new AposBot());
+window.botList.push(new ExplosiveBot());
 
 window.updateBotList(); //This function might not exist yet.
