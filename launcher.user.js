@@ -1318,7 +1318,7 @@ console.log("Running Bot Launcher!");
                 toggleDraw = false,
                 shootTime = 0,
                 splitTime = 0,
-                shootCooldown = 330,
+                shootCooldown = 255,
                 splitCooldown = 800,
                 tempPoint = [0, 0, 1],
                 dPoints = [],
@@ -1330,7 +1330,6 @@ console.log("Running Bot Launcher!");
                     "EXPLOSIVE",
                     "TNT",
                     "Creeper",
-                    "Boomer!",
                     unescape( "%uD83D%uDCA3" ),
                     "Eat Me",
                     "Free food"

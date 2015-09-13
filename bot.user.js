@@ -845,7 +845,7 @@ function AposBot() {
                         var virusSizeMean = player[k].size / allPossibleViruses[i].size;
                         var virusDistance = this.computeDistance(allPossibleViruses[i].x, allPossibleViruses[i].y, player[k].x, player[k].y);
 
-                        isDisguised = virusDistance < player[k].size && virusSizeMean > 0.93;
+                        isDisguised = virusDistance < player[k].size && virusSizeMean > 1.01;
 
                         if (virusSizeMean > 1.086 || isDisguised) {
                             disguiseVirusCandidates.push(allPossibleViruses[i]);
@@ -915,9 +915,12 @@ function AposBot() {
 
                         var shiftDistance = player[k].size;
 
-                        if (disguiseVirus !== null) {
-                            normalDangerDistance -= 100;
+                        if (isDisguised) {
+                            normalDangerDistance = allPossibleThreats[i].size + 35;
                             splitDangerDistance = normalDangerDistance;
+                        }
+                        else if (disguiseVirus !== null) {
+                            splitDangerDistance = allPossibleThreats[i].size + this.splitDistance / 2 + 35;
                         }
 
                         //console.log("Found distance.");
