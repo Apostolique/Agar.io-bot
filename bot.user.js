@@ -19,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-
 // ==UserScript==
 // @name        AposBot
 // @namespace   AposBot
@@ -28,7 +27,6 @@ SOFTWARE.*/
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
-
 var aposBotVersion = 3.63;
 
 //TODO: Team mode
@@ -47,43 +45,43 @@ Array.prototype.peek = function() {
 };
 
 var sha = "efde0488cc2cc176db48dd23b28a20b90314352b";
+
 function getLatestCommit() {
     window.jQuery.ajax({
-            url: "https://api.github.com/repos/apostolique/Agar.io-bot/git/refs/heads/master",
-            cache: false,
-            dataType: "jsonp"
-        }).done(function(data) {
-            console.dir(data.data);
-            console.log("hmm: " + data.data.object.sha);
-            sha = data.data.object.sha;
+        url: "https://api.github.com/repos/apostolique/Agar.io-bot/git/refs/heads/master",
+        cache: false,
+        dataType: "jsonp"
+    }).done(function(data) {
+        console.dir(data.data);
+        console.log("hmm: " + data.data.object.sha);
+        sha = data.data.object.sha;
 
-            function update(prefix, name, url) {
-                window.jQuery(document.body).prepend("<div id='" + prefix + "Dialog' style='position: absolute; left: 0px; right: 0px; top: 0px; bottom: 0px; z-index: 100; display: none;'>");
-                window.jQuery('#' + prefix + 'Dialog').append("<div id='" + prefix + "Message' style='width: 350px; background-color: #FFFFFF; margin: 100px auto; border-radius: 15px; padding: 5px 15px 5px 15px;'>");
-                window.jQuery('#' + prefix + 'Message').append("<h2>UPDATE TIME!!!</h2>");
-                window.jQuery('#' + prefix + 'Message').append("<p>Grab the update for: <a id='" + prefix + "Link' href='" + url + "' target=\"_blank\">" + name + "</a></p>");
-                window.jQuery('#' + prefix + 'Link').on('click', function() {
-                    window.jQuery("#" + prefix + "Dialog").hide();
-                    window.jQuery("#" + prefix + "Dialog").remove();
-                });
-                window.jQuery("#" + prefix + "Dialog").show();
-            }
-
-            $.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/bot.user.js?' + Math.floor((Math.random() * 1000000) + 1), function(data) {
-                var latestVersion = data.replace(/(\r\n|\n|\r)/gm,"");
-                latestVersion = latestVersion.substring(latestVersion.indexOf("// @version")+11,latestVersion.indexOf("// @grant"));
-
-                latestVersion = parseFloat(latestVersion + 0.0000);
-                var myVersion = parseFloat(aposBotVersion + 0.0000); 
-                
-                if(latestVersion > myVersion)
-                {
-                    update("aposBot", "bot.user.js", "https://github.com/Apostolique/Agar.io-bot/blob/" + sha + "/bot.user.js/");
-                }
-                console.log('Current bot.user.js Version: ' + myVersion + " on Github: " + latestVersion);
+        function update(prefix, name, url) {
+            window.jQuery(document.body).prepend("<div id='" + prefix + "Dialog' style='position: absolute; left: 0px; right: 0px; top: 0px; bottom: 0px; z-index: 100; display: none;'>");
+            window.jQuery('#' + prefix + 'Dialog').append("<div id='" + prefix + "Message' style='width: 350px; background-color: #FFFFFF; margin: 100px auto; border-radius: 15px; padding: 5px 15px 5px 15px;'>");
+            window.jQuery('#' + prefix + 'Message').append("<h2>UPDATE TIME!!!</h2>");
+            window.jQuery('#' + prefix + 'Message').append("<p>Grab the update for: <a id='" + prefix + "Link' href='" + url + "' target=\"_blank\">" + name + "</a></p>");
+            window.jQuery('#' + prefix + 'Link').on('click', function() {
+                window.jQuery("#" + prefix + "Dialog").hide();
+                window.jQuery("#" + prefix + "Dialog").remove();
             });
+            window.jQuery("#" + prefix + "Dialog").show();
+        }
 
-        }).fail(function() {});
+        $.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/bot.user.js?' + Math.floor((Math.random() * 1000000) + 1), function(data) {
+            var latestVersion = data.replace(/(\r\n|\n|\r)/gm, "");
+            latestVersion = latestVersion.substring(latestVersion.indexOf("// @version") + 11, latestVersion.indexOf("// @grant"));
+
+            latestVersion = parseFloat(latestVersion + 0.0000);
+            var myVersion = parseFloat(aposBotVersion + 0.0000);
+
+            if (latestVersion > myVersion) {
+                update("aposBot", "bot.user.js", "https://github.com/Apostolique/Agar.io-bot/blob/" + sha + "/bot.user.js/");
+            }
+            console.log('Current bot.user.js Version: ' + myVersion + " on Github: " + latestVersion);
+        });
+
+    }).fail(function() {});
 }
 getLatestCommit();
 
@@ -170,30 +168,30 @@ function AposBot() {
     };
 
     this.compareSize = function(player1, player2, ratio) {
-        if (player1.size * player1.size * ratio < player2.size * player2.size) {
-            return true;
-        }
-        return false;
-    },
+            if (player1.size * player1.size * ratio < player2.size * player2.size) {
+                return true;
+            }
+            return false;
+        },
 
-    this.canSplit = function(player1, player2) {
-        return this.compareSize(player1, player2, 2.8) && !this.compareSize(player1, player2, 20);
-    };
+        this.canSplit = function(player1, player2) {
+            return this.compareSize(player1, player2, 2.8) && !this.compareSize(player1, player2, 20);
+        };
 
     this.isItMe = function(player, cell) {
         if (getMode() == ":teams") {
             var currentColor = player[0].color;
-            var currentRed = currentColor.substring(1,3);
-            var currentGreen = currentColor.substring(3,5);
-            var currentBlue = currentColor.substring(5,7);
-            
+            var currentRed = currentColor.substring(1, 3);
+            var currentGreen = currentColor.substring(3, 5);
+            var currentBlue = currentColor.substring(5, 7);
+
             var currentTeam = this.getTeam(currentRed, currentGreen, currentBlue);
 
             var cellColor = cell.color;
 
-            var cellRed = cellColor.substring(1,3);
-            var cellGreen = cellColor.substring(3,5);
-            var cellBlue = cellColor.substring(5,7);
+            var cellRed = cellColor.substring(1, 3);
+            var cellGreen = cellColor.substring(3, 5);
+            var cellBlue = cellColor.substring(5, 7);
 
             var cellTeam = this.getTeam(cellRed, cellGreen, cellBlue);
 
@@ -230,7 +228,7 @@ function AposBot() {
     };
 
     this.isThreat = function(blob, cell) {
-        
+
         if (!cell.isVirus() && this.compareSize(blob, cell, 1.30)) {
             return true;
         }
@@ -240,7 +238,7 @@ function AposBot() {
     this.isVirus = function(blob, cell) {
         if (cell.isVirus() && this.compareSize(cell, blob, 1.2)) {
             return true;
-        } else if (cell.isVirus() && cell.color.substring(3,5).toLowerCase() != "ff") {
+        } else if (cell.isVirus() && cell.color.substring(3, 5).toLowerCase() != "ff") {
             return true;
         }
         return false;
@@ -253,8 +251,8 @@ function AposBot() {
         return false;
     };
 
-    this.getTimeToRemerge = function(mass){
-        return ((mass*0.02) + 30);
+    this.getTimeToRemerge = function(mass) {
+        return ((mass * 0.02) + 30);
     };
 
     this.separateListBasedOnFunction = function(that, listToUse, blob) {
@@ -273,23 +271,23 @@ function AposBot() {
                     //IT'S FOOD!
                     foodElementList.push(listToUse[element]);
 
-                    
+
                 } else if (that.isThreat(blob, listToUse[element])) {
                     //IT'S DANGER!
                     threatList.push(listToUse[element]);
                 } else if (that.isVirus(blob, listToUse[element])) {
                     //IT'S VIRUS!
                     virusList.push(listToUse[element]);
+                } else if (that.isSplitTarget(that, blob, listToUse[element])) {
+                    drawCircle(listToUse[element].x, listToUse[element].y, listToUse[element].size + 50, 7);
+                    splitTargetList.push(listToUse[element]);
+                    foodElementList.push(listToUse[element]);
                 }
-                else if (that.isSplitTarget(that, blob, listToUse[element])) {
-                        drawCircle(listToUse[element].x, listToUse[element].y, listToUse[element].size + 50, 7);
-                        splitTargetList.push(listToUse[element]);
-                        foodElementList.push(listToUse[element]);
-                    }
-            }/*else if(isMe && (getBlobCount(getPlayer()) > 0)){
-                //Attempt to make the other cell follow the mother one
-                foodElementList.push(listToUse[element]);
-            }*/
+            }
+            /*else if(isMe && (getBlobCount(getPlayer()) > 0)){
+                            //Attempt to make the other cell follow the mother one
+                            foodElementList.push(listToUse[element]);
+                        }*/
         });
 
         foodList = [];
@@ -552,72 +550,72 @@ function AposBot() {
     };
 
     this.invertAngle = function(range) {
-        var angle1 = this.rangeToAngle(badAngles[i]);
-        var angle2 = (badAngles[i][0] - angle1).mod(360);
-        return [angle1, angle2];
-    },
+            var angle1 = this.rangeToAngle(badAngles[i]);
+            var angle2 = (badAngles[i][0] - angle1).mod(360);
+            return [angle1, angle2];
+        },
 
-    this.addWall = function(listToUse, blob) {
-        //var mapSizeX = Math.abs(f.getMapStartX - f.getMapEndX);
-        //var mapSizeY = Math.abs(f.getMapStartY - f.getMapEndY);
-        //var distanceFromWallX = mapSizeX/3;
-        //var distanceFromWallY = mapSizeY/3;
-        var distanceFromWallY = 2000;
-        var distanceFromWallX = 2000;
-        if (blob.x < getMapStartX() + distanceFromWallX) {
-            //LEFT
-            //console.log("Left");
-            listToUse.push([
-                [90, true],
-                [270, false], this.computeDistance(getMapStartX(), blob.y, blob.x, blob.y)
-            ]);
-            var lineLeft = this.followAngle(90, blob.x, blob.y, 190 + blob.size);
-            var lineRight = this.followAngle(270, blob.x, blob.y, 190 + blob.size);
-            drawLine(blob.x, blob.y, lineLeft[0], lineLeft[1], 5);
-            drawLine(blob.x, blob.y, lineRight[0], lineRight[1], 5);
-            drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
-        }
-        if (blob.y < getMapStartY() + distanceFromWallY) {
-            //TOP
-            //console.log("TOP");
-            listToUse.push([
-                [180, true],
-                [0, false], this.computeDistance(blob.x, getMapStartY, blob.x, blob.y)
-            ]);
-            var lineLeft = this.followAngle(180, blob.x, blob.y, 190 + blob.size);
-            var lineRight = this.followAngle(360, blob.x, blob.y, 190 + blob.size);
-            drawLine(blob.x, blob.y, lineLeft[0], lineLeft[1], 5);
-            drawLine(blob.x, blob.y, lineRight[0], lineRight[1], 5);
-            drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
-        }
-        if (blob.x > getMapEndX() - distanceFromWallX) {
-            //RIGHT
-            //console.log("RIGHT");
-            listToUse.push([
-                [270, true],
-                [90, false], this.computeDistance(getMapEndX(), blob.y, blob.x, blob.y)
-            ]);
-            var lineLeft = this.followAngle(270, blob.x, blob.y, 190 + blob.size);
-            var lineRight = this.followAngle(90, blob.x, blob.y, 190 + blob.size);
-            drawLine(blob.x, blob.y, lineLeft[0], lineLeft[1], 5);
-            drawLine(blob.x, blob.y, lineRight[0], lineRight[1], 5);
-            drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
-        }
-        if (blob.y > getMapEndY() - distanceFromWallY) {
-            //BOTTOM
-            //console.log("BOTTOM");
-            listToUse.push([
-                [0, true],
-                [180, false], this.computeDistance(blob.x, getMapEndY(), blob.x, blob.y)
-            ]);
-            var lineLeft = this.followAngle(0, blob.x, blob.y, 190 + blob.size);
-            var lineRight = this.followAngle(180, blob.x, blob.y, 190 + blob.size);
-            drawLine(blob.x, blob.y, lineLeft[0], lineLeft[1], 5);
-            drawLine(blob.x, blob.y, lineRight[0], lineRight[1], 5);
-            drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
-        }
-        return listToUse;
-    };
+        this.addWall = function(listToUse, blob) {
+            //var mapSizeX = Math.abs(f.getMapStartX - f.getMapEndX);
+            //var mapSizeY = Math.abs(f.getMapStartY - f.getMapEndY);
+            //var distanceFromWallX = mapSizeX/3;
+            //var distanceFromWallY = mapSizeY/3;
+            var distanceFromWallY = 2000;
+            var distanceFromWallX = 2000;
+            if (blob.x < getMapStartX() + distanceFromWallX) {
+                //LEFT
+                //console.log("Left");
+                listToUse.push([
+                    [90, true],
+                    [270, false], this.computeDistance(getMapStartX(), blob.y, blob.x, blob.y)
+                ]);
+                var lineLeft = this.followAngle(90, blob.x, blob.y, 190 + blob.size);
+                var lineRight = this.followAngle(270, blob.x, blob.y, 190 + blob.size);
+                drawLine(blob.x, blob.y, lineLeft[0], lineLeft[1], 5);
+                drawLine(blob.x, blob.y, lineRight[0], lineRight[1], 5);
+                drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
+            }
+            if (blob.y < getMapStartY() + distanceFromWallY) {
+                //TOP
+                //console.log("TOP");
+                listToUse.push([
+                    [180, true],
+                    [0, false], this.computeDistance(blob.x, getMapStartY, blob.x, blob.y)
+                ]);
+                var lineLeft = this.followAngle(180, blob.x, blob.y, 190 + blob.size);
+                var lineRight = this.followAngle(360, blob.x, blob.y, 190 + blob.size);
+                drawLine(blob.x, blob.y, lineLeft[0], lineLeft[1], 5);
+                drawLine(blob.x, blob.y, lineRight[0], lineRight[1], 5);
+                drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
+            }
+            if (blob.x > getMapEndX() - distanceFromWallX) {
+                //RIGHT
+                //console.log("RIGHT");
+                listToUse.push([
+                    [270, true],
+                    [90, false], this.computeDistance(getMapEndX(), blob.y, blob.x, blob.y)
+                ]);
+                var lineLeft = this.followAngle(270, blob.x, blob.y, 190 + blob.size);
+                var lineRight = this.followAngle(90, blob.x, blob.y, 190 + blob.size);
+                drawLine(blob.x, blob.y, lineLeft[0], lineLeft[1], 5);
+                drawLine(blob.x, blob.y, lineRight[0], lineRight[1], 5);
+                drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
+            }
+            if (blob.y > getMapEndY() - distanceFromWallY) {
+                //BOTTOM
+                //console.log("BOTTOM");
+                listToUse.push([
+                    [0, true],
+                    [180, false], this.computeDistance(blob.x, getMapEndY(), blob.x, blob.y)
+                ]);
+                var lineLeft = this.followAngle(0, blob.x, blob.y, 190 + blob.size);
+                var lineRight = this.followAngle(180, blob.x, blob.y, 190 + blob.size);
+                drawLine(blob.x, blob.y, lineLeft[0], lineLeft[1], 5);
+                drawLine(blob.x, blob.y, lineRight[0], lineRight[1], 5);
+                drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
+            }
+            return listToUse;
+        };
 
     //listToUse contains angles in the form of [angle, boolean].
     //boolean is true when the range is starting. False when it's ending.
@@ -681,7 +679,9 @@ function AposBot() {
             }
         }
 
-        removeList.sort(function(a, b){return b-a;});
+        removeList.sort(function(a, b) {
+            return b - a;
+        });
 
         for (var i = 0; i < removeList.length; i++) {
             newListToUse.splice(removeList[i], 1);
@@ -716,7 +716,7 @@ function AposBot() {
             drawLine(blob1.x, blob1.y, lineLeft[0], lineLeft[1], 6);
             drawLine(blob1.x, blob1.y, lineRight[0], lineRight[1], 6);
             drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob1.x, blob1.y, 6);
-        } else if(getCells().hasOwnProperty(blob2.id)) {
+        } else if (getCells().hasOwnProperty(blob2.id)) {
             drawLine(blob1.x, blob1.y, lineLeft[0], lineLeft[1], 0);
             drawLine(blob1.x, blob1.y, lineRight[0], lineRight[1], 0);
             drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob1.x, blob1.y, 0);
@@ -857,8 +857,8 @@ function AposBot() {
                         //console.log("Found distance.");
 
                         var enemyCanSplit = this.canSplit(player[k], allPossibleThreats[i]);
-                        
-                        for (var j = clusterAllFood.length - 1; j >= 0 ; j--) {
+
+                        for (var j = clusterAllFood.length - 1; j >= 0; j--) {
                             var secureDistance = (enemyCanSplit ? splitDangerDistance : normalDangerDistance);
                             if (this.computeDistance(allPossibleThreats[i].x, allPossibleThreats[i].y, clusterAllFood[j][0], clusterAllFood[j][1]) < secureDistance)
                                 clusterAllFood.splice(j, 1);
@@ -901,13 +901,19 @@ function AposBot() {
                             var angle1 = tempOb[0];
                             var angle2 = this.rangeToAngle(tempOb);
 
-                            obstacleList.push([[angle1, true], [angle2, false]]);
+                            obstacleList.push([
+                                [angle1, true],
+                                [angle2, false]
+                            ]);
                         } else if (!enemyCanSplit && enemyDistance < normalDangerDistance + shiftDistance) {
                             var tempOb = this.getAngleRange(player[k], allPossibleThreats[i], i, normalDangerDistance + shiftDistance);
                             var angle1 = tempOb[0];
                             var angle2 = this.rangeToAngle(tempOb);
 
-                            obstacleList.push([[angle1, true], [angle2, false]]);
+                            obstacleList.push([
+                                [angle1, true],
+                                [angle2, false]
+                            ]);
                         }
                         //console.log("Done with enemy: " + i);
                     }
@@ -935,14 +941,20 @@ function AposBot() {
                                 var tempOb = this.getAngleRange(player[k], allPossibleViruses[i], i, allPossibleViruses[i].size + 10);
                                 var angle1 = tempOb[0];
                                 var angle2 = this.rangeToAngle(tempOb);
-                                obstacleList.push([[angle1, true], [angle2, false]]);
+                                obstacleList.push([
+                                    [angle1, true],
+                                    [angle2, false]
+                                ]);
                             }
                         } else {
                             if (virusDistance < (player[k].size * 2)) {
                                 var tempOb = this.getAngleRange(player[k], allPossibleViruses[i], i, player[k].size + 50);
                                 var angle1 = tempOb[0];
                                 var angle2 = this.rangeToAngle(tempOb);
-                                obstacleList.push([[angle1, true], [angle2, false]]);
+                                obstacleList.push([
+                                    [angle1, true],
+                                    [angle2, false]
+                                ]);
                             }
                         }
                     }
@@ -955,15 +967,18 @@ function AposBot() {
                     for (var i = 0; i < badAngles.length; i++) {
                         var angle1 = badAngles[i][0];
                         var angle2 = this.rangeToAngle(badAngles[i]);
-                        stupidList.push([[angle1, true], [angle2, false], badAngles[i][2]]);
+                        stupidList.push([
+                            [angle1, true],
+                            [angle2, false], badAngles[i][2]
+                        ]);
                     }
 
                     //stupidList.push([[45, true], [135, false]]);
                     //stupidList.push([[10, true], [200, false]]);
 
-                    stupidList.sort(function(a, b){
+                    stupidList.sort(function(a, b) {
                         //console.log("Distance: " + a[2] + ", " + b[2]);
-                        return a[2]-b[2];
+                        return a[2] - b[2];
                     });
 
                     //console.log("Added random noob stuff.");
@@ -1107,17 +1122,17 @@ function AposBot() {
                             //console.log("mefore: " + clusterAllFood[i][2]);
                             //This is the cost function. Higher is better.
 
-                                var clusterAngle = this.getAngle(clusterAllFood[i][0], clusterAllFood[i][1], player[k].x, player[k].y);
+                            var clusterAngle = this.getAngle(clusterAllFood[i][0], clusterAllFood[i][1], player[k].x, player[k].y);
 
-                                clusterAllFood[i][2] = clusterAllFood[i][2] * 6 - this.computeDistance(clusterAllFood[i][0], clusterAllFood[i][1], player[k].x, player[k].y);
-                                //console.log("Current Value: " + clusterAllFood[i][2]);
+                            clusterAllFood[i][2] = clusterAllFood[i][2] * 6 - this.computeDistance(clusterAllFood[i][0], clusterAllFood[i][1], player[k].x, player[k].y);
+                            //console.log("Current Value: " + clusterAllFood[i][2]);
 
-                                //(goodAngles[bIndex][1] / 2 - (Math.abs(perfectAngle - clusterAngle)));
+                            //(goodAngles[bIndex][1] / 2 - (Math.abs(perfectAngle - clusterAngle)));
 
-                                clusterAllFood[i][3] = clusterAngle;
+                            clusterAllFood[i][3] = clusterAngle;
 
-                                drawPoint(clusterAllFood[i][0], clusterAllFood[i][1], 1, "");
-                                //console.log("After: " + clusterAllFood[i][2]);
+                            drawPoint(clusterAllFood[i][0], clusterAllFood[i][1], 1, "");
+                            //console.log("After: " + clusterAllFood[i][2]);
                         }
 
                         var bestFoodI = 0;
