@@ -15,7 +15,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-
 // ==UserScript==
 // @name        AposLauncher
 // @namespace   AposLauncher
@@ -24,7 +23,6 @@ SOFTWARE.*/
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
-
 var aposLauncherVersion = 4.124;
 
 Number.prototype.mod = function(n) {
@@ -36,42 +34,43 @@ Array.prototype.peek = function() {
 };
 
 var sha = "efde0488cc2cc176db48dd23b28a20b90314352b";
+
 function getLatestCommit() {
     window.jQuery.ajax({
-            url: "https://api.github.com/repos/apostolique/Agar.io-bot/git/refs/heads/master",
-            cache: false,
-            dataType: "jsonp"
-        }).done(function(data) {
-            console.dir(data.data);
-            console.log("hmm: " + data.data.object.sha);
-            sha = data.data.object.sha;
+        url: "https://api.github.com/repos/apostolique/Agar.io-bot/git/refs/heads/master",
+        cache: false,
+        dataType: "jsonp"
+    }).done(function(data) {
+        console.dir(data.data);
+        console.log("hmm: " + data.data.object.sha);
+        sha = data.data.object.sha;
 
-            function update(prefix, name, url) {
-                window.jQuery(document.body).prepend("<div id='" + prefix + "Dialog' style='position: absolute; left: 0px; right: 0px; top: 0px; bottom: 0px; z-index: 100; display: none;'>");
-                window.jQuery('#' + prefix + 'Dialog').append("<div id='" + prefix + "Message' style='width: 350px; background-color: #FFFFFF; margin: 100px auto; border-radius: 15px; padding: 5px 15px 5px 15px;'>");
-                window.jQuery('#' + prefix + 'Message').append("<h2>UPDATE TIME!!!</h2>");
-                window.jQuery('#' + prefix + 'Message').append("<p>Grab the update for: <a id='" + prefix + "Link' href='" + url + "' target=\"_blank\">" + name + "</a></p>");
-                window.jQuery('#' + prefix + 'Link').on('click', function() {
-                    window.jQuery("#" + prefix + "Dialog").hide();
-                    window.jQuery("#" + prefix + "Dialog").remove();
-                });
-                window.jQuery("#" + prefix + "Dialog").show();
-            }
-
-            window.jQuery.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/launcher.user.js?' + Math.floor((Math.random() * 1000000) + 1), function(data) {
-                var latestVersion = data.replace(/(\r\n|\n|\r)/gm, "");
-                latestVersion = latestVersion.substring(latestVersion.indexOf("// @version") + 11, latestVersion.indexOf("// @grant"));
-
-                latestVersion = parseFloat(latestVersion + 0.0000);
-                var myVersion = parseFloat(aposLauncherVersion + 0.0000);
-
-                if (latestVersion > myVersion) {
-                    update("aposLauncher", "launcher.user.js", "https://github.com/Apostolique/Agar.io-bot/blob/" + sha + "/launcher.user.js/");
-                }
-                console.log('Current launcher.user.js Version: ' + myVersion + " on Github: " + latestVersion);
+        function update(prefix, name, url) {
+            window.jQuery(document.body).prepend("<div id='" + prefix + "Dialog' style='position: absolute; left: 0px; right: 0px; top: 0px; bottom: 0px; z-index: 100; display: none;'>");
+            window.jQuery('#' + prefix + 'Dialog').append("<div id='" + prefix + "Message' style='width: 350px; background-color: #FFFFFF; margin: 100px auto; border-radius: 15px; padding: 5px 15px 5px 15px;'>");
+            window.jQuery('#' + prefix + 'Message').append("<h2>UPDATE TIME!!!</h2>");
+            window.jQuery('#' + prefix + 'Message').append("<p>Grab the update for: <a id='" + prefix + "Link' href='" + url + "' target=\"_blank\">" + name + "</a></p>");
+            window.jQuery('#' + prefix + 'Link').on('click', function() {
+                window.jQuery("#" + prefix + "Dialog").hide();
+                window.jQuery("#" + prefix + "Dialog").remove();
             });
+            window.jQuery("#" + prefix + "Dialog").show();
+        }
 
-        }).fail(function() {});
+        window.jQuery.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/launcher.user.js?' + Math.floor((Math.random() * 1000000) + 1), function(data) {
+            var latestVersion = data.replace(/(\r\n|\n|\r)/gm, "");
+            latestVersion = latestVersion.substring(latestVersion.indexOf("// @version") + 11, latestVersion.indexOf("// @grant"));
+
+            latestVersion = parseFloat(latestVersion + 0.0000);
+            var myVersion = parseFloat(aposLauncherVersion + 0.0000);
+
+            if (latestVersion > myVersion) {
+                update("aposLauncher", "launcher.user.js", "https://github.com/Apostolique/Agar.io-bot/blob/" + sha + "/launcher.user.js/");
+            }
+            console.log('Current launcher.user.js Version: ' + myVersion + " on Github: " + latestVersion);
+        });
+
+    }).fail(function() {});
 }
 getLatestCommit();
 
@@ -125,7 +124,9 @@ console.log("Running Bot Launcher!");
         function HumanPlayerObject() {
             this.name = "Human";
             this.keyAction = function(key) {};
-            this.displayText = function() {return [];};
+            this.displayText = function() {
+                return [];
+            };
             this.mainLoop = humanPlayer;
         }
 
@@ -289,7 +290,7 @@ console.log("Running Bot Launcher!");
     function sb() {
         la && (la = !1, setTimeout(function() {
             la = !0
-        //UPDATE
+                //UPDATE
         }, 6E4 * Ya))
     }
 
@@ -655,7 +656,7 @@ console.log("Running Bot Launcher!");
             reviving = false;
             console.log("Done Reviving!");
         }
-        
+
         if (T()) {
             var a = fa - m / 2;
             var b = ga - r / 2;
@@ -776,7 +777,7 @@ console.log("Running Bot Launcher!");
         f.lineTo(getMapEndX(), getMapEndY());
         f.stroke();
         f.restore();
-        
+
         for (d = 0; d < v.length; d++) v[d].w(f);
         for (d = 0; d < Q.length; d++) Q[d].w(f);
         //UPDATE
@@ -812,7 +813,7 @@ console.log("Running Bot Launcher!");
         var nbSeconds = 0;
         if (getPlayer().length > 0) {
             //nbSeconds = currentDate.getSeconds() + currentDate.getMinutes() * 60 + currentDate.getHours() * 3600 - lifeTimer.getSeconds() - lifeTimer.getMinutes() * 60 - lifeTimer.getHours() * 3600;
-            nbSeconds = (currentDate.getTime() - lifeTimer.getTime())/1000;
+            nbSeconds = (currentDate.getTime() - lifeTimer.getTime()) / 1000;
         }
 
         bestTime = Math.max(nbSeconds, bestTime);
@@ -1855,7 +1856,7 @@ console.log("Running Bot Launcher!");
                 window.getMode = function() {
                     return P;
                 }
-                
+
                 window.getServer = function() {
                     return serverIP;
                 }
@@ -1941,7 +1942,7 @@ console.log("Running Bot Launcher!");
                     id: 0,
                     a: null,
                     name: null,
-                    o: null,    
+                    o: null,
                     O: null,
                     x: 0,
                     y: 0,
@@ -1973,7 +1974,7 @@ console.log("Running Bot Launcher!");
                     },
                     getUptimeTime: function() {
                         return this.Q;
-                    }, 
+                    },
                     X: function() {
                         var a;
                         for (a = 0; a < v.length; a++)
