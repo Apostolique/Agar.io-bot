@@ -67,10 +67,10 @@ function ExplosiveBot() {
     };
 
     this.splitDistance = 710;
-    this.disguiseStayMinSize = 7.2;
-    this.disguiseMaxSize = 15.4;
-    this.disguiseMinSize = 10.3;
-    this.disguiseDangerMargin = 27;
+    this.disguiseStayMinSize = 7.7;
+    this.disguiseMaxSize = 15.1;
+    this.disguiseMinSize = 11.4;
+    this.disguiseDangerMargin = 26;
 
     //Given an angle value that was gotten from valueAndleBased(),
     //returns a new value that scales it appropriately.
