@@ -10,7 +10,8 @@ Try it out. It's a lot of fun.
 
 Bot in action
 -------------
-![Bot in action 1](https://github.com/caiosm1005/Agar.io-bot-explosive/raw/master/preview-images/bot-in-action-1.gif) ![Bot in action 2](https://github.com/caiosm1005/Agar.io-bot-explosive/raw/master/preview-images/bot-in-action-2.gif)
+![Bot in action 1](https://github.com/caiosm1005/Agar.io-bot-explosive/raw/master/preview-images/bot-in-action-1.gif)
+![Bot in action 2](https://github.com/caiosm1005/Agar.io-bot-explosive/raw/master/preview-images/bot-in-action-2.gif)
 
 For a tutorial on how to run the bot, see the
 [read-me](https://github.com/Apostolique/Agar.io-bot/blob/master/README.md)
