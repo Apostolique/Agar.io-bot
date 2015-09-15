@@ -73,7 +73,8 @@ function ExplosiveBot() {
     this.disguiseStayMinSize = 7.7;
     this.disguiseMaxSize = 15.1;
     this.disguiseMinSize = 11.4;
-    this.disguiseDangerMargin = 12;
+    this.disguiseDangerMargin = 13;
+    this.disguiseDangerVelocityWeight = 1.12;
 
     //Given an angle value that was gotten from valueAndleBased(),
     //returns a new value that scales it appropriately.
@@ -840,8 +841,8 @@ function ExplosiveBot() {
 
                     if (isDisguised) {
                         var enemyVelocity = this.computeVelocity( allPossibleThreats[ i ] );
-                        enemyX += enemyVelocity[ 0 ];
-                        enemyY += enemyVelocity[ 1 ];
+                        enemyX += ( enemyVelocity[ 0 ] < 0 ? -1 : 1 ) * Math.pow( Math.abs( enemyVelocity[ 0 ] ), this.disguiseDangerVelocityWeight );
+                        enemyY += ( enemyVelocity[ 1 ] < 0 ? -1 : 1 ) * Math.pow( Math.abs( enemyVelocity[ 1 ] ), this.disguiseDangerVelocityWeight );
                     }
 
                     var enemyDistance = this.computeDistance(enemyX, enemyY, playerCell.x, playerCell.y);
