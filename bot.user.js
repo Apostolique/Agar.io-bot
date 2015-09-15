@@ -24,12 +24,12 @@ SOFTWARE.*/
 // @name        ExplosiveBot
 // @namespace   ExplosiveBot
 // @include     http://agar.io/*
-// @version     1.1
+// @version     1.11
 // @grant       none
 // @author      https://github.com/caiosm1005
 // ==/UserScript==
 
-var botVersion = 1.1;
+var botVersion = 1.11;
 
 //TODO: Team mode
 //      Detect when people are merging
@@ -70,7 +70,7 @@ function ExplosiveBot() {
     this.disguiseStayMinSize = 7.7;
     this.disguiseMaxSize = 15.1;
     this.disguiseMinSize = 11.4;
-    this.disguiseDangerMargin = 26;
+    this.disguiseDangerMargin = 31;
 
     //Given an angle value that was gotten from valueAndleBased(),
     //returns a new value that scales it appropriately.
