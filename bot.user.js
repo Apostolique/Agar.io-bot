@@ -835,10 +835,10 @@ function ExplosiveBot() {
                         //console.log("Found distance.");
 
                         var enemyCanSplit = this.canSplit(player[k], allPossibleThreats[i]);
-                        var secureDistance = enemyCanSplit ? splitDangerDistance : normalDangerDistance;
+                        var secureDistance = (enemyCanSplit ? splitDangerDistance : normalDangerDistance);
                         
                         for (var j = clusterAllFood.length - 1; j >= 0 ; j--) {
-                            if (this.computeDistance(allPossibleThreats[i].x, allPossibleThreats[i].y, clusterAllFood[j][0], clusterAllFood[j][1]) < secureDistance)
+                            if (this.computeDistance(allPossibleThreats[i].x, allPossibleThreats[i].y, clusterAllFood[j][0], clusterAllFood[j][1]) < secureDistance + shiftDistance)
                                 clusterAllFood.splice(j, 1);
                         }
 
