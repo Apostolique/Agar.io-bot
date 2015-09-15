@@ -24,7 +24,7 @@ SOFTWARE.*/
 // @name        ExplosiveBot
 // @namespace   ExplosiveBot
 // @include     http://agar.io/*
-// @version     1.0
+// @version     1.1
 // @grant       none
 // @author      https://github.com/caiosm1005
 // ==/UserScript==
