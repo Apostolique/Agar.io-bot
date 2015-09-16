@@ -72,7 +72,7 @@ function ExplosiveBot() {
     this.splitDistance = 710;
     this.disguiseStayMinSize = 7.7;
     this.disguiseMaxSize = 15.1;
-    this.disguiseMinSize = 11.4;
+    this.disguiseMinSize = 11.2;
     this.disguiseDangerMargin = 13;
     this.disguiseDangerVelocityWeight = 1.12;
 
