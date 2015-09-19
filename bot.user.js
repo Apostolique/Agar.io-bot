@@ -71,9 +71,10 @@ function ExplosiveBot() {
 
     this.splitDistance = 710;
     this.disguiseStayMinSize = 7.7;
-    this.disguiseMaxSize = 15.1;
+    this.disguiseMaxSize = 15.0;
     this.disguiseMinSize = 11.2;
     this.disguiseDangerMargin = 13;
+    this.disguiseNeighbourMargin = 35;
     this.disguiseDangerVelocityWeight = 1.12;
 
     //Given an angle value that was gotten from valueAndleBased(),
@@ -236,6 +237,7 @@ function ExplosiveBot() {
 
     this.separateListBasedOnFunction = function(that, listToUse, blob) {
         var foodElementList = [];
+        var movingFoodList = [];
         var threatList = [];
         var virusList = [];
         var splitTargetList = [];
@@ -249,8 +251,9 @@ function ExplosiveBot() {
                 if (that.isFood(blob, listToUse[element]) && listToUse[element].isNotMoving()) {
                     //IT'S FOOD!
                     foodElementList.push(listToUse[element]);
-
-                    
+                } else if (that.isFood(blob, listToUse[element]) && ! listToUse[element].isNotMoving()) {
+                    //IT'S A MOVING FOOD!
+                    movingFoodList.push(listToUse[element]);
                 } else if (that.isThreat(blob, listToUse[element])) {
                     //IT'S DANGER!
                     threatList.push(listToUse[element]);
@@ -263,10 +266,7 @@ function ExplosiveBot() {
                         splitTargetList.push(listToUse[element]);
                         foodElementList.push(listToUse[element]);
                     }
-            }/*else if(isMe && (getBlobCount(getPlayer()) > 0)){
-                //Attempt to make the other cell follow the mother one
-                foodElementList.push(listToUse[element]);
-            }*/
+            }
         });
 
         foodList = [];
@@ -277,9 +277,33 @@ function ExplosiveBot() {
         var isDisguised = false;
         var virusCandidateList = [];
         for (var i = 0; i < virusList.length; i++) {
-            var distance = this.computeDistance(virusList[i].x, virusList[i].y, blob.x, blob.y);
 
-            var virusDisguised = distance < blob.size * 2 / 3 && blob.size - virusList[i].size > this.disguiseStayMinSize;
+            // Do not include viruses as candidates that have nearby food or
+            // other viruses within the minimum radius
+            var hasNeighbour = false;
+            
+            for(var j = 0; ! hasNeighbour && j < foodElementList.length; j++) {
+                var distance = this.computeDistance(virusList[i].x, virusList[i].y, foodElementList[j].x, foodElementList[j].y);
+                hasNeighbour = hasNeighbour || distance - foodElementList[j].size < virusList[i].size + this.disguiseNeighbourMargin;
+            }
+            for(var j = 0; ! hasNeighbour && j < movingFoodList.length; j++) {
+                var distance = this.computeDistance(virusList[i].x, virusList[i].y, movingFoodList[j].x, movingFoodList[j].y);
+                hasNeighbour = hasNeighbour || distance - movingFoodList[j].size < virusList[i].size + this.disguiseNeighbourMargin;
+            }
+            for(var j = 0; ! hasNeighbour && j < virusList.length; j++) {
+                if ( j == i ) { continue; }
+                var distance = this.computeDistance(virusList[i].x, virusList[i].y, virusList[j].x, virusList[j].y);
+                hasNeighbour = hasNeighbour || distance - virusList[j].size < virusList[i].size + this.disguiseNeighbourMargin;
+            }
+
+            if ( hasNeighbour ) {
+                continue;
+            }
+
+            // See if this virus is a candidate to be disguised by the bot 
+            var playerDistance = this.computeDistance(virusList[i].x, virusList[i].y, blob.x, blob.y);
+
+            var virusDisguised = playerDistance < blob.size * 2 / 3 && blob.size - virusList[i].size > this.disguiseStayMinSize;
             isDisguised = isDisguised || virusDisguised;
 
             if (blob.size - virusList[i].size > this.disguiseMinSize || virusDisguised) {
@@ -798,9 +822,7 @@ function ExplosiveBot() {
 
                 //Loop through all the player's cells.
                 for (var k = 0; k < player.length; k++) {
-                    if (true) {
-                        drawPoint(playerCell.x, playerCell.y + playerCell.size, 0, "" + (getLastUpdate() - playerCell.birth) + " / " + (30000 + (playerCell.birthMass * 57) - (getLastUpdate() - playerCell.birth)) + " / " + playerCell.birthMass);
-                    }
+                    drawPoint(playerCell.x, playerCell.y + playerCell.size, 0, (getLastUpdate() - playerCell.birth) + " / " + (30000 + (playerCell.birthMass * 57) - (getLastUpdate() - playerCell.birth)) + " / " + playerCell.birthMass);
                 }
 
                 drawCircle(playerCell.x, playerCell.y, playerCell.size + this.splitDistance, 5);
@@ -822,6 +844,10 @@ function ExplosiveBot() {
                         drawCircle(allPossibleViruses[i].x, allPossibleViruses[i].y, playerCell.size + 50, 3);
                         drawCircle(allPossibleViruses[i].x, allPossibleViruses[i].y, playerCell.size * 2, 6);
                     }
+                }
+
+                for (var i = 0; i < virusCandidates.length; i++) {
+                    drawCircle(virusCandidates[i].x, virusCandidates[i].y, virusCandidates[i].size + this.disguiseNeighbourMargin, 5);
                 }
 
                 //console.log("Looking for enemies!");
