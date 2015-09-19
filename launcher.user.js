@@ -1334,7 +1334,7 @@ console.log("Running Bot Launcher!");
                     unescape( "%uD83D%uDCA3" ),
                     "Eat Me",
                     "Free food",
-                    "<AFK>"
+                    "AFK"
                 ],
                 originalName = names[Math.floor(Math.random() * names.length)],
                 sessionScore = 0,
