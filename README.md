@@ -38,3 +38,7 @@ Just copy the code snippet found in the wiki:
 
 If you start working on a bot, make sure to start an issue and tell me about it so that I can add it to the bot list on
 [Alternate Bots](https://github.com/Apostolique/Agar.io-bot/wiki/Alternate-Bots)
+
+#Troubleshooting
+
+If the bot doesn't spawn, it's possible that your adblocker is causing the issue. Try disabling it.
