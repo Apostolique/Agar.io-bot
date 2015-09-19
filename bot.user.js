@@ -74,7 +74,7 @@ function ExplosiveBot() {
     this.disguiseMaxSize = 15.0;
     this.disguiseMinSize = 11.2;
     this.disguiseDangerMargin = 13;
-    this.disguiseNeighbourMargin = 35;
+    this.disguiseNeighbourMargin = 18;
     this.disguiseDangerVelocityWeight = 1.12;
 
     //Given an angle value that was gotten from valueAndleBased(),
@@ -284,16 +284,16 @@ function ExplosiveBot() {
             
             for(var j = 0; ! hasNeighbour && j < foodElementList.length; j++) {
                 var distance = this.computeDistance(virusList[i].x, virusList[i].y, foodElementList[j].x, foodElementList[j].y);
-                hasNeighbour = hasNeighbour || distance - foodElementList[j].size < virusList[i].size + this.disguiseNeighbourMargin;
+                hasNeighbour = distance - foodElementList[j].size < virusList[i].size + this.disguiseNeighbourMargin;
             }
             for(var j = 0; ! hasNeighbour && j < movingFoodList.length; j++) {
                 var distance = this.computeDistance(virusList[i].x, virusList[i].y, movingFoodList[j].x, movingFoodList[j].y);
-                hasNeighbour = hasNeighbour || distance - movingFoodList[j].size < virusList[i].size + this.disguiseNeighbourMargin;
+                hasNeighbour = distance - movingFoodList[j].size < virusList[i].size + this.disguiseNeighbourMargin;
             }
             for(var j = 0; ! hasNeighbour && j < virusList.length; j++) {
                 if ( j == i ) { continue; }
                 var distance = this.computeDistance(virusList[i].x, virusList[i].y, virusList[j].x, virusList[j].y);
-                hasNeighbour = hasNeighbour || distance - virusList[j].size < virusList[i].size + this.disguiseNeighbourMargin;
+                hasNeighbour = distance - virusList[j].size < virusList[i].size + this.disguiseNeighbourMargin;
             }
 
             if ( hasNeighbour ) {
@@ -783,436 +783,427 @@ function ExplosiveBot() {
         var player = getPlayer();
         var interNodes = getMemoryCells();
 
-        if ( /*!toggle*/ 1) {
-            //The following code converts the mouse position into an
-            //absolute game coordinate.
-            var useMouseX = screenToGameX(getMouseX());
-            var useMouseY = screenToGameY(getMouseY());
-            tempPoint = [useMouseX, useMouseY, 1];
-
-            //The current destination that the cells were going towards.
-            var tempMoveX = getPointX();
-            var tempMoveY = getPointY();
-
-            //This variable will be returned at the end.
-            //It will contain the destination choices for all the cells.
-            //BTW!!! ERROR ERROR ABORT MISSION!!!!!!! READ BELOW -----------
-            //
-            //SINCE IT'S STUPID NOW TO ASK EACH CELL WHERE THEY WANT TO GO,
-            //THE BOT SHOULD SIMPLY PICK ONE AND THAT'S IT, I MEAN WTF....
-            var destinationChoices = []; //destination, size, danger
-
-            //Just to make sure the player is alive.
-            if ( player.length > 0 ) {
-
-                var playerCell = this.getMainPlayerCell( player );
-
-                //loop through everything that is on the screen and
-                //separate everything in it's own category.
-                var allIsAll = this.getAll(playerCell);
-
-                //The food stored in element 0 of allIsAll
-                var allPossibleFood = allIsAll[0];
-                //The threats are stored in element 1 of allIsAll
-                var allPossibleThreats = allIsAll[1];
-                //The viruses are stored in element 2 of allIsAll
-                var allPossibleViruses = allIsAll[2];
-                //The candidate viruses (to be disguised) are stored in element 3,0 of allIsAll
-                var virusCandidates = allIsAll[4][0];
-
-                //Loop through all the player's cells.
-                for (var k = 0; k < player.length; k++) {
-                    drawPoint(playerCell.x, playerCell.y + playerCell.size, 0, (getLastUpdate() - playerCell.birth) + " / " + (30000 + (playerCell.birthMass * 57) - (getLastUpdate() - playerCell.birth)) + " / " + playerCell.birthMass);
-                }
-
-                drawCircle(playerCell.x, playerCell.y, playerCell.size + this.splitDistance, 5);
-                
-                //The bot works by removing angles in which it is too
-                //dangerous to travel towards to.
-                var badAngles = [];
-                var obstacleList = [];
-
-                var isSafeSpot = true;
-                var isMouseSafe = true;
-                var isDisguised = allIsAll[4][1];
-
-                var clusterAllFood = this.clusterFood(allPossibleFood, playerCell.size);
-                var disguiseVirus = null;
-
-                for (var i = 0; i < allPossibleViruses.length; i++) {
-                    if (playerCell.size > allPossibleViruses[i].size) {
-                        drawCircle(allPossibleViruses[i].x, allPossibleViruses[i].y, playerCell.size + 50, 3);
-                        drawCircle(allPossibleViruses[i].x, allPossibleViruses[i].y, playerCell.size * 2, 6);
-                    }
-                }
-
-                for (var i = 0; i < virusCandidates.length; i++) {
-                    drawCircle(virusCandidates[i].x, virusCandidates[i].y, virusCandidates[i].size + this.disguiseNeighbourMargin, 5);
-                }
-
-                //console.log("Looking for enemies!");
-
-                //Loop through all the cells that were identified as threats.
-                for (var i = 0; i < allPossibleThreats.length; i++) {
-
-                    var enemyDistance = this.computeDistanceFromCircleEdge(allPossibleThreats[i].x, allPossibleThreats[i].y, playerCell.x, playerCell.y, allPossibleThreats[i].size);
-
-                    allPossibleThreats[i].enemyDist = enemyDistance;
-                }
-
-                for (var i = 0; i < allPossibleThreats.length; i++) {
-
-                    var enemyX = allPossibleThreats[i].x;
-                    var enemyY = allPossibleThreats[i].y;
-
-                    if (isDisguised) {
-                        var enemyVelocity = this.computeVelocity( allPossibleThreats[ i ] );
-                        enemyX += ( enemyVelocity[ 0 ] < 0 ? -1 : 1 ) * Math.pow( Math.abs( enemyVelocity[ 0 ] ), this.disguiseDangerVelocityWeight );
-                        enemyY += ( enemyVelocity[ 1 ] < 0 ? -1 : 1 ) * Math.pow( Math.abs( enemyVelocity[ 1 ] ), this.disguiseDangerVelocityWeight );
-                    }
-
-                    var enemyDistance = this.computeDistance(enemyX, enemyY, playerCell.x, playerCell.y);
-
-                    var splitDangerDistance = allPossibleThreats[i].size + this.splitDistance + 150;
-                    var normalDangerDistance = allPossibleThreats[i].size + 150;
-                    var shiftDistance = playerCell.size;
-
-                    if (isDisguised) {
-                        normalDangerDistance = allPossibleThreats[i].size + this.disguiseDangerMargin;
-                        splitDangerDistance = normalDangerDistance;
-                    }
-                    else if (virusCandidates.length > 0) {
-                        splitDangerDistance = allPossibleThreats[i].size + this.splitDistance / 2 + this.disguiseDangerMargin;
-                    }
-
-                    //console.log("Found distance.");
-
-                    var enemyCanSplit = this.canSplit(playerCell, allPossibleThreats[i]);
-                    var secureDistance = (enemyCanSplit ? splitDangerDistance : normalDangerDistance);
-                    
-                    for (var j = clusterAllFood.length - 1; j >= 0 ; j--) {
-                        if (this.computeDistance(enemyX, enemyY, clusterAllFood[j][0], clusterAllFood[j][1]) < secureDistance + shiftDistance)
-                            clusterAllFood.splice(j, 1);
-                    }
-
-                    //console.log("Removed some food.");
-
-                    for (var j = virusCandidates.length - 1; j >= 0 ; j--) {
-                        var virusDistance = this.computeDistance(virusCandidates[j].x, virusCandidates[j].y, playerCell.x, playerCell.y);
-                        if (this.computeDistance(enemyX, enemyY, virusCandidates[j].x, virusCandidates[j].y) < secureDistance &&
-                            virusDistance > playerCell.size + this.splitDistance / 2 && playerCell.size - allPossibleThreats[i].size <= this.disguiseMaxSize)
-                            virusCandidates.splice(j, 1);
-                    }
-
-                    if (isDisguised) {
-                        drawCircle(enemyX, enemyY, normalDangerDistance, 6);
-                    } else if (enemyCanSplit) {
-                        drawCircle(enemyX, enemyY, splitDangerDistance, 0);
-                        drawCircle(enemyX, enemyY, splitDangerDistance + shiftDistance, 6);
-                    } else {
-                        drawCircle(enemyX, enemyY, normalDangerDistance, 3);
-                        drawCircle(enemyX, enemyY, normalDangerDistance + shiftDistance, 6);
-                    }
-
-                    if (allPossibleThreats[i].danger && getLastUpdate() - allPossibleThreats[i].dangerTimeOut > 1000) {
-
-                        allPossibleThreats[i].danger = false;
-                    }
-
-                    //console.log("Figured out who was important.");
-
-                    if ((enemyCanSplit && enemyDistance < splitDangerDistance) || (enemyCanSplit && allPossibleThreats[i].danger)) {
-
-                        badAngles.push(this.getAngleRange(playerCell, allPossibleThreats[i], i, splitDangerDistance).concat(allPossibleThreats[i].enemyDist));
-
-                    } else if ((!enemyCanSplit && enemyDistance < normalDangerDistance) || (!enemyCanSplit && allPossibleThreats[i].danger)) {
-
-                        badAngles.push(this.getAngleRange(playerCell, allPossibleThreats[i], i, normalDangerDistance).concat(allPossibleThreats[i].enemyDist));
-
-                    } else if (enemyCanSplit && enemyDistance < splitDangerDistance + shiftDistance) {
-                        var tempOb = this.getAngleRange(playerCell, allPossibleThreats[i], i, splitDangerDistance + shiftDistance);
-                        var angle1 = tempOb[0];
-                        var angle2 = this.rangeToAngle(tempOb);
-
-                        obstacleList.push([[angle1, true], [angle2, false]]);
-                    } else if (!enemyCanSplit && enemyDistance < normalDangerDistance + shiftDistance) {
-                        var tempOb = this.getAngleRange(playerCell, allPossibleThreats[i], i, normalDangerDistance + shiftDistance);
-                        var angle1 = tempOb[0];
-                        var angle2 = this.rangeToAngle(tempOb);
-
-                        obstacleList.push([[angle1, true], [angle2, false]]);
-                    }
-                    //console.log("Done with enemy: " + i);
-                }
-
-                //console.log("Done looking for enemies!");
-
-                // Pick the virus to be disguised
-                for (var i = 0; i < virusCandidates.length; i++) {
-                    if (disguiseVirus === null) {
-                        disguiseVirus = virusCandidates[i];
-                        continue;
-                    }
-
-                    if (isDisguised) {
-                        var virusDistance1 = this.computeDistance(virusCandidates[i].x, virusCandidates[i].y, playerCell.x, playerCell.y);
-                        var virusDistance2 = this.computeDistance(disguiseVirus.x, disguiseVirus.y, playerCell.x, playerCell.y);
-
-                        if (virusDistance1 < virusDistance2) {
-                            disguiseVirus = virusCandidates[i];
-                        }
-                    }
-                    else {
-                        if (virusCandidates[i].size > disguiseVirus.size) {
-                            disguiseVirus = virusCandidates[i];
-                        }
-                    }
-                }
-
-                // Set all other viruses to be obstacles
-                for (var i = 0; i < virusCandidates.length; i++) {
-                    if (virusCandidates[i] !== disguiseVirus) {
-                        var virusDistance = this.computeDistance(virusCandidates[i].x, virusCandidates[i].y, playerCell.x, playerCell.y);
-                        if (virusDistance < (playerCell.size * 2)) {
-                            var tempOb = this.getAngleRange(playerCell, virusCandidates[i], i, playerCell.size + 50);
-                            var angle1 = tempOb[0];
-                            var angle2 = this.rangeToAngle(tempOb);
-                            obstacleList.push([[angle1, true], [angle2, false]]);
-                        }
-                    }
-                }
-
-                if (disguiseVirus !== null) {
-                    drawCircle(playerCell.x, playerCell.y, playerCell.size + this.splitDistance / 2, 5);
-                }
-
-                var goodAngles = [];
-                var stupidList = [];
-
-                if (badAngles.length > 0) {
-                    //NOTE: This is only bandaid wall code. It's not the best way to do it.
-                    stupidList = this.addWall(stupidList, playerCell);
-                }
-
-                for (var i = 0; i < badAngles.length; i++) {
-                    var angle1 = badAngles[i][0];
-                    var angle2 = this.rangeToAngle(badAngles[i]);
-                    stupidList.push([[angle1, true], [angle2, false], badAngles[i][2]]);
-                }
-
-                //stupidList.push([[45, true], [135, false]]);
-                //stupidList.push([[10, true], [200, false]]);
-
-                stupidList.sort(function(a, b){
-                    //console.log("Distance: " + a[2] + ", " + b[2]);
-                    return a[2]-b[2];
-                });
-
-                //console.log("Added random noob stuff.");
-
-                var sortedInterList = [];
-                var sortedObList = [];
-
-                for (var i = 0; i < stupidList.length; i++) {
-                    //console.log("Adding to sorted: " + stupidList[i][0][0] + ", " + stupidList[i][1][0]);
-                    var tempList = this.addAngle(sortedInterList, stupidList[i]);
-
-                    if (tempList.length == 0) {
-                        console.log("MAYDAY IT'S HAPPENING!");
-                        break;
-                    } else {
-                        sortedInterList = tempList;
-                    }
-                }
-
-                for (var i = 0; i < obstacleList.length; i++) {
-                    sortedObList = this.addAngle(sortedObList, obstacleList[i]);
-
-                    if (sortedObList.length == 0) {
-                        break;
-                    }
-                }
-
-                var offsetI = 0;
-                var obOffsetI = 1;
-
-                if (sortedInterList.length > 0 && sortedInterList[0][1]) {
-                    offsetI = 1;
-                }
-                if (sortedObList.length > 0 && sortedObList[0][1]) {
-                    obOffsetI = 0;
-                }
-
-                var goodAngles = [];
-                var obstacleAngles = [];
-
-                for (var i = 0; i < sortedInterList.length; i += 2) {
-                    var angle1 = sortedInterList[(i + offsetI).mod(sortedInterList.length)][0];
-                    var angle2 = sortedInterList[(i + 1 + offsetI).mod(sortedInterList.length)][0];
-                    var diff = (angle2 - angle1).mod(360);
-                    goodAngles.push([angle1, diff]);
-                }
-
-                for (var i = 0; i < sortedObList.length; i += 2) {
-                    var angle1 = sortedObList[(i + obOffsetI).mod(sortedObList.length)][0];
-                    var angle2 = sortedObList[(i + 1 + obOffsetI).mod(sortedObList.length)][0];
-                    var diff = (angle2 - angle1).mod(360);
-                    obstacleAngles.push([angle1, diff]);
-                }
-
-                for (var i = 0; i < goodAngles.length; i++) {
-                    var line1 = this.followAngle(goodAngles[i][0], playerCell.x, playerCell.y, 100 + playerCell.size);
-                    var line2 = this.followAngle((goodAngles[i][0] + goodAngles[i][1]).mod(360), playerCell.x, playerCell.y, 100 + playerCell.size);
-                    drawLine(playerCell.x, playerCell.y, line1[0], line1[1], 1);
-                    drawLine(playerCell.x, playerCell.y, line2[0], line2[1], 1);
-
-                    drawArc(line1[0], line1[1], line2[0], line2[1], playerCell.x, playerCell.y, 1);
-
-                    //drawPoint(player[0].x, player[0].y, 2, "");
-
-                    drawPoint(line1[0], line1[1], 0, "" + i + ": 0");
-                    drawPoint(line2[0], line2[1], 0, "" + i + ": 1");
-                }
-
-                for (var i = 0; i < obstacleAngles.length; i++) {
-                    var line1 = this.followAngle(obstacleAngles[i][0], playerCell.x, playerCell.y, 50 + playerCell.size);
-                    var line2 = this.followAngle((obstacleAngles[i][0] + obstacleAngles[i][1]).mod(360), playerCell.x, playerCell.y, 50 + playerCell.size);
-                    drawLine(playerCell.x, playerCell.y, line1[0], line1[1], 6);
-                    drawLine(playerCell.x, playerCell.y, line2[0], line2[1], 6);
-
-                    drawArc(line1[0], line1[1], line2[0], line2[1], playerCell.x, playerCell.y, 6);
-
-                    //drawPoint(player[0].x, player[0].y, 2, "");
-
-                    drawPoint(line1[0], line1[1], 0, "" + i + ": 0");
-                    drawPoint(line2[0], line2[1], 0, "" + i + ": 1");
-                }
-
-                if (this.toggleFollow && goodAngles.length == 0) {
-                    //This is the follow the mouse mode
-                    var distance = this.computeDistance(playerCell.x, playerCell.y, tempPoint[0], tempPoint[1]);
-
-                    var shiftedAngle = this.shiftAngle(obstacleAngles, this.getAngle(tempPoint[0], tempPoint[1], playerCell.x, playerCell.y), [0, 360]);
-
-                    var destination = this.followAngle(shiftedAngle, playerCell.x, playerCell.y, distance);
-
-                    destinationChoices = destination;
-                    drawLine(playerCell.x, playerCell.y, destination[0], destination[1], 1);
-                    //tempMoveX = destination[0];
-                    //tempMoveY = destination[1];
-
-                } else if (goodAngles.length > 0) {
-                    var bIndex = goodAngles[0];
-                    var biggest = goodAngles[0][1];
-                    for (var i = 1; i < goodAngles.length; i++) {
-                        var size = goodAngles[i][1];
-                        if (size > biggest) {
-                            biggest = size;
-                            bIndex = goodAngles[i];
-                        }
-                    }
-                    var perfectAngle = (bIndex[0] + bIndex[1] / 2).mod(360);
-
-                    perfectAngle = this.shiftAngle(obstacleAngles, perfectAngle, bIndex);
-
-                    var line1 = this.followAngle(perfectAngle, playerCell.x, playerCell.y, verticalDistance());
-
-                    destinationChoices = line1;
-                    drawLine(playerCell.x, playerCell.y, line1[0], line1[1], 7);
-                    //tempMoveX = line1[0];
-                    //tempMoveY = line1[1];
-                } else if (badAngles.length > 0 && goodAngles == 0) {
-                    //When there are enemies around but no good angles
-                    //You're likely screwed. (This should never happen.)
-
-                    console.log("Failed");
-                    destinationChoices = [tempMoveX, tempMoveY];
-
-                } else if (disguiseVirus !== null) {
-                    // We've found a virus smaller than our current cell
-                    // Let's disguise it with our "explosive" cell
-
-                    var virusDistance = this.computeDistance(disguiseVirus.x, disguiseVirus.y, playerCell.x, playerCell.y);
-
-                    if (virusDistance < playerCell.size + this.splitDistance / 2 && playerCell.size - disguiseVirus.size > this.disguiseMaxSize) {
-                        console.log("We're too big for this virus - shooting some mass");
-                        setTimeout(shoot, 80);
-                        // While shooting, jiggle towards an angle perpendicular to the angle
-                        // of the virus, so we avoid shooting it and making it bigger by accident
-                        var shiftedAngle = this.getAngle(playerCell.x, playerCell.y, disguiseVirus.x, disguiseVirus.y) + 90 + 180 * (Math.random() > 0.5 ? 1 : 0);
-                        destinationChoices = this.followAngle(shiftedAngle, playerCell.x, playerCell.y, 10);
-                    }
-                    else {
-                        var distance = this.computeDistance(playerCell.x, playerCell.y, disguiseVirus.x, disguiseVirus.y);
-                        var shiftedAngle = this.shiftAngle(obstacleAngles, this.getAngle(disguiseVirus.x, disguiseVirus.y, playerCell.x, playerCell.y), [0, 360]);
-                        destinationChoices = this.followAngle(shiftedAngle, playerCell.x, playerCell.y, distance);
-                    }
-
-                    drawLine(playerCell.x, playerCell.y, disguiseVirus.x, disguiseVirus.y, 4);
-
-                } else if (clusterAllFood.length > 0) {
-                    for (var i = 0; i < clusterAllFood.length; i++) {
-                        //console.log("mefore: " + clusterAllFood[i][2]);
-                        //This is the cost function. Higher is better.
-
-                            var clusterAngle = this.getAngle(clusterAllFood[i][0], clusterAllFood[i][1], playerCell.x, playerCell.y);
-
-                            clusterAllFood[i][2] = clusterAllFood[i][2] * 6 - this.computeDistance(clusterAllFood[i][0], clusterAllFood[i][1], playerCell.x, playerCell.y);
-                            //console.log("Current Value: " + clusterAllFood[i][2]);
-
-                            //(goodAngles[bIndex][1] / 2 - (Math.abs(perfectAngle - clusterAngle)));
-
-                            clusterAllFood[i][3] = clusterAngle;
-
-                            drawPoint(clusterAllFood[i][0], clusterAllFood[i][1], 1, "");
-                            //console.log("After: " + clusterAllFood[i][2]);
-                    }
-
-                    var bestFoodI = 0;
-                    var bestFood = clusterAllFood[0][2];
-                    for (var i = 1; i < clusterAllFood.length; i++) {
-                        if (bestFood < clusterAllFood[i][2]) {
-                            bestFood = clusterAllFood[i][2];
-                            bestFoodI = i;
-                        }
-                    }
-
-                    //console.log("Best Value: " + clusterAllFood[bestFoodI][2]);
-
-                    var distance = this.computeDistance(playerCell.x, playerCell.y, clusterAllFood[bestFoodI][0], clusterAllFood[bestFoodI][1]);
-
-                    var shiftedAngle = this.shiftAngle(obstacleAngles, this.getAngle(clusterAllFood[bestFoodI][0], clusterAllFood[bestFoodI][1], playerCell.x, playerCell.y), [0, 360]);
-
-                    var destination = this.followAngle(shiftedAngle, playerCell.x, playerCell.y, distance);
-
-                    destinationChoices = destination;
-                    //tempMoveX = destination[0];
-                    //tempMoveY = destination[1];
-                    drawLine(playerCell.x, playerCell.y, destination[0], destination[1], 1);
-                } else {
-                    //If there are no enemies around and no food to eat.
-                    destinationChoices = [tempMoveX, tempMoveY];
-                }
-
-                drawPoint(tempPoint[0], tempPoint[1], tempPoint[2], "");
-                //drawPoint(tempPoint[0], tempPoint[1], tempPoint[2], "" + Math.floor(this.computeDistance(tempPoint[0], tempPoint[1], I, J)));
-                //drawLine(tempPoint[0], tempPoint[1], player[0].x, player[0].y, 6);
-                //console.log("Slope: " + slope(tempPoint[0], tempPoint[1], player[0].x, player[0].y) + " Angle: " + getAngle(tempPoint[0], tempPoint[1], player[0].x, player[0].y) + " Side: " + (getAngle(tempPoint[0], tempPoint[1], player[0].x, player[0].y) - 90).mod(360));
-                tempPoint[2] = 1;
-
-                this.previousBlobList = player.concat( allIsAll[ 0 ] ).concat( allIsAll[ 1 ] ).concat( allIsAll[ 3 ] );
-
-                // Update prev_x and prev_y from all blobs in previousBlobList
-                // This is used for calculating blob velocity
-                for( var i = 0; i < this.previousBlobList.length; i++ ) {
-                    this.previousBlobList[ i ].prev_x = this.previousBlobList[ i ].x;
-                    this.previousBlobList[ i ].prev_y = this.previousBlobList[ i ].y;
-                }
-            }
-
+        //The following code converts the mouse position into an
+        //absolute game coordinate.
+        var useMouseX = screenToGameX(getMouseX());
+        var useMouseY = screenToGameY(getMouseY());
+        tempPoint = [useMouseX, useMouseY, 1];
+
+        //The current destination that the cells were going towards.
+        var tempMoveX = getPointX();
+        var tempMoveY = getPointY();
+
+        //This variable will be returned at the end.
+        //It will contain the destination choices for all the cells.
+        //BTW!!! ERROR ERROR ABORT MISSION!!!!!!! READ BELOW -----------
+        //
+        //SINCE IT'S STUPID NOW TO ASK EACH CELL WHERE THEY WANT TO GO,
+        //THE BOT SHOULD SIMPLY PICK ONE AND THAT'S IT, I MEAN WTF....
+        var destinationChoices = []; //destination, size, danger
+
+        //Just to make sure the player is alive.
+        if ( ! player.length ) {
             this.previousLoopTime = new Date().getTime();
             return destinationChoices;
         }
+
+        var playerCell = this.getMainPlayerCell( player );
+
+        //loop through everything that is on the screen and
+        //separate everything in it's own category.
+        var allIsAll = this.getAll(playerCell);
+
+        //The food stored in element 0 of allIsAll
+        var allPossibleFood = allIsAll[0];
+        //The threats are stored in element 1 of allIsAll
+        var allPossibleThreats = allIsAll[1];
+        //The viruses are stored in element 2 of allIsAll
+        var allPossibleViruses = allIsAll[2];
+        //The candidate viruses (to be disguised) are stored in element 3,0 of allIsAll
+        var virusCandidates = allIsAll[4][0];
+
+        //Loop through all the player's cells.
+        for (var k = 0; k < player.length; k++) {
+            drawPoint(playerCell.x, playerCell.y + playerCell.size, 0, (getLastUpdate() - playerCell.birth) + " / " + (30000 + (playerCell.birthMass * 57) - (getLastUpdate() - playerCell.birth)) + " / " + playerCell.birthMass);
+        }
+
+        drawCircle(playerCell.x, playerCell.y, playerCell.size + this.splitDistance, 5);
+        
+        //The bot works by removing angles in which it is too
+        //dangerous to travel towards to.
+        var badAngles = [];
+        var obstacleList = [];
+
+        var isSafeSpot = true;
+        var isMouseSafe = true;
+        var isDisguised = allIsAll[4][1];
+
+        var clusterAllFood = this.clusterFood(allPossibleFood, playerCell.size);
+        var disguiseVirus = null;
+
+        //console.log("Looking for enemies!");
+
+        //Loop through all the cells that were identified as threats.
+        for (var i = 0; i < allPossibleThreats.length; i++) {
+
+            var enemyDistance = this.computeDistanceFromCircleEdge(allPossibleThreats[i].x, allPossibleThreats[i].y, playerCell.x, playerCell.y, allPossibleThreats[i].size);
+
+            allPossibleThreats[i].enemyDist = enemyDistance;
+        }
+
+        for (var i = 0; i < allPossibleThreats.length; i++) {
+
+            var enemyX = allPossibleThreats[i].x;
+            var enemyY = allPossibleThreats[i].y;
+
+            if (isDisguised) {
+                var enemyVelocity = this.computeVelocity( allPossibleThreats[ i ] );
+                enemyX += ( enemyVelocity[ 0 ] < 0 ? -1 : 1 ) * Math.pow( Math.abs( enemyVelocity[ 0 ] ), this.disguiseDangerVelocityWeight );
+                enemyY += ( enemyVelocity[ 1 ] < 0 ? -1 : 1 ) * Math.pow( Math.abs( enemyVelocity[ 1 ] ), this.disguiseDangerVelocityWeight );
+            }
+
+            var enemyDistance = this.computeDistance(enemyX, enemyY, playerCell.x, playerCell.y);
+
+            var splitDangerDistance = allPossibleThreats[i].size + this.splitDistance + 150;
+            var normalDangerDistance = allPossibleThreats[i].size + 150;
+            var shiftDistance = playerCell.size;
+
+            if (isDisguised) {
+                normalDangerDistance = allPossibleThreats[i].size + this.disguiseDangerMargin;
+                splitDangerDistance = normalDangerDistance;
+                shiftDistance = 0;
+            }
+            else if (virusCandidates.length > 0) {
+                splitDangerDistance = allPossibleThreats[i].size + this.splitDistance / 2 + this.disguiseDangerMargin;
+            }
+
+            //console.log("Found distance.");
+
+            var enemyCanSplit = this.canSplit(playerCell, allPossibleThreats[i]);
+            var secureDistance = (enemyCanSplit ? splitDangerDistance : normalDangerDistance);
+            
+            for (var j = clusterAllFood.length - 1; j >= 0 ; j--) {
+                if (this.computeDistance(enemyX, enemyY, clusterAllFood[j][0], clusterAllFood[j][1]) < secureDistance + shiftDistance)
+                    clusterAllFood.splice(j, 1);
+            }
+
+            //console.log("Removed some food.");
+
+            for (var j = virusCandidates.length - 1; j >= 0 ; j--) {
+                var virusDistance = this.computeDistance(virusCandidates[j].x, virusCandidates[j].y, playerCell.x, playerCell.y);
+                var virusEnemyDistance = this.computeDistance(virusCandidates[j].x, virusCandidates[j].y, enemyX, enemyY);
+                if ( virusEnemyDistance < secureDistance + shiftDistance && virusDistance > playerCell.size + this.splitDistance / 2 )
+                    virusCandidates.splice(j, 1);
+            }
+
+            if (isDisguised) {
+                drawCircle(enemyX, enemyY, normalDangerDistance, 6);
+            } else if (enemyCanSplit) {
+                drawCircle(enemyX, enemyY, splitDangerDistance, 0);
+                drawCircle(enemyX, enemyY, splitDangerDistance + shiftDistance, 6);
+            } else {
+                drawCircle(enemyX, enemyY, normalDangerDistance, 3);
+                drawCircle(enemyX, enemyY, normalDangerDistance + shiftDistance, 6);
+            }
+
+            if (allPossibleThreats[i].danger && getLastUpdate() - allPossibleThreats[i].dangerTimeOut > 1000) {
+
+                allPossibleThreats[i].danger = false;
+            }
+
+            //console.log("Figured out who was important.");
+
+            if ((enemyCanSplit && enemyDistance < splitDangerDistance) || (enemyCanSplit && allPossibleThreats[i].danger)) {
+
+                badAngles.push(this.getAngleRange(playerCell, allPossibleThreats[i], i, splitDangerDistance).concat(allPossibleThreats[i].enemyDist));
+
+            } else if ((!enemyCanSplit && enemyDistance < normalDangerDistance) || (!enemyCanSplit && allPossibleThreats[i].danger)) {
+
+                badAngles.push(this.getAngleRange(playerCell, allPossibleThreats[i], i, normalDangerDistance).concat(allPossibleThreats[i].enemyDist));
+
+            } else if (enemyCanSplit && enemyDistance < splitDangerDistance + shiftDistance) {
+                var tempOb = this.getAngleRange(playerCell, allPossibleThreats[i], i, splitDangerDistance + shiftDistance);
+                var angle1 = tempOb[0];
+                var angle2 = this.rangeToAngle(tempOb);
+
+                obstacleList.push([[angle1, true], [angle2, false]]);
+            } else if (!enemyCanSplit && enemyDistance < normalDangerDistance + shiftDistance) {
+                var tempOb = this.getAngleRange(playerCell, allPossibleThreats[i], i, normalDangerDistance + shiftDistance);
+                var angle1 = tempOb[0];
+                var angle2 = this.rangeToAngle(tempOb);
+
+                obstacleList.push([[angle1, true], [angle2, false]]);
+            }
+            //console.log("Done with enemy: " + i);
+        }
+
+        //console.log("Done looking for enemies!");
+
+        // Pick the virus to be disguised
+        for (var i = 0; i < virusCandidates.length; i++) {
+            if ( disguiseVirus === null ) {
+                disguiseVirus = virusCandidates[i];
+                continue;
+            }
+
+            if ( isDisguised ) {
+                var virusDistance1 = this.computeDistance(virusCandidates[i].x, virusCandidates[i].y, playerCell.x, playerCell.y);
+                var virusDistance2 = this.computeDistance(disguiseVirus.x, disguiseVirus.y, playerCell.x, playerCell.y);
+
+                if ( virusDistance1 < virusDistance2 ) {
+                    disguiseVirus = virusCandidates[i];
+                }
+            }
+            else {
+                if ( virusCandidates[i].size > disguiseVirus.size ) {
+                    disguiseVirus = virusCandidates[i];
+                }
+            }
+        }
+
+        // Set all other viruses to be obstacles
+        for (var i = 0; i < virusCandidates.length; i++) {
+            if (virusCandidates[i] !== disguiseVirus) {
+                var virusDistance = this.computeDistance(virusCandidates[i].x, virusCandidates[i].y, playerCell.x, playerCell.y);
+                if (virusDistance < (playerCell.size * 2)) {
+                    var tempOb = this.getAngleRange(playerCell, virusCandidates[i], i, playerCell.size + 50);
+                    var angle1 = tempOb[0];
+                    var angle2 = this.rangeToAngle(tempOb);
+                    obstacleList.push([[angle1, true], [angle2, false]]);
+                }
+            }
+        }
+
+        // Do a cool "radar" animation on candidate viruses
+        for (var i = 0; i < virusCandidates.length; i++) {
+            if ( isDisguised && virusCandidates[i] !== disguiseVirus ) {
+                continue;
+            }
+            var steps = 4;
+            var animLength = 2500;
+            var alphaMin = 0.05;
+            var alphaMax = 0.18;
+            var radiusMin = virusCandidates[i].size + this.disguiseNeighbourMargin;
+            var radiusMax = playerCell.size + this.splitDistance / 2;
+            for (var j = 0; j < steps; j++) {
+                var animRatio = ( ( this.previousLoopTime + ( animLength / steps ) * j ) % animLength ) / animLength;
+                var animAlpha = alphaMin + ( alphaMax - alphaMin ) * ( 1 - animRatio );
+                var animRadius = radiusMin + ( radiusMax - radiusMin ) * animRatio;
+                drawCircle(virusCandidates[i].x, virusCandidates[i].y, animRadius, 5, animAlpha);
+            }
+        }
+
+        // Draw ranges around viruses
+        if ( ! isDisguised ) {
+            for (var i = 0; i < allPossibleViruses.length; i++) {
+                if (playerCell.size > allPossibleViruses[i].size) {
+                    drawCircle(allPossibleViruses[i].x, allPossibleViruses[i].y, playerCell.size + 50, 3);
+                    drawCircle(allPossibleViruses[i].x, allPossibleViruses[i].y, playerCell.size * 2, 6);
+                }
+            }
+        }
+
+        var goodAngles = [];
+        var stupidList = [];
+
+        if (badAngles.length > 0) {
+            //NOTE: This is only bandaid wall code. It's not the best way to do it.
+            stupidList = this.addWall(stupidList, playerCell);
+        }
+
+        for (var i = 0; i < badAngles.length; i++) {
+            var angle1 = badAngles[i][0];
+            var angle2 = this.rangeToAngle(badAngles[i]);
+            stupidList.push([[angle1, true], [angle2, false], badAngles[i][2]]);
+        }
+
+        stupidList.sort(function(a, b){
+            //console.log("Distance: " + a[2] + ", " + b[2]);
+            return a[2]-b[2];
+        });
+
+        //console.log("Added random noob stuff.");
+
+        var sortedInterList = [];
+        var sortedObList = [];
+
+        for (var i = 0; i < stupidList.length; i++) {
+            var tempList = this.addAngle(sortedInterList, stupidList[i]);
+
+            if (tempList.length == 0) {
+                console.log("MAYDAY IT'S HAPPENING!");
+                break;
+            } else {
+                sortedInterList = tempList;
+            }
+        }
+
+        for (var i = 0; i < obstacleList.length; i++) {
+            sortedObList = this.addAngle(sortedObList, obstacleList[i]);
+
+            if (sortedObList.length == 0) {
+                break;
+            }
+        }
+
+        var offsetI = 0;
+        var obOffsetI = 1;
+
+        if (sortedInterList.length > 0 && sortedInterList[0][1]) {
+            offsetI = 1;
+        }
+        if (sortedObList.length > 0 && sortedObList[0][1]) {
+            obOffsetI = 0;
+        }
+
+        var goodAngles = [];
+        var obstacleAngles = [];
+
+        for (var i = 0; i < sortedInterList.length; i += 2) {
+            var angle1 = sortedInterList[(i + offsetI).mod(sortedInterList.length)][0];
+            var angle2 = sortedInterList[(i + 1 + offsetI).mod(sortedInterList.length)][0];
+            var diff = (angle2 - angle1).mod(360);
+            goodAngles.push([angle1, diff]);
+        }
+
+        for (var i = 0; i < sortedObList.length; i += 2) {
+            var angle1 = sortedObList[(i + obOffsetI).mod(sortedObList.length)][0];
+            var angle2 = sortedObList[(i + 1 + obOffsetI).mod(sortedObList.length)][0];
+            var diff = (angle2 - angle1).mod(360);
+            obstacleAngles.push([angle1, diff]);
+        }
+
+        for (var i = 0; i < goodAngles.length; i++) {
+            var line1 = this.followAngle(goodAngles[i][0], playerCell.x, playerCell.y, 100 + playerCell.size);
+            var line2 = this.followAngle((goodAngles[i][0] + goodAngles[i][1]).mod(360), playerCell.x, playerCell.y, 100 + playerCell.size);
+            drawLine(playerCell.x, playerCell.y, line1[0], line1[1], 1);
+            drawLine(playerCell.x, playerCell.y, line2[0], line2[1], 1);
+
+            drawArc(line1[0], line1[1], line2[0], line2[1], playerCell.x, playerCell.y, 1);
+
+            drawPoint(line1[0], line1[1], 0, "" + i + ": 0");
+            drawPoint(line2[0], line2[1], 0, "" + i + ": 1");
+        }
+
+        for (var i = 0; i < obstacleAngles.length; i++) {
+            var line1 = this.followAngle(obstacleAngles[i][0], playerCell.x, playerCell.y, 50 + playerCell.size);
+            var line2 = this.followAngle((obstacleAngles[i][0] + obstacleAngles[i][1]).mod(360), playerCell.x, playerCell.y, 50 + playerCell.size);
+            drawLine(playerCell.x, playerCell.y, line1[0], line1[1], 6);
+            drawLine(playerCell.x, playerCell.y, line2[0], line2[1], 6);
+
+            drawArc(line1[0], line1[1], line2[0], line2[1], playerCell.x, playerCell.y, 6);
+
+            drawPoint(line1[0], line1[1], 0, "" + i + ": 0");
+            drawPoint(line2[0], line2[1], 0, "" + i + ": 1");
+        }
+
+        if (this.toggleFollow && goodAngles.length == 0) {
+            //This is the follow the mouse mode
+            var distance = this.computeDistance(playerCell.x, playerCell.y, tempPoint[0], tempPoint[1]);
+
+            var shiftedAngle = this.shiftAngle(obstacleAngles, this.getAngle(tempPoint[0], tempPoint[1], playerCell.x, playerCell.y), [0, 360]);
+
+            var destination = this.followAngle(shiftedAngle, playerCell.x, playerCell.y, distance);
+
+            destinationChoices = destination;
+            drawLine(playerCell.x, playerCell.y, destination[0], destination[1], 1);
+
+        } else if (goodAngles.length > 0) {
+            var bIndex = goodAngles[0];
+            var biggest = goodAngles[0][1];
+            for (var i = 1; i < goodAngles.length; i++) {
+                var size = goodAngles[i][1];
+                if (size > biggest) {
+                    biggest = size;
+                    bIndex = goodAngles[i];
+                }
+            }
+            var perfectAngle = (bIndex[0] + bIndex[1] / 2).mod(360);
+
+            perfectAngle = this.shiftAngle(obstacleAngles, perfectAngle, bIndex);
+
+            var line1 = this.followAngle(perfectAngle, playerCell.x, playerCell.y, verticalDistance());
+
+            destinationChoices = line1;
+            drawLine(playerCell.x, playerCell.y, line1[0], line1[1], 7);
+        } else if (badAngles.length > 0 && goodAngles == 0) {
+            //When there are enemies around but no good angles
+            //You're likely screwed. (This should never happen.)
+
+            console.log("Failed");
+            destinationChoices = [tempMoveX, tempMoveY];
+
+        } else if (disguiseVirus !== null) {
+            // We've found a virus smaller than our current cell
+            // Let's disguise it with our "explosive" cell
+
+            var virusDistance = this.computeDistance(disguiseVirus.x, disguiseVirus.y, playerCell.x, playerCell.y);
+
+            if (virusDistance < playerCell.size + this.splitDistance / 2 && playerCell.size - disguiseVirus.size > this.disguiseMaxSize) {
+                console.log("We're too big for this virus - shooting some mass");
+                setTimeout(shoot, 80);
+                // While shooting, jiggle towards an angle perpendicular to the angle
+                // of the virus, so we avoid shooting it and making it bigger by accident
+                var shiftedAngle = this.getAngle(playerCell.x, playerCell.y, disguiseVirus.x, disguiseVirus.y) + 90 + 180 * (Math.random() > 0.5 ? 1 : 0);
+                destinationChoices = this.followAngle(shiftedAngle, playerCell.x, playerCell.y, 10);
+            }
+            else {
+                var distance = this.computeDistance(playerCell.x, playerCell.y, disguiseVirus.x, disguiseVirus.y);
+                var shiftedAngle = this.shiftAngle(obstacleAngles, this.getAngle(disguiseVirus.x, disguiseVirus.y, playerCell.x, playerCell.y), [0, 360]);
+                destinationChoices = this.followAngle(shiftedAngle, playerCell.x, playerCell.y, distance);
+            }
+
+            drawLine(playerCell.x, playerCell.y, disguiseVirus.x, disguiseVirus.y, 5);
+
+        } else if (clusterAllFood.length > 0) {
+            for (var i = 0; i < clusterAllFood.length; i++) {
+                //This is the cost function. Higher is better.
+                var clusterAngle = this.getAngle(clusterAllFood[i][0], clusterAllFood[i][1], playerCell.x, playerCell.y);
+
+                clusterAllFood[i][2] = clusterAllFood[i][2] * 6 - this.computeDistance(clusterAllFood[i][0], clusterAllFood[i][1], playerCell.x, playerCell.y);
+                clusterAllFood[i][3] = clusterAngle;
+
+                drawPoint(clusterAllFood[i][0], clusterAllFood[i][1], 1, "");
+            }
+
+            var bestFoodI = 0;
+            var bestFood = clusterAllFood[0][2];
+            for (var i = 1; i < clusterAllFood.length; i++) {
+                if (bestFood < clusterAllFood[i][2]) {
+                    bestFood = clusterAllFood[i][2];
+                    bestFoodI = i;
+                }
+            }
+
+            //console.log("Best Value: " + clusterAllFood[bestFoodI][2]);
+
+            var distance = this.computeDistance(playerCell.x, playerCell.y, clusterAllFood[bestFoodI][0], clusterAllFood[bestFoodI][1]);
+
+            var shiftedAngle = this.shiftAngle(obstacleAngles, this.getAngle(clusterAllFood[bestFoodI][0], clusterAllFood[bestFoodI][1], playerCell.x, playerCell.y), [0, 360]);
+
+            var destination = this.followAngle(shiftedAngle, playerCell.x, playerCell.y, distance);
+
+            destinationChoices = destination;
+            drawLine(playerCell.x, playerCell.y, destination[0], destination[1], 1);
+        } else {
+            //If there are no enemies around and no food to eat.
+            destinationChoices = [tempMoveX, tempMoveY];
+        }
+
+        drawPoint(tempPoint[0], tempPoint[1], tempPoint[2], "");
+        tempPoint[2] = 1;
+
+        this.previousBlobList = player.concat( allIsAll[ 0 ] ).concat( allIsAll[ 1 ] ).concat( allIsAll[ 3 ] );
+
+        // Update prev_x and prev_y from all blobs in previousBlobList
+        // This is used for calculating blob velocity
+        for( var i = 0; i < this.previousBlobList.length; i++ ) {
+            this.previousBlobList[ i ].prev_x = this.previousBlobList[ i ].x;
+            this.previousBlobList[ i ].prev_y = this.previousBlobList[ i ].y;
+        }
+
+        this.previousLoopTime = new Date().getTime();
+        return destinationChoices;
     };
 };
 window.botList.push(new ExplosiveBot());
