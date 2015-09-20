@@ -858,8 +858,8 @@ function PopBot() {
 
             if (isDisguised) {
                 var enemyVelocity = this.computeVelocity( allPossibleThreats[ i ] );
-                enemyX += ( enemyVelocity[ 0 ] < 0 ? -1 : 1 ) * Math.pow( Math.abs( enemyVelocity[ 0 ] ), this.disguiseDangerVelocityWeight );
-                enemyY += ( enemyVelocity[ 1 ] < 0 ? -1 : 1 ) * Math.pow( Math.abs( enemyVelocity[ 1 ] ), this.disguiseDangerVelocityWeight );
+                enemyX += ( enemyVelocity[ 0 ] < 0 ? -1 : 1 ) * Math.pow( enemyVelocity[ 0 ] < 0 ? -enemyVelocity[ 0 ] : enemyVelocity[ 0 ], this.disguiseDangerVelocityWeight );
+                enemyY += ( enemyVelocity[ 1 ] < 0 ? -1 : 1 ) * Math.pow( enemyVelocity[ 1 ] < 0 ? -enemyVelocity[ 1 ] : enemyVelocity[ 1 ], this.disguiseDangerVelocityWeight );
             }
 
             var enemyDistance = this.computeDistance(enemyX, enemyY, playerCell.x, playerCell.y);
