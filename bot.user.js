@@ -21,8 +21,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
 
 // ==UserScript==
-// @name        ExplosiveBot
-// @namespace   ExplosiveBot
+// @name        PopBot
+// @namespace   PopBot
 // @include     http://agar.io/*
 // @version     1.2
 // @grant       none
@@ -51,8 +51,8 @@ var g = window.jQuery;
 
 window.botList = window.botList || [];
 
-function ExplosiveBot() {
-    this.name = "ExplosiveBot " + botVersion;
+function PopBot() {
+    this.name = "PopBot " + botVersion;
 
     this.toggleFollow = false;
     this.keyAction = function(key) {
@@ -1206,6 +1206,6 @@ function ExplosiveBot() {
         return destinationChoices;
     };
 };
-window.botList.push(new ExplosiveBot());
+window.botList.push(new PopBot());
 
 window.updateBotList(); //This function might not exist yet.
