@@ -1335,11 +1335,10 @@ console.log("Running Bot Launcher!");
                 lines = [],
                 names = [
                     "EXPLOSIVE",
-                    "TNT",
                     "Creeper",
-                    unescape( "%uD83D%uDCA3" ),
                     "Eat Me",
                     "Free food",
+                    "Hot sauce",
                     "AFK"
                 ],
                 originalName = names[Math.floor(Math.random() * names.length)],
