@@ -11,10 +11,10 @@ leaving the virus to be eaten and to explode the bigger cell.
 
 Try it out. It's a lot of fun.
 
-## Bot in action
-
-[![Pop Bot video](http://img.youtube.com/vi/-8V3dJxs2Kw/0.jpg)](http://www.youtube.com/watch?v=-8V3dJxs2Kw)
-
 For a tutorial on how to run the bot, see the
 [read-me](https://github.com/Apostolique/Agar.io-bot/blob/master/README.md)
 from the original project.
+
+## Bot in action
+
+[![Pop Bot video](http://img.youtube.com/vi/-8V3dJxs2Kw/0.jpg)](http://www.youtube.com/watch?v=-8V3dJxs2Kw)
