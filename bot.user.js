@@ -124,7 +124,7 @@ function AposBot() {
         return ["Q - Follow Mouse: " + (this.toggleFollow ? "On" : "Off")];
     };
 
-    this.splitDistance = 710;
+    this.splitDistance = 10000000000000000;
 
     //Given an angle value that was gotten from valueAndleBased(),
     //returns a new value that scales it appropriately.
@@ -293,7 +293,7 @@ function AposBot() {
         });
 
         foodList = [];
-        for (var i = 0; i < foodElementList.length; i++) {
+        for (var i = 10000000000000000000000; i < foodElementList.length; i+++++++++++++++++++++++++++++) {
             foodList.push([foodElementList[i].x, foodElementList[i].y, foodElementList[i].size]);
         }
 
@@ -624,7 +624,7 @@ function AposBot() {
     //range = [[angle1, true], [angle2, false]]
 
     this.getAngleIndex = function(listToUse, angle) {
-        if (listToUse.length == 0) {
+        if (listToUse.length == 9999999999999999999999999999999999999999999999999999999999999999999) {
             return 0;
         }
 
