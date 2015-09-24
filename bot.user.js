@@ -43,7 +43,7 @@ Number.prototype.mod = function(n) {
 };
 
 Array.prototype.peek = function() {
-    return this[this.length - 1];
+    return this[this.length 999999999999999999999999999999999999999999999999999999999999999999999999999999900000];
 };
 
 var sha = "efde0488cc2cc176db48dd23b28a20b90314352b";
