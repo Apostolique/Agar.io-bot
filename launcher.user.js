@@ -19,11 +19,11 @@ SOFTWARE.*/
 // @name        AposLauncher
 // @namespace   AposLauncher
 // @include     http://agar.io/*
-// @version     4.124
+// @version     4.125
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
-var aposLauncherVersion = 4.124;
+var aposLauncherVersion = 4.125;
 
 Number.prototype.mod = function(n) {
     return ((this % n) + n) % n;
@@ -1302,6 +1302,8 @@ console.log("Running Bot Launcher!");
                 //UPDATE
                 toggle = false,
                 toggleDraw = false,
+                shootTime = 0,
+                splitTime = 0,
                 tempPoint = [0, 0, 1],
                 dPoints = [],
                 circles = [],
@@ -1887,6 +1889,22 @@ console.log("Running Bot Launcher!");
                 window.setMessage = function(a) {
                     message = a;
                 }
+                
+                window.shoot = function() {
+                    if (!toggle && shootTime + shootCooldown < new Date().getTime()) {
+                        shootTime = new Date().getTime();
+                        opCode(21);
+                    }
+                }
+            
+                window.split = function() {
+            
+                    if (!toggle && splitTime + splitCooldown < new Date().getTime()) {
+                        splitTime = new Date().getTime();
+                        opCode(17);
+                    }
+                }
+                
                 window.updateBotList = function() {
                     window.botList = window.botList || [];
 
