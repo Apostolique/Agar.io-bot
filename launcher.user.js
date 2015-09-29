@@ -19,11 +19,11 @@ SOFTWARE.*/
 // @name        AposLauncher
 // @namespace   AposLauncher
 // @include     http://agar.io/*
-// @version     4.126
+// @version     4.13
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
-var aposLauncherVersion = 4.126;
+var aposLauncherVersion = 4.13;
 
 Number.prototype.mod = function(n) {
     return ((this % n) + n) % n;
@@ -247,7 +247,7 @@ console.log("Running Bot Launcher!");
                 b = a.val();
             b && (ka[b] = a.text())
         }));
-        e.get("https://m.agar.io/info", function(a) {
+        e.get(ap + "info", function(a) {
                 var b = {},
                     c;
                 for (c in a.regions) {
@@ -301,7 +301,7 @@ console.log("Running Bot Launcher!");
     function Za() {
         var a = ++Ba;
         console.log("Find " + y + P);
-        e.ajax("https://m.agar.io/findServer", {
+        e.ajax(ap + "findServer", {
             error: function() {
                 setTimeout(Za, 1E3)
             },
@@ -330,7 +330,7 @@ console.log("Running Bot Launcher!");
             } catch (c) {}
             q = null
         }
-        Da.la && (a = "ws://" + Da.la);
+        Da.ip && (a = "ws://" + Da.ip);
         if (null != L) {
             var l = L;
             L = function() {
@@ -339,7 +339,7 @@ console.log("Running Bot Launcher!");
         }
         if (tb) {
             var d = a.split(":");
-            a = d[0] + "s://ip-" + d[1].replace(/\./g, "-").replace(/\//g, "") + ".tech.agar.io:" + (+d[2] + 2E3)
+            a = d[0] + "s://ip-" + d[1].replace(/\./g, "-").replace(/\//g, "") + ".tech.agar.io:" + +d[2]
         }
         M = [];
         k = [];
@@ -1221,7 +1221,7 @@ console.log("Running Bot Launcher!");
                 e(".agario-profile-picture").attr("src", a.data.url)
             });
             e("#helloContainer").attr("data-logged-in", "1");
-            null != B ? e.ajax("https://m.agar.io/checkToken", {
+            null != B ? e.ajax(ap + "checkToken", {
                 error: function() {
                     console.log("Facebook Fail!");
                     B = null;
@@ -1241,7 +1241,7 @@ console.log("Running Bot Launcher!");
                 cache: !1,
                 crossDomain: !0,
                 data: B
-            }) : e.ajax("https://m.agar.io/facebookLogin", {
+            }) : e.ajax(ap + "facebookLogin", {
                 error: function() {
                     console.log("You have a Facebook problem!");
                     B = null;
@@ -1262,7 +1262,7 @@ console.log("Running Bot Launcher!");
         e("#helloContainer").attr("data-party-state", "4");
         a = decodeURIComponent(a).replace(/.*#/gim, "");
         Ma("#" + d.encodeURIComponent(a));
-        e.ajax(Na + "//m.agar.io/getToken", {
+        e.ajax(ap + "getToken", {
             error: function() {
                 e("#helloContainer").attr("data-party-state", "6")
             },
@@ -1288,6 +1288,7 @@ console.log("Running Bot Launcher!");
     if (!d.agarioNoInit) {
         var Na = d.location.protocol,
             tb = "https:" == Na,
+            ap = Na + "//m.agar.io/",
             xa = d.navigator.userAgent;
         if (-1 != xa.indexOf("Android")) d.ga && d.ga("send", "event", "MobileRedirect", "PlayStore"), setTimeout(function() {
                 d.location.href = "market://details?id=com.miniclip.agar.io"
