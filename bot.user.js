@@ -24,12 +24,12 @@ SOFTWARE.*/
 // @name        AposBot
 // @namespace   AposBot
 // @include     http://agar.io/*
-// @version     3.63
+// @version     3.631
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposBotVersion = 3.63;
+var aposBotVersion = 3.631;
 
 //TODO: Team mode
 //      Detect when people are merging
@@ -582,7 +582,7 @@ function AposBot() {
             //console.log("TOP");
             listToUse.push([
                 [180, true],
-                [0, false], this.computeDistance(blob.x, getMapStartY, blob.x, blob.y)
+                [0, false], this.computeDistance(blob.x, getMapStartY(), blob.x, blob.y)
             ]);
             var lineLeft = this.followAngle(180, blob.x, blob.y, 190 + blob.size);
             var lineRight = this.followAngle(360, blob.x, blob.y, 190 + blob.size);
