@@ -38,9 +38,11 @@ var aposBotVersion = 3.631;
 //      Better wall code
 //      In team mode, make allies be obstacles.
 
+/*
 Number.prototype.mod = function(n) {
     return ((this % n) + n) % n;
 };
+*/
 
 Array.prototype.peek = function() {
     return this[this.length - 1];
@@ -124,6 +126,13 @@ function AposBot() {
         return ["Q - Follow Mouse: " + (this.toggleFollow ? "On" : "Off")];
     };
 
+    // Using mod function instead the prototype directly as it is very slow
+    this.mod = function(num, mod) {
+        if (mod & (mod - 1) === 0 && mod !== 0) {
+            return num & (mod - 1);
+        }
+        return num < 0 ? ((num % mod) + mod) % mod : num % mod;
+    };
     this.splitDistance = 710;
 
     //Given an angle value that was gotten from valueAndleBased(),
@@ -132,9 +141,13 @@ function AposBot() {
         return (15 / (range[1])) * (angleValue * angleValue) - (range[1] / 6);
     };
 
+    this.getMass = function(size) {
+        return Math.pow(size / 10, 2);
+    };
+
     this.valueAngleBased = function(angle, range) {
-        var leftValue = (angle - range[0]).mod(360);
-        var rightValue = (this.rangeToAngle(range) - angle).mod(360);
+        var leftValue = this.mod(angle - range[0], 360);
+        var rightValue = this.mod(this.rangeToAngle(range) - angle, 360);
 
         var bestValue = Math.min(leftValue, rightValue);
 
@@ -144,15 +157,34 @@ function AposBot() {
         return -1;
     };
 
-    this.computeDistance = function(x1, y1, x2, y2) {
+    this.computeDistance = function(x1, y1, x2, y2, s1, s2) {
+        // Make sure there are no null optional params.
+        s1 = s1 || 0;
+        s2 = s2 || 0;
         var xdis = x1 - x2; // <--- FAKE AmS OF COURSE!
         var ydis = y1 - y2;
-        var distance = Math.sqrt(xdis * xdis + ydis * ydis);
+        var distance = Math.sqrt(xdis * xdis + ydis * ydis) - (s1 + s2);
 
         return distance;
     };
 
-    this.computeDistanceFromCircleEdge = function(x1, y1, x2, y2, s2) {
+    // Get a distance that is Inexpensive on the cpu for various purpaces
+    this.computeInexpensiveDistance = function(x1, y1, x2, y2, s1, s2) {
+        // Make sure there are no null optional params.
+        s1 = s1 || 0;
+        s2 = s2 || 0;
+        var xdis = x1 - x2;
+        var ydis = y1 - y2;
+        // Get abs quickly
+        xdis = xdis < 1 ? xdis * -1 : xdis;
+        ydis = ydis < 1 ? ydis * -1 : ydis;
+
+        var distance = xdis + ydis;
+
+        return distance;
+    };
+
+    this.computeDistanceFromCircleEdgeDeprecated = function(x1, y1, x2, y2, s2) {
         var tempD = this.computeDistance(x1, y1, x2, y2);
 
         var offsetX = 0;
@@ -321,7 +353,7 @@ function AposBot() {
 
         for (var i = 0; i < foodList.length; i++) {
             for (var j = 0; j < clusters.length; j++) {
-                if (this.computeDistance(foodList[i][0], foodList[i][1], clusters[j][0], clusters[j][1]) < blobSize * 1.5) {
+                if (this.computeInexpensiveDistance(foodList[i][0], foodList[i][1], clusters[j][0], clusters[j][1]) < blobSize * 2) {
                     clusters[j][0] = (foodList[i][0] + clusters[j][0]) / 2;
                     clusters[j][1] = (foodList[i][1] + clusters[j][1]) / 2;
                     clusters[j][2] += foodList[i][2];
@@ -393,7 +425,7 @@ function AposBot() {
         var slope = this.slopeFromAngle(angle);
         var coords = this.pointsOnLine(slope, useX, useY, distance);
 
-        var side = (angle - 90).mod(360);
+        var side = this.mod(angle - 90, 360);
         if (side < 180) {
             return coords[1];
         } else {
@@ -412,13 +444,13 @@ function AposBot() {
     //angle range2 is within angle range2
     //an Angle is a point and a distance between an other point [5, 40]
     this.angleRangeIsWithin = function(range1, range2) {
-        if (range2[0] == (range2[0] + range2[1]).mod(360)) {
+        if (range2[0] == this.mod(range2[0] + range2[1], 360)) {
             return true;
         }
         //console.log("r1: " + range1[0] + ", " + range1[1] + " ... r2: " + range2[0] + ", " + range2[1]);
 
-        var distanceFrom0 = (range1[0] - range2[0]).mod(360);
-        var distanceFrom1 = (range1[1] - range2[0]).mod(360);
+        var distanceFrom0 = this.mod(range1[0] - range2[0], 360);
+        var distanceFrom1 = this.mod(range1[1] - range2[0], 360);
 
         if (distanceFrom0 < range2[1] && distanceFrom1 < range2[1] && distanceFrom0 < distanceFrom1) {
             return true;
@@ -427,8 +459,8 @@ function AposBot() {
     };
 
     this.angleRangeIsWithinInverted = function(range1, range2) {
-        var distanceFrom0 = (range1[0] - range2[0]).mod(360);
-        var distanceFrom1 = (range1[1] - range2[0]).mod(360);
+        var distanceFrom0 = this.mod(range1[0] - range2[0], 360);
+        var distanceFrom1 = this.mod(range1[1] - range2[0], 360);
 
         if (distanceFrom0 < range2[1] && distanceFrom1 < range2[1] && distanceFrom0 > distanceFrom1) {
             return true;
@@ -437,7 +469,7 @@ function AposBot() {
     };
 
     this.angleIsWithin = function(angle, range) {
-        var diff = (this.rangeToAngle(range) - angle).mod(360);
+        var diff = this.mod(this.rangeToAngle(range) - angle, 360);
         if (diff >= 0 && diff <= range[1]) {
             return true;
         }
@@ -445,7 +477,7 @@ function AposBot() {
     };
 
     this.rangeToAngle = function(range) {
-        return (range[0] + range[1]).mod(360);
+        return this.mod(range[0] + range[1], 360);
     };
 
     this.anglePair = function(range) {
@@ -454,8 +486,8 @@ function AposBot() {
 
     this.computeAngleRanges = function(blob1, blob2) {
         var mainAngle = this.getAngle(blob1.x, blob1.y, blob2.x, blob2.y);
-        var leftAngle = (mainAngle - 90).mod(360);
-        var rightAngle = (mainAngle + 90).mod(360);
+        var leftAngle = this.mod(mainAngle - 90, 360);
+        var rightAngle = this.mod(mainAngle + 90, 360);
 
         var blob1Left = this.followAngle(leftAngle, blob1.x, blob1.y, blob1.size);
         var blob1Right = this.followAngle(rightAngle, blob1.x, blob1.y, blob1.size);
@@ -469,8 +501,8 @@ function AposBot() {
         var blob2AngleLeft = this.getAngle(blob1.x, blob1.y, blob2Left[0], blob2Left[1]);
         var blob2AngleRight = this.getAngle(blob1.x, blob1.y, blob2Right[0], blob2Right[1]);
 
-        var blob1Range = (blob1AngleRight - blob1AngleLeft).mod(360);
-        var blob2Range = (blob2AngleRight - blob2AngleLeft).mod(360);
+        var blob1Range = this.mod(blob1AngleRight - blob1AngleLeft, 360);
+        var blob2Range = this.mod(blob2AngleRight - blob2AngleLeft, 360);
 
         var tempLine = this.followAngle(blob2AngleLeft, blob2Left[0], blob2Left[1], 400);
         //drawLine(blob2Left[0], blob2Left[1], tempLine[0], tempLine[1], 0);
@@ -537,13 +569,13 @@ function AposBot() {
 
         var angleLeft = this.getAngle(cx + ta.x, cy + ta.y, px, py);
         var angleRight = this.getAngle(cx + tb.x, cy + tb.y, px, py);
-        var angleDistance = (angleRight - angleLeft).mod(360);
+        var angleDistance = this.mod(angleRight - angleLeft, 360);
 
         /*if (shouldInvert) {
             var temp = angleLeft;
-            angleLeft = (angleRight + 180).mod(360);
-            angleRight = (temp + 180).mod(360);
-            angleDistance = (angleRight - angleLeft).mod(360);
+            angleLeft = this.mod(angleRight + 180, 360);
+            angleRight = this.mod(temp + 180, 360);
+            angleDistance = this.mod(angleRight - angleLeft, 360);
         }*/
 
         return [angleLeft, angleDistance, [cx + tb.x, cy + tb.y],
@@ -551,9 +583,9 @@ function AposBot() {
         ];
     };
 
-    this.invertAngle = function(range) {
+    this.invertAngle = function(range) { // Where are you getting all of these vars from? (badAngles and angle)
         var angle1 = this.rangeToAngle(badAngles[i]);
-        var angle2 = (badAngles[i][0] - angle1).mod(360);
+        var angle2 = this.mod(badAngles[i][0] - angle, 360);
         return [angle1, angle2];
     },
 
@@ -569,7 +601,7 @@ function AposBot() {
             //console.log("Left");
             listToUse.push([
                 [90, true],
-                [270, false], this.computeDistance(getMapStartX(), blob.y, blob.x, blob.y)
+                [270, false], this.computeInexpensiveDistance(getMapStartX(), blob.y, blob.x, blob.y)
             ]);
             var lineLeft = this.followAngle(90, blob.x, blob.y, 190 + blob.size);
             var lineRight = this.followAngle(270, blob.x, blob.y, 190 + blob.size);
@@ -582,7 +614,7 @@ function AposBot() {
             //console.log("TOP");
             listToUse.push([
                 [180, true],
-                [0, false], this.computeDistance(blob.x, getMapStartY(), blob.x, blob.y)
+                [0, false], this.computeInexpensiveDistance(blob.x, getMapStartY(), blob.x, blob.y)
             ]);
             var lineLeft = this.followAngle(180, blob.x, blob.y, 190 + blob.size);
             var lineRight = this.followAngle(360, blob.x, blob.y, 190 + blob.size);
@@ -595,7 +627,7 @@ function AposBot() {
             //console.log("RIGHT");
             listToUse.push([
                 [270, true],
-                [90, false], this.computeDistance(getMapEndX(), blob.y, blob.x, blob.y)
+                [90, false], this.computeInexpensiveDistance(getMapEndX(), blob.y, blob.x, blob.y)
             ]);
             var lineLeft = this.followAngle(270, blob.x, blob.y, 190 + blob.size);
             var lineRight = this.followAngle(90, blob.x, blob.y, 190 + blob.size);
@@ -608,7 +640,7 @@ function AposBot() {
             //console.log("BOTTOM");
             listToUse.push([
                 [0, true],
-                [180, false], this.computeDistance(blob.x, getMapEndY(), blob.x, blob.y)
+                [180, false], this.computeInexpensiveDistance(blob.x, getMapEndY(), blob.x, blob.y)
             ]);
             var lineLeft = this.followAngle(0, blob.x, blob.y, 190 + blob.size);
             var lineRight = this.followAngle(180, blob.x, blob.y, 190 + blob.size);
@@ -624,7 +656,7 @@ function AposBot() {
     //range = [[angle1, true], [angle2, false]]
 
     this.getAngleIndex = function(listToUse, angle) {
-        if (listToUse.length == 0) {
+        if (listToUse.length === 0) {
             return 0;
         }
 
@@ -653,10 +685,10 @@ function AposBot() {
         }
 
         var startMark = this.getAngleIndex(newListToUse, range[0][0]);
-        var startBool = startMark.mod(2) != startIndex;
+        var startBool = this.mod(startMark, 2) != startIndex;
 
         var endMark = this.getAngleIndex(newListToUse, range[1][0]);
-        var endBool = endMark.mod(2) != startIndex;
+        var endBool = this.mod(endMark, 2) != startIndex;
 
         var removeList = [];
 
@@ -667,12 +699,12 @@ function AposBot() {
                 biggerList = 1;
             }
 
-            for (var i = startMark; i < startMark + (endMark - startMark).mod(newListToUse.length + biggerList); i++) {
-                removeList.push((i).mod(newListToUse.length));
+            for (var i = startMark; i < startMark + this.mod(endMark - startMark, newListToUse.length + biggerList); i++) {
+                removeList.push(this.mod(i, newListToUse.length));
             }
         } else if (startMark < newListToUse.length && endMark < newListToUse.length) {
-            var startDist = (newListToUse[startMark][0] - range[0][0]).mod(360);
-            var endDist = (newListToUse[endMark][0] - range[1][0]).mod(360);
+            var startDist = this.mod(newListToUse[startMark][0] - range[0][0], 360);
+            var endDist = this.mod(newListToUse[endMark][0] - range[1][0], 360);
 
             if (startDist < endDist) {
                 for (var i = 0; i < newListToUse.length; i++) {
@@ -739,8 +771,8 @@ function AposBot() {
                 var angle1 = listToUse[i][0];
                 var angle2 = this.rangeToAngle(listToUse[i]);
 
-                var dist1 = (angle - angle1).mod(360);
-                var dist2 = (angle2 - angle).mod(360);
+                var dist1 = this.mod(angle - angle1, 360);
+                var dist2 = this.mod(angle2 - angle, 360);
 
                 if (dist1 < dist2) {
                     if (this.angleIsWithin(angle1, range)) {
@@ -835,7 +867,7 @@ function AposBot() {
                     //Loop through all the cells that were identified as threats.
                     for (var i = 0; i < allPossibleThreats.length; i++) {
 
-                        var enemyDistance = this.computeDistanceFromCircleEdge(allPossibleThreats[i].x, allPossibleThreats[i].y, player[k].x, player[k].y, allPossibleThreats[i].size);
+                        var enemyDistance = this.computeDistance(allPossibleThreats[i].x, allPossibleThreats[i].y, player[k].x, player[k].y, allPossibleThreats[i].size);
 
                         allPossibleThreats[i].enemyDist = enemyDistance;
                     }
@@ -975,7 +1007,7 @@ function AposBot() {
                         //console.log("Adding to sorted: " + stupidList[i][0][0] + ", " + stupidList[i][1][0]);
                         var tempList = this.addAngle(sortedInterList, stupidList[i]);
 
-                        if (tempList.length == 0) {
+                        if (tempList.length === 0) {
                             console.log("MAYDAY IT'S HAPPENING!");
                             break;
                         } else {
@@ -986,7 +1018,7 @@ function AposBot() {
                     for (var i = 0; i < obstacleList.length; i++) {
                         sortedObList = this.addAngle(sortedObList, obstacleList[i]);
 
-                        if (sortedObList.length == 0) {
+                        if (sortedObList.length === 0) {
                             break;
                         }
                     }
@@ -1005,22 +1037,22 @@ function AposBot() {
                     var obstacleAngles = [];
 
                     for (var i = 0; i < sortedInterList.length; i += 2) {
-                        var angle1 = sortedInterList[(i + offsetI).mod(sortedInterList.length)][0];
-                        var angle2 = sortedInterList[(i + 1 + offsetI).mod(sortedInterList.length)][0];
-                        var diff = (angle2 - angle1).mod(360);
+                        var angle1 = sortedInterList[this.mod(i + offsetI, sortedInterList.length)][0];
+                        var angle2 = sortedInterList[this.mod(i + 1 + offsetI, sortedInterList.length)][0];
+                        var diff = this.mod(angle2 - angle1, 360);
                         goodAngles.push([angle1, diff]);
                     }
 
                     for (var i = 0; i < sortedObList.length; i += 2) {
-                        var angle1 = sortedObList[(i + obOffsetI).mod(sortedObList.length)][0];
-                        var angle2 = sortedObList[(i + 1 + obOffsetI).mod(sortedObList.length)][0];
-                        var diff = (angle2 - angle1).mod(360);
+                        var angle1 = sortedObList[this.mod(i + obOffsetI, sortedObList.length)][0];
+                        var angle2 = sortedObList[this.mod(i + 1 + obOffsetI, sortedObList.length)][0];
+                        var diff = this.mod(angle2 - angle1, 360);
                         obstacleAngles.push([angle1, diff]);
                     }
 
                     for (var i = 0; i < goodAngles.length; i++) {
                         var line1 = this.followAngle(goodAngles[i][0], player[k].x, player[k].y, 100 + player[k].size);
-                        var line2 = this.followAngle((goodAngles[i][0] + goodAngles[i][1]).mod(360), player[k].x, player[k].y, 100 + player[k].size);
+                        var line2 = this.followAngle(this.mod(goodAngles[i][0] + goodAngles[i][1], 360), player[k].x, player[k].y, 100 + player[k].size);
                         drawLine(player[k].x, player[k].y, line1[0], line1[1], 1);
                         drawLine(player[k].x, player[k].y, line2[0], line2[1], 1);
 
@@ -1034,7 +1066,7 @@ function AposBot() {
 
                     for (var i = 0; i < obstacleAngles.length; i++) {
                         var line1 = this.followAngle(obstacleAngles[i][0], player[k].x, player[k].y, 50 + player[k].size);
-                        var line2 = this.followAngle((obstacleAngles[i][0] + obstacleAngles[i][1]).mod(360), player[k].x, player[k].y, 50 + player[k].size);
+                        var line2 = this.followAngle(this.mod(obstacleAngles[i][0] + obstacleAngles[i][1], 360), player[k].x, player[k].y, 50 + player[k].size);
                         drawLine(player[k].x, player[k].y, line1[0], line1[1], 6);
                         drawLine(player[k].x, player[k].y, line2[0], line2[1], 6);
 
@@ -1046,7 +1078,7 @@ function AposBot() {
                         drawPoint(line2[0], line2[1], 0, "" + i + ": 1");
                     }
 
-                    if (this.toggleFollow && goodAngles.length == 0) {
+                    if (this.toggleFollow && goodAngles.length === 0) {
                         //This is the follow the mouse mode
                         var distance = this.computeDistance(player[k].x, player[k].y, tempPoint[0], tempPoint[1]);
 
@@ -1069,7 +1101,7 @@ function AposBot() {
                                 bIndex = goodAngles[i];
                             }
                         }
-                        var perfectAngle = (bIndex[0] + bIndex[1] / 2).mod(360);
+                        var perfectAngle = this.mod(bIndex[0] + bIndex[1] / 2, 360);
 
                         perfectAngle = this.shiftAngle(obstacleAngles, perfectAngle, bIndex);
 
@@ -1079,7 +1111,7 @@ function AposBot() {
                         drawLine(player[k].x, player[k].y, line1[0], line1[1], 7);
                         //tempMoveX = line1[0];
                         //tempMoveY = line1[1];
-                    } else if (badAngles.length > 0 && goodAngles == 0) {
+                    } else if (badAngles.length > 0 && goodAngles.length === 0) {
                         //When there are enemies around but no good angles
                         //You're likely screwed. (This should never happen.)
 
@@ -1096,7 +1128,7 @@ function AposBot() {
                         for (var i = 0; i < angleWeights.length; i++){
                             if (angleWeights[i][1] > maxDist){
                                 maxDist = angleWeights[i][1];
-                                finalAngle = (angleWeights[i][0] + 180).mod(360);
+                                finalAngle = this.mod(angleWeights[i][0] + 180, 360);
                             }
                         }
                         var line1 = this.followAngle(finalAngle,player[k].x,player[k].y,f.verticalDistance());
@@ -1149,7 +1181,7 @@ function AposBot() {
                     drawPoint(tempPoint[0], tempPoint[1], tempPoint[2], "");
                     //drawPoint(tempPoint[0], tempPoint[1], tempPoint[2], "" + Math.floor(this.computeDistance(tempPoint[0], tempPoint[1], I, J)));
                     //drawLine(tempPoint[0], tempPoint[1], player[0].x, player[0].y, 6);
-                    //console.log("Slope: " + slope(tempPoint[0], tempPoint[1], player[0].x, player[0].y) + " Angle: " + getAngle(tempPoint[0], tempPoint[1], player[0].x, player[0].y) + " Side: " + (getAngle(tempPoint[0], tempPoint[1], player[0].x, player[0].y) - 90).mod(360));
+                    //console.log("Slope: " + slope(tempPoint[0], tempPoint[1], player[0].x, player[0].y) + " Angle: " + getAngle(tempPoint[0], tempPoint[1], player[0].x, player[0].y) + " Side: " + this.mod(getAngle(tempPoint[0], tempPoint[1], player[0].x, player[0].y) - 90, 360));
                     tempPoint[2] = 1;
 
                     //console.log("Done working on blob: " + i);
