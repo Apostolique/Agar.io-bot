@@ -184,7 +184,7 @@ function AposBot() {
         return distance;
     };
 
-    this.computeDistanceFromCircleEdgeDepretiated = function(x1, y1, x2, y2, s2) {
+    this.computeDistanceFromCircleEdgeDeprecated = function(x1, y1, x2, y2, s2) {
         var tempD = this.computeDistance(x1, y1, x2, y2);
 
         var offsetX = 0;
