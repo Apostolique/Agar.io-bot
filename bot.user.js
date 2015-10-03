@@ -168,8 +168,8 @@ function AposBot() {
         return distance;
     };
 
-    // Get a distance that is inexpencive on the cpu for various purpaces
-    this.computeInexpenciveDistance = function(x1, y1, x2, y2, s1, s2) {
+    // Get a distance that is Inexpensive on the cpu for various purpaces
+    this.computeInexpensiveDistance = function(x1, y1, x2, y2, s1, s2) {
         // Make sure there are no null optional params.
         s1 = s1 || 0;
         s2 = s2 || 0;
@@ -353,7 +353,7 @@ function AposBot() {
 
         for (var i = 0; i < foodList.length; i++) {
             for (var j = 0; j < clusters.length; j++) {
-                if (this.computeInexpenciveDistance(foodList[i][0], foodList[i][1], clusters[j][0], clusters[j][1]) < blobSize * 2) {
+                if (this.computeInexpensiveDistance(foodList[i][0], foodList[i][1], clusters[j][0], clusters[j][1]) < blobSize * 2) {
                     clusters[j][0] = (foodList[i][0] + clusters[j][0]) / 2;
                     clusters[j][1] = (foodList[i][1] + clusters[j][1]) / 2;
                     clusters[j][2] += foodList[i][2];
@@ -601,7 +601,7 @@ function AposBot() {
             //console.log("Left");
             listToUse.push([
                 [90, true],
-                [270, false], this.computeInexpenciveDistance(getMapStartX(), blob.y, blob.x, blob.y)
+                [270, false], this.computeInexpensiveDistance(getMapStartX(), blob.y, blob.x, blob.y)
             ]);
             var lineLeft = this.followAngle(90, blob.x, blob.y, 190 + blob.size);
             var lineRight = this.followAngle(270, blob.x, blob.y, 190 + blob.size);
@@ -614,7 +614,7 @@ function AposBot() {
             //console.log("TOP");
             listToUse.push([
                 [180, true],
-                [0, false], this.computeInexpenciveDistance(blob.x, getMapStartY(), blob.x, blob.y)
+                [0, false], this.computeInexpensiveDistance(blob.x, getMapStartY(), blob.x, blob.y)
             ]);
             var lineLeft = this.followAngle(180, blob.x, blob.y, 190 + blob.size);
             var lineRight = this.followAngle(360, blob.x, blob.y, 190 + blob.size);
@@ -627,7 +627,7 @@ function AposBot() {
             //console.log("RIGHT");
             listToUse.push([
                 [270, true],
-                [90, false], this.computeInexpenciveDistance(getMapEndX(), blob.y, blob.x, blob.y)
+                [90, false], this.computeInexpensiveDistance(getMapEndX(), blob.y, blob.x, blob.y)
             ]);
             var lineLeft = this.followAngle(270, blob.x, blob.y, 190 + blob.size);
             var lineRight = this.followAngle(90, blob.x, blob.y, 190 + blob.size);
@@ -640,7 +640,7 @@ function AposBot() {
             //console.log("BOTTOM");
             listToUse.push([
                 [0, true],
-                [180, false], this.computeInexpenciveDistance(blob.x, getMapEndY(), blob.x, blob.y)
+                [180, false], this.computeInexpensiveDistance(blob.x, getMapEndY(), blob.x, blob.y)
             ]);
             var lineLeft = this.followAngle(0, blob.x, blob.y, 190 + blob.size);
             var lineRight = this.followAngle(180, blob.x, blob.y, 190 + blob.size);
