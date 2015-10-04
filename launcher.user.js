@@ -1936,7 +1936,7 @@ console.log("Running Bot Launcher!");
                     window.jQuery('#launcher-wrapper').remove();
                     window.jQuery('<div id="launcher-wrapper">').insertBefore("#agario-main-buttons");
 
-                    window.jQuery('#launcher-wrapper').append(window.jQuery('<select id="bList" class="form-control" onchange="setBotIndex($(this).val());" />'));
+                    window.jQuery('#launcher-wrapper').append(window.jQuery('<select id="bList" class="form-control" onchange="setBotIndex(window.jQuery(this).val());" />'));
                     window.jQuery('#launcher-wrapper').addClass('form-group');
 
                     for (var i = 0; i < window.botList.length; i++) {
@@ -2479,7 +2479,7 @@ apos('send', 'pageview');
 
 window.ignoreStream = false;
 window.refreshTwitch = function() {
-    $.ajax({
+    window.jQuery.ajax({
         url: "https://api.twitch.tv/kraken/streams/apostolique",
         cache: false,
         dataType: "jsonp"
