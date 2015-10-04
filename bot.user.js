@@ -101,6 +101,7 @@ window.botList = window.botList || [];
 
 /*function QuickBot() {
     this.name = "QuickBot V1";
+    this.customParameters = {};
     this.keyAction = function(key) {};
     this.displayText = function() {return [];};
     this.mainLoop = function() {
