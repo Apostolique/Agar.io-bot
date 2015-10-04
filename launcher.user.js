@@ -19,11 +19,11 @@ SOFTWARE.*/
 // @name        AposLauncher
 // @namespace   AposLauncher
 // @include     http://agar.io/*
-// @version     4.14
+// @version     4.141
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
-var aposLauncherVersion = 4.14;
+var aposLauncherVersion = 4.141;
 
 Number.prototype.mod = function(n) {
     return ((this % n) + n) % n;
@@ -350,7 +350,7 @@ console.log("Running Bot Launcher!");
         F = [];
         z = A = null;
         R = 0;
-        $ = !1;
+        bo = !1;
         console.log("Connecting to " + a);
         //UPDATE
         serverIP = a;
@@ -389,7 +389,7 @@ console.log("Running Bot Launcher!");
     }
 
     function vb() {
-        $ && (ma = 500);
+        bo && (ma = 500);
         console.log("socket close");
         setTimeout(I, ma);
         ma *= 2
@@ -493,7 +493,7 @@ console.log("Running Bot Launcher!");
 
     function xb(a, b) {
         bb = C = Date.now();
-        $ || ($ = !0, e("#connecting").hide(), cb(), L && (L(), L = null));
+        bo || (bo = !0, e("#connecting").hide(), cb(), L && (L(), L = null));
         var c = Math.random();
         Ha = !1;
         var d = a.getUint16(b, !0);
@@ -668,7 +668,7 @@ console.log("Running Bot Launcher!");
     }
 
     function cb() {
-        if (T() && $ && null != K) {
+        if (T() && bo && null != K) {
             var a = N(1 + 2 * K.length);
             a.setUint8(0, 0);
             for (var b = 0; b < K.length; ++b) a.setUint16(1 + 2 * b, K.charCodeAt(b), !0);
@@ -1388,7 +1388,7 @@ console.log("Running Bot Launcher!");
                 mb = 0,
                 Db = ["#333333", "#FF3333", "#33FF33", "#3333FF"],
                 Ia = !1,
-                $ = !1,
+                bo = !1,
                 bb = 0,
                 B = null,
                 J = 1,
@@ -2477,7 +2477,7 @@ apos('send', 'pageview');
 
 window.ignoreStream = false;
 window.refreshTwitch = function() {
-    $.ajax({
+    window.jQuery.ajax({
         url: "https://api.twitch.tv/kraken/streams/apostolique",
         cache: false,
         dataType: "jsonp"
