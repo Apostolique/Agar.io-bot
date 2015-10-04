@@ -19,11 +19,11 @@ SOFTWARE.*/
 // @name        AposLauncher
 // @namespace   AposLauncher
 // @include     http://agar.io/*
-// @version     4.13
+// @version     4.14
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
-var aposLauncherVersion = 4.13;
+var aposLauncherVersion = 4.14;
 
 Number.prototype.mod = function(n) {
     return ((this % n) + n) % n;
@@ -207,6 +207,7 @@ console.log("Running Bot Launcher!");
 
     function Ra(a) {
         J *= Math.pow(.9, a.wheelDelta / -120 || a.detail || 0);
+        console.log("J: " + J);
         //UPDATE
         0.07 > J && (J = 0.07);
         J > 4 / h && (J = 4 / h)
@@ -556,12 +557,13 @@ console.log("Running Bot Launcher!");
             if (isRemoved && (window.getLastUpdate() - interNodes[element].getUptimeTime()) > 3000) {
                 delete interNodes[element];
             } else {
-                for (var i = 0; i < getPlayer().length; i++) {
-                    if (isRemoved && computeDistance(getPlayer()[i].x, getPlayer()[i].y, interNodes[element].x, interNodes[element].y) < getPlayer()[i].size + 710) {
+                if (isRemoved &&
+                    interNodes[element].x > (getX() - (1920 / 2) / getZoomlessRatio()) &&
+                    interNodes[element].x < (getX() + (1920 / 2) / getZoomlessRatio()) &&
+                    interNodes[element].y > getY() - (1080 / 2) / getZoomlessRatio() &&
+                    interNodes[element].y < getY() + (1080 / 2) / getZoomlessRatio()) {
 
-                        delete interNodes[element];
-                        break;
-                    }
+                    delete interNodes[element];
                 }
             }
         });
@@ -570,7 +572,7 @@ console.log("Running Bot Launcher!");
         b += 4;
         for (u = 0; u < c; u++) d = a.getUint32(b, !0), b += 4, n = E[d], null != n && n.X();
         //UPDATE
-        //Ha && 0 == k.length && Sa(!1)
+        Ha && 0 == k.length && Sa(!1)
     }
 
     //UPDATE
@@ -648,7 +650,7 @@ console.log("Running Bot Launcher!");
             apos('send', 'pageview');
         }
 
-        if (getPlayer().length == 0) {
+        if (getPlayer().length == 0 && !firstStart) {
             console.log("Revive");
             setNick(originalName);
             reviving = true;
@@ -719,11 +721,22 @@ console.log("Running Bot Launcher!");
         return a *= J
     }
 
+    //UPDATE
+    function hb2() {
+        var a;
+        a = Math.max(r / 1080, m / 1920);
+        return a;
+    }
+
     function yb() {
         if (0 != k.length) {
             for (var a = 0, b = 0; b < k.length; b++) a += k[b].size;
+            //UPDATE
+            var a2 = Math.pow(Math.min(64 / a, 1), .4) * hb2();
             a = Math.pow(Math.min(64 / a, 1), .4) * hb();
-            h = (9 * h + a) / 10
+            h = (9 * h + a) / 10;
+            //UPDATE
+            h2 = (9 * h2 + a2) / 10;
         }
     }
 
@@ -747,7 +760,8 @@ console.log("Running Bot Launcher!");
             ca = h;
             s = (s + a) / 2;
             t = (t + c) / 2;
-        } else s = (29 * s + aa) / 30, t = (29 * t + ba) / 30, h = (9 * h + ca * hb()) / 10;
+            //UPDATE
+        } else s = (29 * s + aa) / 30, t = (29 * t + ba) / 30, h = (9 * h + ca * hb()) / 10, h2 = (9 * h2 + ca * hb2()) / 10;
         qb();
         Aa();
         Ia || f.clearRect(0, 0, m, r);
@@ -1314,6 +1328,7 @@ console.log("Running Bot Launcher!");
                 dText = [],
                 lines = [],
                 names = ["NotReallyABot"],
+                firstStart = true;
                 originalName = names[Math.floor(Math.random() * names.length)],
                 sessionScore = 0,
                 serverIP = "",
@@ -1349,6 +1364,7 @@ console.log("Running Bot Launcher!");
                 ra = 1E4,
                 sa = 1E4,
                 h = 1,
+                h2 = 1,
                 y = null,
                 kb = !0,
                 wa = !0,
@@ -1398,6 +1414,7 @@ console.log("Running Bot Launcher!");
                 var ka = null;
                 d.setNick = function(a) {
                     //UPDATE
+                    firstStart = false;
                     originalName = a;
                     if (getPlayer().length == 0) {
                         lifeTimer = new Date();
@@ -1775,6 +1792,10 @@ console.log("Running Bot Launcher!");
                  */
                 window.getRatio = function() {
                     return h;
+                }
+
+                window.getZoomlessRatio = function() {
+                    return h2;
                 }
 
                 /**
