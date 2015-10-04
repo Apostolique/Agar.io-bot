@@ -24,12 +24,12 @@ SOFTWARE.*/
 // @name        AposBot
 // @namespace   AposBot
 // @include     http://agar.io/*
-// @version     3.64
+// @version     3.641
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposBotVersion = 3.64;
+var aposBotVersion = 3.641;
 
 //TODO: Team mode
 //      Detect when people are merging
@@ -176,8 +176,8 @@ function AposBot() {
         var xdis = x1 - x2;
         var ydis = y1 - y2;
         // Get abs quickly
-        xdis = xdis < 1 ? xdis * -1 : xdis;
-        ydis = ydis < 1 ? ydis * -1 : ydis;
+        xdis = xdis < 0 ? xdis * -1 : xdis;
+        ydis = ydis < 0 ? ydis * -1 : ydis;
 
         var distance = xdis + ydis;
 
