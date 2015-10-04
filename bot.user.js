@@ -24,12 +24,12 @@ SOFTWARE.*/
 // @name        AposBot
 // @namespace   AposBot
 // @include     http://agar.io/*
-// @version     3.631
+// @version     3.64
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposBotVersion = 3.631;
+var aposBotVersion = 3.64;
 
 //TODO: Team mode
 //      Detect when people are merging
@@ -600,11 +600,11 @@ function AposBot() {
             //LEFT
             //console.log("Left");
             listToUse.push([
-                [90, true],
-                [270, false], this.computeInexpensiveDistance(getMapStartX(), blob.y, blob.x, blob.y)
+                [115, true],
+                [245, false], this.computeInexpensiveDistance(getMapStartX(), blob.y, blob.x, blob.y)
             ]);
-            var lineLeft = this.followAngle(90, blob.x, blob.y, 190 + blob.size);
-            var lineRight = this.followAngle(270, blob.x, blob.y, 190 + blob.size);
+            var lineLeft = this.followAngle(115, blob.x, blob.y, 190 + blob.size);
+            var lineRight = this.followAngle(245, blob.x, blob.y, 190 + blob.size);
             drawLine(blob.x, blob.y, lineLeft[0], lineLeft[1], 5);
             drawLine(blob.x, blob.y, lineRight[0], lineRight[1], 5);
             drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
@@ -613,11 +613,11 @@ function AposBot() {
             //TOP
             //console.log("TOP");
             listToUse.push([
-                [180, true],
-                [0, false], this.computeInexpensiveDistance(blob.x, getMapStartY(), blob.x, blob.y)
+                [205, true],
+                [335, false], this.computeInexpensiveDistance(blob.x, getMapStartY(), blob.x, blob.y)
             ]);
-            var lineLeft = this.followAngle(180, blob.x, blob.y, 190 + blob.size);
-            var lineRight = this.followAngle(360, blob.x, blob.y, 190 + blob.size);
+            var lineLeft = this.followAngle(205, blob.x, blob.y, 190 + blob.size);
+            var lineRight = this.followAngle(335, blob.x, blob.y, 190 + blob.size);
             drawLine(blob.x, blob.y, lineLeft[0], lineLeft[1], 5);
             drawLine(blob.x, blob.y, lineRight[0], lineRight[1], 5);
             drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
@@ -626,11 +626,11 @@ function AposBot() {
             //RIGHT
             //console.log("RIGHT");
             listToUse.push([
-                [270, true],
-                [90, false], this.computeInexpensiveDistance(getMapEndX(), blob.y, blob.x, blob.y)
+                [295, true],
+                [65, false], this.computeInexpensiveDistance(getMapEndX(), blob.y, blob.x, blob.y)
             ]);
-            var lineLeft = this.followAngle(270, blob.x, blob.y, 190 + blob.size);
-            var lineRight = this.followAngle(90, blob.x, blob.y, 190 + blob.size);
+            var lineLeft = this.followAngle(295, blob.x, blob.y, 190 + blob.size);
+            var lineRight = this.followAngle(65, blob.x, blob.y, 190 + blob.size);
             drawLine(blob.x, blob.y, lineLeft[0], lineLeft[1], 5);
             drawLine(blob.x, blob.y, lineRight[0], lineRight[1], 5);
             drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
@@ -639,11 +639,11 @@ function AposBot() {
             //BOTTOM
             //console.log("BOTTOM");
             listToUse.push([
-                [0, true],
-                [180, false], this.computeInexpensiveDistance(blob.x, getMapEndY(), blob.x, blob.y)
+                [25, true],
+                [155, false], this.computeInexpensiveDistance(blob.x, getMapEndY(), blob.x, blob.y)
             ]);
-            var lineLeft = this.followAngle(0, blob.x, blob.y, 190 + blob.size);
-            var lineRight = this.followAngle(180, blob.x, blob.y, 190 + blob.size);
+            var lineLeft = this.followAngle(25, blob.x, blob.y, 190 + blob.size);
+            var lineRight = this.followAngle(155, blob.x, blob.y, 190 + blob.size);
             drawLine(blob.x, blob.y, lineLeft[0], lineLeft[1], 5);
             drawLine(blob.x, blob.y, lineRight[0], lineRight[1], 5);
             drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
@@ -811,6 +811,11 @@ function AposBot() {
             //The current destination that the cells were going towards.
             var tempMoveX = getPointX();
             var tempMoveY = getPointY();
+
+            drawLine(getX() - (1920 / 2) / getZoomlessRatio(), getY() - (1080 / 2) / getZoomlessRatio(), getX() + (1920 / 2) / getZoomlessRatio(), getY() - (1080 / 2) / getZoomlessRatio(), 7);
+            drawLine(getX() - (1920 / 2) / getZoomlessRatio(), getY() + (1080 / 2) / getZoomlessRatio(), getX() + (1920 / 2) / getZoomlessRatio(), getY() + (1080 / 2) / getZoomlessRatio(), 7);
+            drawLine(getX() - (1920 / 2) / getZoomlessRatio(), getY() - (1080 / 2) / getZoomlessRatio(), getX() - (1920 / 2) / getZoomlessRatio(), getY() + (1080 / 2) / getZoomlessRatio(), 7);
+            drawLine(getX() + (1920 / 2) / getZoomlessRatio(), getY() - (1080 / 2) / getZoomlessRatio(), getX() + (1920 / 2) / getZoomlessRatio(), getY() + (1080 / 2) / getZoomlessRatio(), 7);
 
             //This variable will be returned at the end.
             //It will contain the destination choices for all the cells.
