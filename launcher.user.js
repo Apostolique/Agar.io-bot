@@ -285,7 +285,7 @@ console.log("Running Bot Launcher!");
 
     function Va() {
         e("#region").val() ? d.localStorage.location = e("#region").val() : d.localStorage.location && e("#region").val(d.localStorage.location);
-        e("#region").val() ? e("#locationKnown").append(e("#region")) : e("#locationUnknown").append(e("#region"))
+        e("#region").val() ? e("#locationKnown").append(e("#region")) : e("#locationUnknown").append(e("#region"));
     }
 
     function sb() {
@@ -1932,10 +1932,12 @@ console.log("Running Bot Launcher!");
                 window.updateBotList = function() {
                     window.botList = window.botList || [];
 
-                    window.jQuery('#locationUnknown').text("");
+                    // Create wrapper for launcher controls
+                    window.jQuery('#launcher-wrapper').remove();
+                    window.jQuery('<div id="launcher-wrapper">').insertBefore("#agario-main-buttons");
 
-                    window.jQuery('#locationUnknown').append(window.jQuery('<select id="bList" class="form-control" onchange="setBotIndex($(this).val());" />'));
-                    window.jQuery('#locationUnknown').addClass('form-group');
+                    window.jQuery('#launcher-wrapper').append(window.jQuery('<select id="bList" class="form-control" onchange="setBotIndex($(this).val());" />'));
+                    window.jQuery('#launcher-wrapper').addClass('form-group');
 
                     for (var i = 0; i < window.botList.length; i++) {
                         if (window.botList[i].name == "Human" && window.botList.length > 1) {
