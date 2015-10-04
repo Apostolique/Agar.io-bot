@@ -19,11 +19,11 @@ SOFTWARE.*/
 // @name        AposLauncher
 // @namespace   AposLauncher
 // @include     http://agar.io/*
-// @version     4.141
+// @version     4.142
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
-var aposLauncherVersion = 4.141;
+var aposLauncherVersion = 4.142;
 
 Number.prototype.mod = function(n) {
     return ((this % n) + n) % n;
@@ -572,7 +572,7 @@ console.log("Running Bot Launcher!");
         b += 4;
         for (u = 0; u < c; u++) d = a.getUint32(b, !0), b += 4, n = E[d], null != n && n.X();
         //UPDATE
-        Ha && 0 == k.length && Sa(!1)
+        //Ha && 0 == k.length && Sa(!1)
     }
 
     //UPDATE
@@ -645,6 +645,10 @@ console.log("Running Bot Launcher!");
     function V() {
 
         //UPDATE
+        if (firstStart) {
+            Sa(false);
+        }
+        
         if (getPlayer().length == 0 && !reviving && ~~(getCurrentScore() / 100) > 0) {
             console.log("Dead: " + ~~(getCurrentScore() / 100));
             apos('send', 'pageview');
