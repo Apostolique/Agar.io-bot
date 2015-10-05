@@ -285,7 +285,7 @@ console.log("Running Bot Launcher!");
 
     function Va() {
         e("#region").val() ? d.localStorage.location = e("#region").val() : d.localStorage.location && e("#region").val(d.localStorage.location);
-        e("#region").val() ? e("#locationKnown").append(e("#region")) : e("#locationUnknown").append(e("#region"))
+        e("#region").val() ? e("#locationKnown").append(e("#region")) : e("#locationUnknown").append(e("#region"));
     }
 
     function sb() {
@@ -1912,6 +1912,84 @@ console.log("Running Bot Launcher!");
                 window.setBotIndex = function(a) {
                     console.log("Changing bot");
                     botIndex = a;
+                    setLauncherCustomParameters(window.botList[a]);
+                }
+
+                window.setLauncherCustomParameterOnChange = function(a, b, c) {
+                    a.on('change input', function() {
+                        var val = window.jQuery(this).val();
+                        c.value = val;
+                        b.text(val);
+                    });
+                }
+
+                window.setLauncherCustomParameters = function(a) {
+                    window.jQuery('#launcher-custom-params').remove();
+                    window.jQuery('#launcher-wrapper').append(window.jQuery('<div id="launcher-custom-params">'));
+
+                    // If no custom parameters are defined, abort
+                    if (a.customParameters === undefined) {
+                        return;
+                    }
+
+                    for (var param in a.customParameters) {
+                        var form = window.jQuery('<div class="form-group">');
+                        var label = window.jQuery('<label>');
+                        var value = window.jQuery('<span style="float: right; display: none;">');
+                        var input = window.jQuery('<input class="form-control">');
+
+                        if (a.customParameters[param].label !== undefined) {
+                            label.text(a.customParameters[param].label);
+                        }
+                        else {
+                            label.text(param);
+                        }
+
+                        for (var paramKey in a.customParameters[param]) {
+                            if (paramKey == 'label') {
+                                continue;
+                            }
+
+                            if (paramKey == 'value') {
+                                value.text(a.customParameters[param][paramKey]);
+                            }
+                            else if (paramKey == 'type' && a.customParameters[param][paramKey] == 'range') {
+                                input.removeClass('form-control');
+                                value.show();
+                            }
+
+                            input.attr(paramKey, a.customParameters[param][paramKey]);
+                        }
+
+                        setLauncherCustomParameterOnChange(input, value, a.customParameters[param]);
+
+                        form.append(label);
+                        form.append(value);
+                        form.append(input);
+                        form.appendTo(window.jQuery('#launcher-custom-params'));
+                    }
+                }
+
+                window.setLauncherBotList = function() {
+                    window.jQuery('#launcher-bot-list').remove();
+                    window.jQuery('#launcher-wrapper').append(window.jQuery('<div id="launcher-bot-list" class="form-group">'));
+                    var select = window.jQuery('<select id="bList" class="form-control" onchange="setBotIndex(window.jQuery(this).val());" />');
+                    
+                    for (var i = 0; i < window.botList.length; i++) {
+                        if (window.botList[i].name == "Human" && window.botList.length > 1) {
+                            if (botIndex == i) {
+                                botIndex = (botIndex + 1).mod(window.botList.length);
+                            }
+                            continue;
+                        }
+
+                        window.jQuery('<option />', {
+                            value: i,
+                            text: window.botList[i].name
+                        }).appendTo(select);
+                    }
+
+                    select.appendTo(window.jQuery('#launcher-bot-list'));
                 }
 
                 window.setMessage = function(a) {
@@ -1936,25 +2014,14 @@ console.log("Running Bot Launcher!");
                 window.updateBotList = function() {
                     window.botList = window.botList || [];
 
-                    window.jQuery('#locationUnknown').text("");
+                    // Create wrapper for launcher controls
+                    window.jQuery('#launcher-wrapper').remove();
+                    window.jQuery('<div id="launcher-wrapper">').insertBefore('#agario-main-buttons');
 
-                    window.jQuery('#locationUnknown').append(window.jQuery('<select id="bList" class="form-control" onchange="setBotIndex($(this).val());" />'));
-                    window.jQuery('#locationUnknown').addClass('form-group');
+                    setLauncherBotList();
 
-                    for (var i = 0; i < window.botList.length; i++) {
-                        if (window.botList[i].name == "Human" && window.botList.length > 1) {
-                            if (botIndex == i) {
-                                botIndex = (botIndex + 1).mod(window.botList.length);
-                            }
-                            continue;
-                        }
-
-                        var bList = window.jQuery('#bList');
-                        window.jQuery('<option />', {
-                            value: i,
-                            text: window.botList[i].name
-                        }).appendTo(bList);
-                    }
+                    // Show initial custom parameters
+                    setLauncherCustomParameters(window.botList[window.jQuery('#bList').val()]);
                 }
 
                 var ma = 500,
