@@ -297,6 +297,8 @@ function AposBot() {
         var splitTargetList = [];
 
         var player = getPlayer();
+        
+        var mergeList = [];
 
         Object.keys(listToUse).forEach(function(element, index) {
             var isMe = that.isItMe(player, listToUse[element]);
@@ -310,6 +312,7 @@ function AposBot() {
                 } else if (that.isThreat(blob, listToUse[element])) {
                     //IT'S DANGER!
                     threatList.push(listToUse[element]);
+                    mergeList.push(listToUse[element]);
                 } else if (that.isVirus(blob, listToUse[element])) {
                     //IT'S VIRUS!
                     virusList.push(listToUse[element]);
@@ -317,7 +320,10 @@ function AposBot() {
                 else if (that.isSplitTarget(that, blob, listToUse[element])) {
                         drawCircle(listToUse[element].x, listToUse[element].y, listToUse[element].size + 50, 7);
                         splitTargetList.push(listToUse[element]);
-                        foodElementList.push(listToUse[element]);
+                        //foodElementList.push(listToUse[element]);
+                        mergeList.push(listToUse[element]);
+                }
+                else {if (that.isVirus(null, listToUse[element])==false) {mergeList.push(listToUse[element]);}
                     }
             }/*else if(isMe && (getBlobCount(getPlayer()) > 0)){
                 //Attempt to make the other cell follow the mother one
@@ -329,7 +335,37 @@ function AposBot() {
         for (var i = 0; i < foodElementList.length; i++) {
             foodList.push([foodElementList[i].x, foodElementList[i].y, foodElementList[i].size]);
         }
-
+        
+        //console.log("Merglist length: " +  mergeList.length)
+        //cell merging
+        for (var i = 0; i < mergeList.length; i++) {
+            for (var z = 0; z < mergeList.length; z++) {
+                if (z != i && that.isMerging(mergeList[i], mergeList[z])) { //z != i && 
+                        //found cells that appear to be merging - if they constitute a threat add them to the theatlist
+                        
+                        //clone us a new cell
+                        var newThreat = {};
+                        var prop;
+                        
+                        for (prop in mergeList[i]) {
+                            newThreat[prop] = mergeList[i][prop];
+                        }
+                        
+                        //average distance and sum the size
+                        newThreat.x = (mergeList[i].x + mergeList[z].x)/2;
+                        newThreat.y = (mergeList[i].y + mergeList[z].y)/2;
+                        newThreat.size = (mergeList[i].size + mergeList[z].size);
+                        newThreat.nopredict = true;
+                        //check its a threat
+                        if (that.isThreat(blob, newThreat)) {
+                             //IT'S DANGER!
+                            threatList.push(newThreat);
+                        }   
+                                          
+                }
+            }
+        }
+        
         return [foodList, threatList, virusList, splitTargetList];
     };
 
