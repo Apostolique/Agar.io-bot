@@ -136,6 +136,19 @@ function AposBot() {
     };
     this.splitDistance = 710;
 
+    this.isMerging = function(cell1, cell2) {        
+        var dist = this.computeDistance(cell1.x, cell1.y, cell2.x, cell2.y, cell1.size, cell2.size);
+        
+        //debug logging
+        if (false){
+        var params = [cell1.x, cell1.y, cell2.x, cell2.y, cell1.size, cell2.size, dist];
+        var debugString = params.join(", ");
+        console.log("Merge:" + debugString);
+        }
+        
+        return dist <= -50;
+    };
+
     //Given an angle value that was gotten from valueAndleBased(),
     //returns a new value that scales it appropriately.
     this.paraAngleValue = function(angleValue, range) {
