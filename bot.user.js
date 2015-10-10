@@ -220,7 +220,7 @@ function AposBot() {
             return true;
         }
         return false;
-    },
+    };
 
     this.canSplit = function(player1, player2) {
         return this.compareSize(player1, player2, 2.8) && !this.compareSize(player1, player2, 20);
@@ -274,9 +274,15 @@ function AposBot() {
         }
         return false;
     };
+    
+    this.isAttackableTarget = function(blob, cell) {
+        if (!cell.isVirus() && this.compareSize(cell, blob, 3) && cell.size > 13) {
+            return true;
+        }
+        return false;
+    };
 
-    this.isThreat = function(blob, cell) {
-        
+    this.isThreat = function(blob, cell) {      
         if (!cell.isVirus() && this.compareSize(blob, cell, 1.30)) {
             return true;
         }
@@ -313,6 +319,7 @@ function AposBot() {
         var threatList = [];
         var virusList = [];
         var splitTargetList = [];
+        var attackableTargetList = [];
 
         var player = getPlayer();
         
@@ -325,8 +332,9 @@ function AposBot() {
                 if (that.isFood(blob, listToUse[element]) && listToUse[element].isNotMoving()) {
                     //IT'S FOOD!
                     foodElementList.push(listToUse[element]);
-
-                    
+                } else if (that.isAttackableTarget(blob, listToUse[element])) {
+                    //EASYKILL!!
+                    attackableTargetList.push(listToUse[element]);
                 } else if (that.isThreat(blob, listToUse[element])) {
                     //IT'S DANGER!
                     threatList.push(listToUse[element]);
@@ -384,7 +392,7 @@ function AposBot() {
             }
         }
         
-        return [foodList, threatList, virusList, splitTargetList];
+        return [foodList, threatList, virusList, splitTargetList, attackableTargetList];
     };
 
     this.getAll = function(blob) {
@@ -911,6 +919,9 @@ function AposBot() {
                     var allPossibleThreats = allIsAll[1];
                     //The viruses are stored in element 2 of allIsAll
                     var allPossibleViruses = allIsAll[2];
+                    
+                    //The viruses are stored in element 2 of allIsAll
+                    var allAttackableTargets = allIsAll[4];
 
                     //The bot works by removing angles in which it is too
                     //dangerous to travel towards to.
@@ -923,6 +934,11 @@ function AposBot() {
                     var clusterAllFood = this.clusterFood(allPossibleFood, player[k].size);
 
                     //console.log("Looking for enemies!");
+                    
+                    for (var i = 0; i < allAttackableTargets.length; i++) {
+                        drawCircle(allAttackableTargets[i].x, allAttackableTargets[i].y, player[k].size + 50, 1);
+                        drawLine(player[k].x, player[k].y, allAttackableTargets[i].x, allAttackableTargets[i].y, 0);
+                    }
 
                     //Loop through all the cells that were identified as threats.
                     for (var i = 0; i < allPossibleThreats.length; i++) {

@@ -23,7 +23,7 @@ SOFTWARE.*/
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
-var aposLauncherVersion = 4.145;
+var aposLauncherVersion = 4.146;
 
 Number.prototype.mod = function(n) {
     return ((this % n) + n) % n;
@@ -889,22 +889,31 @@ console.log("Running Bot Launcher!");
         d.save();
         for (var i = 0; i < circles.length; i++) {
             if (circles[i][3] == 0) {
+                // RED
                 d.strokeStyle = "#FF0000";
             } else if (circles[i][3] == 1) {
+                // GREEN
                 d.strokeStyle = "#00FF00";
             } else if (circles[i][3] == 2) {
+                // BLUE
                 d.strokeStyle = "#0000FF";
             } else if (circles[i][3] == 3) {
+                // ORANGE
                 d.strokeStyle = "#FF8000";
             } else if (circles[i][3] == 4) {
+                // PURPLE
                 d.strokeStyle = "#8A2BE2";
             } else if (circles[i][3] == 5) {
+                // PINK
                 d.strokeStyle = "#FF69B4";
             } else if (circles[i][3] == 6) {
+                // TURQUOISE
                 d.strokeStyle = "#008080";
             } else if (circles[i][3] == 7) {
+                // LIGHTBLUE, DARK (CLOSE TO BLACK)
                 d.strokeStyle = (getDarkBool() ? '#F2FBFF' : '#111111');
             } else {
+                // BLACK
                 d.strokeStyle = "#000000";
             }
             d.beginPath();
