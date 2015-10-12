@@ -19,11 +19,13 @@ SOFTWARE.*/
 // @name        AposLauncher
 // @namespace   AposLauncher
 // @include     http://agar.io/*
-// @version     4.145
+// @version     4.146
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
-var aposLauncherVersion = 4.145;
+var aposLauncherVersion = 4.146;
+
+var showAd = true;
 
 Number.prototype.mod = function(n) {
     return ((this % n) + n) % n;
@@ -73,6 +75,15 @@ function getLatestCommit() {
     }).fail(function() {});
 }
 getLatestCommit();
+
+function addAd() {
+    window.jQuery("#helloContainer").prepend("<div class='agario-panel' id='aposAd'></div>");
+    window.jQuery("#aposAd").append("<h1><a href='https://www.twitchalerts.com/donate/apostolique' target='_blank'>You can support me with a donation using this link.</a></h1> Feel free to also follow my Twitch channel: <a href='http://www.twitch.tv/apostolique' target='_blank'>http://www.twitch.tv/apostolique</a>");
+}
+
+if (showAd) {
+    addAd();
+}
 
 console.log("Running Bot Launcher!");
 (function(d, e) {
