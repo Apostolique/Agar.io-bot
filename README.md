@@ -39,6 +39,11 @@ Just copy the code snippet found in the wiki:
 If you start working on a bot, make sure to start an issue and tell me about it so that I can add it to the bot list on
 [Alternate Bots](https://github.com/Apostolique/Agar.io-bot/wiki/Alternate-Bots)
 
+#Support the project
+[You can support me with a donation using this link.](https://www.twitchalerts.com/donate/apostolique)
+
+Feel free to also follow my Twitch channel: [http://www.twitch.tv/apostolique](http://www.twitch.tv/apostolique).
+
 #Troubleshooting
 
 If the bot doesn't spawn, it's possible that your adblocker is causing the issue. Try disabling it.
