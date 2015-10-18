@@ -262,7 +262,6 @@ function PopBot() {
                     virusList.push(listToUse[element]);
                 }
                 else if (that.isSplitTarget(that, blob, listToUse[element])) {
-                        drawCircle(listToUse[element].x, listToUse[element].y, listToUse[element].size + 50, 7);
                         splitTargetList.push(listToUse[element]);
                         foodElementList.push(listToUse[element]);
                     }
@@ -821,13 +820,6 @@ function PopBot() {
         var allPossibleViruses = allIsAll[2];
         //The candidate viruses (to be disguised) are stored in element 3,0 of allIsAll
         var virusCandidates = allIsAll[4][0];
-
-        //Loop through all the player's cells.
-        for (var k = 0; k < player.length; k++) {
-            drawPoint(playerCell.x, playerCell.y + playerCell.size, 0, (getLastUpdate() - playerCell.birth) + " / " + (30000 + (playerCell.birthMass * 57) - (getLastUpdate() - playerCell.birth)) + " / " + playerCell.birthMass);
-        }
-
-        drawCircle(playerCell.x, playerCell.y, playerCell.size + this.splitDistance, 5);
         
         //The bot works by removing angles in which it is too
         //dangerous to travel towards to.
@@ -900,10 +892,8 @@ function PopBot() {
                 drawCircle(enemyX, enemyY, normalDangerDistance, 6);
             } else if (enemyCanSplit) {
                 drawCircle(enemyX, enemyY, splitDangerDistance, 0);
-                drawCircle(enemyX, enemyY, splitDangerDistance + shiftDistance, 6);
             } else {
                 drawCircle(enemyX, enemyY, normalDangerDistance, 3);
-                drawCircle(enemyX, enemyY, normalDangerDistance + shiftDistance, 6);
             }
 
             if (allPossibleThreats[i].danger && getLastUpdate() - allPossibleThreats[i].dangerTimeOut > 1000) {
