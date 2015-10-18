@@ -24,12 +24,12 @@ SOFTWARE.*/
 // @name        PopBot
 // @namespace   PopBot
 // @include     http://agar.io/*
-// @version     1.2
+// @version     1.3
 // @grant       none
 // @author      https://github.com/caiosm1005
 // ==/UserScript==
 
-var botVersion = 1.2;
+var botVersion = 1.3;
 
 //TODO: Team mode
 //      Detect when people are merging

@@ -19,11 +19,13 @@ SOFTWARE.*/
 // @name        AposLauncher
 // @namespace   AposLauncher
 // @include     http://agar.io/*
-// @version     4.124
+// @version     4.147
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
-var aposLauncherVersion = 4.124;
+var aposLauncherVersion = 4.147;
+
+var showAd = true;
 
 Number.prototype.mod = function(n) {
     return ((this % n) + n) % n;
@@ -73,6 +75,30 @@ function getLatestCommit() {
     }).fail(function() {});
 }
 getLatestCommit();
+
+function addAd() {
+    window.google_ad_client = "ca-pub-5878021809689194";
+    window.google_ad_slot = "1479874665";
+    window.google_ad_width = 300;
+    window.google_ad_height = 250;
+
+    window.jQuery(".side-container:last").append("<div class='agario-panel'><center id='aposAd'></center></div>");
+    var aposAd = document.getElementById('aposAd');
+    var w = document.write;
+    document.write = function (content) {
+        aposAd.innerHTML = content;
+        document.write = w;
+    };
+
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'http://pagead2.googlesyndication.com/pagead/show_ads.js';
+    document.body.appendChild(script);
+}
+
+if (showAd) {
+    addAd();
+}
 
 console.log("Running Bot Launcher!");
 (function(d, e) {
@@ -207,6 +233,7 @@ console.log("Running Bot Launcher!");
 
     function Ra(a) {
         J *= Math.pow(.9, a.wheelDelta / -120 || a.detail || 0);
+        console.log("J: " + J);
         //UPDATE
         0.07 > J && (J = 0.07);
         J > 4 / h && (J = 4 / h)
@@ -247,7 +274,7 @@ console.log("Running Bot Launcher!");
                 b = a.val();
             b && (ka[b] = a.text())
         }));
-        e.get("https://m.agar.io/info", function(a) {
+        e.get(ap + "info", function(a) {
                 var b = {},
                     c;
                 for (c in a.regions) {
@@ -284,7 +311,7 @@ console.log("Running Bot Launcher!");
 
     function Va() {
         e("#region").val() ? d.localStorage.location = e("#region").val() : d.localStorage.location && e("#region").val(d.localStorage.location);
-        e("#region").val() ? e("#locationKnown").append(e("#region")) : e("#locationUnknown").append(e("#region"))
+        e("#region").val() ? e("#locationKnown").append(e("#region")) : e("#locationUnknown").append(e("#region"));
     }
 
     function sb() {
@@ -301,7 +328,7 @@ console.log("Running Bot Launcher!");
     function Za() {
         var a = ++Ba;
         console.log("Find " + y + P);
-        e.ajax("https://m.agar.io/findServer", {
+        e.ajax(ap + "findServer", {
             error: function() {
                 setTimeout(Za, 1E3)
             },
@@ -330,7 +357,7 @@ console.log("Running Bot Launcher!");
             } catch (c) {}
             q = null
         }
-        Da.la && (a = "ws://" + Da.la);
+        Da.ip && (a = "ws://" + Da.ip);
         if (null != L) {
             var l = L;
             L = function() {
@@ -339,7 +366,7 @@ console.log("Running Bot Launcher!");
         }
         if (tb) {
             var d = a.split(":");
-            a = d[0] + "s://ip-" + d[1].replace(/\./g, "-").replace(/\//g, "") + ".tech.agar.io:" + (+d[2] + 2E3)
+            a = d[0] + "s://ip-" + d[1].replace(/\./g, "-").replace(/\//g, "") + ".tech.agar.io:" + +d[2]
         }
         M = [];
         k = [];
@@ -349,7 +376,7 @@ console.log("Running Bot Launcher!");
         F = [];
         z = A = null;
         R = 0;
-        $ = !1;
+        bo = !1;
         console.log("Connecting to " + a);
         //UPDATE
         serverIP = a;
@@ -388,7 +415,7 @@ console.log("Running Bot Launcher!");
     }
 
     function vb() {
-        $ && (ma = 500);
+        bo && (ma = 500);
         console.log("socket close");
         setTimeout(I, ma);
         ma *= 2
@@ -492,7 +519,7 @@ console.log("Running Bot Launcher!");
 
     function xb(a, b) {
         bb = C = Date.now();
-        $ || ($ = !0, e("#connecting").hide(), cb(), L && (L(), L = null));
+        bo || (bo = !0, e("#connecting").hide(), cb(), L && (L(), L = null));
         var c = Math.random();
         Ha = !1;
         var d = a.getUint16(b, !0);
@@ -556,12 +583,13 @@ console.log("Running Bot Launcher!");
             if (isRemoved && (window.getLastUpdate() - interNodes[element].getUptimeTime()) > 3000) {
                 delete interNodes[element];
             } else {
-                for (var i = 0; i < getPlayer().length; i++) {
-                    if (isRemoved && computeDistance(getPlayer()[i].x, getPlayer()[i].y, interNodes[element].x, interNodes[element].y) < getPlayer()[i].size + 710) {
+                if (isRemoved &&
+                    interNodes[element].x > (getX() - (1920 / 2) / getZoomlessRatio()) &&
+                    interNodes[element].x < (getX() + (1920 / 2) / getZoomlessRatio()) &&
+                    interNodes[element].y > getY() - (1080 / 2) / getZoomlessRatio() &&
+                    interNodes[element].y < getY() + (1080 / 2) / getZoomlessRatio()) {
 
-                        delete interNodes[element];
-                        break;
-                    }
+                    delete interNodes[element];
                 }
             }
         });
@@ -658,12 +686,16 @@ console.log("Running Bot Launcher!");
     function V() {
 
         //UPDATE
+        if (firstStart) {
+            Sa(false);
+        }
+        
         if (getPlayer().length == 0 && !reviving && ~~(getCurrentScore() / 100) > 0) {
             console.log("Dead: " + ~~(getCurrentScore() / 100));
             apos('send', 'pageview');
         }
 
-        if (getPlayer().length == 0) {
+        if (getPlayer().length == 0 && !firstStart) {
             console.log("Revive");
             setNick(originalName);
             reviving = true;
@@ -681,7 +713,7 @@ console.log("Running Bot Launcher!");
     }
 
     function cb() {
-        if (T() && $ && null != K) {
+        if (T() && bo && null != K) {
             var a = N(1 + 2 * K.length);
             a.setUint8(0, 0);
             for (var b = 0; b < K.length; ++b) a.setUint16(1 + 2 * b, K.charCodeAt(b), !0);
@@ -734,11 +766,22 @@ console.log("Running Bot Launcher!");
         return a *= J
     }
 
+    //UPDATE
+    function hb2() {
+        var a;
+        a = Math.max(r / 1080, m / 1920);
+        return a;
+    }
+
     function yb() {
         if (0 != k.length) {
             for (var a = 0, b = 0; b < k.length; b++) a += k[b].size;
+            //UPDATE
+            var a2 = Math.pow(Math.min(64 / a, 1), .4) * hb2();
             a = Math.pow(Math.min(64 / a, 1), .4) * hb();
-            h = (9 * h + a) / 10
+            h = (9 * h + a) / 10;
+            //UPDATE
+            h2 = (9 * h2 + a2) / 10;
         }
     }
 
@@ -762,7 +805,8 @@ console.log("Running Bot Launcher!");
             ca = h;
             s = (s + a) / 2;
             t = (t + c) / 2;
-        } else s = (29 * s + aa) / 30, t = (29 * t + ba) / 30, h = (9 * h + ca * hb()) / 10;
+            //UPDATE
+        } else s = (29 * s + aa) / 30, t = (29 * t + ba) / 30, h = (9 * h + ca * hb()) / 10, h2 = (9 * h2 + ca * hb2()) / 10;
         qb();
         Aa();
         Ia || f.clearRect(0, 0, m, r);
@@ -1242,7 +1286,7 @@ console.log("Running Bot Launcher!");
                 e(".agario-profile-picture").attr("src", a.data.url)
             });
             e("#helloContainer").attr("data-logged-in", "1");
-            null != B ? e.ajax("https://m.agar.io/checkToken", {
+            null != B ? e.ajax(ap + "checkToken", {
                 error: function() {
                     console.log("Facebook Fail!");
                     B = null;
@@ -1262,7 +1306,7 @@ console.log("Running Bot Launcher!");
                 cache: !1,
                 crossDomain: !0,
                 data: B
-            }) : e.ajax("https://m.agar.io/facebookLogin", {
+            }) : e.ajax(ap + "facebookLogin", {
                 error: function() {
                     console.log("You have a Facebook problem!");
                     B = null;
@@ -1283,7 +1327,7 @@ console.log("Running Bot Launcher!");
         e("#helloContainer").attr("data-party-state", "4");
         a = decodeURIComponent(a).replace(/.*#/gim, "");
         Ma("#" + d.encodeURIComponent(a));
-        e.ajax(Na + "//m.agar.io/getToken", {
+        e.ajax(ap + "getToken", {
             error: function() {
                 e("#helloContainer").attr("data-party-state", "6")
             },
@@ -1309,6 +1353,7 @@ console.log("Running Bot Launcher!");
     if (!d.agarioNoInit) {
         var Na = d.location.protocol,
             tb = "https:" == Na,
+            ap = Na + "//m.agar.io/",
             xa = d.navigator.userAgent;
         if (-1 != xa.indexOf("Android")) d.ga && d.ga("send", "event", "MobileRedirect", "PlayStore"), setTimeout(function() {
                 d.location.href = "market://details?id=com.miniclip.agar.io"
@@ -1325,8 +1370,8 @@ console.log("Running Bot Launcher!");
                 toggleDraw = false,
                 shootTime = 0,
                 splitTime = 0,
-                shootCooldown = 390,
-                splitCooldown = 800,
+                shootCooldown = 100,
+                splitCooldown = 100,
                 tempPoint = [0, 0, 1],
                 dPoints = [],
                 circles = [],
@@ -1341,6 +1386,7 @@ console.log("Running Bot Launcher!");
                     "Hot sauce",
                     "AFK"
                 ],
+                firstStart = true;
                 originalName = names[Math.floor(Math.random() * names.length)],
                 sessionScore = 0,
                 serverIP = "",
@@ -1376,6 +1422,7 @@ console.log("Running Bot Launcher!");
                 ra = 1E4,
                 sa = 1E4,
                 h = 1,
+                h2 = 1,
                 y = null,
                 kb = !0,
                 wa = !0,
@@ -1399,7 +1446,7 @@ console.log("Running Bot Launcher!");
                 mb = 0,
                 Db = ["#333333", "#FF3333", "#33FF33", "#3333FF"],
                 Ia = !1,
-                $ = !1,
+                bo = !1,
                 bb = 0,
                 B = null,
                 J = 1,
@@ -1425,6 +1472,7 @@ console.log("Running Bot Launcher!");
                 var ka = null;
                 d.setNick = function(a) {
                     //UPDATE
+                    firstStart = false;
                     originalName = a;
                     if (getPlayer().length == 0) {
                         lifeTimer = new Date();
@@ -1804,6 +1852,10 @@ console.log("Running Bot Launcher!");
                     return h;
                 }
 
+                window.getZoomlessRatio = function() {
+                    return h2;
+                }
+
                 /**
                  * [getOffsetX description]
                  * @return {[type]} [description]
@@ -1914,19 +1966,69 @@ console.log("Running Bot Launcher!");
                 window.setBotIndex = function(a) {
                     console.log("Changing bot");
                     botIndex = a;
+                    setLauncherCustomParameters(window.botList[a]);
                 }
 
-                window.setMessage = function(a) {
-                    message = a;
+                window.setLauncherCustomParameterOnChange = function(a, b, c) {
+                    a.on('change input', function() {
+                        var val = window.jQuery(this).val();
+                        c.value = val;
+                        b.text(val);
+                    });
                 }
-                window.updateBotList = function() {
-                    window.botList = window.botList || [];
 
-                    window.jQuery('#locationUnknown').text("");
+                window.setLauncherCustomParameters = function(a) {
+                    window.jQuery('#launcher-custom-params').remove();
+                    window.jQuery('#launcher-wrapper').append(window.jQuery('<div id="launcher-custom-params">'));
 
-                    window.jQuery('#locationUnknown').append(window.jQuery('<select id="bList" class="form-control" onchange="setBotIndex($(this).val());" />'));
-                    window.jQuery('#locationUnknown').addClass('form-group');
+                    // If no custom parameters are defined, abort
+                    if (a.customParameters === undefined) {
+                        return;
+                    }
 
+                    for (var param in a.customParameters) {
+                        var form = window.jQuery('<div class="form-group">');
+                        var label = window.jQuery('<label>');
+                        var value = window.jQuery('<span style="float: right; display: none;">');
+                        var input = window.jQuery('<input class="form-control">');
+
+                        if (a.customParameters[param].label !== undefined) {
+                            label.text(a.customParameters[param].label);
+                        }
+                        else {
+                            label.text(param);
+                        }
+
+                        for (var paramKey in a.customParameters[param]) {
+                            if (paramKey == 'label') {
+                                continue;
+                            }
+
+                            if (paramKey == 'value') {
+                                value.text(a.customParameters[param][paramKey]);
+                            }
+                            else if (paramKey == 'type' && a.customParameters[param][paramKey] == 'range') {
+                                input.removeClass('form-control');
+                                value.show();
+                            }
+
+                            input.attr(paramKey, a.customParameters[param][paramKey]);
+                        }
+
+                        setLauncherCustomParameterOnChange(input, value, a.customParameters[param]);
+
+                        form.append(label);
+                        form.append(value);
+                        form.append(input);
+                        form.appendTo(window.jQuery('#launcher-custom-params'));
+                    }
+                }
+
+                window.setLauncherBotList = function() {
+                    window.jQuery('#launcher-bot-list').remove();
+                    window.jQuery('#launcher-wrapper').append(window.jQuery('<div id="launcher-bot-list" class="form-group">'));
+                    var select = window.jQuery('<select id="bList" class="form-control" onchange="setBotIndex(window.jQuery(this).val());" />');
+                    
                     for (var i = 0; i < window.botList.length; i++) {
                         if (window.botList[i].name == "Human" && window.botList.length > 1) {
                             if (botIndex == i) {
@@ -1935,12 +2037,45 @@ console.log("Running Bot Launcher!");
                             continue;
                         }
 
-                        var bList = window.jQuery('#bList');
                         window.jQuery('<option />', {
                             value: i,
                             text: window.botList[i].name
-                        }).appendTo(bList);
+                        }).appendTo(select);
                     }
+
+                    select.appendTo(window.jQuery('#launcher-bot-list'));
+                }
+
+                window.setMessage = function(a) {
+                    message = a;
+                }
+                
+                window.shoot = function() {
+                    if (!toggle && shootTime + shootCooldown < new Date().getTime()) {
+                        shootTime = new Date().getTime();
+                        opCode(21);
+                    }
+                }
+            
+                window.split = function() {
+            
+                    if (!toggle && splitTime + splitCooldown < new Date().getTime()) {
+                        splitTime = new Date().getTime();
+                        opCode(17);
+                    }
+                }
+                
+                window.updateBotList = function() {
+                    window.botList = window.botList || [];
+
+                    // Create wrapper for launcher controls
+                    window.jQuery('#launcher-wrapper').remove();
+                    window.jQuery('<div id="launcher-wrapper">').insertBefore('#agario-main-buttons');
+
+                    setLauncherBotList();
+
+                    // Show initial custom parameters
+                    setLauncherCustomParameters(window.botList[window.jQuery('#bList').val()]);
                 }
 
                 var ma = 500,
@@ -2467,7 +2602,7 @@ apos('send', 'pageview');
 
 window.ignoreStream = false;
 window.refreshTwitch = function() {
-    $.ajax({
+    window.jQuery.ajax({
         url: "https://api.twitch.tv/kraken/streams/apostolique",
         cache: false,
         dataType: "jsonp"
