@@ -69,6 +69,9 @@ function PopBot() {
     this.previousLoopTime = new Date().getTime();
     this.previousBlobList = [];
 
+    this.shootTime = 0;
+    this.shootCooldown = 350;
+
     this.splitDistance = 710;
     this.disguiseStayMinSize = 7.7;
     this.disguiseMaxSize = 15.0;
@@ -774,6 +777,13 @@ function PopBot() {
         return angle;
     };
 
+    this.shootSlow = function() {
+        if ( this.shootTime + this.shootCooldown < new Date().getTime()) {
+            this.shootTime = new Date().getTime();
+            shoot();
+        }
+    }
+
     /**
      * This is the main bot logic. This is called quite often.
      * @return A 2 dimensional array with coordinates for every cells.  [[x, y], [x, y]]
@@ -1131,11 +1141,11 @@ function PopBot() {
 
             if (virusDistance < playerCell.size + this.splitDistance / 2 && playerCell.size - disguiseVirus.size > this.disguiseMaxSize) {
                 console.log("We're too big for this virus - shooting some mass");
-                setTimeout(shoot, 80);
                 // While shooting, jiggle towards an angle perpendicular to the angle
                 // of the virus, so we avoid shooting it and making it bigger by accident
                 var shiftedAngle = this.getAngle(playerCell.x, playerCell.y, disguiseVirus.x, disguiseVirus.y) + 90 + 180 * (Math.random() > 0.5 ? 1 : 0);
                 destinationChoices = this.followAngle(shiftedAngle, playerCell.x, playerCell.y, 10);
+                this.shootSlow();
             }
             else {
                 var distance = this.computeDistance(playerCell.x, playerCell.y, disguiseVirus.x, disguiseVirus.y);
