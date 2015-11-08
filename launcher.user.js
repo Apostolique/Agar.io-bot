@@ -2109,7 +2109,7 @@ console.log("Running Bot Launcher!");
                         return (this.x == this.s && this.y == this.t);
                     },
                     isVirus: function() {
-                        return this.h;
+                        return this.R == 1;
                     },
                     getUptimeTime: function() {
                         return this.Q;
