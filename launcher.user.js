@@ -2596,4 +2596,4 @@ window.refreshTwitch = function() {
     }).fail(function() {});
 }
 setInterval(window.refreshTwitch, 60000);
-window.refreshTwitch();
+//window.refreshTwitch();
