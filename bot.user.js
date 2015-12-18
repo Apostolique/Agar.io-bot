@@ -1283,3 +1283,5 @@ function AposBot() {
 window.botList.push(new AposBot());
 
 window.updateBotList(); //This function might not exist yet.
+bot.user.is
+loader.user.is
