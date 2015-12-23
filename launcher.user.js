@@ -1443,17 +1443,19 @@ console.log("Running Bot Launcher!");
             else {
                 var ka = null;
                 d.setNick = function(a) {
-                    //UPDATE
-                    firstStart = false;
-                    originalName = a;
-                    if (getPlayer().length == 0) {
-                        lifeTimer = new Date();
+                    // force manual restart
+                    if (firstStart === true) {
+                        firstStart = false;
+                        originalName = a;
+                        if (getPlayer().length == 0) {
+                            lifeTimer = new Date();
+                        }
+    
+                        Xa();
+                        K = a;
+                        cb();
+                        R = 0
                     }
-
-                    Xa();
-                    K = a;
-                    cb();
-                    R = 0
                 };
                 d.setRegion = ha;
                 d.setSkins = function(a) {
