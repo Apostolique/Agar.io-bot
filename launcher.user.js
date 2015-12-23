@@ -519,7 +519,7 @@ console.log("Running Bot Launcher!");
 
     function xb(a, b) {
         bb = C = Date.now();
-        bo || (bo = !0, e("#connecting").hide(), cb(), L && (L(), L = null));
+        bo || (bo = !0, e("#connecting").hide(), /*opcode0(),*/ L && (L(), L = null));
         var c = Math.random();
         Ha = !1;
         var d = a.getUint16(b, !0);
@@ -697,7 +697,7 @@ console.log("Running Bot Launcher!");
         }
     }
 
-    function cb() {
+    function opcode0() {
         if (T() && bo && null != K) {
             var a = N(1 + 2 * K.length);
             a.setUint8(0, 0);
@@ -1452,7 +1452,7 @@ console.log("Running Bot Launcher!");
 
                     Xa();
                     K = a;
-                    cb();
+                    //opcode0();
                     R = 0
                 };
                 d.setRegion = ha;
