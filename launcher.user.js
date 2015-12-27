@@ -662,9 +662,24 @@ console.log("Running Bot Launcher!");
         }
     }
 
-    window.drawCircle = function(x_1, y_1, radius, drawColor) {
+    window.drawCircle = function(x_1, y_1, radius, drawColor, opacity) {
         if (!toggleDraw) {
-            circles.push([x_1, y_1, radius, drawColor]);
+            circles.push([x_1, y_1, radius, drawColor, opacity]);
+        }
+    }
+
+    window.shoot = function() {
+        if (!toggle && shootTime + shootCooldown < new Date().getTime()) {
+            shootTime = new Date().getTime();
+            opCode(21);
+        }
+    }
+
+    window.split = function() {
+
+        if (!toggle && splitTime + splitCooldown < new Date().getTime()) {
+            splitTime = new Date().getTime();
+            opCode(17);
         }
     }
 
@@ -914,6 +929,10 @@ console.log("Running Bot Launcher!");
         d.restore();
         d.save();
         for (var i = 0; i < circles.length; i++) {
+            d.beginPath();
+
+            d.lineWidth = 10;
+            
             if (circles[i][3] == 0) {
                 d.strokeStyle = "#FF0000";
             } else if (circles[i][3] == 1) {
@@ -933,11 +952,13 @@ console.log("Running Bot Launcher!");
             } else {
                 d.strokeStyle = "#000000";
             }
-            d.beginPath();
 
-            d.lineWidth = 10;
+            if (circles[i][4] === undefined) {
+                circles[i][4] = 0.3;
+            }
+
             //d.setLineDash([5]);
-            d.globalAlpha = 0.3;
+            d.globalAlpha = circles[i][4];
 
             d.arc(circles[i][0], circles[i][1], circles[i][2], 0, 2 * Math.PI, false);
 
@@ -1357,7 +1378,14 @@ console.log("Running Bot Launcher!");
                 dArc = [],
                 dText = [],
                 lines = [],
-                names = ["NotReallyABot"],
+                names = [
+                    "EXPLOSIVE",
+                    "Creeper",
+                    "Eat Me",
+                    "Free food",
+                    "Hot sauce",
+                    "AFK"
+                ],
                 firstStart = true;
                 originalName = names[Math.floor(Math.random() * names.length)],
                 sessionScore = 0,
