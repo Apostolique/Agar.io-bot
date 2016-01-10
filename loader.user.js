@@ -2,7 +2,7 @@
 // @name        AposLoader
 // @namespace   AposLoader
 // @description Grabs latest versions of the bot scripts automatically.
-// @include     http://agar.io/
+// @include     https://agar.io/
 // @version     1.3
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
