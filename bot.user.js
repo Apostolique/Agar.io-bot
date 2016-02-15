@@ -49,7 +49,7 @@ Array.prototype.peek = function() {
 };
 
 var sha = "efde0488cc2cc176db48dd23b28a20b90314352b";
-function getLatestCommit() {
+(function () {
     window.jQuery.ajax({
             url: "https://api.github.com/repos/apostolique/Agar.io-bot/git/refs/heads/master",
             cache: false,
@@ -86,8 +86,7 @@ function getLatestCommit() {
             });
 
         }).fail(function() {});
-}
-getLatestCommit();
+})();
 
 console.log("Running Apos Bot!");
 
