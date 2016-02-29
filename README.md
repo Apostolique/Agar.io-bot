@@ -1,3 +1,5 @@
+*APOSTOLIQUE HAS (maybe...) ABANDONED THIS PROJECT. THIS IS JUST THE REMANANTS OF HIS PROJECT THAT HE LEFT OFF FROM. ~ Drflash55*
+
 # Agar.io-bot
 The aim of the project is to create a bot that can play Agar.io
 
