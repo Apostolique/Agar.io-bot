@@ -1,5 +1,5 @@
 /*The MIT License (MIT)
-Copyright (c) 2015 Apostolique
+Copyright (c) 2016 Ermiya Eskandary
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -16,12 +16,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
 // ==UserScript==
-// @name        AposLauncher
-// @namespace   AposLauncher
+// @name        AgarLauncher
+// @namespace   AgarLauncher
 // @include     http://agar.io/*
 // @version     4.149
 // @grant       none
-// @author      http://www.twitch.tv/apostolique
+// @author      Ermiya Eskandary
 // ==/UserScript==
 var aposLauncherVersion = 4.149;
 
@@ -391,7 +391,7 @@ console.log("Running Bot Launcher!");
             O(a);
             a = N(5);
             a.setUint8(0, 255);
-            a.setUint32(1, 2200049715, !0);
+            a.setUint32(1, 154669603, !0);
             O(a);
             a = N(1 + b.length);
             a.setUint8(0, 80);

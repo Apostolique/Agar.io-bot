@@ -1,6 +1,6 @@
 /*The MIT License (MIT)
 
-Copyright (c) 2015 Apostolique
+Copyright (c) 2016 Ermiya Eskandary
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,12 +21,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
 
 // ==UserScript==
-// @name        AposBot
-// @namespace   AposBot
+// @name        Agarbot
+// @namespace   Agarbot
 // @include     http://agar.io/*
 // @version     3.645
 // @grant       none
-// @author      http://www.twitch.tv/apostolique
+// @author      Ermiya Eskandary
 // ==/UserScript==
 
 var aposBotVersion = 3.645;
@@ -88,13 +88,13 @@ var sha = "efde0488cc2cc176db48dd23b28a20b90314352b";
         }).fail(function() {});
 })();
 
-console.log("Running Apos Bot!");
+console.log("Running Agar Bot!");
 
 var f = window;
 var g = window.jQuery;
 
 
-console.log("Apos Bot!");
+console.log("Agar Bot!");
 
 window.botList = window.botList || [];
 

@@ -1,9 +1,5 @@
-*APOSTOLIQUE HAS ABANDONED THIS PROJECT AS HE IS NO LONGER WORKING ON THE BOT FOR AGAR.IO. IT WILL NOT BE ABLE TO CONNECT TO THE SERVERS, DUE TO THE UNFAMILIAR INFRASTRUCTURE. THIS IS THE RENAMENTS OF HIS WORK. ~ Drflash55*
-
 # Agar.io-bot
-The aim of the project is to create a bot that can play Agar.io
-
-The full coding process is streamed live on http://www.twitch.tv/apostolique
+A bot that can play Agar.io and will be updated regularly.
 
 Make sure to install both bot.user.js and launcher.user.js. If you don't mind having the code auto update itself though, you can simply get the loader.user.js without the other two.
 
@@ -31,21 +27,6 @@ https://www.youtube.com/watch?v=x2-DFRnEFBU - Android Tutorial.
 * Press 'F' to toggle the show mass option.
 * Press 'ESC' for the option menu.
 
-#Bot creation!
+#Copyright and license
 
-**It's really easy!**
-
-Just copy the code snippet found in the wiki:
-[Bot creation using the Launcher](https://github.com/Apostolique/Agar.io-bot/wiki/Bot-creation-using-the-Launcher)
-
-If you start working on a bot, make sure to start an issue and tell me about it so that I can add it to the bot list on
-[Alternate Bots](https://github.com/Apostolique/Agar.io-bot/wiki/Alternate-Bots)
-
-#Support the project
-[You can support me with a donation using this link.](https://www.twitchalerts.com/donate/apostolique)
-
-Feel free to also follow my Twitch channel: [http://www.twitch.tv/apostolique](http://www.twitch.tv/apostolique).
-
-#Troubleshooting
-
-If the bot doesn't spawn, it's possible that your adblocker is causing the issue. Try disabling it.
+Code copyright 2016 Ermiya Eskandary. Code released under the MIT license. More info in LICENSE file.
