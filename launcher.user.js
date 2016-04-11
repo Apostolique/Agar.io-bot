@@ -23,7 +23,7 @@ SOFTWARE.*/
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
-var aposLauncherVersion = 4.149;
+var aposLauncherVersion = 4.150;
 
 var showAd = true;
 
@@ -168,9 +168,9 @@ console.log("Running Bot Launcher!");
 
         var father = window.jQuery("#canvas").parent();
         window.jQuery("#canvas").remove();
-        father.prepend("<canvas id='canvas'>");
+        father.prepend("<canvas id='canvas1'>");
 
-        G = za = document.getElementById("canvas");
+        G = za = document.getElementById("canvas1");
         f = G.getContext("2d");
         G.onmousedown = function(a) {
             if (Qa) {
