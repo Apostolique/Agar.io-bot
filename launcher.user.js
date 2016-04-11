@@ -391,7 +391,7 @@ console.log("Running Bot Launcher!");
             O(a);
             a = N(5);
             a.setUint8(0, 255);
-            a.setUint32(1, 2200049715, !0);
+            a.setUint32(1, 154669603, !0);
             O(a);
             a = N(1 + b.length);
             a.setUint8(0, 80);
