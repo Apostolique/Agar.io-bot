@@ -19,7 +19,7 @@ SOFTWARE.*/
 // @name        AposLauncher
 // @namespace   AposLauncher
 // @include     http://agar.io/*
-// @version     4.149
+// @version     4.150
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
