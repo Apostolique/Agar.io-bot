@@ -24,12 +24,12 @@ SOFTWARE.*/
 // @name        AposBot
 // @namespace   AposBot
 // @include     http://agar.io/*
-// @version     3.645
+// @version     3.646
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposBotVersion = 3.645;
+var aposBotVersion = 3.646;
 
 //TODO: Team mode
 //      Detect when people are merging
@@ -1281,4 +1281,8 @@ function AposBot() {
 };
 window.botList.push(new AposBot());
 
-window.updateBotList(); //This function might not exist yet.
+if ( typeof window.updateBotList == 'function' ) {
+    window.updateBotList(); //This function might not exist yet.
+} else {
+    console.log("The launcher is not yet started.");
+}
