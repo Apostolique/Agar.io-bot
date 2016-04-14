@@ -1,12 +1,13 @@
-# UPDATE
-APOSTOLIQUE HAS (SORT OF) ABANDONED THIS PROJECT AS HE IS NO LONGER WORKING ON THIS BOT FOR AGAR.IO. THIS BOT HAS SOME BUGS BUT IT WILL BE HOPEFULLY BACK ON TRACK SOON AND WORKING AGAIN WITH THE HELP OF APOSTOLIQUE, OTHER COLLABORATORS AND ME ~ ErmiyaEskandary
-
 # Agar.io-bot
 The aim of the project is to create a bot that can play Agar.io
 
 The full coding process is streamed live on http://www.twitch.tv/apostolique
 
 Make sure to install both bot.user.js and launcher.user.js. If you don't mind having the code auto update itself though, you can simply get the loader.user.js without the other two.
+
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://opensource.org/licenses/MIT)
+
+[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg?maxAge=2592000)](https://gitter.im/Apostolique/ACS)
 
 # Honorable mention
 There are other people working on bots, you can check the forks, as well as GamerLio's Github which uses genetic algorithms: https://github.com/leomwu/agario-bot
@@ -43,9 +44,11 @@ If you start working on a bot, make sure to start an issue and tell me about it 
 [Alternate Bots](https://github.com/Apostolique/Agar.io-bot/wiki/Alternate-Bots)
 
 # Support the project
-[You can support me with a donation using this link.](https://www.twitchalerts.com/donate/apostolique)
+[![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/fold_left.svg?style=social&label=Follow%20%40JeanDavidMoisan)](https://twitter.com/JeanDavidMoisan)
 
-Feel free to also follow my Twitch channel: [http://www.twitch.tv/apostolique](http://www.twitch.tv/apostolique).
+[![Twitch Donation](https://img.shields.io/badge/donate-twitch-red.svg)](https://www.twitchalerts.com/donate/apostolique)
+
+[![Twitch Follow](https://img.shields.io/badge/follow-twitch-orange.svg)](http://www.twitch.tv/apostolique)
 
 # Troubleshooting
 
