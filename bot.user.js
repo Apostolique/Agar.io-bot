@@ -637,12 +637,6 @@ function AposBot() {
         ];
     };
 
-    this.invertAngle = function(range) { // Where are you getting all of these vars from? (badAngles and angle)
-        var angle1 = this.rangeToAngle(badAngles[i]);
-        var angle2 = this.mod(badAngles[i][0] - angle, 360);
-        return [angle1, angle2];
-    },
-
     this.addWall = function(listToUse, blob) {
         //var mapSizeX = Math.abs(f.getMapStartX - f.getMapEndX);
         //var mapSizeY = Math.abs(f.getMapStartY - f.getMapEndY);
