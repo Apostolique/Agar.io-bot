@@ -99,7 +99,7 @@ if (showAd) {
     addAd();
 }
 (function(c, e) {
-	function vc() {
+    function vc() {
         for (var a = document.cookie.split(";"), b = 0; b < a.length; b++) {
             for (var d = a[b];
                 " " == d.charAt(0);) d = d.substring(1, d.length);
@@ -107,7 +107,8 @@ if (showAd) {
         }
         return null
     }
-	function qa(a, b) {
+
+    function qa(a, b) {
         if (b) {
             var d = new Date;
             d.setTime(d.getTime() + 864E5 * b);
@@ -605,7 +606,8 @@ if (showAd) {
             n.T = y;
             n.ea = h;
             q && (n.C = q);
-            u && n.A(u); - 1 != G.indexOf(g) && -1 == t.indexOf(n) && (t.push(n), n.I = !0, 1 == t.length && (n.wa = !0, A = n.x, B = n.y, Wb(), document.getElementById("overlays").style.display = "none", F = [], wb = 0, xb = t[0].color, Aa = !0, Ja = Date.now(), W = yb = zb = 0))
+            //UPDATE
+            u && n.A(u); - 1 != G.indexOf(g) && -1 == t.indexOf(n) && (t.push(n), n.birth = getLastUpdate(), n.birthMass = (n.size * n.size / 100), n.I = !0, 1 == t.length && (n.wa = !0, A = n.x, B = n.y, Wb(), document.getElementById("overlays").style.display = "none", F = [], wb = 0, xb = t[0].color, Aa = !0, Ja = Date.now(), W = yb = zb = 0))
                 //UPDATE
             interNodes[g] = window.getCells()[g];
         }
