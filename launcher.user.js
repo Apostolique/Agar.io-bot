@@ -19,11 +19,19 @@ SOFTWARE.*/
 // @name        AposLauncher
 // @namespace   AposLauncher
 // @include     http://agar.io/*
+<<<<<<< HEAD
 // @version     5.030
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 var aposLauncherVersion = 5.030;
+=======
+// @version     5.010
+// @grant       none
+// @author      http://www.twitch.tv/apostolique
+// ==/UserScript==
+var aposLauncherVersion = 5.010;
+>>>>>>> master
 
 var showAd = true;
 
@@ -231,8 +239,13 @@ if (showAd) {
         a.preventDefault();
         P *= Math.pow(.9, a.wheelDelta / -120 || a.detail || 0);
         console.log("P: " + P)
+<<<<<<< HEAD
         //UPDATE
         0.07 > P && (P = 0.07);
+=======
+            //UPDATE
+        1 > P && (P = 0.07);
+>>>>>>> master
         P > 4 / r && (P = 4 / r)
     }
 
@@ -258,10 +271,15 @@ if (showAd) {
     }
 
     function $a() {
+<<<<<<< HEAD
         //UPDATE
         if (toggle || window.botList[botIndex].name == "Human") {
             setPoint((Y - q / 2) / r + A, (Z - u / 2) / r + B);
         }
+=======
+        va = (Y - q / 2) / r + A;
+        wa = (Z - u / 2) / r + B
+>>>>>>> master
     }
 
     function Ob() {
@@ -314,6 +332,7 @@ if (showAd) {
 
     function cb(a) {
         "env_local" in EnvConfig ? "true" == EnvConfig.load_local_configuration ? c.MC.updateConfigurationID("base") : c.MC.updateConfigurationID(EnvConfig.configID) : c.MC.updateConfigurationID(a)
+<<<<<<< HEAD
     }
 
     function yc() {
@@ -336,6 +355,30 @@ if (showAd) {
         }, "text")
     }
 
+=======
+    }
+
+    function yc() {
+        "configID" in E ? cb(E.configID) : e.get(ya + "getLatestID", function(a) {
+            cb(a);
+            c.localStorage.last_config_id = a
+        }).fail(function() {
+            var a;
+            if (a = "last_config_id" in c.localStorage) a = c.localStorage.last_config_id, a = !(null == a || void 0 == a || "" === a);
+            a && (a = c.localStorage.last_config_id, console.log("Fallback to stored configID: " + a), cb(a))
+        })
+    }
+
+    function zc() {
+        e.get(db + "//gc.agar.io", function(a) {
+            var b = a.split(" ");
+            a = b[0];
+            b = b[1] || ""; - 1 == ["UA"].indexOf(a) && Rb.push("ussr");
+            la.hasOwnProperty(a) && ("string" == typeof la[a] ? K || za(la[a]) : la[a].hasOwnProperty(b) && (K || za(la[a][b])))
+        }, "text")
+    }
+
+>>>>>>> master
     function R(a) {
         return c.i18n[a] || c.i18n_dict.en[a] || a
     }
@@ -880,7 +923,11 @@ if (showAd) {
 
         var displayText = 'Score: ' + ~~(Z / 100) + " Current Time: " + nbSeconds + " seconds.";
 
+<<<<<<< HEAD
         0 != T && (null == Ma && (Ma = new Na(24, "#FFFFFF")), Ma.B(displayText), d = Ma.N(), a = d.width, f.globalAlpha =
+=======
+        0 != T && (null == Ma && (Ma = new Na(24, "#FFFFFF")), Ma.B(R("score") + ": " + ~~(T / 100)), d = Ma.N(), a = d.width, f.globalAlpha =
+>>>>>>> master
             .2, f.fillStyle = "#000000", f.fillRect(10, u - 10 - 24 - 10, a + 10, 34), f.globalAlpha = 1, f.drawImage(d, 15, u - 10 - 24 - 5));
         Oc();
         b = Date.now() - b;
@@ -1241,6 +1288,7 @@ if (showAd) {
         b && (this.W = b);
         this.Y = !!d;
         c && (this.Z = c)
+<<<<<<< HEAD
     }
 
     function Sc(a) {
@@ -1263,6 +1311,30 @@ if (showAd) {
         "google" == k.context ? (e("#gPlusShare").show(), e("#fbShare").hide()) : (e("#gPlusShare").hide(), e("#fbShare").show())
     }
 
+=======
+    }
+
+    function Sc(a) {
+        for (var b = a.length, d, c; 0 < b;) c = Math.floor(Math.random() * b), b--, d = a[b], a[b] = a[c], a[c] = d
+    }
+
+    function Tc() {
+        k = Qa
+    }
+
+    function ic(a) {
+        k.context = "google" == a ? "google" : "facebook";
+        Ra()
+    }
+
+    function Ra() {
+        c.localStorage.storeObjectInfo = JSON.stringify(k);
+        k = JSON.parse(c.localStorage.storeObjectInfo);
+        c.storageInfo = k;
+        "google" == k.context ? (e("#gPlusShare").show(), e("#fbShare").hide()) : (e("#gPlusShare").hide(), e("#fbShare").show())
+    }
+
+>>>>>>> master
     function jc(a) {
         e("#helloContainer").attr("data-has-account-data");
         "" != a.displayName && (a.name = a.displayName);
@@ -1330,6 +1402,7 @@ if (showAd) {
                 }
             }
         }
+<<<<<<< HEAD
     }
 
     function Eb() {
@@ -1337,6 +1410,15 @@ if (showAd) {
         ("undefined" !== typeof a && a || "none" == e("#settings").css("display") && "none" == e("#socialLoginContainer").css("display")) && e("#instructions").show()
     }
 
+=======
+    }
+
+    function Eb() {
+        var a;
+        ("undefined" !== typeof a && a || "none" == e("#settings").css("display") && "none" == e("#socialLoginContainer").css("display")) && e("#instructions").show()
+    }
+
+>>>>>>> master
     function kc(a) {
         if ("connected" == a.status) {
             var b = a.authResponse.accessToken;
@@ -2712,10 +2794,17 @@ if (showAd) {
                     D: 1,
                     O: function(a) {
                         this.v != a && (this.v = a, this.l = !0)
+<<<<<<< HEAD
                     },
                     oa: function(a) {
                         this.D != a && (this.D = a, this.l = !0)
                     },
+=======
+                    },
+                    oa: function(a) {
+                        this.D != a && (this.D = a, this.l = !0)
+                    },
+>>>>>>> master
                     B: function(a) {
                         a != this.F && (this.F = a, this.l = !0)
                     },
@@ -2878,6 +2967,7 @@ if (showAd) {
                     e("#settings").hide();
                     e("#instructions").hide();
                     Eb()
+<<<<<<< HEAD
                 };
                 c.toggleSettings = function() {
                     e("#settings").toggle();
@@ -2934,6 +3024,64 @@ if (showAd) {
                     c.facebookRelogin = a;
                     c.facebookLogin = a
                 };
+=======
+                };
+                c.toggleSettings = function() {
+                    e("#settings").toggle();
+                    e("#socialLoginContainer").hide();
+                    e("#instructions").hide();
+                    Eb()
+                };
+                m.account = function(a) {
+                    function b() {}
+
+                    function d(a, b) {
+                        if (null == f || f.id != b.id) f = b, null != c.ssa_json && (c.ssa_json.applicationUserId = "" + b.id, c.ssa_json.custom_user_id = "" + b.id), "undefined" != typeof SSA_CORE && SSA_CORE.start()
+                    }
+                    var f = null;
+                    a.init = function() {
+                        m.core.bind("user_login", d);
+                        m.core.bind("user_logout", b)
+                    };
+                    a.setUserData = function(a) {
+                        jc(a)
+                    };
+                    a.setAccountData = function(a, b) {
+                        var c = e("#helloContainer").attr("data-has-account-data", "1");
+                        k.userInfo.xp = a.xp;
+                        k.userInfo.xpNeeded = a.xpNeeded;
+                        k.userInfo.level = a.level;
+                        Ra();
+                        c && b ? ga(a) : (e(".agario-profile-panel .progress-bar-star").text(a.level), e(".agario-exp-bar .progress-bar-text").text(a.xp + "/" + a.xpNeeded + " XP"), e(".agario-exp-bar .progress-bar").css("width", (88 * a.xp / a.xpNeeded).toFixed(2) + "%"))
+                    };
+                    a.Ia = function(a) {
+                        ga(a)
+                    };
+                    return a
+                }({});
+                var lc = 0;
+                c.fbAsyncInit = function() {
+                    function a() {
+                        null == c.FB ? alert("You seem to have something blocking Facebook on your browser, please check for any extensions") : (k.loginIntent = "1", c.updateStorage(), c.FB.login(function(a) {
+                            kc(a)
+                        }, {
+                            scope: "public_profile, email"
+                        }))
+                    }
+                    c.FB.init({
+                        appId: EnvConfig.fb_app_id,
+                        cookie: !0,
+                        xfbml: !0,
+                        status: !0,
+                        version: "v2.2"
+                    });
+                    ("1" == c.storageInfo.loginIntent && "facebook" == c.storageInfo.context || qc) && c.FB.getLoginStatus(function(b) {
+                        "connected" === b.status ? kc(b) : "not_authorized" === b.status ? (c.logout(), a()) : c.logout()
+                    });
+                    c.facebookRelogin = a;
+                    c.facebookLogin = a
+                };
+>>>>>>> master
                 var Kb = !1;
                 (function(a) {
                     function b() {
