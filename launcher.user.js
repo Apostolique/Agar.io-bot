@@ -19,11 +19,11 @@ SOFTWARE.*/
 // @name        AposLauncher
 // @namespace   AposLauncher
 // @include     http://agar.io/*
-// @version     5.01
+// @version     5.020
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
-var aposLauncherVersion = 5.01;
+var aposLauncherVersion = 5.020;
 
 var showAd = true;
 
@@ -231,8 +231,8 @@ if (showAd) {
         a.preventDefault();
         P *= Math.pow(.9, a.wheelDelta / -120 || a.detail || 0);
         console.log("P: " + P)
-            //UPDATE
-        1 > P && (P = 0.07);
+        //UPDATE
+        0.07 > P && (P = 0.07);
         P > 4 / r && (P = 4 / r)
     }
 
@@ -258,8 +258,10 @@ if (showAd) {
     }
 
     function $a() {
-        va = (Y - q / 2) / r + A;
-        wa = (Z - u / 2) / r + B
+        //UPDATE
+        if (toggle || window.botList[botIndex].name == "Human") {
+            setPoint((Y - q / 2) / r + A, (Z - u / 2) / r + B);
+        }
     }
 
     function Ob() {
