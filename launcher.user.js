@@ -878,7 +878,7 @@ if (showAd) {
 
         bestTime = Math.max(nbSeconds, bestTime);
 
-        var displayText = 'Score: ' + ~~(Z / 100) + " Current Time: " + nbSeconds + " seconds.";
+        var displayText = 'Score: ' + ~~(T / 100) + " Current Time: " + nbSeconds + " seconds.";
 
         0 != T && (null == Ma && (Ma = new Na(24, "#FFFFFF")), Ma.B(displayText), d = Ma.N(), a = d.width, f.globalAlpha =
             .2, f.fillStyle = "#000000", f.fillRect(10, u - 10 - 24 - 10, a + 10, 34), f.globalAlpha = 1, f.drawImage(d, 15, u - 10 - 24 - 5));
