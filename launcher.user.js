@@ -19,11 +19,11 @@ SOFTWARE.*/
 // @name        AposLauncher
 // @namespace   AposLauncher
 // @include     http://agar.io/*
-// @version     5.031
+// @version     5.032
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
-var aposLauncherVersion = 5.031;
+var aposLauncherVersion = 5.032;
 
 var showAd = true;
 
@@ -231,7 +231,7 @@ if (showAd) {
         a.preventDefault();
         P *= Math.pow(.9, a.wheelDelta / -120 || a.detail || 0);
         console.log("P: " + P)
-        //UPDATE
+            //UPDATE
         0.07 > P && (P = 0.07);
         P > 4 / r && (P = 4 / r)
     }
@@ -839,6 +839,24 @@ if (showAd) {
         f.translate(q / 2, u / 2);
         f.scale(r, r);
         f.translate(-A, -B);
+        //UPDATE
+        f.save();
+        f.beginPath();
+        f.lineWidth = 5;
+        f.strokeStyle = (getDarkBool() ? '#F2FBFF' : '#111111');
+        f.moveTo(getMapStartX(), getMapStartY());
+        f.lineTo(getMapStartX(), getMapEndY());
+        f.stroke();
+        f.moveTo(getMapStartX(), getMapStartY());
+        f.lineTo(getMapEndX(), getMapStartY());
+        f.stroke();
+        f.moveTo(getMapEndX(), getMapStartY());
+        f.lineTo(getMapEndX(), getMapEndY());
+        f.stroke();
+        f.moveTo(getMapStartX(), getMapEndY());
+        f.lineTo(getMapEndX(), getMapEndY());
+        f.stroke();
+        f.restore();
         for (c = 0; c < ba.length; c++) ba[c].w(f);
         for (c = 0; c < z.length; c++) z[c].w(f);
         //UPDATE
@@ -1555,9 +1573,6 @@ if (showAd) {
                     D = [],
                     Y = 0,
                     Z = 0,
-                    //UPDATE - NOT SURE
-                    //va = (Y - q / 2) / r + A;
-                    //wa = (Z - u / 2) / r + B;
                     va = -1,
                     wa = -1,
                     Mc = 0,
@@ -2815,7 +2830,7 @@ if (showAd) {
                             var e = document.getElementById("favicon"),
                                 g = e.cloneNode(!0);
                             g.setAttribute("href", b.toDataURL("image/png"));
-                            //UPDATE -- NO IDEA WHAT I JUST DID THERE!
+                            //UPDATE -- ?????
                             //e.setAttribute("href", b.toDataURL("image/png"));
                             e.parentNode.replaceChild(g, e)
                         }
