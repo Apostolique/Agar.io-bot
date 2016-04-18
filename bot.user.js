@@ -76,8 +76,8 @@ var sha = "efde0488cc2cc176db48dd23b28a20b90314352b";
                 latestVersion = latestVersion.substring(latestVersion.indexOf("// @version")+11,latestVersion.indexOf("// @grant"));
 
                 latestVersion = parseFloat(latestVersion + 0.0000);
-                var myVersion = parseFloat(aposBotVersion + 0.0000); 
-                
+                var myVersion = parseFloat(aposBotVersion + 0.0000);
+
                 if(latestVersion > myVersion)
                 {
                     update("aposBot", "bot.user.js", "https://github.com/Apostolique/Agar.io-bot/blob/" + sha + "/bot.user.js/");
@@ -135,16 +135,16 @@ function AposBot() {
     };
     this.splitDistance = 710;
 
-    this.isMerging = function(cell1, cell2) {        
+    this.isMerging = function(cell1, cell2) {
         var dist = this.computeDistance(cell1.x, cell1.y, cell2.x, cell2.y, cell1.size, cell2.size);
-        
+
         //debug logging
         if (false){
         var params = [cell1.x, cell1.y, cell2.x, cell2.y, cell1.size, cell2.size, dist];
         var debugString = params.join(", ");
         console.log("Merge:" + debugString);
         }
-        
+
         return dist <= -50;
     };
 
@@ -231,7 +231,7 @@ function AposBot() {
             var currentRed = currentColor.substring(1,3);
             var currentGreen = currentColor.substring(3,5);
             var currentBlue = currentColor.substring(5,7);
-            
+
             var currentTeam = this.getTeam(currentRed, currentGreen, currentBlue);
 
             var cellColor = cell.color;
@@ -275,7 +275,7 @@ function AposBot() {
     };
 
     this.isThreat = function(blob, cell) {
-        
+
         if (!cell.isVirus() && this.compareSize(blob, cell, 1.30)) {
             return true;
         }
@@ -284,10 +284,10 @@ function AposBot() {
 
     this.isVirus = function(blob, cell) {
         if (blob == null) {
-            if (cell.isVirus()){return true;} 
+            if (cell.isVirus()){return true;}
             else {return false;}
         }
-        
+
         if (cell.isVirus() && this.compareSize(cell, blob, 1.2)) {
             return true;
         } else if (cell.isVirus() && cell.color.substring(3,5).toLowerCase() != "ff") {
@@ -314,7 +314,7 @@ function AposBot() {
         var splitTargetList = [];
 
         var player = getPlayer();
-        
+
         var mergeList = [];
 
         Object.keys(listToUse).forEach(function(element, index) {
@@ -325,7 +325,7 @@ function AposBot() {
                     //IT'S FOOD!
                     foodElementList.push(listToUse[element]);
 
-                    
+
                 } else if (that.isThreat(blob, listToUse[element])) {
                     //IT'S DANGER!
                     threatList.push(listToUse[element]);
@@ -352,22 +352,22 @@ function AposBot() {
         for (var i = 0; i < foodElementList.length; i++) {
             foodList.push([foodElementList[i].x, foodElementList[i].y, foodElementList[i].size]);
         }
-        
+
         //console.log("Merglist length: " +  mergeList.length)
         //cell merging
         for (var i = 0; i < mergeList.length; i++) {
             for (var z = 0; z < mergeList.length; z++) {
-                if (z != i && that.isMerging(mergeList[i], mergeList[z])) { //z != i && 
+                if (z != i && that.isMerging(mergeList[i], mergeList[z])) { //z != i &&
                         //found cells that appear to be merging - if they constitute a threat add them to the theatlist
-                        
+
                         //clone us a new cell
                         var newThreat = {};
                         var prop;
-                        
+
                         for (prop in mergeList[i]) {
                             newThreat[prop] = mergeList[i][prop];
                         }
-                        
+
                         //average distance and sum the size
                         newThreat.x = (mergeList[i].x + mergeList[z].x)/2;
                         newThreat.y = (mergeList[i].y + mergeList[z].y)/2;
@@ -377,12 +377,12 @@ function AposBot() {
                         if (that.isThreat(blob, newThreat)) {
                              //IT'S DANGER!
                             threatList.push(newThreat);
-                        }   
-                                          
+                        }
+
                 }
             }
         }
-        
+
         return [foodList, threatList, virusList, splitTargetList];
     };
 
@@ -486,6 +486,12 @@ function AposBot() {
             return coords[0];
         }
     };
+
+    this.goToCoordinates = function(x, y){
+        //Placeholder for now. LOGIC (pseudo-code):
+        //currentCoordinates = getCurrentCoordinates(); (This function does not exist)
+        //destinationCoordinates = [x, y];
+    }
 
     //Using a line formed from point a to b, tells if point c is on S side of that line.
     this.isSideLine = function(a, b, c) {
@@ -879,7 +885,7 @@ function AposBot() {
                 //Loop through all the player's cells.
                 for (var k = 0; k < player.length; k++) {
                     if (true) {
-                        drawPoint(player[k].x, player[k].y + player[k].size, 0, "" + (getLastUpdate() - player[k].birth) + " / " + (30000 + (player[k].birthMass * 57) - (getLastUpdate() - player[k].birth)) + " / " + player[k].birthMass);
+                        drawPoint(player[k].x, player[k].y + player[k].size, 0, "" + (getLastUpdate() - player[k].birth) + " / " + parseInt((30000 + (player[k].birthMass * 57) - (getLastUpdate() - player[k].birth))) + " / " + player[k].birthMass);
                     }
                 }
 
@@ -943,7 +949,7 @@ function AposBot() {
 
                         var enemyCanSplit = this.canSplit(player[k], allPossibleThreats[i]);
                         var secureDistance = (enemyCanSplit ? splitDangerDistance : normalDangerDistance);
-                        
+
                         for (var j = clusterAllFood.length - 1; j >= 0 ; j--) {
                             if (this.computeDistance(allPossibleThreats[i].x, allPossibleThreats[i].y, clusterAllFood[j][0], clusterAllFood[j][1]) < secureDistance + shiftDistance)
                                 clusterAllFood.splice(j, 1);
