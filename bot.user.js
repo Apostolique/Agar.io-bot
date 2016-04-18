@@ -24,12 +24,12 @@ SOFTWARE.*/
 // @name        AposBot
 // @namespace   AposBot
 // @include     http://agar.io/*
-// @version     3.647
+// @version     3.650
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
 
-var aposBotVersion = 3.647;
+var aposBotVersion = 3.650;
 
 //TODO: Team mode
 //      Detect when people are merging
@@ -1034,7 +1034,7 @@ function AposBot() {
 
                     if (badAngles.length > 0) {
                         //NOTE: This is only bandaid wall code. It's not the best way to do it.
-                        stupidList = this.addWall(stupidList, player[k]);
+                        //stupidList = this.addWall(stupidList, player[k]);
                     }
 
                     for (var i = 0; i < badAngles.length; i++) {
