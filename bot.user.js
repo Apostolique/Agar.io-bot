@@ -487,12 +487,6 @@ function AposBot() {
         }
     };
 
-    this.goToCoordinates = function(x, y){
-        //Placeholder for now. LOGIC (pseudo-code):
-        //currentCoordinates = getCurrentCoordinates(); (This function does not exist)
-        //destinationCoordinates = [x, y];
-    }
-
     //Using a line formed from point a to b, tells if point c is on S side of that line.
     this.isSideLine = function(a, b, c) {
         if ((b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]) > 0) {
