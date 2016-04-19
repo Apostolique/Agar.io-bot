@@ -642,8 +642,8 @@ function AposBot() {
         //var mapSizeY = Math.abs(f.getMapStartY - f.getMapEndY);
         //var distanceFromWallX = mapSizeX/3;
         //var distanceFromWallY = mapSizeY/3;
-        var distanceFromWallY = 2000;
-        var distanceFromWallX = 2000;
+        var distanceFromWallY = 1000;
+        var distanceFromWallX = 1000;
         if (blob.x < getMapStartX() + distanceFromWallX) {
             //LEFT
             //console.log("Left");
@@ -1034,7 +1034,7 @@ function AposBot() {
 
                     if (badAngles.length > 0) {
                         //NOTE: This is only bandaid wall code. It's not the best way to do it.
-                        //stupidList = this.addWall(stupidList, player[k]);
+                        stupidList = this.addWall(stupidList, player[k]);
                     }
 
                     for (var i = 0; i < badAngles.length; i++) {
