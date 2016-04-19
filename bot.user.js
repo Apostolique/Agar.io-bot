@@ -116,7 +116,7 @@ function AposBot() {
 
     this.toggleFollow = false;
     this.keyAction = function(key) {
-        if (81 == key.keyCode) {
+        if (key.keyCode === 81) {
             console.log("Toggle Follow Mouse!");
             this.toggleFollow = !this.toggleFollow;
         }
