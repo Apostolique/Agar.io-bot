@@ -93,9 +93,7 @@ console.log("Running Apos Bot!");
 var f = window;
 var g = window.jQuery;
 
-
 console.log("Apos Bot!");
-
 window.botList = window.botList || [];
 
 /*function QuickBot() {
@@ -642,8 +640,8 @@ function AposBot() {
         //var mapSizeY = Math.abs(f.getMapStartY - f.getMapEndY);
         //var distanceFromWallX = mapSizeX/3;
         //var distanceFromWallY = mapSizeY/3;
-        var distanceFromWallY = 2000;
-        var distanceFromWallX = 2000;
+        var distanceFromWallY = 1000;
+        var distanceFromWallX = 1000;
         if (blob.x < getMapStartX() + distanceFromWallX) {
             //LEFT
             //console.log("Left");
@@ -885,7 +883,13 @@ function AposBot() {
 
 
                 //Loops only for one cell for now.
-                for (var k = 0; /*k < player.length*/ k < 1; k++) {
+
+                var playerX = 0;
+                var playerY = 0;
+                var firstCellX = 0;
+                var firstCellY = 0;
+
+                for (var k = 0; k < player.length; k++) {
 
                     //console.log("Working on blob: " + k);
 
@@ -1034,7 +1038,7 @@ function AposBot() {
 
                     if (badAngles.length > 0) {
                         //NOTE: This is only bandaid wall code. It's not the best way to do it.
-                        //stupidList = this.addWall(stupidList, player[k]);
+                        stupidList = this.addWall(stupidList, player[k]);
                     }
 
                     for (var i = 0; i < badAngles.length; i++) {
@@ -1237,8 +1241,33 @@ function AposBot() {
                     //console.log("Slope: " + slope(tempPoint[0], tempPoint[1], player[0].x, player[0].y) + " Angle: " + getAngle(tempPoint[0], tempPoint[1], player[0].x, player[0].y) + " Side: " + this.mod(getAngle(tempPoint[0], tempPoint[1], player[0].x, player[0].y) - 90, 360));
                     tempPoint[2] = 1;
 
+                    playerX += destinationChoices[0];
+                    playerY += destinationChoices[1];
+
+                    if (k === 0) {
+                        firstCellX = destinationChoices[0];
+                        firstCellY = destinationChoices[1];
+                    };
+
                     //console.log("Done working on blob: " + i);
                 }
+
+                playerX = playerX / player.length;
+                playerY = playerY / player.length;
+
+                if (((firstCellX - playerX) >= 5) && (firstCellX > playerX)) {
+                    playerX = firstCellX;
+                } else if (((playerX - firstCellX ) >= 5) && (playerX > firstCellX)) {
+                    playerX = firstCellX;
+                };
+
+                if (((firstCellY - playerY) >= 5) && (firstCellY > playerY)) {
+                    playerY = firstCellY;
+                } else if (((playerY - firstCellY) >= 5) && (playerY > firstCellY)) {
+                    playerY = firstCellY; 
+                };
+
+                destinationChoices = [playerX, playerY];
 
                 //TODO: Find where to go based on destinationChoices.
                 /*var dangerFound = false;
