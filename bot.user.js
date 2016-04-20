@@ -284,8 +284,15 @@ function AposBot() {
         }
         return false;
     };
-    
+
     this.isVirus = function(blob, cell) {
+    if (blob == null) {
+        if (cell.isVirus()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     if (cell.isVirus() && this.compareSize(cell, blob, 1.1)) {
         return true;
     } else if (cell.isVirus() && cell.color.substring(3, 5).toLowerCase() != "ff") {
