@@ -19,11 +19,11 @@ SOFTWARE.*/
 // @name        AposLauncher
 // @namespace   AposLauncher
 // @include     http://agar.io/*
-// @version     5.032
+// @version     5.036
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
-var aposLauncherVersion = 5.032;
+var aposLauncherVersion = 5.036;
 
 var showAd = true;
 
@@ -82,29 +82,6 @@ function getLatestCommit() {
 }
 getLatestCommit();
 
-function addAd() {
-    window.google_ad_client = "ca-pub-5878021809689194";
-    window.google_ad_slot = "1479874665";
-    window.google_ad_width = 300;
-    window.google_ad_height = 250;
-
-    window.jQuery(".side-container:last").append("<div class='agario-panel'><center id='aposAd'></center></div>");
-    var aposAd = document.getElementById('aposAd');
-    var w = document.write;
-    document.write = function(content) {
-        aposAd.innerHTML = content;
-        document.write = w;
-    };
-
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = 'http://pagead2.googlesyndication.com/pagead/show_ads.js';
-    document.body.appendChild(script);
-}
-
-if (showAd) {
-    addAd();
-}
 (function(c, e) {
     function vc() {
         for (var a = document.cookie.split(";"), b = 0; b < a.length; b++) {
