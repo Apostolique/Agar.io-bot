@@ -19,11 +19,11 @@ SOFTWARE.*/
 // @name        AposLauncher
 // @namespace   AposLauncher
 // @include     http://agar.io/*
-// @version     5.038
+// @version     5.040
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
-var aposLauncherVersion = 5.038;
+var aposLauncherVersion = 5.040;
 
 var showAd = true;
 
@@ -81,6 +81,30 @@ function getLatestCommit() {
     }).fail(function() {});
 }
 getLatestCommit();
+
+function addAd() {
+    window.google_ad_client = "ca-pub-5878021809689194";
+    window.google_ad_slot = "1479874665";
+    window.google_ad_width = 300;
+    window.google_ad_height = 250;
+
+    window.jQuery(".side-container:last").append("<div class='agario-panel'><center id='aposAd'></center></div>");
+    var aposAd = document.getElementById('aposAd');
+    var w = document.write;
+    document.write = function(content) {
+        aposAd.innerHTML = content;
+        document.write = w;
+    };
+
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'http://pagead2.googlesyndication.com/pagead/show_ads.js';
+    document.body.appendChild(script);
+}
+
+if (showAd) {
+    addAd();
+}
 
 (function(c, e) {
     function vc() {
@@ -3157,3 +3181,44 @@ getLatestCommit();
         }
     }
 })(window, window.jQuery);
+//UPDATE
+(function(i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function() {
+        (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date();
+    a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'apos');
+
+apos('create', 'UA-64394184-1', 'auto');
+apos('send', 'pageview');
+
+window.ignoreStream = false;
+window.refreshTwitch = function() {
+    window.jQuery.ajax({
+        url: "https://api.twitch.tv/kraken/streams/apostolique",
+        cache: false,
+        dataType: "jsonp"
+    }).done(function(data) {
+        if (data["stream"] == null) {
+            //console.log("Apostolique is not online!");
+            window.setMessage([]);
+            window.onmouseup = function() {};
+            window.ignoreStream = false;
+        } else {
+            //console.log("Apostolique is online!");
+            if (!window.ignoreStream) {
+                window.setMessage(["twitch.tv/apostolique is online right now!", "Click the screen to open the stream!", "Press E to ignore."]);
+                window.onmouseup = function() {
+                    window.open("http://www.twitch.tv/apostolique");
+                };
+            }
+        }
+    }).fail(function() {});
+}
+setInterval(window.refreshTwitch, 60000);
+window.refreshTwitch();
