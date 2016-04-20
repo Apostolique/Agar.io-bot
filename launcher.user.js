@@ -19,11 +19,11 @@ SOFTWARE.*/
 // @name        AposLauncher
 // @namespace   AposLauncher
 // @include     http://agar.io/*
-// @version     5.040
+// @version     5.041
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
-var aposLauncherVersion = 5.040;
+var aposLauncherVersion = 5.041;
 
 var showAd = true;
 
@@ -98,7 +98,7 @@ function addAd() {
 
     var script = document.createElement('script');
     script.type = 'text/javascript';
-    script.src = 'http://pagead2.googlesyndication.com/pagead/show_ads.js';
+    script.src = '//pagead2.googlesyndication.com/pagead/show_ads.js';
     document.body.appendChild(script);
 }
 
