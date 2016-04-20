@@ -286,13 +286,20 @@ function AposBot() {
     };
 
     this.isVirus = function(blob, cell) {
-        if (cell.isVirus() && this.compareSize(cell, blob, 1.1)) {
+    if (blob == null) {
+        if (cell.isVirus()) {
             return true;
-        } else if (cell.isVirus() && cell.color.substring(3, 5).toLowerCase() != "ff") {
-            return true;
+        } else {
+            return false;
         }
-        return false;
-    };
+    }
+    if (cell.isVirus() && this.compareSize(cell, blob, 1.1)) {
+        return true;
+    } else if (cell.isVirus() && cell.color.substring(3, 5).toLowerCase() != "ff") {
+        return true;
+    }
+    return false;
+};
 
     this.isSplitTarget = function(that, blob, cell) {
         if (that.canSplit(cell, blob)) {
