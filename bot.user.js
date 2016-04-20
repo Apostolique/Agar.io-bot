@@ -307,7 +307,8 @@ function AposBot() {
     };
 
     this.getTimeToRemerge = function(mass){
-        return ((mass*0.02) + 30);
+        return Math.max(30, Math.floor(mass*0.02));
+        //return ((mass*0.02) + 30);
     };
 
     this.separateListBasedOnFunction = function(that, listToUse, blob) {

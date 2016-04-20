@@ -19,11 +19,11 @@ SOFTWARE.*/
 // @name        AposLauncher
 // @namespace   AposLauncher
 // @include     http://agar.io/*
-// @version     5.036
+// @version     5.038
 // @grant       none
 // @author      http://www.twitch.tv/apostolique
 // ==/UserScript==
-var aposLauncherVersion = 5.036;
+var aposLauncherVersion = 5.038;
 
 var showAd = true;
 
@@ -3157,18 +3157,3 @@ getLatestCommit();
         }
     }
 })(window, window.jQuery);
-//UPDATE
-(function(i, s, o, g, r, a, m) {
-    i['GoogleAnalyticsObject'] = r;
-    i[r] = i[r] || function() {
-        (i[r].q = i[r].q || []).push(arguments)
-    }, i[r].l = 1 * new Date();
-    a = s.createElement(o),
-        m = s.getElementsByTagName(o)[0];
-    a.async = 1;
-    a.src = g;
-    m.parentNode.insertBefore(a, m)
-})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'apos');
-
-apos('create', 'UA-64394184-1', 'auto');
-apos('send', 'pageview');
