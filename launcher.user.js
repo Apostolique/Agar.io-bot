@@ -31,6 +31,13 @@ Number.prototype.mod = function(n) {
     return ((this % n) + n) % n;
 };
 
+window.logDebugging = false
+window.log = function(message){
+    if(window.logDebugging === true){
+        console.log.apply(console, arguments);
+    }
+}
+
 Array.prototype.peek = function() {
     return this[this.length - 1];
 };
@@ -43,7 +50,7 @@ function getLatestCommit() {
         dataType: "jsonp"
     }).done(function(data) {
         console.dir(data.data);
-        console.log("hmm: " + data.data.object.sha);
+        window.log("hmm: " + data.data.object.sha);
         sha = data.data.object.sha;
 
         function update(prefix, name, url) {
@@ -68,7 +75,7 @@ function getLatestCommit() {
             if (latestVersion > myVersion) {
                 update("aposLauncher", "launcher.user.js", "https://github.com/Apostolique/Agar.io-bot/blob/" + sha + "/launcher.user.js/");
             }
-            console.log('Current launcher.user.js Version: ' + myVersion + " on Github: " + latestVersion);
+            window.log('Current launcher.user.js Version: ' + myVersion + " on Github: " + latestVersion);
         });
 
     }).fail(function() {});
@@ -119,11 +126,11 @@ if (showAd) {
     //UPDATE
     function keyAction(e) {
         if (84 == e.keyCode) {
-            console.log("Toggle");
+            window.log("Toggle");
             toggle = !toggle;
         }
         if (82 == e.keyCode) {
-            console.log("ToggleDraw");
+            window.log("ToggleDraw");
             toggleDraw = !toggleDraw;
         }
         if (68 == e.keyCode) {
@@ -184,7 +191,7 @@ if (showAd) {
 
         O = Ab = document.getElementById("canvas1");
         f = O.getContext("2d");
-        //UPDATE 
+        //UPDATE
         O.onmousedown = function(a) {
             if (gc) {
                 var b = a.clientX - (5 + q / 5 / 2),
@@ -230,7 +237,7 @@ if (showAd) {
     function Nb(a) {
         a.preventDefault();
         P *= Math.pow(.9, a.wheelDelta / -120 || a.detail || 0);
-        console.log("P: " + P)
+        window.log("P: " + P)
             //UPDATE
         0.07 > P && (P = 0.07);
         P > 4 / r && (P = 4 / r)
@@ -323,7 +330,7 @@ if (showAd) {
         }).fail(function() {
             var a;
             if (a = "last_config_id" in c.localStorage) a = c.localStorage.last_config_id, a = !(null == a || void 0 == a || "" === a);
-            a && (a = c.localStorage.last_config_id, console.log("Fallback to stored configID: " + a), cb(a))
+            a && (a = c.localStorage.last_config_id, window.log("Fallback to stored configID: " + a), cb(a))
         })
     }
 
@@ -345,7 +352,7 @@ if (showAd) {
         Tb();
         e.ajax(ya + "findServer", {
             error: function() {
-                console.log("Failed to get server. Will retry in 30 seconds");
+                window.log("Failed to get server. Will retry in 30 seconds");
                 setTimeout(Sb, 3E4)
             },
             success: function(b) {
@@ -404,7 +411,7 @@ if (showAd) {
         ma = !1;
         m.cache.sentGameServerLogin = !1;
         //UPDATE
-        console.log("Connecting to " + a);
+        window.log("Connecting to " + a);
         serverIP = a;
         x = new WebSocket(a);
         x.binaryType = "arraybuffer";
@@ -413,7 +420,7 @@ if (showAd) {
             Da = y = Date.now();
             na = 120;
             Ea = 0;
-            console.log("socket open");
+            window.log("socket open");
             a = U(5);
             a.setUint8(0, 254);
             a.setUint32(1, 5, !0);
@@ -431,7 +438,7 @@ if (showAd) {
         x.onmessage = Ac;
         x.onclose = Bc;
         x.onerror = function() {
-            console.log(hb.la() + " socket error", arguments)
+            window.log(hb.la() + " socket error", arguments)
         }
     }
 
@@ -446,7 +453,7 @@ if (showAd) {
     function Bc() {
         ma && (Fa = 500);
         m.core.proxy.onSocketClosed();
-        console.log(hb.la() + " socket close");
+        window.log(hb.la() + " socket close");
         setTimeout(Q, Fa);
         Fa *= 2
     }
@@ -531,7 +538,7 @@ if (showAd) {
                 d += 8;
                 rb = a.getFloat64(d, !0);
                 d += 8;
-                a.byteLength > d && (v = a.getUint32(d, !0), d += 4, sb = !!(v & 1), tb = b(), c.MC.updateServerVersion(tb), console.log("Server version " + tb));
+                a.byteLength > d && (v = a.getUint32(d, !0), d += 4, sb = !!(v & 1), tb = b(), c.MC.updateServerVersion(tb), window.log("Server version " + tb));
                 break;
             case 102:
                 v = a.buffer.slice(d);
@@ -615,10 +622,10 @@ if (showAd) {
         }
         //UPDATE
         Object.keys(interNodes).forEach(function(element, index) {
-            //console.log("start: " + interNodes[element].updateTime + " current: " + h.detail + " life: " + (h.detail - interNodes[element].updateTime));
+            //window.log("start: " + interNodes[element].updateTime + " current: " + h.detail + " life: " + (h.detail - interNodes[element].updateTime));
             var isRemoved = !window.getCells().hasOwnProperty(element);
 
-            //console.log("Time not updated: " + (window.getLastUpdate() - interNodes[element].getUptimeTime()));
+            //window.log("Time not updated: " + (window.getLastUpdate() - interNodes[element].getUptimeTime()));
             if (isRemoved && (window.getLastUpdate() - interNodes[element].getUptimeTime()) > 3000) {
                 delete interNodes[element];
             } else {
@@ -646,7 +653,7 @@ if (showAd) {
 
         return distance;
     }
-    //UPDATE    
+    //UPDATE
     /**
      * Some horse shit of some sort.
      * @return Horse Shit
@@ -712,17 +719,17 @@ if (showAd) {
         }
 
         if (getPlayer().length == 0 && !reviving && ~~(getCurrentScore() / 100) > 0) {
-            console.log("Dead: " + ~~(getCurrentScore() / 100));
+            window.log("Dead: " + ~~(getCurrentScore() / 100));
             apos('send', 'pageview');
         }
 
         if (getPlayer().length == 0 && !firstStart) {
-            console.log("Revive");
+            window.log("Revive");
             setNick(originalName);
             reviving = true;
         } else if (getPlayer().length > 0 && reviving) {
             reviving = false;
-            console.log("Done Reviving!");
+            window.log("Done Reviving!");
         }
 
         if (da()) {
@@ -808,7 +815,7 @@ if (showAd) {
 
     function ac() {
         //UPDATE
-        console.log("Update rendering");
+        window.log("Update rendering");
         dPoints = [];
         circles = [];
         dArc = [];
@@ -2342,7 +2349,7 @@ if (showAd) {
                 }
 
                 window.setBotIndex = function(a) {
-                    console.log("Changing bot");
+                    window.log("Changing bot");
                     botIndex = a;
                     setLauncherCustomParameters(window.botList[a]);
                 }
@@ -2467,7 +2474,7 @@ if (showAd) {
                             if (e > b) {
                                 a = d - e % b;
                                 var g = Date.now();
-                                !da() || 240 > g - Da || !m.core.config.skipDraw ? ac() : console.warn("Skipping draw");
+                                !da() || 240 > g - Da || !m.core.config.skipDraw ? ac() : window.log("Skipping draw");
                                 cd();
                                 Jb = 1E3 / e;
                                 m.debug.updateChart("fps", d, Jb);
@@ -2971,7 +2978,7 @@ if (showAd) {
                         },
                         ua: function(a, b) {
                             c.gapi.client.load("plus", "v1", function() {
-                                console.log("fetching me profile");
+                                window.log("fetching me profile");
                                 gapi.client.plus.people.get({
                                     userId: "me"
                                 }).execute(function(a) {
@@ -3014,9 +3021,9 @@ if (showAd) {
                                 c.gapi.load("auth2", function() {
                                     f = c.gapi.auth2.init(g);
                                     f.attachClickHandler(document.getElementById("gplusLogin"), {}, function(a) {
-                                        console.log("googleUser : " + a)
+                                        window.log("googleUser : " + a)
                                     }, function(a) {
-                                        console.log("failed to login in google plus: ", JSON.stringify(a, void 0, 2))
+                                        window.log("failed to login in google plus: ", JSON.stringify(a, void 0, 2))
                                     });
                                     f.currentUser.listen(_.bind(a.Ea, a));
                                     b && 1 == f.isSignedIn.get() && f.signIn()
@@ -3030,7 +3037,7 @@ if (showAd) {
                                 var e = a.getAuthResponse(),
                                     g = e.access_token;
                                 c.qa = e;
-                                console.log("loggedIn with G+!");
+                                window.log("loggedIn with G+!");
                                 var h = a.getBasicProfile();
                                 a = h.getImageUrl();
                                 void 0 == a ? m.google.ua(e, function(a) {
@@ -3207,12 +3214,12 @@ window.refreshTwitch = function() {
         dataType: "jsonp"
     }).done(function(data) {
         if (data["stream"] == null) {
-            //console.log("Apostolique is not online!");
+            //window.log("Apostolique is not online!");
             window.setMessage([]);
             window.onmouseup = function() {};
             window.ignoreStream = false;
         } else {
-            //console.log("Apostolique is online!");
+            //window.log("Apostolique is online!");
             if (!window.ignoreStream) {
                 window.setMessage(["twitch.tv/apostolique is online right now!", "Click the screen to open the stream!", "Press E to ignore."]);
                 window.onmouseup = function() {
