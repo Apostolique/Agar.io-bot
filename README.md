@@ -1,4 +1,7 @@
 # Agar.io-bot
+
+*FOR EVERYONE WHO KEEPS SENDING THE ISSUES TO THIS BOT, PLEASE READ ISSUE 617 FOR THE REASONS AS TO WHY APOSTOLIQUE HAS STOPPED WORKING ON THIS BOT!!! (~ Drflash55)
+
 The aim of the project is to create a bot that can play Agar.io
 
 The full coding process is streamed live on http://www.twitch.tv/apostolique
