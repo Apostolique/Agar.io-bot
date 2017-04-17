@@ -28,7 +28,7 @@ https://www.youtube.com/watch?v=Zvq38nmCm1s - Install Tutorial.
 
 https://www.youtube.com/watch?v=x2-DFRnEFBU - Android Tutorial.
 
-#Hotkeys
+# Hotkeys
 
 * Press 'R' if you want to toggle the line and dot drawing.
 * Press 'T' if you want to use the manual controls.
