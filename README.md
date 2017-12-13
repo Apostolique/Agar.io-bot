@@ -1,4 +1,7 @@
 # Agar.io-bot
+
+*FOR EVERYONE WHO KEEPS SENDING THE ISSUES TO THIS BOT, PLEASE READ [ISSUE 616](https://github.com/Apostolique/Agar.io-bot/issues/616) FOR THE REASONS AS TO WHY APOSTOLIQUE HAS STOPPED WORKING ON THIS BOT!!! (~ Drflash55)*
+
 The aim of the project is to create a bot that can play Agar.io
 
 The full coding process is streamed live on http://www.twitch.tv/apostolique
@@ -25,7 +28,7 @@ https://www.youtube.com/watch?v=Zvq38nmCm1s - Install Tutorial.
 
 https://www.youtube.com/watch?v=x2-DFRnEFBU - Android Tutorial.
 
-#Hotkeys
+# Hotkeys
 
 * Press 'R' if you want to toggle the line and dot drawing.
 * Press 'T' if you want to use the manual controls.
