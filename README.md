@@ -1,58 +1,70 @@
 # Agar.io-bot
 
-*FOR EVERYONE WHO KEEPS SENDING THE ISSUES TO THIS BOT, PLEASE READ [ISSUE 616](https://github.com/Apostolique/Agar.io-bot/issues/616) FOR THE REASONS AS TO WHY APOSTOLIQUE HAS STOPPED WORKING ON THIS BOT!!! (~ Drflash55)*
+A bot that plays Agar.io. It looks at the cells around it, works out which directions are dangerous, and steers somewhere it can eat without being eaten.
 
-The aim of the project is to create a bot that can play Agar.io
+## Installing
 
-The full coding process is streamed live on http://www.twitch.tv/apostolique
+Install [`aposbot.user.js`](aposbot.user.js) with [Tampermonkey](https://www.tampermonkey.net/) or [Violentmonkey](https://violentmonkey.github.io/) and open `agar.io`.
 
-Make sure to install both bot.user.js and launcher.user.js. If you don't mind having the code auto update itself though, you can simply get the loader.user.js without the other two.
+## Playing
 
-[![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://opensource.org/licenses/MIT)
+* Press `T` if you want to use the manual controls.
+* Press `B` to switch to the next bot when more than one is installed.
+* Press `R` if you want to toggle the line and dot drawing.
+* Press `D` to toggle the dark mode.
+* Press `P` to toggle restarting after a death.
+* Press `ESC` for the option menu.
 
-[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg?maxAge=2592000)](https://gitter.im/Apostolique/ACS)
+## The console
 
-# Honorable mention
-There are other people working on bots, you can check the forks, as well as GamerLio's Github which uses genetic algorithms: https://github.com/leomwu/agario-bot
+`window.AposBot` does the same things without the keys.
 
-# How to Install
-**Web Tutorial**
+```js
+AposBot.start()          // same as pressing T
+AposBot.stop()
+AposBot.status()         // mass, cells, state, how settled the steering is
+AposBot.bots             // the names use() takes
+AposBot.use('aposbot')   // switch to one of them
+AposBot.bot              // the one that is running
+AposBot.world            // the cells, the camera and the map
+AposBot.backend          // the socket hook and the input path
+AposBot.dump()           // the frames it has seen, as hex
+```
 
-http://bot.jlynx.net/
+`AposBot.dump()` is what to attach to an issue when the bot stops reading the game. agar.io moves its frame layout every so often, and the panel says `PROTOCOL DESYNC` with a hex window around the byte that stopped the parse in the console when it does.
 
-**Videos**
+## Writing your own bot
 
-Created by https://www.youtube.com/user/karter61/
+A bot is a factory that takes the world API and returns `mainLoop`, `keyAction` and `displayText`. `mainLoop` returns where you want to go in absolute game coordinates:
 
-https://www.youtube.com/watch?v=Zvq38nmCm1s - Install Tutorial.
+```js
+AposBot.backend.useBot(function (api) {
+    return {
+        name: 'MyBot',
+        keyAction: function (key) {},
+        displayText: function () { return []; },
+        mainLoop: function () {
+            var me = api.getPlayer()[0];
+            if (!me) return [];
+            return [me.x + 100, me.y];
+        },
+    };
+});
+```
 
-https://www.youtube.com/watch?v=x2-DFRnEFBU - Android Tutorial.
-
-# Hotkeys
-
-* Press 'R' if you want to toggle the line and dot drawing.
-* Press 'T' if you want to use the manual controls.
-* Press 'D' to toggle the dark mode.
-* Press 'F' to toggle the show mass option.
-* Press 'ESC' for the option menu.
-
-# Bot creation!
-
-**It's really easy!**
-
-Just copy the code snippet found in the wiki:
-[Bot creation using the Launcher](https://github.com/Apostolique/Agar.io-bot/wiki/Bot-creation-using-the-Launcher)
+Paste that into the console and it takes over on the next frame. `B` goes to the next bot from there, so the built-in one is a keypress away and yours is another one back. You can read [`BOT-API.md`](BOT-API.md) for more information about what's available. Every accessor you can read the world through, what a cell carries, how the camera moves, and the debug drawing.
 
 If you start working on a bot, make sure to start an issue and tell me about it so that I can add it to the bot list on
 [Alternate Bots](https://github.com/Apostolique/Agar.io-bot/wiki/Alternate-Bots)
 
-# Support the project
-[![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/fold_left.svg?style=social&label=Follow%20%40JeanDavidMoisan)](https://twitter.com/JeanDavidMoisan)
+## Updates
 
-[![Twitch Donation](https://img.shields.io/badge/donate-twitch-red.svg)](https://www.twitchalerts.com/donate/apostolique)
+Your userscript manager handles this. `aposbot.user.js` carries `@updateURL` and `@downloadURL`, so it updates itself on the manager's normal schedule. The bot also checks the GitHub releases API once an hour and mentions a new version in the console.
 
-[![Twitch Follow](https://img.shields.io/badge/follow-twitch-orange.svg)](http://www.twitch.tv/apostolique)
+## Sponsoring
 
-# Troubleshooting
+You can sponsor the project on [GitHub Sponsors](https://github.com/sponsors/Apostolique) if the bot is useful to you.
 
-If the bot doesn't spawn, it's possible that your adblocker is causing the issue. Try disabling it.
+## License
+
+MIT. See [LICENSE](LICENSE).
