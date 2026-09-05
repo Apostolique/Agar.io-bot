@@ -512,6 +512,35 @@ function main() {
             },
         },
     };
+
+    // Companion userscripts get no say in load order, so the array is the
+    // meeting point and whoever runs first creates it. What is already in it
+    // is installed now, and a push from here on installs on the spot.
+    const queue = window.aposBots || [];
+    const installQueued = (factory) => {
+        if (typeof factory !== 'function') {
+            console.error(
+                '[AposBot] window.aposBots takes a factory: a function that ' +
+                'takes the world API and returns the bot. Got ' +
+                typeof factory + '.'
+            );
+            return;
+        }
+        try {
+            log('Playing ' + backend.useBot(factory).name);
+        } catch (err) {
+            console.error('[AposBot] A bot in window.aposBots threw:', err);
+        }
+    };
+    for (const factory of queue.slice()) installQueued(factory);
+    queue.push = function (...factories) {
+        for (const factory of factories) {
+            Array.prototype.push.call(this, factory);
+            installQueued(factory);
+        }
+        return this.length;
+    };
+    window.aposBots = queue;
 }
 
 main();

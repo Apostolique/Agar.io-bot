@@ -52,7 +52,7 @@ AposBot.backend.useBot(function (api) {
 });
 ```
 
-Paste that into the console and it takes over on the next frame. `B` goes to the next bot from there, so the built-in one is a keypress away and yours is another one back. You can read [`BOT-API.md`](BOT-API.md) for more information about what's available. Every accessor you can read the world through, what a cell carries, how the camera moves, and the debug drawing.
+Paste that into the console and it takes over on the next frame. To install a bot rather than paste it, push the same factory onto `window.aposBots` from a userscript of your own, which works whichever of the two loads first. `B` goes to the next bot from there, so the built-in one is a keypress away and yours is another one back. You can read [`BOT-API.md`](BOT-API.md) for more information about what's available. Every accessor you can read the world through, what a cell carries, how the camera moves, and the debug drawing.
 
 If you start working on a bot, make sure to start an issue and tell me about it so that I can add it to the bot list on
 [Alternate Bots](https://github.com/Apostolique/Agar.io-bot/wiki/Alternate-Bots)

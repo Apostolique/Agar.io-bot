@@ -54,6 +54,39 @@ Paste that into the console on a page with [`aposbot.user.js`](aposbot.user.js) 
 
 Returning an empty array leaves the bot aimed where it was, which is what the example does on a screen with no pellet on it. Throwing is survivable, since the backend catches it, reports it and carries on, though the bot won't steer that tick.
 
+## Installing from your own userscript
+
+Pasting into the console is for working on a bot. Shipping one is a userscript of your own, with the same `@match` lines and `@grant none`, which is what puts it in the page's `window` where AposBot lives:
+
+```js
+// ==UserScript==
+// @name         QuickBot
+// @match        https://agar.io/*
+// @match        https://*.agar.io/*
+// @run-at       document-start
+// @grant        none
+// ==/UserScript==
+
+window.aposBots = window.aposBots || [];
+window.aposBots.push(function (api) {
+    return {
+        name: 'QuickBot',
+        keyAction: function (key) {},
+        displayText: function () { return []; },
+        mainLoop: function () {
+            return [api.screenToGameX(api.getMouseX()),
+                    api.screenToGameY(api.getMouseY())];
+        },
+    };
+});
+```
+
+Neither script gets a say in the load order, so the array is the meeting point and whoever runs first creates it. AposBot installs whatever is already in it, and a push after that installs on the spot. Waiting for `window.AposBot` yourself works too, though it takes a poll rather than a check: `@run-at document-idle` looks late enough and isn't for anyone running AposLoader, since that one fetches the bundle over the network and turns up a couple of round trips into the page.
+
+A bot starts playing the moment it is installed, so with two of these the last one to load is the one steering while `B` reaches the other. Pushing under a name already installed replaces it rather than adding a second entry.
+
+Under any `@grant` other than `none` the script is sandboxed, so the array to push onto is `unsafeWindow.aposBots`.
+
 ## Reading the world
 
 | Accessor | Returns |
